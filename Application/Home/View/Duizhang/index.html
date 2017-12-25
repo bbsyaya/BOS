@@ -1,0 +1,86 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+	<script type="text/javascript">
+	var nowid;
+			$(function() {
+				if(getCookie('boss30_on_'+getHref()+'_t_left_state')!='activate' || getCookie('boss30_on_'+getHref()+'_t_left_state')=='' || getCookie('boss30_on_'+getHref()+'_t_left_state')==null || getCookie('boss30_on_'+getHref()+'_t_left_state')==undefined) {
+					setCookie('boss30_on_'+getHref()+'_t_left','111');
+				}
+
+
+
+			});
+		</script>
+</block>
+<block name="body">
+<div class="subMainBox" goal="t_left">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">对账管理</span>
+				<span>财务管理</span>
+			</div>
+			<div class="ri_work">Settlement of accounts</div>
+
+			<div class="dataTable_columnCa_b pa">
+				<div class="dataTable_columnCn_b"></div>
+				<div class="dataTableShow_close_b tc">关闭</div>
+			</div>
+		</div>
+		<div><span class="field_customize">查询自定义</span></div>
+				
+<style type="text/css">
+	.tableBox tr th{font-size: 12px !important;}
+</style>
+			<div class="screenBox">
+					<form action="/Duizhang/index" method='get' id="search_form">
+
+						<div class="t_left">
+							<div class="ziduan">
+								<label>销售: </label>
+								<input type="text" name='username' value="{:I('get.username')}"/>
+							</div>
+							<div class="ziduan">
+								<label>广告主: </label>
+								<input type="text" name='advname' value="{:I('get.advname')}"/>
+							</div>
+						</div>
+						<div class="t_right"><input type="submit" value="查询" /></div>
+					</form>
+			</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha" id="table_con">
+
+					<form action="subaudit" method='post' name='subauditdataform'>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th>广告主名称</th>
+							<th>未对账账单数量</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name='data' id='v'>
+							<tr>
+								<td>{$v.advname}</td>
+								<td>{$v.setnum}</td>
+								
+								<td><a target="_blank" href="/Home/Duizhang/setlist?advid={$v.advid}">查看</a></td>
+					        </tr>
+						</volist>
+						</tbody>
+					</table>
+					{$_page}
+					</form>
+				</div>
+
+			</div>
+	</div>
+
+
+</block>
+
+
+

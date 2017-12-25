@@ -1,0 +1,870 @@
+<extend name="Public/base"/>
+<block name="body">
+    <include file="Public/commonoa" />
+    <style type="text/css">
+        label{font-weight:normal!important}.wd300{width:68% !important}.wd100{width:100% !important}.dayTwo-1{width:28%!important}.fd-k{margin-top:20px}
+        .fs-color{color:#1269cc!important;width: 100%;padding: 0;font-size: 21px;}
+        .btnBox{padding-bottom:100px!important}.a-com{border:medium none;border-radius:3px;color:#fff;height:36px;margin:0 15px;background:#1269cc none repeat scroll 0 0;width:110px;line-height:36px;display:inline-block;color:#fff!important;font-size:14px;text-align:center}.submit{width: auto !important;padding: 0px 20px !important;height: 36px;line-height: 36px;}.btnBox input[type="button"]{ margin: 0px !important;}.glzw{color:#1269cc !important;font-size:12px;margin-left:8px;text-decoration: underline !important;}.dayTwo-a{width:48% !important;}.entryList li .entryCon label{width: 20% !important;height: 44px !important;overflow: hidden;line-height: 44px !important;display: inline-block !important; float: left;}.xt-sz{color:#1269cc !important;}.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){width: 60% !important;}.bootstrap-select.btn-group .dropdown-menu li{width: 100% !important; height: 32px !important; line-height: 32px  !important;}
+        .oaList{border: 1px solid #1269cc;text-align: center}
+        .mp{margin-top: 15px;}
+        .oaList li{margin-top: 15px;/*margin-left: 10px;*/}
+        .rencai{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:5px!important;color:#fff!important;cursor:pointer!important;height:32px!important;line-height:32px !important;padding:0 5px !important;width: 150px;font-size: 12px;vertical-align: top;margin-right: 20px;}
+        .dataFormTable tr th {text-align: left !important;}
+        .toux{width: 122px;
+            height: 122px;
+            margin: -50px 28px 23px 100px;
+            float: left;border-radius: 50%;
+        }
+        .toux img{
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #1879e6;
+            box-sizing: border-box;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(23,113,255,.2);
+        }
+        .a_href{color: #1269cc;}
+    </style>
+    <!--主体-->
+    <div class="subConten  fl w">
+        <!--内容-->
+        <div class="subCon  fl w">
+            <form action="/OA/HrManage/saveEntry.html" method="get" id="dataForm">
+
+                <fieldset class="fl w">
+                    <!--<span class="fs-color">OA基础信息</span>-->
+                    <legend class="fs-color mp">OA基础信息</legend>
+                    <ul class="entryList oaList">
+                        <li>
+                            <p class="entryCon">
+                                <label>头像</label>
+                            <div class="toux"><img src="__PUBLIC__/newUI/img/<eq name="one.sex" value="1">g<else/>p1</eq>.png"></div>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>公司花名：</label>
+                                {$one['flower_name']}
+                            </p>
+                        </li>
+                        <li></li>
+                        <li></li>
+                        <li>
+                            <p class="entryCon">
+                                <label>个性签名：</label>
+                                {$one['signature']}
+                            </p>
+                        </li>
+                        <li></li>
+                        <li>
+                            <p class="entryCon">
+                                <label>爱好：</label>
+                                {$one['hobbies']}
+                            </p>
+                        </li>
+                    </ul>
+                </fieldset>
+
+                <!--员工入职表单-->
+                <fieldset class="fl w">
+                    <legend class="fs-color mp">岗位信息</legend>
+                    <ul class="entryList oaList">
+                        <li>
+                            <p class="entryCon">
+                                <label for="" title="" class="xt-sz">员工编号：</label>
+                                {$one['job_no']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" style="color:red;"><font style="color:red;">*</font>姓　　名：</label>
+                                {$one['user_name']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" style="color:red;"><font style="color:red;">*</font>姓名拼音：</label>
+                                {$one['username_pinyin']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">性　　别：</label>
+                                    <?php if($one['sex'] ==1)$aa = '女'; else $aa = '男'?>
+                                {$aa}
+                            </p>
+                        </li>
+
+                        <!-- teat -->
+                        <li>
+                            <p class="entryCon">
+                                <label for="">入职公司：</label>
+                                {$company[$one['company_id']]}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">部　　门：</label>
+                                {$dep[$one['depart_id']]}
+                            </p>
+                        </li>
+
+                        <li>
+                            <p class="entryCon">
+                                <label for="">职　　务：</label>
+                                {$position[$one['duty']]}
+                            </p>
+                        </li>
+                        <!--<li>
+                            <p class="entryCon">
+                                <label for="">岗位评级</label>
+                                <input name="job_rating" id="job_rating" value="{$one['job_rating']}" class="items"  placeholder="请输入岗位评级,非必填" data-v="请输入岗位评级" type="text">
+                            </p>
+                        </li>-->
+                        <li>
+                            <p class="entryCon">
+                                <label for="">职等职级：</label>
+                                {$one['grade_rank']}
+                            </p>
+                        </li>
+
+                        <li>
+                            <p class="entryCon">
+                                <label for="">层　　级：</label>
+                                {$level[$one['level']]}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">入职时间：</label>
+                                <?php if($one['entry_time'] && $one['entry_time']!="0000-00-00 00:00:00"){ ?>
+                                    {$one['entry_time']|strtotime|date='Y-m-d',###}
+                                <?php }  ?>
+
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">拟转正日期：</label>
+                                <span class="dayTime"><?php if($one['proposed_time'] && $one['proposed_time']!="0000-00-00 00:00:00"){ ?> {$one['proposed_time']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">员工状态：</label>
+                                {$userAttr[$one['status']]}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for=""  class="xt-sz">司　　龄：</label>
+                                {$one['company_age']}
+                            </p>
+                        </li>
+                        <php>if(I('get.status') == 1){</php>
+                        <li><input type="button" value="提交到人才储备库" class="rencai" user_id="{$one['user_id']}"></li>
+                        <php>}</php>
+                    </ul>
+                </fieldset>
+
+                <fieldset class="fl w">
+                    <legend class="fs-color mp">身份信息</legend>
+                    <ul class="entryList oaList">
+                        <li>
+                            <p class="entryCon">
+                                <label for="" style="color:red;"><font style="color:red;">*</font>身份证号：</label>
+                                {$one['body_no']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for=""  class="xt-sz">出生年月：</label>
+                                <span class="dayTime"><?php if($one['birth'] && $one['birth']!="0000-00-00 00:00:00"){ ?> {$one['birth']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for=""  class="xt-sz">年　　龄：</label>
+                                {$one['age']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">民　　族：</label>
+                                {$one['nation']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">籍　　贯：</label>
+                                {$one['passby']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" style="width:24% !important;display:inline-block;">身份证地址：</label>
+                                {$one['id_card_address']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">户口性质：</label>
+                                {$accountNature[$one['account_nature']]}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">婚姻情况：</label>
+                                {$is_marry[$one['is_marry']]}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">体　　重：</label>
+                                {$one['weight']}&nbsp;kg
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">身　　高：</label>
+                                {$one['height']}&nbsp;厘米
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">联系电话：</label>
+                                {$one['phone']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">Q　　Q：</label>
+                                {$one['qq']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">联系地址：</label>
+                                {$one['adress']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" title="" class="xt-sz">邮 箱：</label>
+                                {$one['post_email']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">备用电话：</label>
+                                {$one['back_phone']}
+                            </p>
+                        </li>
+                        <li style="color: #1269cc;text-align: left;">员工联系信息</li>
+                        <li></li>
+                        <li></li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" >紧急联系人：</label>
+                                {$one['emergen_user']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">紧急电话：</label>
+                                {$one['emergen_phone']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" >与本人关系：</label>
+                                {$one['relation_me']}
+                            </p>
+                        </li>
+                    </ul>
+                </fieldset>
+
+                <fieldset class="fl w">
+                    <legend class="fs-color mp">工作学习信息</legend>
+                    <ul class="entryList oaList">
+                        <li>
+                            <p class="entryCon">
+                                <label for="">毕业院校：</label>
+                                {$one['graduat_school']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">学　　历：</label>
+                                {$educate[$one['educate']]}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">专　　业：</label>
+                                {$one['profession']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">毕业时间：</label>
+                                <span class="dayTime"><?php if($one['graduat_time'] && $one['graduat_time']!="0000-00-00 00:00:00"){ ?> {$one['graduat_time']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryOne" for=""  style="width:30% !important;">首次工作时间：</label>
+				<span class="dayOne"  style="width:60% !important;"><?php if($one['start_work'] && $one['start_work']!="0000-00-00 00:00:00"){ ?> {$one['start_work']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+
+                        <!--最近工作时间(新增的)-->
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryOne" for=""  style="width:30% !important;">最近工作时间：</label>
+				<span class="dayOne"  style="width:60% !important;"><?php if($one['start_work'] && $one['start_work']!="0000-00-00 00:00:00"){ ?> {$one['start_work']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+
+                        <li>
+                            <p class="entryCon">
+                                <label for="">最近工作单位：</label>
+                                {$one['recent_work']}
+                            </p>
+                        </li>
+
+                        <li>
+                            <p class="entryCon">
+                                <label for="">最近工作岗位：</label>
+                                {$one['recent_job']}
+                            </p>
+                        </li>
+
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryOne" for="" style="width:25% !important;">实转正日期：</label>
+                                <span class="dayOne" style="width:65% !important;"><?php if($one['real_proposed'] && $one['real_proposed']!="0000-00-00 00:00:00"){ ?> {$one['real_proposed']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">招聘渠道：</label>
+                                {$one['rec_channel']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">背景调查情况：</label>
+                                {$one['investigation']}
+                            </p>
+                        </li>
+                    </ul>
+                </fieldset>
+
+                <!--异动记录-->
+                <fieldset class="fl w transaction">
+                    <legend class="fs-color mp">异动记录</legend>
+                    <table class="dataFormTable">
+                        <!--<tr>
+                            <th>OA编号</th>
+                            <td><input name="oa_number"  placeholder="请选择OA编号" id="oa_number" type="text"  class="items" value="{$one['oa_number']}"></td>
+                            <th>类型</th>
+                            <td>
+                                <select id="type" name="type">
+                                    <option value="" selected>请选择</option>
+                                    <option value="1">职级调整</option>
+                                    <option value="2">岗位调整</option>
+                                    <option value="3">薪酬调整</option>
+                                </select>
+                            </td>
+                            <th>异动时间</th>
+                            <td><input type="text" name="date" id="date"  placeholder="请输入异动时间"  class="items"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" ></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><input name="remark"  placeholder="请输入备注,非必填" id="remark" type="text"  class="items" value="{$one['remark']}" style="width: 900px !important;height: 50px;"></td>
+
+                        </tr>
+                        <tr>
+                            <th>附件</th>
+                            <td colspan="5"><input name="annex" type="file"></td>
+                        </tr>-->
+                        <tr id="loaingtr">
+                            <td colspan="6">
+                                <div class="no-data" id="ltip">加载中....</div>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+
+                <!--奖惩记录-->
+                <fieldset class="fl w transaction">
+                    <legend class="fs-color mp">奖惩记录</legend>
+                    <table class="dataFormTable">
+
+                        <!--<tr>
+                            <th>OA编号</th>
+                            <td><input name="oa_number"  placeholder="请选择OA编号" id="oa_number" type="text"  class="items" value="{$one['oa_number']}"></td>
+                            <th>类型</th>
+                            <td>
+                                <select id="type" name="type">
+                                    <option value="" selected>请选择</option>
+                                    <option value="1">职级调整</option>
+                                    <option value="2">岗位调整</option>
+                                    <option value="3">薪酬调整</option>
+                                </select>
+                            </td>
+                            <th>异动时间</th>
+                            <td><input type="text" name="date" id="date"  placeholder="请输入异动时间"  class="items"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" ></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><input name="remark"  placeholder="请输入备注,非必填" id="remark" type="text"  class="items" value="{$one['remark']}" style="width: 900px !important;height: 50px;"></td>
+
+                        </tr>
+                        <tr>
+                            <th>附件</th>
+                            <td colspan="5"><input name="annex" type="file"></td>
+                        </tr>-->
+                        <tr id="loaingtrs">
+                            <td colspan="6">
+                                <div class="no-data" id="ltips">加载中....</div>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+
+                <?php if($isPer){ ?>
+                <fieldset class="fd-k fl w">
+                    <legend class="fs-color mp">福利信息</legend>
+                    <ul class="entryList oaList">
+                        <!-- aa -->
+                        <li>
+                            <p class="entryCon">
+                                <label for="" class="xt-sz">工龄津贴：</label>
+                                {$one['age_allowance']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for=""  class="xt-sz">交通补助：</label>
+                                {$one['trasport_allowance']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for=""  class="xt-sz">通讯补助：</label>
+                                {$one['commun_allowance']}
+                            </p>
+                            <script type="text/javascript">
+                                $(function(){f.init();});
+                                var f={
+                                    init:function(){
+                                        this.initBitie();
+                                    },
+                                    initBitie:function(){
+                                        var level = $("#level option:selected").val(),company_age=$("#company_age").val();
+                                        var gl_money=0,jt_money=0,zx_money=0;
+                                        company_age = parseFloat(company_age);var age_int=parseInt(company_age),age_int_1=age_int-1;
+
+                                        //基层
+                                        if(level==1 && company_age>1){
+                                            gl_money=100+(50*age_int_1);
+                                        }
+                                        if(level==1){
+                                            jt_money = 100;
+                                        }
+
+                                        //中层
+                                        if(level==2 && company_age>1){
+                                            company_age = parseInt(company_age);
+                                            gl_money=200+(50*age_int_1);
+                                        }
+                                        if(level==2){
+                                            jt_money = 200;
+                                            zx_money=100;
+                                        }
+                                        //高层
+                                        if(level==3 && company_age>1){
+                                            gl_money=300+(50*age_int_1);
+                                        }
+                                        if(level==3){
+                                            jt_money = 200;
+                                            zx_money=200;
+                                        }
+
+
+                                        $("#age_allowance").val(gl_money);
+                                        $("#trasport_allowance").val(jt_money);
+                                        $("#commun_allowance").val(zx_money);
+                                        f.setper_radio(level);
+                                    },
+                                    setper_radio:function(level){
+                                        //m:2000,3000,4000,5000;b:10%,20%,30%,40%
+                                        var per_radio=0,basic_pay=0;
+                                        if(level==1){
+                                            basic_pay=2000;per_radio=0.1;
+                                        }
+                                        if(level==2){
+                                            basic_pay=3000;per_radio=0.2;
+                                        }
+                                        if(level==3){
+                                            basic_pay=4000;per_radio=0.3;
+                                        }
+                                        if(level==4){
+                                            basic_pay=5000;per_radio=0.4;
+                                        }
+                                        $("#per_radio").val(per_radio);
+                                        $("#basic_pay").val(basic_pay);
+                                    }
+                                };
+                            </script>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">社保办理：</label>
+                                {$one['social_man']}
+                            </p>
+                        </li>
+
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryOne" for=""  style="width:28% !important;">公积金办理：</label>
+                                {$one['provident_start']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryOne" for=""  style="width:28% !important;">社保卡办理：</label>
+                                {$one['social_card']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryOne xt-sz" for=""  style="width:28% !important;" >绩效考核比例：</label>
+                                {$one['per_radio']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" title="入职薪资">入职薪资：</label>
+                                {$one['entry_salary']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" title="入职薪资,也是excel的工资总额">工资总额：</label>
+                                {$one['turn_salary']}
+                            </p>
+                            <script type="text/javascript">
+                                function getPay(){
+                                    var v=$("#turn_salary").val(),v_ =parseFloat(v),per_radio=parseFloat($("#per_radio").val());
+                                    if(v!="" && v_>0){
+                                        var per_pay=v_*per_radio;
+                                        per_pay = per_pay.toFixed(2);
+                                        $("#per_pay").val(per_pay);//绩效工资
+                                        //职务工资
+                                        var basic_pay = parseFloat($("#basic_pay").val());
+                                        var job_salary = v_-per_pay-basic_pay;
+                                        job_salary = job_salary.toFixed(2);
+                                        $("#job_salary").val(job_salary);
+                                    }else{
+                                        $("#turn_salary").val(0);
+                                    }
+                                }
+                            </script>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" class="xt-sz">基本工资：</label>
+                                {$one['basic_pay']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" class="xt-sz">职务工资：</label>
+                                {$one['job_salary']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="" class="xt-sz">绩效工资：</label>
+                                {$one['per_pay']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryTwo" for="" style="width:50% !important;">第一次签证合同开始时间：</label>
+                                <span class="dayTwo dayTwo-a" style="width:45% !important;"><?php if($one['first_visa_start'] && $one['first_visa_start']!="0000-00-00 00:00:00"){ ?> {$one['first_visa_start']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryTwo" for="" style="width:50% !important;">第一次签证合同结束时间：</label>
+                                <span class="dayTwo dayTwo-a" style="width:45% !important;"><?php if($one['fist_visa_end'] && $one['fist_visa_end']!="0000-00-00 00:00:00"){ ?> {$one['fist_visa_end']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryTwo" for="" style="width:50% !important;">第二次签证合同开始时间：</label>
+                                <span class="dayTwo dayTwo-a" style="width:45% !important;"><?php if($one['sec_visa_start'] && $one['sec_visa_start']!="0000-00-00 00:00:00"){ ?> {$one['sec_visa_start']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryTwo" for="" style="width:50% !important;">第二次签证合同结束时间：</label>
+                                <span class="dayTwo dayTwo-a" style="width:45% !important;"><?php if($one['sec_visa_end'] && $one['sec_visa_end']!="0000-00-00 00:00:00"){ ?> {$one['sec_visa_end']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryTwo" for="" style="width:50% !important;">第三次签证合同开始时间：</label>
+                                <span class="dayTwo dayTwo-a" style="width:45% !important;"><?php if($one['third_visa_start'] && $one['third_visa_start']!="0000-00-00 00:00:00"){ ?> {$one['third_visa_start']|strtotime|date='Y-m-d',###} <?php }  ?></span>
+                            </p>
+                        </li>
+                        <!-- <li>
+                        <p class="entryCon">
+                        <label class="entryTwo" for="" style="width:50% !important;">第三次签证合同结束时间</label>
+                        <span class="dayTwo dayTwo-a" style="width:45% !important;"><input placeholder="请输入第三次签证合同结束时间,非必填" type="text" class="items"  value="{$one['third_visa_end']}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="third_visa_end" name="third_visa_end"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                        </p>
+                        </li> -->
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryThree" for="" style="width:30% !important;">保密/竞业禁止：</label>
+                                <span class="dayThree" style="width:65% !important;">{$one['probihibe']}</span>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">银行卡1：</label>
+                                {$one['bank_cardno1']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryThree" for=""  style="width:30% !important;">银行卡1开户行：</label>
+                                {$one['bank_card1']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label for="">银行卡2：</label>
+                                {$one['bank_cardno2']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryThree" for="" style="width:30% !important;">银行卡2开户行：</label>
+                                {$one['bank_card2']}
+                            </p>
+                        </li>
+                        <li style="width:100% !important;height:auto !important;">
+                            <style type="text/css">
+                                .fleft{float:left;width:80px}.jx-sec{float:left;width:90%}.jx-items{float:left;border:1px solid #d8d8d8;border-radius:3px;color:#666;font-size:14px;height:40px;line-height:40px;width:120px;padding:0 5px;margin:0 8px 8px 0}.jx-bj{width:100%;float:left}.btn-kx{background:#1269cc none repeat scroll 0 0;width:110px;border:medium none;border-radius:3px;color:#fff;margin-left:0px;width:120px!important;padding:0!important;height: 40px;float:left;margin: 0 8px 8px 0px;}.fls{float:left}.jx-ts{color:red;margin: 0 8px 8px 0px;width:450px;display: inline-block;float:left;font-size: 12px}
+                            </style>
+                            <span class="fleft">各年度绩效：</span>
+                            <div class="jx-sec">
+                                <notempty name="perList">
+                                    <volist name="perList" id="vo" key="key">
+                                        <!--<input type="text" name="jx_per[]" placeholder="格式:2015-Q1-95" id="jx_per_{$key}" value="{$vo}"  class="jx-items" />--><span style="float: left;">{$vo}</span><br />
+                                    </volist>
+                                    <else />
+                                    <!--<input type="text" name="jx_per[]" placeholder="格式:2015-Q1-95" id="jx_per_0" value=""  class="jx-items" />-->
+                                </notempty>
+                                <!--<input class="submit btn-kx" name=""  value="添加绩效输入框" id="btnjx" type="button" onclick="jx.addPer()">
+                                <span class="jx-ts">*绩效格式必须是2015-Q1-95,表示2015年Q1季度分数是95分。不填写就是删除！</span>-->
+                            </div>
+                            <script type="text/javascript">
+                                var jx={
+                                    addPer:function(){
+                                        var jsec=$(".jx-sec"),jsec_len = jsec.find(".jx-items").length,ht="";
+                                        ht='<input type="text" name="jx_per[]" placeholder="格式:2015-Q1-95" id="jx_per_'+(jsec_len+1)+'" value=""  class="jx-items" />';
+                                        $("#btnjx").before(ht);
+                                    }
+                                };
+                            </script>
+                        </li>
+                        <!-- end aa -->
+                    </ul>
+                </fieldset>
+                <?php } ?>
+
+                <fieldset class="fd-k fl w">
+                    <legend class="fs-color mp">其它信息</legend>
+                    <ul class="entryList oaList">
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryThree" for="" style="width:30% !important;">合同签订公司：</label>
+                                {$one['sign_company']}
+                            </p>
+                        </li>
+
+                        <li>
+                            <p class="entryCon">
+                                <label for="">服务异动：</label>
+                                {$one['job_change']}
+                            </p>
+                        </li>
+                    </ul>
+                </fieldset>
+                <!--end 员工入职表单-->
+                <!--按钮-->
+                <div class="btnBox fl w" style="text-align: center;">
+                    <?php if($one['id']){
+	        	?>
+                    <input type="hidden"  id="hrid" name="hrid" value="{$one['id']}" />
+                    <?php
+        	} ?>
+                    <?php if($isPer){ ?>
+                    <!--<input class="submit" name="" type="button" value="保存资料" onclick="E.saveData(this)" id="btnsave">-->
+                    <?php } ?>
+                    <a href="/OA/HrManage/hrList.html"  class="a-com">返回列表</a>
+                </div>
+            </form>
+            <!--end 按钮-->
+        </div>
+        <!--end 内容-->
+    </div>
+    <!--end 主体-->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+    <script type="text/javascript" src="/Public/OA/js/globle.js"></script>
+    <!--双日期插件-->
+    <script type="text/javascript" src="/Public/OA/js/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="/Public/OA/js/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="/Public/OA/js/entry.js?v=<?php echo time(); ?>"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $(".rencai").click(function(){
+                var user_id = $(this).attr('user_id');
+                if(user_id){
+                    $.get("{:U('add_talent')}",{user_id:user_id},function(ret){
+                        if(ret.status == 1){
+                            layer.alert(ret.msg);
+                        }else{
+                            layer.alert(ret.msg);
+                        }
+                    });
+                }
+            });
+
+            //异动初始化
+            var id = "{$one['id']}";
+            if(id){
+                $.get("{:U('transaction_records_sel')}",{id:id},function(data){
+                    if(data.step_list){
+                        var idx = 1;
+                        $.each(data.step_list,function(i,v){
+                            var del = '';
+                            if(v.type == 1){
+                                var sel = '职级调整';
+                            }else if(v.type == 2){
+                                sel = '岗位调整';
+                            }else if(v.type == 3){
+                                sel = '薪酬调整';
+                            }
+                            var annex_file = '';
+                            if(v.annex_path){
+                                annex_file = '<span class="ysc" >已上传文件：<a href="'+v.annex_path+'" target="_blank" class="a_ysc" id="a_ysc_'+idx+'"><span class="a_href">'+v.annex+'</span></a></span>';
+                            }else{
+                                annex_file = '暂无附件';
+                            }
+                            var str = '<tr>' +
+                                    '<th>OA编号</th>' +
+                                    '<td>'+ v.oa_number+'</td>' +
+                                    '<th>类型</th>' +
+                                    '<td>'+sel+'</td>' +
+                                    '<th>异动时间</th>' +
+                                    '<td><span class="dayOne"  style="width:60% !important;">'+ v.date+'</span></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                    '<td colspan="6">'+ v.remark+'</td></tr>' +
+                                    '<tr>' +
+                                    '<th>附件</th>' +
+                                    '<td colspan="5">' +
+                                    '<input type="hidden" name="procontacts['+idx+'][annex]" id="annex_url_'+idx+'" value="'+ v.annex+'">' +
+                                    annex_file +
+                                    '</td>' +
+                                    '</tr>';
+                            $("#loaingtr").after(str).show();
+                            idx++;
+                        });
+                        $("#loaingtr").hide();
+
+                        $(".del").click(function(){
+                            var sid = $(this).attr('sid');
+                            if(sid){
+                                $("#a_ysc_"+sid).attr("href",'');
+                                $("#a_ysc_"+sid).text('');
+                            }
+                        });
+                    }else{
+                        $("#ltip").html("暂无数据");
+                    }
+                });
+            }else{
+                $("#loaingtr").remove();
+            }
+
+            //奖惩初始化
+            if(id){
+                $.get("{:U('rewards_punishments')}",{id:id},function(data){
+                    if(data.step_list){
+                        var idx = 1;
+                        $.each(data.step_list,function(i,v){
+                            var del = '';
+                            if(v.type == 1){
+                                var sel = '奖励';
+                            }else{
+                                sel = '惩罚';
+                            }
+                            var s_h = '';
+                            if(v.annex_path){
+                                s_h = '<span class="ysc_'+idx+'" >已上传文件：<a href="'+v.annex_path+'" target="_blank" class="a_yscs" id="a_yscs_'+idx+'"><span class="a_href">'+v.annex+'</span></a></span>';
+                            }else{
+                                s_h='暂无附件';
+                            }
+                            var str = '<tr>' +
+                                    '<th>类型</th>' +
+                                    '<td>'+sel+'</td>' +
+                                    '<th>标题</th>' +
+                                    '<td>'+ v.title+'</td>' +
+                                    '<th>异动时间</th>' +
+                                    '<td><span class="dayOne"  style="width:60% !important;">'+ v.date+'</span></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                    '<td colspan="6">'+ v.remark+'</td></tr>' +
+                                    '<tr>' +
+                                    '<th>附件</th>' +
+                                    '<td colspan="5">' +
+                                     s_h +
+                                    '</td>' +
+                                    '</tr>';
+                            $("#loaingtrs").after(str).show();
+                            idx++;
+                        });
+                        $("#loaingtrs").hide();
+
+                        $(".dels").click(function(){
+                            var sid = $(this).attr('sid');
+                            if(sid){
+                                $("#a_yscs_"+sid).attr("href",'');
+                                $("#a_yscs_"+sid).text('');
+                            }
+                        });
+                    }else{
+                        $("#ltips").html("暂无数据");
+                    }
+                });
+            }else{
+                $("#loaingtrs").remove();
+            }
+
+        });
+
+    </script>
+</block>

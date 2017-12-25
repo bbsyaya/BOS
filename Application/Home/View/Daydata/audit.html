@@ -1,0 +1,586 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+	<script type="text/javascript">
+		var getdata_url;
+		var ctype;
+		function getdatalist(obj){
+			if(ctype==1){
+				getdata_url='/Finance/getadverlist';
+			}else if(ctype==2){
+				getdata_url='/Finance/getcomlist';
+			}else if(ctype==3){
+				getdata_url='/Finance/getsalerlist';
+			}else if(ctype==4){
+				getdata_url='/Finance/getlinelist';
+			}else if(ctype==5){
+				getdata_url='/Finance/getjsztlist';
+			}
+			$.post(getdata_url,{'name':$('#getadverlistp').find('input[name="name"]').val(),'code':$('#getadverlistp').find('input[name="ad_code"]').val()},function(res){
+				var newhtml='';
+					for(o in res){
+						newhtml+='<tr><td><input type="radio" name="advinfo[]" data="'+res[o].name+'" data_id="'+res[o].id+'" /></td><td>'+res[o].name+'</td><td>'+res[o].code+'</td><td>'+res[o].address+'</td></tr>';
+					}
+				$('.dataSelectDialog').find('tbody').html(newhtml);
+			},'json');
+		}
+			$(function() {
+
+				if(getCookie('boss30_on_'+getHref()+'_t_left_state')!='activate' || getCookie('boss30_on_'+getHref()+'_t_left_state')=='' || getCookie('boss30_on_'+getHref()+'_t_left_state')==null || getCookie('boss30_on_'+getHref()+'_t_left_state')==undefined) {
+					setCookie('boss30_on_'+getHref()+'_t_left','111100');
+				}
+				//修改
+				$(".dataTable").on({
+					click: function() {
+						$(this).hide();
+						$(this).parents("td").find(".J_dataSave").show();
+						for (i = 0; i < $(this).parents("tr").find("td").length - 1; i++) {
+							if(i==6){
+								var iptV = $(this).parents("tr").find("td").eq(i).text();
+								$(this).parents("tr").find("td").eq(i).html("<input type=\"text\"class=\"J_validUpdate\" name=\"datanum\" value=\"" + iptV + "\" />");
+							}else if(i==7){
+								var iptV = $(this).parents("tr").find("td").eq(i).text();
+								$(this).parents("tr").find("td").eq(i).html("<input type=\"text\"class=\"J_moneyUpdate\" name=\"money\" value=\"" + iptV + "\" />");
+							}
+															
+						};
+
+					}
+				}, ".J_dataUpdate");
+				//保存
+				$(".dataTable").on({
+					click: function() {
+						var datasave=$(this);
+						var datanum=$(this).parents('tr').find('input[name="datanum"]').val();
+						var money=$(this).parents('tr').find('input[name="money"]').val();
+						var id=$(this).parents('tr').find('td').eq(0).attr('data');
+						var price=$(this).parents('tr').find('td').eq(4).text();
+						var newdata={'money':money,'id':id,'price':price};
+						$.post('/daydata/editnumormoney',newdata,function(status){
+							if(status=='1'){
+								datasave.hide();
+								datasave.parents("td").find(".J_dataUpdate").show();
+								for (i = 0; i < datasave.parents("tr").find("td").length - 1; i++) {
+									if(i==6 || i==7){
+										var tdValue = datasave.parents("tr").find("td").eq(i).children("input").val();
+										datasave.parents("tr").find("td").eq(i).html(tdValue);
+									}
+								};
+								alert('保存成功,您可以刷新页面查看');
+							}else{
+								alert('保存失败,请刷新页面重试');
+							}
+						});
+					}
+				}, ".J_dataSave");
+				
+				
+
+
+				
+				
+				//有效数据变更
+				$(".dataTable").on({
+					blur: function() {
+						var thisPriceV=parseFloat($(this).parents("tr").find(".J_price").text());
+						//调整金额
+						var thisV=parseFloat($(this).val());
+						if($(this).parents("tr").find("td").eq(5).text()!='CPT' && $(this).parents("tr").find("td").eq(5).text()!='CPS'){
+							thisV=parseInt($(this).val());
+							$(this).val(thisV);
+						}
+						if($(this).parents("tr").find(".J_money .J_moneyUpdate").length){
+							$(this).parents("tr").find(".J_money .J_moneyUpdate").val(thisPriceV*thisV)
+						}else{
+							$(this).parents("tr").find(".J_money").val(thisPriceV*thisV)
+						}
+					}
+				}, ".J_validUpdate");
+				//金额变更
+				$(".dataTable").on({
+					blur: function() {
+						var thisPriceV=parseFloat($(this).parents("tr").find(".J_price").text());
+						//调整有效数据
+						var thisV=parseFloat($(this).val());
+						var thisData=thisV/thisPriceV;
+						if($(this).parents("tr").find(".J_mode").text()=='CPS' || $(this).parents("tr").find(".J_mode").text()=='CPT')thisData=Math.round(thisData,2);
+						else thisData=Math.round(thisData,0);
+						if($(this).parents("tr").find(".J_valid .J_validUpdate").length){
+							$(this).parents("tr").find(".J_valid .J_validUpdate").val(thisData)
+						}else{
+							$(this).parents("tr").find(".J_valid").val(thisData)
+						}
+					}
+				}, ".J_moneyUpdate");
+				$(".BanDataDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "600",
+					height: "200",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				$(".J_Ban").click(function(){
+					if(confirm('确定进行封禁操作吗？')){
+						var id='';
+							if($('#alldata').is(':checked')){
+								id='alldata_'+window.location;
+							}else{
+								$('.dataTable').find('input[name="id[]"]').each(function(){
+									if($(this).is(':checked'))id+=$(this).attr('value')+',';
+								});
+							}
+						$('.BanDataDialog').find('input[name="idlist"]').val(id);
+						$(".BanDataDialog").dialog('open');
+					}
+					
+				});
+				$(".J_BanEnd").click(function(){
+					if(confirm('确定进行解封操作吗？')){
+						var id='';
+							if($('#alldata').is(':checked')){
+								id='alldata_'+window.location;
+							}else{
+								$('.dataTable').find('input[name="id[]"]').each(function(){
+									if($(this).is(':checked'))id+=$(this).attr('value')+',';
+								});
+							}
+						$.post('/Daydata/banEnd',{'id':id},function(res){
+							if(res=='1'){
+								window.location.reload();
+							}else if(res=='2'){
+								alert('部分解封禁数据处于未封禁状态');
+							}else alert('解封失败');
+						})
+					}
+				});
+
+				$(".dataSelectDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "800",
+					height: "350",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function(){
+							var id='';
+							if($('#alldata').is(':checked')){
+								id='alldata_'+window.location;
+							}else{
+								$('.dataTable').find('input[name="id[]"]').each(function(){
+									if($(this).is(':checked'))id+=$(this).attr('value')+',';
+								});
+							}
+							//console.log(ctype);
+							if(ctype==6){
+								var thisD=$(this);
+								$.post('/Home/Daydata/changedata',{'id':id,'type':ctype,'toid':$('.dataSelectDialog').find('input[name="price"]').val()},function(res){
+											if(res=='0')alert('未选择数据');
+											if(res=='3')alert('SSP业务线不允许改动的内容');
+											if(res=='2')alert('更改失败');
+											if(res=='1'){
+												alert('更改成功');
+												window.location.reload();
+											}
+											thisD.dialog("close");
+										})
+							}else{
+								var thisD=$(this);
+								$('.dataSelectDialog').find('input').each(function(){
+									if($(this).is(":checked")){
+										$.post('/Home/Daydata/changedata',{'id':id,'type':ctype,'toid':$(this).attr('data_id')},function(res){
+											if(res=='0')alert('未选择数据');
+											if(res=='3')alert('SSP业务线不允许改动的内容');
+											if(res=='2')alert('更改失败');
+											if(res=='1'){
+												alert('更改成功');
+												window.location.reload();
+											}
+											thisD.dialog("close");
+										})
+									}
+								})
+							}
+							
+							
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				$(".J_changeInfo").click(function(){
+					$('.dataSelectDialog').find('tbody').html('');
+					ctype=$(this).attr('data');
+					if($(this).attr('data')=='3'){
+						$('.dataSelectDialog').find('thead').show();
+						$('.dataSelectDialog').find('#codediv').hide();
+						$('.dataSelectDialog').find('#namediv').show();
+						$('.dataSelectDialog').find('input[type="button"]').show();
+						$('.dataSelectDialog').find('#pricediv').hide();
+					}else if($(this).attr('data')=='6'){
+						$('.dataSelectDialog').find('thead').hide();
+						$('.dataSelectDialog').find('#codediv').hide();
+						$('.dataSelectDialog').find('#namediv').hide();
+						$('.dataSelectDialog').find('input[type="button"]').hide();
+						$('.dataSelectDialog').find('#pricediv').show();
+					}else{
+						$('.dataSelectDialog').find('thead').show();
+						$('.dataSelectDialog').find('input[type="button"]').show();
+						$('.dataSelectDialog').find('#codediv').show();
+						$('.dataSelectDialog').find('#namediv').show();
+						$('.dataSelectDialog').find('#pricediv').hide();
+					}
+					$(".dataSelectDialog").dialog('open');
+				});
+
+			});
+		</script>
+</block>
+<block name="body">
+<style type="text/css">
+	.logCn {
+    background-color: #ffffff;
+    border: 0px !important;
+    box-shadow: 0 0 0px #fff !important;
+    display: block;
+    margin-top: 0px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 10px;width:95%;
+    max-height: 95% !important;
+    max-width: 95% !important;
+}
+</style>
+	<div class="subMainBox" goal="t_left">
+			<!--面包屑-->
+			<div class="ri_header">
+				<div class="ri_title_box">
+					<span class="clip-text">核减数据</span>
+					<span>数据管理</span>
+				</div>
+				<div class="ri_work">To reduce the data</div>
+
+				<div class="dataTable_columnCa_b pa">
+					<div class="dataTable_columnCn_b"></div>
+					<div class="dataTableShow_close_b tc">关闭</div>
+				</div>
+			</div>
+			<div><span class="field_customize">查询自定义</span></div>
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<input type="button" value="筛选" class="J_openScreen" />
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+						<form action="/Daydata/audit" method='get'>
+					<div class="screenList fl w">
+						<table>
+							<tr>
+								<th>时间：</th>
+								<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>	
+								<th>广告主名称：</th>
+								<td><input type="text" name='ggzname' value="{:I('get.ggzname')}"/></td>
+								<th>产品名称：</th>
+								<td><input type="text" name='comname' value="{:I('get.comname')}"/></td>
+								<th>计费标识名称：</th>
+								<td><input type="text" name='jfname' value="{:I('get.jfname')}"/></td>
+								
+							</tr>
+							<tr>
+								<th class="expertScreen">计费标识ID：</th>
+								<td class="expertScreen"><input type="text" name='jfid' value="{:I('get.jfid')}"/></td>
+								<th class="expertScreen">业务线：</th>
+								<td class="expertScreen"><select name='lineid'>
+									<option value='0'>全公司</option>
+									<foreach name='linelist' item='v' key='k'>
+									<option value="{$v.id}">{$v.name}</option>
+									</foreach>
+								</select></td>
+								
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+									<php>if($checkRule_passdata){</php>
+									<input type="button" value="封禁" class="J_Ban"/>
+									<php>}</php>
+									<php>if($checkRule_unpassdata){</php>
+									<input type="button" value="解封禁" class="J_BanEnd"/>
+									<php>}</php>
+									<php>if($checkRule_changeadver){</php>
+									<input type="button" value="更换广告主" data='1' class="J_changeInfo"/>
+									<php>}</php>
+									<php>if($checkRule_changecom){</php>
+									<input type="button" value="更换产品" data='2' class="J_changeInfo"/>
+									<php>}</php>
+									<php>if($checkRule_changebuer){</php>
+									<input type="button" value="更换销售" data='3' class="J_changeInfo"/>
+									<php>}</php>
+									<php>if($checkRule_changeline){</php>
+									<input type="button" value="更换业务线" data='4' class="J_changeInfo"/>
+									<php>}</php>
+									<php>if($checkRule_changejszt){</php>
+									<input type="button" value="更换结算主体" data='5' class="J_changeInfo"/>
+									<php>}</php>
+									<php>if($checkRule_changeprice){</php>
+									<input type="button" value="更换单价" data='6' class="J_changeInfo"/>
+									<php>}</php>
+									<br/><input type='checkbox' id='alldata'/>对符合条件所有数据进行操作
+								</td>
+							</tr>
+						</table>
+					</div>
+					</form>
+				</div>-->
+				<!--筛选-->
+
+				<div class="screenBox">
+							<form action="/Daydata/audit" method='get' id="search_form">
+								<div class="t_left">
+									<div class="ziduan">
+											<label>开始时间: </label>
+											<input readonly="true"  class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>
+									</div>
+									<div class="ziduan">
+										<label>结束时间: </label>
+										<input readonly="true"  class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/>
+									</div>
+									<div class="ziduan">
+											<label>广告主: </label>
+											<input type="text" name='ggzname' value="{:I('get.ggzname')}"/>
+									</div>
+									<div class="ziduan">
+											<label>产品: </label>
+											<input type="text" name='comname' value="{:I('get.comname')}"/>
+									</div>
+
+									<div class="ziduan">
+											<label>计费标识: </label>
+											<input type="text" name='jfname' value="{:I('get.jfname')}"/>
+									</div>
+									<div class="ziduan">
+											<label>标识ID: </label>
+											<input type="text" name='jfid' value="{:I('get.jfid')}"/>
+									</div>
+									<div class="ziduan">
+											<label>业务线: </label>
+											<select class="selectpicker" name='lineid'>
+												<option value='0'>全公司</option>
+												<foreach name='linelist' item='v' key='k'>
+													<option value="{$v.id}">{$v.name}</option>
+												</foreach>
+											</select>
+									</div>
+									<div class="ziduan">
+										<label>状态: </label>
+										<select name='instatus[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+											<option <php>if(in_array(0,I('get.instatus')))echo "selected='selected'";</php> value="0">全部</option>
+											<option <php>if(in_array(1,I('get.instatus')))echo "selected='selected'";</php> value="1">待审核</option>
+											<option <php>if(in_array(2,I('get.instatus')))echo "selected='selected'";</php> value="2">已确认</option>
+											<option <php>if(in_array(3,I('get.instatus')))echo "selected='selected'";</php> value="3">待开票</option>
+											<option <php>if(in_array(4,I('get.instatus')))echo "selected='selected'";</php> value="4">已开票</option>
+											<option <php>if(in_array(5,I('get.instatus')))echo "selected='selected'";</php> value="5">已结清</option>
+											<option <php>if(in_array(8,I('get.instatus')))echo "selected='selected'";</php> value="8">已回款未开票</option>
+											<option <php>if(in_array(9,I('get.instatus')))echo "selected='selected'";</php> value="9">已封禁</option>
+										</select>
+									</div>
+								</div>
+								<div class="t_right">
+									<input type="submit" value="查 询" /><br />
+									<input type='checkbox' id='alldata'/>对符合条件所有数据进行操作
+								</div>
+							</form>
+				</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<php>if($checkRule_passdata){</php>
+							<input type="button" value="封禁" class="J_Ban"/>
+							<php>}</php>
+							<php>if($checkRule_unpassdata){</php>
+							<input type="button" value="解封禁" class="J_BanEnd"/>
+							<php>}</php>
+							<php>if($checkRule_changeadver){</php>
+							<input type="button" value="更换广告主" data='1' class="J_changeInfo"/>
+							<php>}</php>
+							<php>if($checkRule_changecom){</php>
+							<input type="button" value="更换产品" data='2' class="J_changeInfo"/>
+							<php>}</php>
+							<php>if($checkRule_changebuer){</php>
+							<input type="button" value="更换销售" data='3' class="J_changeInfo"/>
+							<php>}</php>
+							<php>if($checkRule_changeline){</php>
+							<input type="button" value="更换业务线" data='4' class="J_changeInfo"/>
+							<php>}</php>
+							<php>if($checkRule_changejszt){</php>
+							<input type="button" value="更换结算主体" data='5' class="J_changeInfo"/>
+							<php>}</php>
+							<php>if($checkRule_changeprice){</php>
+							<input type="button" value="更换单价" data='6' class="J_changeInfo"/>
+							<php>}</php>
+							<br/><!--<input type='checkbox' id='alldata'/>对符合条件所有数据进行操作-->
+						</div>
+						<div class="advancedRight">
+						</div>
+					</div>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th><input type="checkbox" /></th>
+							<th>日期</th>
+							<th>计费标识ID</th>
+							<th>计费标识名称</th>
+							<th>单价</th>
+							<th>计费模式</th>
+							<th>有效数据</th>
+							<th>金额</th>
+							
+							<th>状态</th>
+							<th>广告主名称</th>
+							<th>产品名称</th>
+							<th>业务线</th>
+							<th>结算主体</th>
+							<th>销售</th>
+							<th>日志</th>
+							<th width="150">操作</th>
+						</tr>
+						<tr>
+							<td>汇总</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td class="J_validSum">{$alldata.allnum|twonum}</td>
+							<td class="J_moneySum">{$alldata.allmoney|twonum}</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						</thead>
+						<tbody>
+						
+						<volist name='data' id='v'>
+							<tr>
+
+								<td data="{$v.id}">
+								<php>
+									if(in_array($v['status'],array(1,9))){
+										echo '<input type="checkbox" name="id[]" value="'.$v['id'].'"/>';
+									}
+								</php>
+								</td>
+								<td>{$v.adddate}</td>
+								<td>{$v.jfid}</td>
+								<td>{$v.jfname}</td>
+								<td class="J_price">{$v.price}</td>
+								<td class="J_mode">{:C('option.charging_mode')[$v['charging_mode']]}</td>
+								<td class="J_valid">{$v.datanum}</td>
+								<td class="J_money">{$v.money|twonum}</td>
+								
+								<td>{:C('option.indata_status')[$v['status']]}</td>
+								<td>{$v.advname}</td>
+								<td>{$v.comname}</td>
+								<td>{$v.linename}</td>
+								<td>{$v.jszt}</td>
+								<td>{$v.real_name}</td>
+								<td onclick="log.showLog({$v.id})" id="log_{$v.id}" datatype="datalog" dataid="{$v.id}" datatype2='1'>
+									<a style="cursor:pointer;">操作日志</a>		
+								</td>
+								<td>
+									<php>
+										if($v['lineid']!=2 && in_array($v['status'],array(1))){
+											echo '<a class="J_dataUpdate" href="javascript:;">修改</a>&nbsp;';
+										}
+									</php>
+									<a class="J_dataSave" style="display: none;">保存</a>&nbsp;
+									<php>if($checkRule_deldata){</php>
+									<a class="J_deleteData" href="{:U('daydata/deldata')}?id={$v.id}">删除</a>
+									<php>}</php>
+									
+								</td>
+							</tr>
+						</volist>
+						
+						</tbody>
+					</table>
+					<!--分页-->
+					{$_page}
+				</div>
+	</div>
+
+				<div class="BanDataDialog" title="封禁数据">
+					<form action="{:U('/Daydata/banData')}" method='post' id="bandataform" target="newpage" enctype="multipart/form-data">
+					<table class="dialogTable_form w ha">
+						<tbody><tr>
+							<th><input type="hidden" name='idlist' value=""/></th>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>封禁依据<span class="must">*</span>:</th>
+							<td><input type="file" name='file' multiple="multiple"></td>
+							<td><input type='submit'/></td>
+						</tr>
+					</tbody></table>
+					</form>
+				</div>
+				<!--弹出框（选择广告主） -->
+				<div class="dataSelectDialog" title="选择广告主/产品/销售">
+					<table class="dialogTable_list w ha" >
+						<caption id="getadverlistp">
+							<span id='namediv'>
+								名称：
+								<input name="name" type="text" />
+							</span>
+							<span id='codediv'>
+								编码：
+								<input name="ad_code" type="text" />
+							</span>
+							<span id='pricediv'>
+								请输入新价格：
+								<input name="price" type="text" />
+							</span>
+							<input type="button" onclick="getdatalist(this)" data="1" value="查询" />
+						</caption>
+						<thead>
+						<tr>
+							<th width="30"><input type="checkbox"/></th>
+							<th>名称</th>
+							<th>编码</th>
+							<th>地址</th>
+						</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+						
+
+				</div>
+
+
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<script type="text/javascript" src="/Public/Home/js/showlog.js"></script>
+
+</block>

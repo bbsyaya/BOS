@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-stand" />
+    <title>智能办公平台 </title>
+    <link href="__CSS__/base.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/common.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/page.css" rel="stylesheet" type="text/css" />
+    <!--jquery-->
+    <script src="__MODULE__/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <!--jquery UI-->
+    <link rel="stylesheet" href="__MODULE__/jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css" />
+    <link rel="stylesheet" href="__CSS__/jqueryUI_reset.css" />
+    <link rel="stylesheet" href="__CSS__/reset.css" />
+    <link rel="stylesheet" type="text/css" href="__MODULE__/bootstrapselect/css/bootstrap.min.css"/>
+
+    <script type="text/javascript" src="__MODULE__/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js" ></script>
+    <script src="__MODULE__/jquery.form.js" type="text/javascript"></script>
+    <block name="style"></block>
+</head>
+<style type="text/css">
+    .messageDialog{display:none;position:absolute;width: 700px; height: 400px;top:50%;left:50%;background-color:#ffffff;border-radius: 5px; z-index: 10; overflow: hidden;}
+    .messageDialog_top{float:left;width:100%;height:40px; background-color: #dddddd;}
+    .messageDialog_topLinie{position:absolute;left:12px;right:0px;height:32px;}
+    .messageDialog_title{color:#333333;float:left;width:100%;height:40px;line-height:40px;padding-right:10px;font-size:16px; text-align: center;}
+    .messageDialog_filtrate{float: left; width: 100%; height: 45px; line-height: 45px; border-bottom: solid 1px #dadada; background: #f9f9f9;}
+    .messageDialog_filtrate .filtrate{padding:0px 20px; height: 44px; font-size: 14px; margin-left: -1px; border: solid 1px #dadada; cursor: pointer;}
+    .messageDialog_filtrate .filtrateFocus{background: #FFFFFF; border-bottom-color: #FFFFFF;}
+    .messageDialog_middle{float:left;width:97%;height:215px; margin-top:1.5%; padding-left: 1.5%; overflow: hidden; overflow-y: auto;}
+    .messageDialog_middle .messageSingle{color: #666666; display: block; height: 30px; line-height: 30px; border:none; overflow: hidden;}
+    .messageDialog_middle .messageSingle:hover{color: #1A72D6;}
+    .messageDialog_middle .messageName{width: 60%; white-space: nowrap; overflow: hidden; }
+    /*.messageDialog_middle .messageTitle{width: 41%; white-space: nowrap; overflow: hidden; }
+    .messageDialog_middle .messageState{width: 10% white-space: nowrap; overflow: hidden; }*/
+    .messageDialog_middle .messageLink{width: 20%; white-space: nowrap; overflow: hidden; }
+    .messageDialog_middle .messageTime{width: 20%; white-space: nowrap; overflow: hidden; }
+    .messageDialog_bottom{float:left;width:100%;height:auto;min-height:37px;margin:10px 0px; padding:20px 0px;text-align:center; border-top: solid 1px #dadada;}
+    .messageDialog_bottom input[type="button"]{color: #ffffff;width: auto;height: 37px;line-height: 37px;padding: 0px;padding: 0px 30px;margin: 0px 10px;outline: none;background: none;background-color: #1a7fe6; border: none; border-radius: 4px;-moz-border-radius: 4px;font-size: 14px;overflow: hidden; cursor: pointer;}
+    .messageDialog_bottom input[type="button"]:last-child{color: #333333; background-color: #dadada;}
+    .menuCn{max-width: 100% !important;}.new-tis{padding:2px;background:#ea2000;color:#fff;border-radius:100%;position:absolute;top:7px;left:75px;line-height:12px!important;text-indent:0!important;font-size:12px!important;width:15px;text-align: center;overflow: hidden;}.subMenuType{position:relative!important}
+</style>
+<script type="text/javascript">
+
+    $(function(){
+        if($.fn.magicSuggest){
+            $.fn.magicSuggest.defaults = {
+                placeholder:''
+            };
+        }
+        //初始化查询通知数据
+        var inf_data ='';
+        //点击后读取信息
+        $.post("/Home/Contract/to_information",{
+        },function(data){
+            if(data != "false"){
+                for(var o in data) {
+                    inf_data +="<div class=\"messageName fl\" fid="+ data[o].id +">"+data[o].content+"</div>"+
+                                    "<div class=\"messageLink fl\"><span class=\"a_link\" style=\"cursor:pointer;\" fid="+ data[o].id +" a_link="+data[o].a_link+">点击跳转</span></div>"+
+                            "<div class=\"messageTime fl\">"+data[o].date_time+"</div>";
+                }
+                // $(".messageDialog_middle").after(inf_data);
+            }else{
+                //无数据 修改喇叭的颜色
+                $(".message").removeClass("messageBlink");
+            }
+        });
+
+        //消息框
+        $(".J_message").click(function(){
+
+            //alert("正在加载数据");
+            $("body").append("<div id=\"conceal\"></div>");
+            $("body").append("<div class=\"messageDialog\">"+
+                    "<div class=\"messageDialog_top\">"+
+                    "<div class=\"messageDialog_topLinie\">"+
+                    "<div class=\"messageDialog_title\">系统消息</div>"+
+                    "<div class=\"messageDialog_close\"></div>"+
+                    "</div>"+
+                    "</div>"+
+                    "<div class=\"messageDialog_filtrate\">"+
+                    "<div class=\"filtrate fl filtrateFocus\" status='0'>未读消息</div>"+
+                    "<div class=\"filtrate fl \" status='1'>已读消息</div>"+
+                    "</div>"+
+                    "<div class=\"messageDialog_middle\">"+ inf_data +"</div>"+
+                    "<div class=\"messageDialog_bottom\">"+
+                    "<input type=\"button\" class='sub' value=\"全部已阅\" />"+
+                    "<input type=\"button\" class='clos' value=\"关闭\" />"+
+                    "</div>"+
+                    "</div>"
+            );
+            //动画显示
+            var w=$(".messageDialog").width();
+            var h=$(".messageDialog").height();
+            $(".messageDialog").width(1);
+            $(".messageDialog").height(1);
+            $(".messageDialog").show();
+            $(".messageDialog").animate({
+                width: w,
+                height: h,
+                marginLeft: -(w/2),
+                marginTop:-(h/2),
+            },400);
+        });
+
+        //单个修改状态 2016.12.20
+        $("body").on({click:function(){
+            var fid = $(this).attr('fid');//id
+            var a_link = $(this).attr('a_link');//链接地址
+            $.post("{:U('Contract/change_one')}", {
+                FID : fid,
+                A_LINK : a_link
+            },function(data){
+                //data = JSON.parse(data);
+                if(a_link != ""){
+                    location.href = a_link;
+                    //location.reload();
+                }else{
+                    alert(data);
+                }
+            });
+        }},".a_link");
+
+        //消息状态切换
+        //未读 已读切换
+        $("body").on({
+            click: function() {
+                var inf_data = "";
+                $.post("{:U('Contract/status_up')}",{
+                    status : $(this).attr('status')//状态传动态值(切换)
+                },function(data){
+                    if(data != ""){
+
+                        for(var o in data) {
+                            inf_data += "<div class=\"messageName fl\" fid="+ data[o].id +">"+data[o].content+"</div>"+
+                                    "<div class=\"messageLink fl\"><span class=\"a_link\" style=\"cursor:pointer;\" fid="+ data[o].id +" a_link="+data[o].a_link+">点击跳转</span></div>"+
+                                    "<div class=\"messageTime fl\">"+data[o].date_time+"</div>";
+                        }
+                        $(".messageDialog_middle").html(inf_data);
+                    }else{
+                        $(".messageDialog_middle").html("暂无数据");
+                    }
+
+                });
+                $(".filtrate").removeClass("filtrateFocus");
+                $(this).addClass("filtrateFocus");
+            }
+        }, ".filtrate");
+
+        //全部阅读
+        $("body").on({
+            click: function() {
+                var fid = "";
+                $(".messageDialog_middle").find(".messageName").each(function(i){
+
+                        fid+=$(this).attr('fid')+',';
+                });
+                //alert(fid);return;
+                $.post("{:U('Contract/change_status')}", {
+                    FID : fid
+                },function(data){
+                    if(data == "TRUE"){
+                        location.reload();
+                    }else{
+                        alert(data);
+                    }
+                });
+
+            }
+        }, ".sub");
+        //关闭消息框
+        $("body").on({
+            click: function() {
+                $(this).parents(".messageDialog").remove();
+                $("#conceal").remove();
+            }
+        }, ".clos");
+    })
+</script>
+<body>
+<div class="mainCa">
+    <div class="topCa pa">
+        <a href="{:U('/Home/Index/index')}" class="logo fl h"></a>
+        <!--  主导航 -->
+        <div class="menuCn fl h">
+            <volist name="__MENU__.main" id="menu">
+                <a href="{$menu.name|U}" class="menuSingle h fl tc {$menu.class|default=''}">{$menu.title}</a>
+            </volist>
+
+        </div>
+        <div class="userCn fr h">
+            <div class="message J_message fl h messageBlink"></div>
+            <a href="{:U('/Home/User/mycenter')}" class="userName fl h">{$Think.session.userinfo.realname}</a>
+            <a href="{:U('/Home/Public/logout')}" class="updateExit fl h"></a>
+        </div>
+    </div>
+    <!--  侧边栏 -->
+    <block name="sidebar">
+        <div class="leftCa pa">
+            <div class="subMenuCn fl w h">
+                <volist name="__MENU__.child" id="lmenu">
+                    <div class="subMenuSingle fl w ha">
+                        <a href="{$lmenu.name|U}" class="subMenuType fl w {$lmenu.class|default=''}">{$lmenu.title}</a>
+                    </div>
+                </volist>
+            </div>
+        </div>
+        <div class="centerCa pa "></div>
+    </block>
+
+    <div class="rightCa pa">
+        <!--面包屑导航-->
+        <block name="subnav">
+            <div class="crumbsNavCn fl w">
+                <a class="crumbsNav fl h">{$__MENU__._nav1}</a>
+                <a class="crumbsNav fl h">{$__MENU__._nav2}</a>
+            </div>
+        </block>
+        
+
+        <block name="body">
+        </block>
+
+    </div>
+</div>
+<!--————————————————————————————————————————————————————————————————————————————————————————————————————-->
+<block name="script">
+    <script type="text/javascript"></script>
+</block>
+<script type="text/javascript" src="__STATIC__/my97datepicker/WdatePicker.js"></script>
+</body>
+
+</html>

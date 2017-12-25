@@ -1,0 +1,34 @@
+<form id="tableForm">
+    <table class="dialogTable_form w ha">
+        <tr>
+            <th>名称:</th>
+            <td><input type="text" name="title" value="{$data['title']}"/></td>
+        </tr>
+        <tr>
+            <th>上级:</th>
+            <td> <select name="pid">
+                <volist name="op_rul_list" id="rule">
+                    <option value="{$rule.id}" <if condition="$rule['id'] == $data['pid']">selected="selected"</if> >{$rule.title_show}</option>
+                </volist>
+            </select></td>
+        </tr>
+        <tr>
+            <th>URL:</th>
+            <td><input type="text" name="name" value="{$data['name']}"/></td>
+        </tr>
+        <tr>
+            <th>隐藏:</th>
+            <td>
+            <select id="is_hide" class="" name="is_hide" onchange="" ondblclick="" style="">
+            <option value="0" <?php if($data["is_hide"]==0){ ?> selected="selected" <?php } ?>>否</option>
+            <option value="1"  <?php if($data["is_hide"]==1){ ?> selected="selected" <?php } ?>>是</option>
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <th>状态:</th>
+            <td><bselect name="status" options="op_status" selected="data['status']"/></td>
+        </tr>
+        <input type="hidden" name="id" value="{$data.id}" />
+    </table>
+</form>

@@ -1,0 +1,94 @@
+<extend name="Public/base"/>
+<block name="body">
+<div class="subMainBox">
+    <div class="ri_header">
+        <div class="ri_title_box">
+            <span class="clip-text">白名单明细</span>
+            <span>风控中心</span>
+        </div>
+        <div class="ri_work">White list details</div>
+    </div>
+    <!--<div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <input id="doExport" type="button" value="下载报表" class="" />
+        </div>
+    </div>-->
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit">
+            <div class="advancedLeft">
+                <span class="export advBtn"><input id="doExport" type="button" value="下载报表" class="" /></span>
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>日期</th>
+                <th>OA号</th>
+                <th>摘要</th>
+                <th>收入金额</th>
+                <th>支出金额</th>
+                <th>我司账户</th>
+                <th>客户名称</th>
+                <th>客户账户</th>
+                <th>客户账号</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="list" id="item">
+                <tr>
+                    <td>{$item.date}</td>
+                    <if condition="$item['type'] eq 2">
+                        <td>{$item.oa}</td>
+                    <else />
+                        <td></td>
+                    </if>
+
+                    <td>{$item.remark}</td>
+                    <if condition="$item['type'] eq 1">
+                        <td>{$item.money}</td>
+                        <td></td>
+                    <else />
+                        <td></td>
+                        <td>{$item.money}</td>
+                    </if>
+                    <if condition="$item['type'] eq 1">
+                        <td></td>
+                        <td>{$item.name}</td>
+                        <td>{$item.opening_bank}</td>
+                        <td>{$item.bank_no}</td>
+                    <else />
+                        <td></td>
+                        <td>{$item.name}</td>
+                        <td>{$item.opening_bank}</td>
+                        <td>{$item.bank_no}</td>
+                    </if>
+
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+        {$_page}
+        <input type="hidden" id="wid" name="wid" value="{$wid}">
+        <input type="hidden" id="type" name="type" value="{$type}">
+        <input type="hidden" id="status" name="status" value="{$status}">
+        <input type="hidden" id="date" name="date" value="{$date}">
+    </div>
+</div>
+</block>
+<block name="script">
+    <script type="text/javascript">
+        $(function() {
+            $("#doExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export')}";
+                var wid = $("#wid").val();
+                var type = $("#type").val();
+                var status = $("#status").val();
+                var date = $("#date").val();
+                //window.location.href=url+'?'+param;
+                window.location.href=url+'?wid='+wid+'&type='+type+'&status='+status+'&date='+date;
+            });
+        });
+    </script>
+</block>

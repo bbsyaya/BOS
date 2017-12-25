@@ -1,0 +1,180 @@
+<extend name="Public/base"/>
+
+<block name="script">
+    <script type="text/javascript">
+        function chuS(years){
+            $.get("{:U('projectShow')}",{
+                mon:years
+            },function(data){
+                $("#sum").html(data.sums);
+                $("#ff").html(data.ff);
+                $("#ssp").html(data.ssp);
+                $("#yx").html(data.yx);
+                $("#sj").html(data.sj);
+                $("#fx").html(data.fx);
+                var newhtml = '<tr><th width="150">月份</th>' +
+                                   '<th width="150">全公司（单位：万元）</th>' +
+                        '<th>优效分发平台<input type="button" value="修改" onclick="updCols(this, 2)"><input type="button" value="保存" style="display: none;" onclick="saveCols(this, 2)"></th>' +
+                        '<th>优效SSP平台<input type="button" value="修改" onclick="updCols(this, 3)"><input type="button" value="保存" style="display: none;" onclick="saveCols(this, 3)"></th>' +
+                        '<th>优效营销平台<input type="button" value="修改" onclick="updCols(this, 4)"><input type="button" value="保存" style="display: none;" onclick="saveCols(this, 4)"></th>' +
+                        '<th>优效商家平台<input type="button" value="修改" onclick="updCols(this, 5)"><input type="button" value="保存" style="display: none;" onclick="saveCols(this, 5)"></th>' +
+                        '<th>优效发行平台<input type="button" value="修改" onclick="updCols(this, 6)"><input type="button" value="保存" style="display: none;" onclick="saveCols(this, 6)"></th>' +
+                        '</tr>';
+                var ide = data.data;
+                for(var i=1;i<=12;i++) {
+                    newhtml += '<tr year_s='+ years +'><td width="150">' + i +'月'+ '</td><td></td><td bl_id="1"></td><td bl_id="2"></td><td bl_id="47"></td><td bl_id="48"></td><td bl_id="46"></td></tr>';
+                }
+                $('.abc').html(newhtml);
+                for (var o in ide) {
+                    var tds = $(".abc tbody tr").eq(parseInt(ide[o].months)).find('td');//.attr('monId', ide[o].id).attr('bl_id',ide[o].bl_id)
+                    tds.eq(1).html(ide[o].sum_money || '0');
+                    tds.eq(2).html(ide[o].ff || '0');
+                    tds.eq(3).html(ide[o].ssp || '0');
+                    tds.eq(4).html(ide[o].yx || '0');
+                    tds.eq(5).html(ide[o].sj || '0');
+                    tds.eq(6).html(ide[o].fx || '0');
+                }
+            });
+        }
+
+        function pl_id(mon_th){
+            $('.classifyList').find('a').removeClass('ifyhover');
+            if(mon_th == 2017){
+                $('.classifyList').find('a').eq(0).addClass('ifyhover');
+            }else if(mon_th == 2018){
+                $('.classifyList').find('a').eq(1).addClass('ifyhover');
+            }else if(mon_th == 2019){
+                $('.classifyList').find('a').eq(2).addClass('ifyhover');
+            }else if(mon_th == 2020){
+                $('.classifyList').find('a').eq(3).addClass('ifyhover');
+            }
+            chuS(mon_th);
+        }
+
+        var updCols = function(ele, num) {
+            $(ele).hide(0).next('input:button').show(0);
+            for(var i = 1; i < 13; i++) {
+                var td = $('.abc tbody tr').eq(i).find('td').eq(num);
+                td.html('<input type="text"  value="' + $.trim(td.text()) + '"/>');
+            }
+        };
+        var saveCols = function(ele, num) {
+            $(ele).hide(0).prev('input:button').show(0);
+            var InfoData = new Array();
+            // var InfoData = {};
+            for(var i = 1; i < 13; i++) {
+                // var addInfo  = new  Array();
+                var addInfo={};
+                var td = $('.abc tbody tr').eq(i).find('td').eq(num);
+
+                addInfo.bl_id = td.attr('bl_id');
+                addInfo.year = $('.abc tbody tr').eq(i).attr('year_s');
+                addInfo.month = i;
+                addInfo.money = $.trim(td.find('input:text').val());
+                InfoData.push(addInfo);
+            }
+            $.get("{:U('save')}",{
+                save_data:InfoData
+            },function(data){
+                if(data == "TRUE"){
+                    alert("修改成功");
+                    location.reload();
+                }else{
+                    alert(data);
+                }
+            });
+        };
+        $(function() {
+            pl_id(2017);
+            $(".uploadingDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "450",
+                height: "200",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        $(this).dialog("close");
+                        $('#uploadexcel').submit();
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+            //导入流水对话框
+            $(".J_uploading").click(function(){
+                var year_y = $(".ifyhover").text();
+                alert("如果"+year_y+"年有数据，导入数据将覆盖原有数据，确认导入吗");
+                $("#year_ye").val(year_y);
+                $(".uploadingDialog").dialog("open");
+            });
+        });
+    </script>
+</block>
+
+<block name="body">
+    <div class="MainContent">
+        <style type="text/css">
+            .MainContent .tableBox .tableCon tr th{
+                color: white;
+            }
+        </style>
+        <div class="classifyBox">
+            <ul class="classifyList clear">
+                <li><a class="ifyhover" href="javascript:pl_id(2017)">2017</a></li>
+                <li><a href="javascript:pl_id(2018)">2018</a></li>
+                <li><a href="javascript:pl_id(2019)">2019</a></li>
+                <li><a href="javascript:pl_id(2020)">2020</a></li>
+                <li><span><input type="button" class="J_uploading" value="导入" style="background: none;"></span></li>
+                <li><input type="button" value="下载导入模板" onclick="window.open('/目标导入模板.xls')" style="background: none;" /></li>
+            </ul>
+        </div>
+        <div class="tableBox">
+            <table class="tableCon">
+                <tbody>
+                <tr>
+                    <th>全公司（单位：万元）</th>
+                    <th>优效分发平台</th>
+                    <th>优效SSP平台</th>
+                    <th>优效营销平台</th>
+                    <th>优效商家平台</th>
+                    <th>优效发行平台</th>
+                </tr>
+                <tr>
+                    <td id="sum">{$sum.money}</td>
+                    <td id="ff">{$ff.money}</td>
+                    <td id="ssp">{$ssp.money}</td>
+                    <td id="yx">{$yx.money}</td>
+                    <td id="sj">{$sj.money}</td>
+                    <td id="fx"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--数据表-->
+    <div class="MainContent">
+        <div class="tableBox" id="table_con">
+            <table class="tableCon abc">
+            </table>
+        </div>
+    </div>
+    <!--弹出框-->
+    <div class="uploadingDialog" title="导入文件选择">
+        <form action='/Target/uploadProject' target="newpage" id="uploadexcel" method='post' enctype="multipart/form-data">
+            <table class="dialogTable_form w ha">
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>导入数据<span class="must">*</span>:</th>
+                    <td><input type="file" name='file' multiple="multiple" /></td>
+                    <td><input type="hidden" id="year_ye" name="year_ye"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</block>

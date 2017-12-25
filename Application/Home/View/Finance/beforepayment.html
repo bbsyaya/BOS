@@ -1,0 +1,262 @@
+<extend name="Public/base"/>
+
+<block name="script">
+	<script type="text/javascript">
+		$(function(){
+			$(".dataTable1").on({click:function(){
+				var rid = $(this).attr('id');
+				var pay_money = $(this).parents('tr').find('input[name="pay_money"]').val();
+				var pay_num = $(this).parents('tr').find('select[name="pay_num"]').val();
+				var pay_date = $(this).parents('tr').find('input[name="pay_date"]').val();
+				$.post("{:U('before_pay')}",{
+					rid : rid,
+					pay_money : pay_money,
+					pay_num : pay_num,
+					pay_date : pay_date
+				},function(data){
+					if(data == "TRUE"){
+						//location.reload();
+						window.location.href=window.location.href;
+					}else{
+						alert(data);
+					}
+				});
+			}},".b_c");
+		})
+	</script>
+	<style type="text/css">
+		.b_c{color: #1a72d6;}
+	</style>
+</block>
+
+<block name="body">
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">预付管理</span>
+				<span>财务管理</span>
+			</div>
+			<div class="ri_work">Prepaid management</div>
+		</div>
+	<!--筛选-->
+	<!--<div class="screenCn fl w ha">
+		<div class="screenOperate fl w">
+			<a href="http://oan.yandui.com/general/noa/web/ordinaryExpenses.php?FLOW_ID=432" target="_blank">申请结算</a>&lt;!&ndash;<input type="button" value="申请结算" class="" />&ndash;&gt;
+			<input type="button" value="导出" class="" onclick="window.open('/Finance/beforePaymentExport'+window.location.search)" />
+			<input type="button" value="高级筛选" class="J_openScreen" />
+			<div class="dataTableShow fr" goal="dataTable1">
+				<div class="dataTableShow_icon fr"></div>
+				<div class="dataTable_columnCa pa">
+					<div class="dataTable_columnCn"></div>
+					<div class="dataTableShow_close tc">关闭</div>
+				</div>
+			</div>
+			<a href="http://oan.yandui.com/general/noa/web/ordinaryExpenses.php?FLOW_ID=433" target="_blank">申请核销</a>
+		</div>
+		<div class="screenList fl w">
+			<form action="{:U('beforepayment')}" method="get">
+				<table>
+					<tr>
+						<th>供应商：</th>
+						<td><input type="text" name="name" /></td>
+						<th>业务线：</th>
+						<td><input type="text" name="pl_name" /></td>
+						<th>申请人：</th>
+						<td><input type="text" name="data_1" /></td>
+						<th>支付日期：</th>
+						<td><input type="text" name="pay_date" /></td>
+					</tr>
+					<tr>
+						<th class="expertScreen">状态：</th>
+						<td class="expertScreen">
+							<select name="status">
+								<option value="" selected="selected">全部</option>
+								<option value="1">未结清</option>
+								<option value="2">已结清</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="8">
+							<input type="submit" value="查询" />
+						</td>
+					</tr>
+				</table>
+				<input type="hidden" name="p" value="1">
+			</form>
+		</div>
+	</div>-->
+
+	<div class="screenBox swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<form action="{:U('beforepayment')}" method="get">
+
+						<div class="swiperRight">
+							<table class="tableBox">
+								<tr>
+									<th>供应商：</th>
+									<td><input type="text" name="name" /></td>
+									<th>业务线：</th>
+									<td><input type="text" name="pl_name" /></td>
+									<th>申请人：</th>
+									<td><input type="text" name="data_1" /></td>
+									<td>
+										<input type="submit" value="查询" />
+									</td>
+								</tr>
+								<tr>
+									<th>支付日期：</th>
+									<td><input type="text" name="pay_date" /></td>
+									<th>状态：</th>
+									<td>
+										<select class="selectpicker" name="status">
+											<option value="" selected="selected">全部</option>
+											<option value="1">未结清</option>
+											<option value="2">已结清</option>
+										</select>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<input type="hidden" name="p" value="1">
+					</form>
+					<!--end 基础查询-->
+				</div>
+			</div>
+		</div>
+	<!--数据表-->
+		<style type="text/css">
+			.te{padding: 0 30px;}
+			.tc{padding: 0 30px;margin-left: 0!important;}
+			/*.daochu{margin: 15px 0 10px 20px;}*/
+		</style>
+	<div class="dataCn fl w ha" id="table_con">
+		<div class="advancedTit">
+		<div class="advancedLeft">
+			<span class="addAdv advBtn te">
+				<a href="http://oan.yandui.com/general/noa/web/ordinaryExpenses.php?FLOW_ID=432" target="_blank">申请结算</a><!--<input type="button" value="申请结算" class="" />-->
+			</span>
+			<span class="export advBtn tc"><a href="http://oan.yandui.com/general/noa/web/ordinaryExpenses.php?FLOW_ID=433" target="_blank">申请核销</a></span>
+			<span class="addAdv advBtn te">
+			<a class="daochu" onclick="window.open('/Finance/beforePaymentExport'+window.location.search)">导出</a>
+			</span>
+		</div>
+		</div>
+		<table class="dataTable dataTable1">
+			<thead>
+			<tr>
+				<th>支付流水号</th>
+				<th>供应商名称</th>
+				<th>预付金额</th>
+				<th>实付金额</th>
+				<th>结算主体</th>
+				<th>支付时间</th>
+				<th>已核销金额</th>
+				<th>待核销金额</th>
+				<th>业务线</th>
+				<th>申请人</th>
+				<th>申请日期</th>
+				<th>支付日期（流程结束）</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+			</thead>
+			<tbody>
+			<volist name="data" id="item">
+
+					<tr>
+						<td>{$item.run_id}</td>
+						<td>{$item.name}</td>
+						<td>{$item.data_22}</td>
+						<!--台账 strat-->
+					<if condition="($item['data_30'] EQ '已支付') ">
+						<td><input type="text" placeholder="{$item.pay_money}" name="pay_money" rid="{$item.id}" /></td>
+						<td>
+							<select name="pay_num" rid="{$item.id}">
+								<volist name='sbData' id='sb'>
+									<if condition="($sb['name'] eq $item['pay_num'])">
+										<option value="{$sb.name}" selected="selected">{$sb.name}</option>
+										<else />
+										<option value="{$sb.name}">{$sb.name}</option>
+									</if>
+								</volist>
+							</select>
+						</td>
+						<if condition="$item['pay_date'] NEQ '' ">
+							<td><input type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="pay_date" value="{$item.pay_date}" rid="{$item.id}"/></td>
+						<else />
+							<td><input type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="pay_date" value="<?php echo date('Y-m-d')?>" rid="{$item.id}"/></td>
+						</if>
+
+					<else />
+					<!--不能编辑-->
+						<td><input type="text" placeholder="{$item.pay_money}" name="pay_money" value="{$item.pay_money}" rid="{$item.id}" disabled="disabled" /></td>
+						<td>
+							<select disabled="disabled" name="pay_num" rid="{$item.id}">
+								<volist name='sbData' id='sb'>
+									<if condition="($sb['name'] eq $item['pay_num'])">
+										<option value="{$sb.name}" selected="selected">{$sb.name}</option>
+										<else />
+										<option value="{$sb.name}">{$sb.name}</option>
+									</if>
+								</volist>
+							</select>
+						</td>
+						<if condition="$item['pay_date'] NEQ '' ">
+							<td><input type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="pay_date" value="{$item.pay_date}" rid="{$item.id}" disabled="disabled" /></td>
+							<else />
+							<td><input type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="pay_date" value="<?php echo date('Y-m-d')?>" rid="{$item.id}" disabled="disabled" /></td>
+						</if>
+					</if>
+					<!--end-->
+
+						<!--<foreach name="data_433" item="val_433" >
+						<if condition="($val_433['data_60'] eq $item['data_40']) AND ($val_433['data_54'] eq $item['data_21']) ">
+							<td>{$val_433.data_48}</td>
+							<td>{$item['pay_money'] - $val_433['data_48']}</td>
+							<td>{$item.data_21}</td>
+							<td>{$item.data_1}</td>
+							<td>{$item.data_3}</td>
+							<td>{$item.data_19}</td>
+							<if condition = "(($item['data_22'] - $val_433['data_48']) gt 0) ">
+								<td>待核销</td>
+							<else />
+								<td>已核销</td>
+							</if>
+						<else/>
+
+							<td>0</td>
+							<td>{$item.pay_money}</td>
+							<td>{$item.data_21}</td>
+							<td>{$item.data_1}</td>
+							<td>{$item.data_3}</td>
+							<td>待核销</td>
+						</if>
+						</foreach>-->
+						<td>0</td>
+						<td>{$item.pay_money}</td>
+						<td>{$item.data_21}</td>
+						<td>{$item.data_1}</td>
+						<td>{$item.data_3}</td>
+						<td>{$item.data_19}</td>
+						<td>待核销</td>
+
+						<td><a href="#" class="b_c" id="{$item.id}">提交</a>&nbsp;&nbsp;
+							<a href="/Finance/beforepayment_look?rid={$item.id}&sup_id={$item['data_40']}&name={$item.name}&yh={$item.data_22}&yy={$val_433.data_48}&dh={$item['data_22'] - $val_433['data_48']}&zy={$item['data_22'] - $val_433['data_48']}&plname={$item.data_21}" target="_blank">查看</a></td>
+					</tr>
+			</volist>
+			</tbody>
+		</table>
+		{$_page}
+	</div>
+	</div>
+
+</block>
+<!--<td>
+	<if condition = "(($item['data_22'] - $val_433['data_48']) gt 0) ">
+		待核销
+	<else />
+		已核销
+	</if>
+</td>-->

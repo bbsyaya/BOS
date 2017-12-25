@@ -1,0 +1,12 @@
+<extend name="Public/base"/>
+
+
+<block name="body">
+
+<iframe id="iframeId" name="iframeName" style="width:100%;" frameborder=0 src="__ROOT__/OA/Index/useing_if?lcid={:I('get.lcid')}&jdid={:I('get.jdid')}&txid={:I('get.txid')}"></iframe>
+<script>
+$("#iframeId").load(function () {
+    $("#iframeId").height($("#iframeId").contents().find("body").height() + 30);
+});
+</script>
+</block>

@@ -1,0 +1,22 @@
+<form id="tableForm">
+    <table class="dialogTable_form w ha">
+        <tr>
+            <th>类型:</th>
+            <td>{$typename}</td>
+        </tr>
+        <tr>
+            <th>编码:</th>
+            <td><input type="text" name="code" value="{$data['code']}"/></td>
+        </tr>
+        <tr>
+            <th>名称:</th>
+            <td><input type="text" name="name" value="{$data['name']}"/></td>
+        </tr>
+        <tr>
+            <th>状态:</th>
+            <td><bselect name="status" options="op_status" selected="data['status']"/></td>
+        </tr>
+        <input type="hidden" name="id" value="{$data.id}" />
+        <input type="hidden" name="tid" value="{$data.dic_type}" />
+    </table>
+</form>

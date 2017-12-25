@@ -1,0 +1,222 @@
+<extend name="Public/base"/>
+<block name="body">
+<div class="subMainBox">
+    <div class="ri_header">
+        <div class="ri_title_box">
+            <span class="clip-text"></span>
+            <span>风控中心</span>
+        </div>
+        <div class="ri_work"></div>
+    </div>
+    <!--筛选-->
+    <!--<div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <input id="doExport" type="button" value="下载报表" class="" />
+            <input type="button" value="高级筛选" class="J_openScreen" />
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+            <div class="line fr h"></div>
+        </div>
+        <div class="screenList fl w">
+            <form action="{:U('index')}" id="search_form">
+            <table>
+                <tr>
+                    <th class="expertScreen">广告主：</th>
+                    <td class="expertScreen">
+                        <div id="multi-sel-ad">&#45;&#45;</div>
+                    </td>
+                    <th class="expertScreen">产品名称：</th>
+                    <td class="expertScreen"><div id="multi-sel-pro">&#45;&#45;</div>
+                    </td>
+                    <th class="expertScreen">销售人员：</th>
+                    <td class="expertScreen">
+                        <div id="multi-sel-saler">&#45;&#45;</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8" class="expertScreen">
+                        <input id="search_btn" type="submit" value="查询" />
+                        <input type="hidden" name="p" value="1"/>
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+    </div>-->
+
+    <div class="screenBox swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <form action="{:U('index')}" id="search_form">
+                    <!--基础查询-->
+                    <h2>基础查询</h2>
+
+                    <div class="swiperRight">
+                        <table class="tableBox">
+                            <tr>
+                                <th>广告主：</th>
+                                <td>
+                                    <div id="multi-sel-ad">--</div>
+                                </td>
+                                <th>产品名称：</th>
+                                <td><div id="multi-sel-pro">--</div>
+                                </td>
+                                <th>销售人员：</th>
+                                <td>
+                                    <div id="multi-sel-saler">--</div>
+                                </td>
+                                <td>
+                                    <input id="search_btn" type="submit" value="查询" />
+                                    <input type="hidden" name="p" value="1"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+                <!--end 基础查询-->
+            </div>
+        </div>
+    </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit" goal="dataTable1">
+
+            <div class="dataTable_columnCa pa">
+                <div class="dataTable_columnCn"></div>
+                <div class="dataTableShow_close tc">关闭</div>
+            </div>
+
+            <div class="advancedLeft">
+                <span class="export advBtn"><input id="doExport" type="button" value="下载报表" class="" /></span>
+            </div>
+            <div class="advancedRight">
+                <div class="advIcon statisticsThumbnail_icon J_statisticsThumbnail fr">可视化报表</div>
+                <div class="dataTableShow fr" goal="dataTable1">
+                    <div class="advIcon dataTableShow_icon fr del">字段筛选</div>
+                    <!--<div class="dataTable_columnCa pa">
+                        <div class="dataTable_columnCn"></div>
+                        <div class="dataTableShow_close tc">关闭</div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>测试周期</th>
+                <th>产品</th>
+                <th>广告主</th>
+                <th>销售</th>
+                <th>产生总收入</th>
+                <th>收入确认率</th>
+                <th>产生总成本</th>
+                <th>成本确认率</th>
+                <th>利润率</th>
+                <th>未回款金额</th>
+                <th>已支付成本</th>
+            </tr>
+            </thead>
+            <tr>
+                <td>汇总</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{$countData.money|number_format=###,2}</td>
+                <td></td>
+                <td>{$countData.out_money|number_format=###,2}</td>
+                <td></td>
+                <td></td>
+                <td>{$countData.whk_money|number_format=###,2}</td>
+                <td>{$countData.pay_money|number_format=###,2}</td>
+            </tr>
+            <tbody>
+            <volist name="list" id="item">
+                <tr>
+                    <td>{$item.days}</td>
+                    <td>{$item.pro_name}</td>
+                    <td>{$item.ad_name}</td>
+                    <td>{$item.saler_name}</td>
+                    <td>{$item.money|number_format=###,2}</td>
+                    <td>{$item.sr_qrl}</td>
+                    <td>{$item.out_money|number_format=###,2}</td>
+                    <td>{$item.cb_qrl}</td>
+                    <td>{$item.lrl}</td>
+                    <td>{$item.whk_money|number_format=###,2}</td>
+                    <td>{$item.pay_money|number_format=###,2}</td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+        <!--分页-->
+        {$_page}
+    </div>
+</div>
+
+    <!--统计缩略图-->
+    <link rel="stylesheet" type="text/css" href="__MODULE__/bootstrapselect/css/bootstrap-select.css"/>
+</block>
+<block name="style">
+    <style>
+        .ms-ctn{width: 90%; padding: 2px; padding-left: 12px; box-shadow: none; border-color: #c5c5c5;}
+        .ms-ctn .ms-trigger .ms-trigger-ico{margin-top: 13px;}
+        .ms-sel-ctn input[type="text"]{border: none;}
+    </style>
+</block>
+<block name="script">
+    <script type="text/javascript" src="__MODULE__/bootstrapselect/bootstrap-select.js"></script>
+    <script src="__MODULE__/ECharts/echarts-all.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function() {
+
+            var adMs = $('#multi-sel-ad').magicSuggest({
+                queryParam: 'q',
+                data: "{:U('Ajax/mutiQuery')}",
+                typeDelay: 5,
+                dataUrlParams: { type: 'ad' },
+            });
+
+            var proMs = $('#multi-sel-pro').magicSuggest({
+                queryParam: 'q',
+                data: "{:U('Ajax/mutiQuery')}",
+                typeDelay: 5,
+                dataUrlParams: { type: 'pro' },
+            });
+
+            var salerMs = $('#multi-sel-saler').magicSuggest({
+                queryParam: 'q',
+                data: "{:U('Ajax/mutiQuery')}",
+                typeDelay: 5,
+                dataUrlParams: { type: 'saler' },
+            });
+            //初始化
+            adMs.setSelection({$adNames});
+            proMs.setSelection({$proNames});
+            salerMs.setSelection({$salerNames});
+
+            $("#search_btn").click(function() {
+                var form = $("#search_form");
+
+                var adval = adMs.getValue();
+                var proval = proMs.getValue();
+                var salerval = salerMs.getValue();
+
+                var goUrl = form.attr('action')+"?adid="+adval+"&proid="+proval+"&salerid="+salerval+"&"+form.serialize();
+                window.location.href = goUrl;
+                return false;
+            });
+            //------------------------
+
+            $("#doExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export')}";
+                window.location.href=url+'?'+param;
+            });
+
+        });
+    </script>
+</block>

@@ -1,0 +1,1099 @@
+<extend name="Public/base"/>
+<block name="style">
+    <style type="text/css">
+        .rightCa{left:10px;}
+        /*.progress {
+            width: 50%;
+            height: 100%;
+            background-color: #90cc41;
+            border-radius: 4px;
+        }*/
+        #progress { position:relative; width:400px; border: 1px solid #ddd; padding: 1px; border-radius: 3px; }
+        #bar { background-color: #B4F5B4; width:0%; height:20px; border-radius: 3px; }
+        #percent { position:absolute; display:inline-block; top:3px; left:48%; }
+    </style>
+</block>
+
+<block name="body">
+
+    <div class="subMainBox" goal="t_left">
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text">合同管理</span>
+                <span>合作管理</span>
+            </div>
+            <div class="ri_work">Contract management</div>
+
+            <div class="dataTable_columnCa_b pa">
+                <div class="dataTable_columnCn_b"></div>
+                <div class="dataTableShow_close_b tc">关闭</div>
+            </div>
+        </div>
+
+        <div><span class="field_customize">查询自定义</span></div>
+    <!--筛选-->
+    <!--<div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <a href="/OA/Index/main.html?mainurl=/OA/Index/begin?id=45" target="_blank">新增</a>
+            <input type="button" value="导出" class="" onclick="window.open('/Contract/ContractExport'+window.location.search)" />
+            <input type="button" value="高级筛选" class="J_openScreen" />
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+            <div class="line fr h"></div>
+            <div class="statisticsThumbnail_icon J_statisticsThumbnail fr"  ></div>
+        </div>
+        <form action="" method="get">
+            <div class="screenList fl w">
+                <table>
+                    <tr>
+                        <th>审批编号：</th>
+                        <td><input type="text" id="run_id" name="run_id" value="{:I('get.run_id')}" /></td>
+                        <th>合同状态：</th>
+                        <td>
+                            <select id="status" name="status" value="{:I('get.status')}">
+                                <option  value="" <?php if($map["status"]==""){ ?>  selected="selected" <?php } ?>>全部</option>
+                                <option value="流程正常完结" <?php if($map["status"]=="流程正常完结"){ ?>  selected="selected" <?php } ?>>流程正常完结</option>
+                                <option value="即将到期"<?php if($map["status"]=="即将到期"){ ?>  selected="selected" <?php } ?>>即将到期</option>
+                                <option value="已到期"<?php if($map["status"]=="已到期"){ ?>  selected="selected" <?php } ?>>已到期</option>
+                                &lt;!&ndash;<option value="1">执行中</option>
+                                <option value="0">已结束</option>&ndash;&gt;
+                            </select>
+                        </td>
+                        <th>审批状态：</th>
+                        <td>
+                            <select id="approval_status" name="approval_status" value="{:I('get.approval_status')}">
+                                <option <?php if($map["approval_status"]==""){ ?>  selected="selected" <?php } ?> value="">全部</option>
+                                <option value="1"<?php if($map["approval_status"]=="1"){ ?>  selected="selected" <?php } ?>>已审核</option>
+                                <option value="2"<?php if($map["approval_status"]=="2"){ ?>  selected="selected" <?php } ?>>未审核</option>
+                                <option value="3"<?php if($map["approval_status"]=="3"){ ?>  selected="selected" <?php } ?>>已作废</option>
+                            </select>
+                        </td>
+                        <th>合同内容归口：</th>
+                        <td>
+                            <select id="contract_nature" name="contract_nature" value="{:I('get.contract_nature')}">
+                                <option <?php if($map["contract_nature"]==""){ ?>  selected="selected" <?php } ?> value="">全部</option>
+                                <option value="销售合同"<?php if($map["contract_nature"]=="销售合同"){ ?>  selected="selected" <?php } ?>>销售合同</option>
+                                <option value="推广合同"<?php if($map["contract_nature"]=="推广合同"){ ?>  selected="selected" <?php } ?>>推广合同</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <?php
+                    $isshow = "";
+                     if($map["contract_type"] || $map["sb_name"] || $map["deptName"] || $map["aciName"] || $map["validity_period"] || $map["user_name"] || $map["contract_category"] || $map["remark"]){
+                        $isshow = "style=\"display: table-cell;\"";
+                        } ?>
+                    <tr >
+                        <th class="expertScreen" {$isshow}>合同类型：</th>
+                        <td class="expertScreen" {$isshow}>
+                            <select id="contract_type" name="contract_type" value="{:I('get.contract_type')}">
+                                <option value="" <?php if($map["contract_type"]==""){ ?>  selected="selected" <?php } ?>>全部</option>
+                                <option value="框架协议"<?php if($map["contract_type"]=="框架协议"){ ?>  selected="selected" <?php } ?>>框架协议</option>
+                                <option value="补充协议"<?php if($map["contract_type"]=="补充协议"){ ?>  selected="selected" <?php } ?>>补充协议</option>
+                                <option value="常规合同"<?php if($map["contract_type"]=="常规合同"){ ?>  selected="selected" <?php } ?>>常规合同</option>
+                            </select>
+                        </td>
+                        <th class="expertScreen" {$isshow}>签订主体：</th>
+                        <td class="expertScreen" {$isshow}>
+                            <select id="sb_name" name="sb_name" value="{:I('get.sb_name')}">
+                                <option value="" <?php if($map["sb_name"]==""){ ?>  selected="selected" <?php } ?>>全部</option>
+                                <option value="上饶市网聚天下科技有限公司"<?php if($map["sb_name"]=="上饶市网聚天下科技有限公司"){ ?>  selected="selected" <?php } ?>>上饶市网聚天下科技有限公司</option>
+                                <option value="重庆趣玩科技有限公司"<?php if($map["sb_name"]=="重庆趣玩科技有限公司"){ ?>  selected="selected" <?php } ?>>重庆趣玩科技有限公司</option>
+                                <option value="上海趣比科技有限公司"<?php if($map["sb_name"]=="上海趣比科技有限公司"){ ?>  selected="selected" <?php } ?>>上海趣比科技有限公司</option>
+                                <option value="其他"<?php if($map["sb_name"]=="其他"){ ?>  selected="selected" <?php } ?>>其他</option>
+                                <option value="上海趣比科技有限公司重庆分公司"<?php if($map["sb_name"]=="上海趣比科技有限公司重庆分公司"){ ?>  selected="selected" <?php } ?>>上海趣比科技有限公司重庆分公司</option>
+                                <option value="重庆趣玩科技有限公司北京分公司"<?php if($map["sb_name"]=="重庆趣玩科技有限公司北京分公司"){ ?>  selected="selected" <?php } ?>>重庆趣玩科技有限公司北京分公司</option>
+                                <option value="上饶网聚天下科技有限公司重庆分公司"<?php if($map["sb_name"]=="上饶网聚天下科技有限公司重庆分公司"){ ?>  selected="selected" <?php } ?>>上饶网聚天下科技有限公司重庆分公司</option>
+                            </select>
+                        </td>
+                        <th class="expertScreen" {$isshow}>归属部门：</th>
+                        <td class="expertScreen" {$isshow}><input type="text" id="deptName" name="deptName" value="{:I('get.deptName')}" /></td>
+                        <th class="expertScreen" {$isshow}>客户名称：</th>
+                        <td class="expertScreen" {$isshow}><input type="text" id="aciName" name="aciName" value="{:I('get.aciName')}" /></td>
+                        &lt;!&ndash;readonly="readonly" class="J_dataSelect"&ndash;&gt;
+                    </tr>
+                    <tr>
+                        <th class="expertScreen" {$isshow}>合同有效期：</th>
+                        <td class="expertScreen" {$isshow}><input type="text" id="validity_period" name="validity_period" onClick="WdatePicker();" value="{:I('get.validity_period')}" /></td>
+                        <th class="expertScreen" {$isshow}>合同责任人：</th>
+                        <td class="expertScreen" {$isshow}><input type="text" id="user_name" name="user_name" value="{:I('get.user_name')}" /></td>
+                        <th class="expertScreen" {$isshow}>合同类别：</th>
+                        <td class="expertScreen" {$isshow}>
+                            <select id="contract_category" name="contract_category">
+                                <option value="" <?php if($map["contract_category"]==""){ ?>  selected="selected" <?php } ?>>全部</option>
+                                <option value="新签"<?php if($map["contract_category"]=="新签"){ ?>  selected="selected" <?php } ?>>新签</option>
+                                <option value="续签"<?php if($map["contract_category"]=="续签"){ ?>  selected="selected" <?php } ?>>续签</option>
+                                <option value="终止"<?php if($map["contract_category"]=="终止"){ ?>  selected="selected" <?php } ?>>终止</option>
+                                <option value="变更"<?php if($map["contract_category"]=="变更"){ ?>  selected="selected" <?php } ?>>变更</option>
+                            </select>
+                        </td>
+                        <th class="expertScreen" {$isshow}>续签情况：</th>
+                        <td class="expertScreen" {$isshow}>
+                            <select name="remark">
+                                <option value="" <?php if($map["remark"]==""){ ?>  selected="selected" <?php } ?>>请选择</option>
+                                <option value="1"<?php if($map["remark"]=="1"){ ?>  selected="selected" <?php } ?>>已续签</option>
+                                <option value="2"<?php if($map["remark"]=="2"){ ?>  selected="selected" <?php } ?>>待续签</option>
+                                <option value="3"<?php if($map["remark"]=="3"){ ?>  selected="selected" <?php } ?>>终止合作</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <input type="hidden" name="p" value="1">
+                    <tr>
+                        <td colspan="8">
+                            <input type="submit" value="查询" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>-->
+
+    <div class="screenBox">
+        <form action="{:U('index')}" id="search_form">
+            <div class="t_left">
+                <div class="ziduan">
+                    <label>审批编号:</label>
+                    <input type="text" id="run_id" name="run_id" value="{:I('get.run_id')}" />
+                </div>
+                <div class="ziduan">
+                        <label>合同状态:</label>
+                            <select class="selectpicker" id="sel_status" name="sel_status" value="{:I('get.status')}">
+                                <option  value="" <?php if($map["status"]==""){ ?>  selected="selected" <?php } ?>>全部</option>
+                                <option value="流程正常完结" <?php if($map["status"]=="流程正常完结"){ ?>  selected="selected" <?php } ?>>流程正常完结</option>
+                                <option value="即将到期"<?php if($map["status"]=="即将到期"){ ?>  selected="selected" <?php } ?>>即将到期</option>
+                                <option value="已到期"<?php if($map["status"]=="已到期"){ ?>  selected="selected" <?php } ?>>已到期</option>
+                                <!--<option value="1">执行中</option>
+                                <option value="0">已结束</option>-->
+                            </select>
+                            <input type="hidden"  class="form-control" id="status" name="status" value="{:I('get.status')}">
+                </div>
+                <div class="ziduan">
+                        <label>审批状态:</label>
+                            <select class="selectpicker" id="sel_approval_status" name="sel_approval_status" value="{:I('get.approval_status')}">
+                                <option <?php if($map["approval_status"]==""){ ?>  selected="selected" <?php } ?> value="">全部</option>
+                                <option value="1"<?php if($map["approval_status"]=="1"){ ?>  selected="selected" <?php } ?>>已审核</option>
+                                <option value="2"<?php if($map["approval_status"]=="2"){ ?>  selected="selected" <?php } ?>>未审核</option>
+                                <option value="3"<?php if($map["approval_status"]=="3"){ ?>  selected="selected" <?php } ?>>已作废</option>
+                            </select>
+                            <input type="hidden"  class="form-control" id="approval_status" name="approval_status">
+                </div>
+                <div class="ziduan">
+                        <label>内容归口:</label>
+                            <select class="selectpicker" id="sel_contract_nature" name="sel_contract_nature" value="{:I('get.contract_nature')}">
+                                <option <?php if($map["contract_nature"]==""){ ?>  selected="selected" <?php } ?> value="">全部</option>
+                                <option value="销售合同"<?php if($map["contract_nature"]=="销售合同"){ ?>  selected="selected" <?php } ?>>销售合同</option>
+                                <option value="推广合同"<?php if($map["contract_nature"]=="推广合同"){ ?>  selected="selected" <?php } ?>>推广合同</option>
+                            </select>
+                            <input type="hidden"  class="form-control" id="contract_nature" name="contract_nature">
+                </div>
+                    <?php
+            $isshow = "";
+             if($map["contract_type"] || $map["sb_name"] || $map["deptName"] || $map["aciName"] || $map["validity_period"] || $map["user_name"] || $map["contract_category"] || $map["remark"]){
+                $isshow = "style=\"display: table-cell;\"";
+                } ?>
+
+                <div class="ziduan">
+                        <label {$isshow}>合同类型:</label>
+                            <select class="selectpicker" id="sel_contract_type" name="sel_contract_type" value="{:I('get.contract_type')}">
+                                <option value="" <?php if($map["contract_type"]==""){ ?>  selected="selected" <?php } ?>>全部</option>
+                                <option value="框架协议"<?php if($map["contract_type"]=="框架协议"){ ?>  selected="selected" <?php } ?>>框架协议</option>
+                                <option value="补充协议"<?php if($map["contract_type"]=="补充协议"){ ?>  selected="selected" <?php } ?>>补充协议</option>
+                                <option value="常规合同"<?php if($map["contract_type"]=="常规合同"){ ?>  selected="selected" <?php } ?>>常规合同</option>
+                            </select>
+                            <input type="hidden"  class="form-control" id="contract_type" name="contract_type">
+                </div>
+                <div class="ziduan">
+                        <label {$isshow}>签订主体:</label>
+                            <select class="selectpicker" id="sel_sb_name" name="sel_sb_name" value="{:I('get.sb_name')}">
+                                <option value="" <?php if($map["sb_name"]==""){ ?>  selected="selected" <?php } ?>>全部</option>
+                                <option value="上饶市网聚天下科技有限公司"<?php if($map["sb_name"]=="上饶市网聚天下科技有限公司"){ ?>  selected="selected" <?php } ?>>上饶市网聚天下科技有限公司</option>
+                                <option value="重庆趣玩科技有限公司"<?php if($map["sb_name"]=="重庆趣玩科技有限公司"){ ?>  selected="selected" <?php } ?>>重庆趣玩科技有限公司</option>
+                                <option value="上海趣比科技有限公司"<?php if($map["sb_name"]=="上海趣比科技有限公司"){ ?>  selected="selected" <?php } ?>>上海趣比科技有限公司</option>
+                                <option value="其他"<?php if($map["sb_name"]=="其他"){ ?>  selected="selected" <?php } ?>>其他</option>
+                                <option value="上海趣比科技有限公司重庆分公司"<?php if($map["sb_name"]=="上海趣比科技有限公司重庆分公司"){ ?>  selected="selected" <?php } ?>>上海趣比科技有限公司重庆分公司</option>
+                                <option value="重庆趣玩科技有限公司北京分公司"<?php if($map["sb_name"]=="重庆趣玩科技有限公司北京分公司"){ ?>  selected="selected" <?php } ?>>重庆趣玩科技有限公司北京分公司</option>
+                                <option value="上饶网聚天下科技有限公司重庆分公司"<?php if($map["sb_name"]=="上饶网聚天下科技有限公司重庆分公司"){ ?>  selected="selected" <?php } ?>>上饶网聚天下科技有限公司重庆分公司</option>
+                            </select>
+                            <input type="hidden"  class="form-control" id="sb_name" name="sb_name">
+                </div>
+                <div class="ziduan">
+                        <label {$isshow}>归属部门:</label>
+                        <input type="text" id="deptName" name="deptName" value="{:I('get.deptName')}" />
+                </div>
+                <div class="ziduan">
+                        <label {$isshow}>客户名称:</label>
+                        <input type="text" id="aciName" name="aciName" value="{:I('get.aciName')}" />
+                </div>
+                <div class="ziduan">
+                        <label {$isshow}>有效期:</label>
+                        <input type="text" id="validity_period" name="validity_period" onClick="WdatePicker();" value="{:I('get.validity_period')}" />
+                </div>
+                <div class="ziduan">
+                        <label {$isshow}>责任人:</label>
+                        <input type="text" id="user_name" name="user_name" value="{:I('get.user_name')}" />
+                </div>
+                <div class="ziduan">
+                    <label {$isshow}>类别:</label>
+                        <select class="selectpicker" id="sel_contract_category" name="sel_contract_category">
+                            <option value="" <?php if($map["contract_category"]==""){ ?>  selected="selected" <?php } ?>>全部</option>
+                            <option value="新签"<?php if($map["contract_category"]=="新签"){ ?>  selected="selected" <?php } ?>>新签</option>
+                            <option value="续签"<?php if($map["contract_category"]=="续签"){ ?>  selected="selected" <?php } ?>>续签</option>
+                            <option value="终止"<?php if($map["contract_category"]=="终止"){ ?>  selected="selected" <?php } ?>>终止</option>
+                            <option value="变更"<?php if($map["contract_category"]=="变更"){ ?>  selected="selected" <?php } ?>>变更</option>
+                        </select>
+                        <input type="hidden"  class="form-control" id="contract_category" name="contract_category">
+                </div>
+                <div class="ziduan">
+                    <label {$isshow}>续签情况:</label>
+                    <select class="selectpicker" id="sel_remark">
+                        <option value="" <?php if($map["remark"]==""){ ?>  selected="selected" <?php } ?>>请选择</option>
+                        <option value="1"<?php if($map["remark"]=="1"){ ?>  selected="selected" <?php } ?>>已续签</option>
+                        <option value="2"<?php if($map["remark"]=="2"){ ?>  selected="selected" <?php } ?>>待续签</option>
+                        <option value="3"<?php if($map["remark"]=="3"){ ?>  selected="selected" <?php } ?>>终止合作</option>
+                    </select>
+                    <input type="hidden"  class="form-control" id="remark" name="remark">
+                </div>
+            </div>
+            <div class="t_right"><input type="submit" value="查询" /></div>
+
+        </form>
+    </div>
+
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit" goal="dataTable1">
+
+            <div class="dataTable_columnCa">
+                <div class="dataTable_columnCn selectpicker">
+                </div>
+                <div class="dataTableShow_close tc">关闭</div>
+            </div>
+            <style type="text/css">
+                .te{margin-left: 0!important;}
+                .export{
+                    float: left;
+                    display: inline;
+                    width: auto;
+                    height: 30px;
+                    line-height: 30px;
+                    font-size: 14px;
+                    margin: 15px 0 10px 30px;
+                    /*padding: 0 30px;*/
+                    cursor: pointer;
+                    /*background: url("../images/chaxun.png") no-repeat;*/
+                    background-size: 100% 100%;
+                    text-align: center;
+                    color: #4776e6;
+                    border-radius: 15px;
+                    border: 1px solid #4776e6;
+                    padding: 0 30px;
+                }
+            </style>
+            <div class="advancedLeft tt">
+                <span class="addAdv advBtn">
+                    <a href="/OA/Index/main.html?mainurl=/OA/Index/begin?id=45" target="_blank">新增</a>
+                </span>
+                <a class="export advBtn te" onclick="window.open('/Contract/ContractExport'+window.location.search)" />导出</a>
+                </span>
+            </div>
+            <div class="advancedRight">
+                <div class="advIcon statisticsThumbnail_icon J_statisticsThumbnail fr">可视化报表</div>
+                <div class="dataTableShow fr" goal="dataTable1">
+                    <div class="advIcon dataTableShow_icon fr del">字段筛选</div>
+                    <!--<div class="dataTable_columnCa pa">
+                        <div class="dataTable_columnCn"></div>
+                        <div class="dataTableShow_close tc">关闭</div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>合同审批编号</th>
+                <th>合同名称</th>
+                <th>签订主体</th>
+                <th>客户名称</th>
+                <th>归属部门</th>
+                <th>合同责任人</th>
+                <th>合同类别</th>
+                <th>合同类型</th>
+                <th>合同性质</th>
+                <th>业务线</th>
+                <th>申请日期</th>
+                <th width="150">合同有效期</th>
+                <!--<th>内容描述</th>-->
+                <th>合同状态</th>
+                <th>存档编号</th>
+                <th width="150">合同附件</th>
+                <th>审批状态</th>
+                <th>是否检查</th>
+                <!--<th>操作</th>-->
+                <th>备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="list" id="item">
+                <?php if($item['data_111'] <= date('Y-m-d') && $item['remark'] !=1 && $item['remark'] !=3 ){ ?>
+                    <!--过期-->
+                <tr style="background-color: red;">
+                    <td>{$item.id}</td>
+                    <td><a href="http://oa.yandui.com/general/workflow/list/print/?RUN_ID={$item.run_id}" target="_blank">{$item.run_id}</a></td>
+                    <td>{$item.run_name}</td>
+                    <?php if(($item['data_7'] == '上饶市网聚天下科技有限公司') or ($item['data_7'] == '重庆趣玩科技有限公司') or ($item['data_7'] == '上海趣比科技有限公司') or ($item['data_7'] == '上海趣比科技有限公司重庆分公司') or ($item['data_7'] == '重庆趣玩科技有限公司北京分公司') or ($item['data_7'] == '上饶网聚天下科技有限公司重庆分公司')){ ?>
+
+                    <td>{$item.data_7}</td>
+                    <td>{$item.data_6}</td>
+                    <?php }else{ ?>
+                    <td>{$item.data_6}</td>
+                    <td>{$item.data_7}</td>
+                    <?php } ?>
+                    <td>{$item.data_2}</td>
+                    <td>{$item.data_107}</td>
+                    <td>{$item.data_8}</td>
+                    <td>{$item.data_112}</td>
+                    <td>{$item.data_139}</td>
+                    <td>{$item.data_612}</td>
+                    <td>{$item.data_3}</td>
+                    <td>{$item.data_110}-{$item.data_111}</td>
+                    <td>{$item.status_s}
+                        <!--<select style="background-color: red;" name="C_STATE" id="C_STATE" onchange="stateContract({$item.id},this.options[this.options.selectedIndex].value);">
+                            <if condition = "$item['status'] eq 1 ">
+                                <option value="1" selected="selected">执行中</option>
+                                <option value="0">结束</option>
+                            <else />
+                                <option value="1">执行中</option>
+                                <option value="0" selected="selected">结束</option>
+                            </if>
+                        </select>-->
+                    </td>
+
+                    <td>{$item.data_50}</td>
+
+                    <td>
+                        <php>$file_path =$item['con_file'];</php>
+                        <volist name="file_path" id='val' key='k'>
+                            <a target="_blank" href="/{$val['file_cont']}">预览{$k}</a>
+                        </volist>
+                        &nbsp;
+                        <a class="J_uploading" id="{$item.id}">上传</a>
+                    </td>
+                    <!--http://{$Think.server.HTTP_HOST}-->
+                    <td>
+                        <if condition = "($item['data_50'] neq '') and ($item['data_50'] neq '流程作废')">已审核
+                            <elseif condition="$item['data_50'] eq '流程作废'"/>已作废
+                            <else />待审核
+                        </if>
+                    </td>
+                    <td>
+                        <select name="is_check" class="is_check" rid="{$item.id}">
+                            <if condition = "$item['is_check'] eq 1 ">
+                                <option value="1" selected="selected">是</option>
+                                <option value="0">否</option>
+                                <else />
+                                <option value="1">是</option>
+                                <option value="0" selected="selected">否</option>
+                            </if>
+                        </select>
+                    </td>
+                    <!--<td></td>-->
+                    <td>
+                        <select id="remark" name="remark" onchange="remarkContract({$item.id},this.options[this.options.selectedIndex].value);">
+                            <if condition = "$item['remark'] eq 1">
+                            <!--<option value="">请选择</option>-->
+                            <option value="1" selected="selected">已续签</option>
+                            <option value="2">待续签</option>
+                            <option value="3">终止合作</option>
+                            <elseif condition = "$item['remark'] eq 2"/>
+                                <option value="1">已续签</option>
+                                <option value="2" selected="selected">待续签</option>
+                                <option value="3">终止合作</option>
+                            <elseif condition = "$item['remark'] eq 3" />
+                                <option value="1">已续签</option>
+                                <option value="2">待续签</option>
+                                <option value="3" selected="selected">终止合作</option>
+                              <else />
+                                <option value="" selected="selected">请选择</option>
+                                <option value="1">已续签</option>
+                                <option value="2">待续签</option>
+                                <option value="3">终止合作</option>
+                            </if>
+                        </select>
+                    </td>
+                </tr>
+
+                <?php }elseif($item['data_111'] <= date("Y-m-d",strtotime("+1months")) && $item['remark'] !=1 && $item['remark'] !=3){ ?>
+                    <!--即将到期-->
+                    <tr style="background-color: yellow;">
+                        <td>{$item.id}</td>
+                        <td><a href="http://oa.yandui.com/general/workflow/list/print/?RUN_ID={$item.run_id}" target="_blank">{$item.run_id}</a></td>
+                        <td>{$item.run_name}</td>
+                        <?php if(($item['data_7'] == '上饶市网聚天下科技有限公司') or ($item['data_7'] == '重庆趣玩科技有限公司') or ($item['data_7'] == '上海趣比科技有限公司') or ($item['data_7'] == '上海趣比科技有限公司重庆分公司') or ($item['data_7'] == '重庆趣玩科技有限公司北京分公司') or ($item['data_7'] == '上饶网聚天下科技有限公司重庆分公司')){ ?>
+
+                            <td>{$item.data_7}</td>
+                            <td>{$item.data_6}</td>
+                        <?php }else{ ?>
+                            <td>{$item.data_6}</td>
+                            <td>{$item.data_7}</td>
+                        <?php } ?>
+                        <td>{$item.data_2}</td>
+                        <td>{$item.data_107}</td>
+                        <td>{$item.data_8}</td>
+                        <td>{$item.data_112}</td>
+                        <td>{$item.data_139}</td>
+                        <td>{$item.data_612}</td>
+                        <td>{$item.data_3}</td>
+                        <td>{$item.data_110}-{$item.data_111}</td>
+                        <td>{$item.status_s}</td>
+                        <td>{$item.data_50}</td>
+                        <td>
+                            <php>$file_path =$item['con_file'];</php>
+                            <volist name="file_path" id='val' key='k'>
+                                <a target="_blank" href="/{$val['file_cont']}">预览{$k}</a>
+                            </volist>
+                            &nbsp;
+                            <a class="J_uploading" id="{$item.id}">上传</a>
+                        </td>
+
+                        <td>
+                            <if condition = "($item['data_50'] neq '') and ($item['data_50'] neq '流程作废')">已审核
+                                <elseif condition="$item['data_50'] eq '流程作废'"/>已作废
+                                <else />待审核
+                            </if>
+                        </td>
+                        <td>
+                            <select name="is_check" class="is_check" rid="{$item.id}" <?php if($item["is_check"]==1){ ?> disabled="disabled" <?php } ?>>
+                                <if condition = "$item['is_check'] eq 1 ">
+                                    <option value="1" selected="selected">是</option>
+                                    <option value="0">否</option>
+                                    <else />
+                                    <option value="1">是</option>
+                                    <option value="0" selected="selected">否</option>
+                                </if>
+                            </select>
+                        </td>
+                        <!--<td></td>-->
+                        <td>
+                            <select id="remark" name="remark" onchange="remarkContract({$item.id},this.options[this.options.selectedIndex].value);">
+                                <if condition = "$item['remark'] eq 1">
+                                    <!--<option value="">请选择</option>-->
+                                    <option value="1" selected="selected">已续签</option>
+                                    <option value="2">待续签</option>
+                                    <option value="3">终止合作</option>
+                                    <elseif condition = "$item['remark'] eq 2"/>
+                                    <option value="1">已续签</option>
+                                    <option value="2" selected="selected">待续签</option>
+                                    <option value="3">终止合作</option>
+                                    <elseif condition = "$item['remark'] eq 3" />
+                                    <option value="1">已续签</option>
+                                    <option value="2">待续签</option>
+                                    <option value="3" selected="selected">终止合作</option>
+                                    <else />
+                                    <option value="" selected="selected">请选择</option>
+                                    <option value="1">已续签</option>
+                                    <option value="2">待续签</option>
+                                    <option value="3">终止合作</option>
+                                </if>
+                            </select>
+                        </td>
+                    </tr>
+            <?php }else{ ?>
+                <!--正常-->
+                <tr>
+                    <td>{$item.id}</td>
+                    <td><a href="http://oa.yandui.com/general/workflow/list/print/?RUN_ID={$item.run_id}" target="_blank">{$item.run_id}</a></td>
+                    <td>{$item.run_name}</td>
+                    <?php if(($item['data_7'] == '上饶市网聚天下科技有限公司') or ($item['data_7'] == '重庆趣玩科技有限公司') or ($item['data_7'] == '上海趣比科技有限公司') or ($item['data_7'] == '上海趣比科技有限公司重庆分公司') or ($item['data_7'] == '重庆趣玩科技有限公司北京分公司') or ($item['data_7'] == '上饶网聚天下科技有限公司重庆分公司')){ ?>
+
+                    <td>{$item.data_7}</td>
+                    <td>{$item.data_6}</td>
+                    <?php }else{ ?>
+                    <td>{$item.data_6}</td>
+                    <td>{$item.data_7}</td>
+                    <?php } ?>
+                    <td>{$item.data_2}</td>
+                    <td>{$item.data_107}</td>
+                    <td>{$item.data_8}</td>
+                    <td>{$item.data_112}</td>
+                    <td>{$item.data_139}</td>
+                    <td>{$item.data_612}</td>
+                    <td>{$item.data_3}</td>
+                    <td>{$item.data_110}-{$item.data_111}</td>
+                    <td>{$item.status_s}</td>
+                    <td>{$item.data_50}</td>
+                    <td>
+                        <php>$file_path =$item['con_file'];</php>
+                        <volist name="file_path" id='val' key='k'>
+                            <a target="_blank" href="/{$val['file_cont']}">预览{$k}</a>
+                        </volist>
+                        &nbsp;
+                        <a class="J_uploading" id="{$item.id}">上传</a>
+                    </td>
+                    <td>
+                        <if condition = "($item['data_50'] neq '') and ($item['data_50'] neq '流程作废')">已审核
+                            <elseif condition="$item['data_50'] eq '流程作废'"/>已作废
+                            <else />待审核
+                        </if>
+                    </td>
+                    <td>
+                        <select name="is_check" class="is_check" rid="{$item.id}" <?php if($item["is_check"]==1){ ?> disabled="disabled" <?php } ?>>
+                            <if condition = "$item['is_check'] eq 1 ">
+                                <option value="1" selected="selected">是</option>
+                                <option value="0">否</option>
+                                <else />
+                                <option value="1">是</option>
+                                <option value="0" selected="selected">否</option>
+                            </if>
+                        </select>
+                    </td>
+                    <!--<td></td>-->
+                    <td>
+                        <select id="remark" name="remark" onchange="remarkContract({$item.id},this.options[this.options.selectedIndex].value);">
+                            <if condition = "$item['remark'] eq 1">
+                                <option value="1" selected="selected">已续签</option>
+                                <option value="2">待续签</option>
+                                <option value="3">终止合作</option>
+                                <elseif condition = "$item['remark'] eq 2"/>
+                                <option value="1">已续签</option>
+                                <option value="2" selected="selected">待续签</option>
+                                <option value="3">终止合作</option>
+                                <elseif condition = "$item['remark'] eq 3" />
+                                <option value="1">已续签</option>
+                                <option value="2">待续签</option>
+                                <option value="3" selected="selected">终止合作</option>
+                                <else />
+                                <option value="" selected="selected">请选择</option>
+                                <option value="1">已续签</option>
+                                <option value="2">待续签</option>
+                                <option value="3">终止合作</option>
+                            </if>
+                        </select>
+                    </td>
+                </tr>
+                <?php } ?>
+            </volist>
+            </tbody>
+        </table>
+        <!--分页-->
+        {$_page}
+    </div>
+    </div>
+    <!--统计缩略图-->
+    <div class="statisticsThumbnail">
+        <img src="__IMG__/statisticsThumbnail_close.png" class="statisticsThumbnail_close" />
+
+        <div class="statisticsFiltrate fl tc w">
+            <span class="singleFiltrate focus">全公司</span>
+            <!--<span class="singleFiltrate aaa">业务线</span>-->
+            <select id="pl_name" name="pl_name">
+                <option value="" selected="selected">请选择</option>
+                <foreach name="pl_name" item="pl" >
+                    <option value="{$pl.name}">{$pl.name}</option>
+                </foreach>
+
+            </select>
+            <!--<span class="singleFiltrate">销售</span>
+            <span class="singleFiltrate">商务</span>-->
+        </div>
+        <div id="myChart1" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+        <div id="myChart2" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+        <div id="myChart3" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+
+        <div id="myChart4" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+        <div id="myChart5" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+        <div id="myChart6" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+    </div>
+
+    </div>
+    <!--弹出框（上传合同 -->
+    <div class="uploadingDialog" title="上传合同">
+        <div class="btn">
+            <form id="ciForm" enctype="multipart/form-data" action="{:U('uploadImg')}" method="post">
+            <table class="dialogTable_form w ha">
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>选择合同<span class="must">*</span>:</th>
+                    <td><input type="file" id="contractImg"  name="contractImg" multiple="multiple" />
+                    <input type="hidden" id="cid" name="cid">
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+        <!--<div class="progress" style="display: none;">
+            <span class="bar"></span><span class="percent">0%</span >
+        </div>-->
+        <div id="progress">
+            <div id="bar"></div>
+            <div id="percent">0%</div >
+        </div>
+        <div id="message"></div>
+    </div>
+
+    <!--弹出框（客户名称、经办人、归属部门） -->
+    <div class="dataSelectDialog" title="客户名称、经办人、归属部门">
+        <table class="dialogTable_list w ha" >
+            <caption>
+                查询字段：
+                <input type="text" />
+                查询字段：
+                <select><option>下拉</option></select>
+                <input type="submit" value="查询" />
+            </caption>
+            <thead>
+            <tr>
+                <th width="30"><input type="checkbox" /></th>
+                <th>字段1</th>
+                <th>字段2</th>
+                <th>字段3</th>
+                <th>字段4</th>
+                <th>字段5</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>……</td>
+                <td>……</td>
+                <td>……</td>
+                <td>……</td>
+                <td>……</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>……</td>
+                <td>……</td>
+                <td>……</td>
+                <td>……</td>
+                <td>……</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</block>
+
+<block name="script">
+<script src="__MODULE__/ECharts/echarts-all.js" type="text/javascript"></script>
+    <script>
+    $(function(){
+        //查询字段初始化 2017.10.27
+        if(getCookie('boss30_on_'+getHref()+'_t_left_state')!='activate' || getCookie('boss30_on_'+getHref()+'_t_left_state')=='' || getCookie('boss30_on_'+getHref()+'_t_left_state')==null || getCookie('boss30_on_'+getHref()+'_t_left_state')==undefined) {
+            setCookie('boss30_on_'+getHref()+'_t_left','111100000000');
+        }
+    });
+    $(".uploadingDialog").dialog({
+        autoOpen: false,
+        resizable: false,
+        width: "450",
+        height: "250",
+        modal: true,
+        show: "scale",
+        buttons: {
+            "确定":function() {
+                /*var bar = $('.bar');
+                var percent = $('.percent');
+                var progress = $(".progress");
+                var btn = $(".btn span:eq(0)");*/
+                //获取合同id
+                var imgPath = $("#contractImg").val();
+                if (imgPath == "") {
+                    alert("请选择上传图片！");
+                    return;
+                }
+                var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
+                if (strExtension != 'jpg' && strExtension != 'gif'
+                        && strExtension != 'png' && strExtension != 'bmp' && strExtension != 'pdf') {
+                    alert("请选择图片文件或者PDF文件");
+                    return;
+                }
+
+                $('#ciForm').ajaxSubmit({
+                    beforeSend: function() { //开始上传
+                        /*progress.show(); //显示进度条
+                        var percentVal = '0%'; //开始进度为0%
+                        bar.width(percentVal); //进度条的宽度
+                        percent.html(percentVal); //显示进度为0%
+                        btn.html("上传中..."); //上传按钮显示上传中*/
+                        $("#progress").show();
+//clear everything
+                        $("#bar").width('0%');
+                        $("#message").html("");
+                        $("#percent").html("0%");
+                    },
+                    uploadProgress: function(event, position, total, percentComplete) {
+                        /*var percentVal = percentComplete + '%'; //获得进度
+                        bar.width(percentVal); //上传进度条宽度变宽
+                        percent.html(percentVal); //显示上传进度百分比*/
+                        $("#bar").width(percentComplete+'%');
+                        $("#percent").html(percentComplete+'%');
+                    },
+                    success: function (html, status) {
+                        $("#bar").width('100%');
+                        $("#percent").html('100%');
+
+                        var result = html.replace("<pre>", "");
+                        result = result.replace("</pre>", "");
+                        //$("#image").attr('src', result);
+                        alert(result);
+                        location.reload();
+                    },
+                    error: function(html,status){
+                        var result = html.replace("<pre>", "");
+                        result = result.replace("</pre>", "");
+                        //$("#image").attr('src', result);
+                        alert(result);
+                        $(this).dialog("close");
+                    }
+                });
+
+                //$(this).dialog("close");
+            },
+            "取消":function(){
+                $(this).dialog("close");
+            }
+        },
+    });
+    //上传合同对话框
+    $(".J_uploading").click(function(){
+
+        var cid = $(this).attr('id');
+        //alert(cid);return;
+        $("#cid").val(cid);
+        //$(".uploadingDialog").attr("cid",cid);
+        $(".uploadingDialog").dialog("open");
+    });
+
+    //对话框（客户名称、经办人、归属部门）
+    $(".dataSelectDialog").dialog({
+        autoOpen: false,
+        resizable: false,
+        width: "600",
+        height: "300",
+        modal: true,
+        show: "scale",
+        buttons: {
+            "确定":function() {
+                $(this).dialog("close");
+            },
+            "取消":function(){
+                $(this).dialog("close");
+            }
+        },
+    });
+    //对话框（客户名称、经办人、归属部门）
+    $(".J_dataSelect").click(function(){
+        $(".dataSelectDialog").dialog("open");
+    });
+    /*$(".contract_export").click(function(){
+        //alert("待完善");
+        $.post("{:U('ContractExport')}",{
+        },function(data){
+            if(data == "TRUE"){
+                location.reload();
+            }else{
+                alert(data);
+            }
+        });
+    });*/
+
+    function stateContract(ID,V){
+        //alert(ID+"/"+V);
+        $.post("{:U('change_state')}",{
+            ID : ID,
+            STATUS : V,
+        },function(data){
+            if(data == "TRUE"){
+                location.reload();
+            }else{
+                alert(data);
+            }
+        });
+    }
+
+    function remarkContract(ID,V){
+        //alert(ID+"/"+V);return;
+        //修改备注
+        $.post("{:U('change_remark')}",{
+            ID : ID,
+            REMARK : V
+        },function(data){
+            if(data == "TRUE"){
+                location.reload();
+            }else{
+                alert(data);
+            }
+        });
+    }
+
+    //普通对话框
+    $(".dialog_bottom :button,.dialog_bottom :submit,.dialog_close").click(function(){
+        $(this).parents(".dialog_ca").hide();
+        $(this).parents(".dialog_ca").css({ marginLeft:'0px', marginTop:'0px'});
+        $("#conceal").remove();
+    });
+    //缩略统计是否展开
+    $(".J_statisticsThumbnail").click(function(){
+        $(".statisticsThumbnail").animate({ left:'0%', },400);
+        setCookie('statisticsState_'+window.location.href,'true',30);
+    });
+    $(".statisticsThumbnail_close").click(function(){
+        $(".statisticsThumbnail").animate({ left:'100%', },400);
+        setCookie('statisticsState_'+window.location.href,'false',30);
+    });
+    if(getCookie('statisticsState_'+window.location.href)=="true"){
+        $(".statisticsThumbnail").css('left','0%');
+    }else{
+        $(".statisticsThumbnail").css('left','100%');
+    }
+
+    //=============================统计图=============================
+    // 基于准备好的dom，初始化echarts图表
+
+    //方法
+    function droonepic_bz(targeid,ser_datastr,title_data) {
+        var myChart1 = echarts.init(document.getElementById(targeid));
+        var pie = {
+            backgroundColor: 'rgba(255,255,255,0.9)',
+            title : {
+                text: title_data,
+                x: 'center',
+                textStyle: {
+                    fontSize: 16,
+                    color: '#1a72d6'
+                },
+                padding: 15,
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            /*legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: legend_datastr
+            },*/
+            calculable : true,
+            series : ser_datastr
+        };
+        myChart1.setOption(pie);
+    }
+
+    //折线图方法
+    function droonepic(targeid,xAxis_datastr,ser_datastr,title_data) {
+        var myChart1 = echarts.init(document.getElementById(targeid));
+        var option = {
+            backgroundColor: 'rgba(255,255,255,0.9)',
+            title : {
+                text: title_data,
+                x: 'center',
+                textStyle: {
+                    fontSize: 16,
+                    color: '#1a72d6'
+                },
+                padding: 15,
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            /*legend: {
+                data: legend_datastr
+            },*/
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    splitLine: {
+                        show: false
+                    },
+                    data: xAxis_datastr
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    splitLine: {
+                        show: false
+                    }
+                }
+            ],
+            series: ser_datastr
+        };
+        myChart1.setOption(option);
+    }
+
+    getpic_data();
+    //统计图查询数据
+    function getpic_data(datekey) {
+        $.post("{:U('s_data')}",{
+            plname : datekey
+        },function(data){
+            //data = JSON.parse(data);
+            if(data.msg == "success"){
+
+                var sale_status = data.sale_status;
+                var sale_type = data.sale_type;
+                var sale_mon = data.sale_mon;
+                var promotion_status = data.promotion_status;
+                var promotion_type = data.promotion_type;
+                var promotion_mon = data.promotion_mon;
+
+                var aci_tit = ["销售合同状态占比"];
+                var aci_type = ["销售合同类型占比"];
+                var cg_title = ["推广合同状态占比"];
+                var cg_type_title = ["推广合同类型占比"];
+
+                var ljser = [];
+                var st = [];
+                var cg_status = [];
+                var cg_type = [];
+
+                ljser[0] = {name: "销售合同状态", type: "pie",radius : '55%',center: ['50%', '60%'],data: sale_status};
+                st[0] = {name: "销售合同类型", type: "pie",radius : '55%',center: ['50%', '60%'],data: sale_type};
+                cg_status[0] = {name: "推广合同状态", type: "pie",radius : '55%',center: ['50%', '60%'],data: promotion_status};
+                cg_type[0] = {name: "推广合同类型", type: "pie",radius : '55%',center: ['50%', '60%'],data: promotion_type};
+
+                //销售趋势
+                var ljser_data = [];
+                var xAxis_pl = [];
+                var pl_tit = ["销售合同每月新增趋势"];
+                for (var o in sale_mon) {
+                    xAxis_pl.push(o);
+                    ljser_data.push(sale_mon[o]);
+                }
+                var pl_datastr = [];
+                pl_datastr[0] = {name: "新增", type: "line",symbol:'circle',symbolSize: 1,data: ljser_data};
+
+                //推广趋势
+                var ljser_data = [];
+                var xAxis_nsi = [];
+                var nsi_tit = ["推广合同每月新增趋势"];
+                for (var o in promotion_mon) {
+                    xAxis_nsi.push(o);
+                    ljser_data.push(promotion_mon[o]);
+                }
+                var nsi_datastr = [];
+                nsi_datastr[0] = {name: "推广", type: "line",symbol:'circle',symbolSize: 1,data: ljser_data};
+
+                droonepic('myChart3', xAxis_pl, pl_datastr,pl_tit);
+                droonepic('myChart6', xAxis_nsi, nsi_datastr,nsi_tit);
+                droonepic_bz('myChart1',ljser,aci_tit);
+                droonepic_bz('myChart2',st,aci_type);
+                droonepic_bz('myChart4',cg_status,cg_title);
+                droonepic_bz('myChart5',cg_type,cg_type_title);
+            }else{
+                alert(data);
+            }
+        });
+
+    }
+
+    //业务线查询切换
+    $("#pl_name").change(function(){
+        getpic_data($(this).val());
+        //alert($(this).val());
+    });
+    //全公司
+    $(".singleFiltrate").click(function(){
+        getpic_data();
+    });
+
+    //是否检查状态切换
+    $(".is_check").change(function(){
+        var rid = $(this).attr('rid');//id
+        var is_check = $(this).val();//是否检查
+        //alert(rid+' '+is_check);
+        $.post("{:U('is_check')}",{
+            rid : rid,
+            is_check : is_check
+        },function(data){
+            //alert(data);
+            if(data == "TRUE"){
+                //location.reload();
+                window.location.href=window.location.href;
+            }else{
+                alert(data);
+            }
+        });
+    });
+
+
+    $('#sel_status').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+        var tmpSelected = $('#sel_status').val();
+        if (tmpSelected != null) {
+            $('#status').val(tmpSelected);
+        } else {
+            $('#status').val("");
+        }
+    });
+    $('#sel_approval_status').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+        var tmpSelected = $('#sel_approval_status').val();
+        if (tmpSelected != null) {
+            $('#approval_status').val(tmpSelected);
+        } else {
+            $('#approval_status').val("");
+        }
+    });
+    $('#sel_contract_nature').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+        var tmpSelected = $('#sel_contract_nature').val();
+        if (tmpSelected != null) {
+            $('#contract_nature').val(tmpSelected);
+        } else {
+            $('#contract_nature').val("");
+        }
+    });
+    $('#sel_contract_type').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+        var tmpSelected = $('#sel_contract_type').val();
+        if (tmpSelected != null) {
+            $('#contract_type').val(tmpSelected);
+        } else {
+            $('#contract_type').val("");
+        }
+    });
+    $('#sel_sb_name').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+        var tmpSelected = $('#sel_sb_name').val();
+        if (tmpSelected != null) {
+            $('#sb_name').val(tmpSelected);
+        } else {
+            $('#sb_name').val("");
+        }
+    });
+    $('#sel_contract_category').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+        var tmpSelected = $('#sel_contract_category').val();
+        if (tmpSelected != null) {
+            $('#contract_category').val(tmpSelected);
+        } else {
+            $('#contract_category').val("");
+        }
+    });
+    $('#sel_remark').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+        var tmpSelected = $('#sel_remark').val();
+        if (tmpSelected != null) {
+            $('#remark').val(tmpSelected);
+        } else {
+            $('#remark').val("");
+        }
+    });
+    /*$(".J_show").click(function(){
+        $("#lx").show();
+        $("#lx_s").show();
+        $("#bu").show();
+        $("#bu_s").show();
+
+    });*/
+
+    /*$(".aaa").click(function(){
+        $.get("{:U('Api/Oa/sel_supplier')}",{},function(data){
+
+        });
+    });*/
+</script>
+</block>

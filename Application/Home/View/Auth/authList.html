@@ -1,0 +1,89 @@
+<extend name="Public/basehtml"/>
+<block name="body">
+<style type="text/css">
+    .bg-btn{width:100%;text-align:center;margin-top:20px;background:#fff;height:50px;position:fixed;bottom:0;left:0;z-index:5000;border-top:1px solid #e2e2e2}.auth-secks{padding-bottom:50px}.mits-btn{margin-top:10px}.lines-sec{float:left!important;height:30px!important;line-height:30px!important;width:60%!important;margin-right:10px!important}.lines-sec option{line-height:30px!important;height:30px!important;width:100%}.siss-se{float:left;margin-bottom:10px;width:100%;display:inline-block}.sic-tw{float:left;height:30px;line-height:30px;display:inline-block;text-align:right}.bntk-sqs{float:left;margin-left:100px}
+    .grant{padding-left: 20px;}
+    .grant p{
+        line-height: 20px;
+        text-align: left;
+    }
+    .grant hr{
+        border: 1px solid #999;
+        margin: 5px 30px 5px 0; 
+    }
+</style>
+    <div class="type1" <?php if($datatype==1){ ?> style="display:block;" <?php } ?>  style="display:none;">
+        <ul id="userGNTree" class="ztree auth-secks">
+            <li class="" style="width:100%;text-align:center;height:4px;line-height:400px;">加载中...</li>
+        </ul>
+        
+        <div class="bg-btn" <eq name="type_id" value="6">style="height:220px;"</eq>>
+            <eq name="type_id" value="6">
+                <div class="grant">
+                    <p>重复授权:<input type="radio" name="chongfu" value="1"/>一周&nbsp;&nbsp;<input type="radio" name="chongfu" value="2"/>两周&nbsp;&nbsp;<input type="radio" name="chongfu" value="4"/>一月</p>
+                    <p>重复日期:<input type="checkbox" name="htime" value="0"/>日&nbsp;&nbsp;<input type="checkbox" name="htime" value="1"/>一&nbsp;&nbsp;<input type="checkbox" name="htime" value="2"/>二&nbsp;&nbsp;<input type="checkbox" name="htime" value="3"/>三&nbsp;&nbsp;<input type="checkbox" name="htime" value="4"/>四&nbsp;&nbsp;<input type="checkbox" name="htime" value="5"/>五&nbsp;&nbsp;<input type="checkbox" name="htime" value="6"/>六&nbsp;&nbsp;</p>
+                    <p>仅工作时间：<input type="checkbox" name="is_worktime" checked="checked" value="1"/></p>
+                    <hr/>
+                    <p>临时授权：时效&nbsp;&nbsp;<input style="width:50px;" type="text" name="linshi"/>&nbsp;&nbsp;小时</p>
+                    <p style="color:red">注：选择临时授权时间时重复授权功能自动失败。</p>
+                </div>
+            </eq>
+            <input type="button" value="确定" class="mits-btn" onclick="auth.getUserGNAuth({$type_id})" id="auth_1_{$type_id}" style="display:none;"/><eq name="type_id" value="6">&nbsp;&nbsp;<input type="button" value="查看已生效的授权记录" class="mits-btn" onclick="auth.getruleh()"/></eq>
+        </div>
+    </div>
+   <div class="type2" <?php if($datatype==2){ ?> style="display:block;" <?php } ?> style="display:none;">
+        <div class="" style="width:91%;padding:20px;float:left;">
+            <div class="siss-se">
+                <span class="sic-tw" style="width:100px;">分配业务线：</span>
+                 <select name="all_line" id="all_line" class="lines-sec" data-actions-box="true" multiple="true" data-done-button="true" data-live-search="true">
+                    <option>加载中...</option>
+                </select>
+            </div>
+           <div class="siss-se">
+                <span class="sic-tw" style="width:100px;">查看用户数据：</span>
+                <select  name="all_user" id="all_user" class="lines-sec" data-actions-box="true" multiple="true" data-done-button="true" data-live-search="true">
+                    <option>加载中...</option>
+                </select>
+
+            </div>
+
+             <div class="siss-se" style="text-align:center;margin-top:10px;">
+                <eq name="type_id" value="7">
+                    <div class="grant">
+                        <p>重复授权:<input type="radio" name="chongfu" value="1"/>一周&nbsp;&nbsp;<input type="radio" name="chongfu" value="2"/>两周&nbsp;&nbsp;<input type="radio" name="chongfu" value="4"/>一月</p>
+                        <p>重复日期:<input type="checkbox" name="htime" value="0"/>日&nbsp;&nbsp;<input type="checkbox" name="htime" value="1"/>一&nbsp;&nbsp;<input type="checkbox" name="htime" value="2"/>二&nbsp;&nbsp;<input type="checkbox" name="htime" value="3"/>三&nbsp;&nbsp;<input type="checkbox" name="htime" value="4"/>四&nbsp;&nbsp;<input type="checkbox" name="htime" value="5"/>五&nbsp;&nbsp;<input type="checkbox" name="htime" value="6"/>六&nbsp;&nbsp;</p>
+                        <p>仅工作时间：<input type="checkbox" name="is_worktime" checked="checked" value="1"/></p>
+                        <hr/>
+                        <p>临时授权：时效&nbsp;&nbsp;<input style="width:50px;" type="text" name="linshi"/>&nbsp;&nbsp;小时</p>
+                        <p style="color:red">注：选择临时授权时间时重复授权功能自动失败。</p>
+                    </div>
+                </eq>
+                <input type="button" value="确定" class="mits-btn bntk-sqs" onclick="auth.saveUserDataAuth({$type_id})" id="auth_2_{$type_id}" style="display:none;margin-top:0px;"/><eq name="type_id" value="7">&nbsp;&nbsp;<input type="button" value="查看已生效的授权记录" class="mits-btn" onclick="auth.getruleh()"/></eq>
+             </div>
+             <div class="d-f " style="color:red;width:100%;text-indent:100px;float:left;margin-top:10px">*数据权限 = 业务线数据 + 用户数据</div>
+        </div>
+    </div>
+    <div class="type3">
+
+    </div>
+<!--JQuery zTree-->
+<input type="hidden" id="userid" name="userid"  value="{$userid}"/>
+<input type="hidden" id="type_id" name="type_id"  value="{$type_id}"/>
+<input type="hidden" id="datatype" name="datatype"  value="{$datatype}"/>
+
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<link rel="stylesheet" href="__MODULE__/jqueryztree3.5/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.excheck.js"></script>
+
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<script type="text/javascript">var pType="Auth_authList";</script>
+<script type="text/javascript" src="/Public/Home/js/auth.js?v={:getVersion()}"></script>
+</block>
+
+
+

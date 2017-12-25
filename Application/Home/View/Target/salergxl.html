@@ -1,0 +1,246 @@
+<extend name="Public/base"/>
+
+<block name="script">
+<style>
+.crumbsNavCn{display: none;}
+</style>
+	<script src="__PUBLIC__/Home/module/ECharts/echarts-all.js" type="text/javascript"></script>
+		
+		<script type="text/javascript">
+			$(function() {
+				$(".cartogramCn").width($(".tab_contentWrapper").width())
+				//=============================统计图=============================
+				 // 基于准备好的dom，初始化echarts图表
+
+				var myChart3 = echarts.init(document.getElementById('myChart3'));
+				//折线图
+		    	var brokenLine = {
+				    tooltip : {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        data:["<php>echo implode('","',$salername_arr);</php>"]
+				    },
+				    calculable : true,
+				    xAxis : [
+				        {
+				            type : 'category',
+				            boundaryGap : false,
+				            data : ['1月','2月','3月','4月','5月','6月','7月','8月','8月','10月','11月','12月']
+				        }
+				    ],
+				    yAxis : [
+				        {
+				            type : 'value',
+				            axisLabel : {
+				                formatter: '{value} %'
+				            }
+				        }
+				    ],
+				    series : [
+				    	<php>
+							foreach($data_name_saler as  $key => $val){
+								echo "{name:'$key',type:'line',data:[";
+								$datanow=array();
+								for($i=11;$i>=0;$i--){
+									$datanow[]=$val[date('Y-m',time()-3600*24*30*$i)];
+								}
+								echo implode(',',$datanow);
+								echo "]},";
+							}
+				    	</php>
+				        
+				    ]
+				};
+
+		        // 为echarts对象加载数据 
+
+		        myChart3.setOption(brokenLine);
+		        $('.dataTable').each(function(){
+		        	var Tindex;
+		        	
+		        	var Ttb=$(this);
+		        	$(this).find('thead').find('tr').eq(1).find('td').each(function(){
+		        		if($(this).hasClass('J_sum')){
+		        			var Tsumnum=0;
+		        			Tindex=$(this).index();
+							Ttb.find('tbody').find('tr').each(function(){
+		        				Tsumnum+=($(this).find('td').eq(Tindex).text()*1);
+		        			})
+		        			$(this).html(Math.round(Tsumnum*100)/100);
+		        		}
+		        	})
+		        	
+		        	
+		        })
+			});
+		</script>
+</block>
+
+<block name="body">
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">销售业绩贡献率</span>
+				<span>商务管理</span>
+			</div>
+			<div class="ri_work">Sales contribution rate</div>
+		</div>
+				<div class="tabCa pa">
+
+					<div class="tab_contentWrapper pa">
+
+						<!--销售业绩贡献率-->
+						<div class="tab_content pa " style="display: block;">
+							<!--筛选-->
+							<!--<div class="screenCn fl w ha">
+								<div class="screenOperate fl w">
+									<input type="button" value="导出" class="J_addData" />
+								</div>
+								<div class="screenList fl w">
+								<form action="/Target/performanceStatistics" method="get">
+									<table>
+										<tr>								
+
+											<th>部门：</th>
+											<td><select name="bumen">
+											<option value="0">全部</option>
+												<volist name='bumen' id='v'>
+													<option value="{$v.id}" <eq name="v.id" value="$_GET['bumen']">selected="selected"</eq>>{$v.name}</option> 
+												</volist>
+											</select></td>
+										</tr>
+										<tr>
+											<td colspan="8">
+												<input type="submit" value="查询" />
+											</td>
+										</tr>
+									</table>
+									</form>
+								</div>
+							</div>-->
+
+							<div class="screenBox swiper-container">
+								<div class="swiper-wrapper">
+									<div class="swiper-slide">
+										<form action="/Target/performanceStatistics" method="get">
+
+											<div class="swiperRight">
+												<table class="tableBox">
+													<tr>
+
+														<th>部门：</th>
+														<td><select class="selectpicker" name="bumen">
+															<option value="0">全部</option>
+															<volist name='bumen' id='v'>
+																<option value="{$v.id}" <eq name="v.id" value="$_GET['bumen']">selected="selected"</eq>>{$v.name}</option>
+															</volist>
+														</select></td>
+														<td colspan="6">
+															<input type="submit" value="查询" />
+														</td>
+													</tr>
+												</table>
+											</div>
+										</form>
+										<!--end 基础查询-->
+									</div>
+								</div>
+							</div>
+
+							<div class="cartogramCn w fl" id="myChart3">
+								
+							</div>
+							<!--统计明细-->
+							<div class="dataCn fl w ha">
+								<div class="advancedTit">
+									<div class="advancedLeft">
+										<span class="export advBtn"><input type="button" value="导出" class="J_addData" /></span>
+									</div>
+								</div>
+								<table class="dataTable2">									
+									<thead>
+									<tr>
+										<th>姓名</th>
+										<volist name='salermonth' id='val'>
+											<td>{$val}</td>
+										</volist>
+
+									</tr>
+									</thead>
+									<tbody>
+									<foreach name='data_name_saler' item='v' key='k'>
+										<tr>
+											<td>{$k}</td>
+											<volist name='salermonth' id='val'>
+												<td>{$v[$val]|twonum}%</td>
+											</volist>
+
+										</tr>
+									</foreach>
+									</tbody>
+								</table>
+							</div>
+							<!--数据表
+							<div class="dataCn fl w ha">
+								<table class="dataTable ">
+									<thead>
+									<tr>
+										<th width="60">序号</th>
+										<th>销售人员</th>
+										<th>岗位指标</th>
+										<th>考核指标</th>
+										<th>收入流水</th>
+										<th>收入开票率</th>
+										<th>回款率</th>
+										<th>业绩完成率</th>
+										<th>个人提成系数</th>
+										<th>预估流水提成</th>
+										<th>销售业绩贡献率</th>
+									</tr>
+									<tr>
+										<td>汇总</td>
+										<td></td>
+										<td class="J_sum"></td>
+										<td class="J_sum"></td>
+										<td class="J_sum"></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td class="J_sum"></td>
+										<td></td>
+									</tr>
+									</thead>
+									<tbody>
+									<volist name='data_saler' id='v' key='k'>
+										<tr>
+											<td>{$k}</td>
+											<td>{$v.real_name}</td>
+											<td>{$v.postrule}</td>
+											<td>{$v.target}</td>
+											<td>{$v.inmoney|twonum}</td>
+											<td>{$v.kaipiaolv}%</td>
+											<td>{$v.huikuanlv}%</td>
+											<td>{$v.yejiwanchenlv}%</td>
+											<td>{$v.rule}</td>
+											<td>{$v.yugutichen|twonum}</td>
+											<td>{$v.gongxianlv|twonum}%</td>
+										</tr>
+									</volist>
+									</tbody>
+								</table>
+							</div>  -->
+							<!--分页-->
+				            
+				            
+						</div>
+						<!--商务毛利贡献率-->
+						
+						<!-- 部门提成 -->
+						
+					</div>
+				</div>
+		</div>
+</block>
+

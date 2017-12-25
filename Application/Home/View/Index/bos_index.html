@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{:getSiteTitle($webTitle)} </title>
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge"/>
+    <link rel="stylesheet" href="__PUBLIC__/newUI/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/newUIH/css/reset.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/newUIH/css/index.css?v={:getVersion()}"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/css/index.css">
+</head>
+<body>
+<header>
+    <div class="header_box">
+        <div class="left">
+            <!--<div class="my_logo"></div>
+            <div class="header_text" style="cursor:pointer;" onclick="window.location='/Home/Index/index'">重庆话语智能办公平台   BOS系统</div>-->
+            <div class="header_text" style="cursor:pointer;" onclick="window.location='/Home/Index/index'"><img src="__PUBLIC__/newUIH/images/til.png"></div>
+        </div>
+        <div class="right user_box">
+            <div class="user_box_img"><img src="__PUBLIC__/newUIH/images/<eq name="data_user.gender" value="1">g<else/>m</eq>.png"></div>
+            <div><a href="/Home/User/mycenter">{$_SESSION['userinfo']['realname']}</a></div>
+            <div id="log_off" onclick="window.location='/Home/Public/logout'"></div>
+        </div>
+    </div>
+</header>
+<section>
+    <div class="section_box">
+
+
+    <!--
+        <div class="section_user">
+            <img src="__PUBLIC__/newUIH/images/<eq name="data_user.gender" value="1">g<else/>m</eq>.png" alt="">
+            <div class="section_user_box">
+                <div class="user_name"><span>hello，</span><span class="user_name_span">{$_SESSION['userinfo']['realname']}</span></div>
+                <div>有梦，有未来</div>
+            </div>
+            <div class="section_user_work">
+                <div class="user_work">
+                    <img src="__PUBLIC__/newUIH/images/work.png">
+                    <span>{$_SESSION['userinfo']['duty_name']}</span>
+                    <img class="work_span" src="__PUBLIC__/newUIH/images/team.png">
+                    <span>{$_SESSION['userinfo']['depart_name']}</span>
+                </div>
+                <div class="user_jse">
+                    <span class="user_jse_color">系统角色：</span>
+                    <span class="user_jse_span">{$_SESSION['userinfo']['duty_name']}</span>
+                    <span class="user_jse_color">工龄：</span>
+                    <span>{$_SESSION['userinfo']['company_age']}年</span>
+                </div>
+            </div>
+        </div>
+-->
+
+    <div class="mainInfo clearfix">
+        <div class="top_left">
+            <!--头像-->
+            <div class="top_left_user_icon"><img src="__PUBLIC__/newUI/img/<eq name="data_user.gender" value="1">g<else/>p1</eq>.png"></div><!--<img src="__PUBLIC__/newUI/img/p1.jpg" alt="">-->
+            <!--个人信息-->
+            <div class="top_left_user_info">
+                <div class="userInofBox clearfix">
+                    <p class="user_info_name"><span>Hi,<em><eq name="data_user.gender" value="1">美女<else/>帅哥</eq></em></span><i>{$_SESSION['userinfo']['realname']}</i></p>      </div>
+
+                <ul class="userInfoList clearfix">
+                    <li class="user_post">{$data_user.auth_name}</li>
+                    <li class="user_department">{$_SESSION['userinfo']['depart_name']}</li>
+                    <li class="user_power"> {$_SESSION['userinfo']['duty_name']}</li>
+                    <li class="user_WorkYears">工龄{$_SESSION['userinfo']['company_age']}年</li>
+                </ul>
+            </div>
+        </div>
+
+
+
+
+        <!--右边企业理念-->
+        <div class="top_right">
+            <div class="swiper-container qywh_swiper">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            价值观
+                        </p>
+                        <p class="company_culture_con">
+                            不作恶，不伤害用户以及合作伙伴利益！不惧恶，敢与一切损害价值观的势力斗争！
+                        </p>
+                    </div>
+
+                </div>
+                <div class="swiper_slide_prev"></div>
+                <div class="swiper_slide_next"></div>
+            </div>
+        </div>
+    </div>
+
+
+        <div class="section_title">
+            <div class="section_title_img"><img src="__PUBLIC__/newUIH/images/hqi.png" alt=""></div>
+            <div>基于平台沉淀客户以及服务数据，建立标准化服务去挖掘客户金矿，用大数据以及人工智能提升服务专业度以及服务效率！</div>
+        </div>
+        <div class="section_do" id="bossMenu">
+            <div class="section_do_left">
+                <div style="height:230px;line-height:230px;text-align:center;width:100% !important;font-size:14px;color:#999;" id="bosloading">加载中...</div>
+            </div>
+
+        </div>
+        <div class="section_willdo">
+            <div class="section_willdo_header">
+                <div class="section_willdo_daiban">
+                    <div><img src="__PUBLIC__/newUIH/images/daiban.png" alt=""></div>
+                    <div>
+                        <div class=" section_willdo_title">TO BE DONE</div>
+                        <div>待办通知</div>
+                    </div>
+                </div>
+                <div class="section_willdo_xiaoxi">
+                    <img src="__PUBLIC__/newUIH/images/weidu.png" alt="">
+                    <span>您有</span>
+                    <span>{$promnum}</span>
+                    <span>条未读消息</span>
+                    <span></span>
+                </div>
+            </div>
+            <!-- udpate 0921  -->
+            
+            <div class="mes-opre-sec">
+                <span class="xx-ch"  onclick="x.checkAll(this)" data-status="1">
+                    <i class="aimg xx-ck" id="choseAll"></i>
+                </span>
+                <span class="xx-sel">
+                    <select class="xx-sel-n" id="msgstatus">
+                        <option value="0" onclick="x.changeStatus()">请选择</option>
+                        <option value="1" onclick="x.changeStatus()">标为已读</option>
+                    </select>
+                    <i class="aimg xx-down"></i>
+                </span>
+                
+                <span style="border:1px solid #508DEE;margin-right:5px;height:auto;line-height:16px;margin-top:18px;" class="del-span" onclick="x.isreadMsg()" title="设为已读信息">设为已读</span>
+                <span style="border:1px solid #508DEE;margin-right:5px;height:auto;line-height:16px;margin-top:18px;" class="del-span" onclick="window.open('/Home/Index/main?mainurl=/Home/Message/add')">发送通知</span>
+                <span class="ks-sk">
+                    <span class="ks-ssk">
+                        <input  type="text" class="ks-puk" id="content" name="content" value="{$content}" placeholder="关键字查询，例如合同、逾期、付款、产品"/>
+                         <span class="ks-ssbtn" onclick="x.searchMsg()">&nbsp;&nbsp;&nbsp;</span>
+                    <form action="/Home/Index/bos_index.html" id="sform">
+                     <input type="hidden" value="{$content}" id="hd_content" name="hd_content"/>
+                     </form>
+                    </span>
+                </span>
+                <span class="xx-lsek" onclick="x.intoRubbish()">
+                    <i class="aimg laj-ico"></i>
+                </span>
+            </div>
+            
+            <!-- udpate 021 -->
+             <style type="text/css">
+                .isExp{color:red !important;}
+                .test{float: right !important;margin-right: 30px;}
+            </style>
+            <div class="section_willdo_text">
+                <if condition="count($promlist) eq 0">
+                    <div class="no_data_text">
+                        <div class="no_data_img"><img src="/Public/newUIH/images/no_data_img.png" alt=""></div>
+                        <div>您暂无待办事项</div>
+                    </div>
+                <else/>
+                    <div id="table_content">
+                        <volist name="promlist" id='v'>
+                            <div class="section_willdo_list">
+                                <span class="xx-ch" onclick="x.choseItem({$v.id})">
+                                    <i class="aimg xx-ck  ckitem" data-msgid="{$v.id}" id="ck_{$v.id}" data-status="{$v.status}"></i>
+                                </span>
+                                <span class="section_willdo_icon mgleft17 <eq name="v.status" value="1">has_backg</eq>"></span>
+                                <span class="xx-mesgk"><a href="/Home/Ajax/readtixing?id={$v.id}&type=bos" target="_blank"  class="{$v['isExp_css']}" title="{$v.content}">{$v.content}</a></span>
+                                <span class="section_willdo_span doing">
+                                <if condition="$v.status eq 0 && $v.add_user eq '系统'"><a href="/Home/Ajax/readtixing?id={$v.id}&type=bos" target="_blank"  class="{$v['isExp_css']}" title="{$v.content}">办理</a></if>
+                                <a href="/Home/Index/main?mainurl=/Home/Message/add?id={$v.id}" target="_blank">查看</a>
+                                </span>
+                                <span class="test">{$v.date_time}</span>
+                                <eq name="v.status" value="1">
+                                    <span class="section_willdo_ztai" style="color:green;">已读</span>
+                                <else/>
+                                    <span class="section_willdo_ztai">未读</span>
+                                </eq>
+                                <span class="section_willdo_span">{$v.add_user}</span>
+                                <span class="section_willdo_span">{$v.msg_type}</span>
+                                
+                            </div>
+                        </volist>
+                    </div>
+                    {$page_html}
+                </if>
+            </div>
+        </div>
+    </div>
+</section>
+<footer>
+
+</footer>
+<div class="my_model my_model_add">
+    <div class="model_section">
+        <div class="model_header">
+            <div class="model_close"></div>
+            <div>
+                <div class="model_header_title">添加</div>
+                <div id="model_header_title_y">OTHER</div>
+            </div>
+        </div>
+        <div class="model_text">
+            
+
+        </div>
+        <div class="model_btn_box"><button id="model_btn_add" class="model_btn_add">确定</button></div>
+    </div>
+</div>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="__PUBLIC__/newUIH/js/jquery-1.9.1.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="__PUBLIC__/newUIH/js/jquery-2.1.1.min.js"></script>
+<!--[if lte IE 8]>
+<script src="__PUBLIC__/newUI/js/jquery-1.9.1.min.js"></script>
+<![endif]-->
+<script src="__PUBLIC__/newUI/js/swiper-3.4.2.jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/newUIH/js/menu.js?v={:GetVersion()}"></script>
+<script type="text/javascript" src="__PUBLIC__/newUIH/js/reset.js?v=2323"></script>
+<script type="text/javascript" src="__PUBLIC__/newUIH/js/msg.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+
+<script>
+    $(function(){
+        var res_data ='';
+        $.post('/OA/Index/find_notify', {}, function (data) {
+            res_data = data;
+            var adTr = '';
+
+            $.each(res_data, function (idx, ele) {
+
+                adTr +=  '<div class="swiper-slide gg_swiper_boc" data-id='+ele.notify_id+'>' +
+                        '<img src="__PUBLIC__/newUI/img/gg_icon.png" alt="">' +
+                        '<span class="gg_title_lable">'+ele.TYPE_ID+':</span>' +
+                        '<span class="gg_title_text">'+ele.subject+'</span>' +
+                        '<span class="gg_title_time_lable">生成时间:</span>' +
+                        '<span class="gg_title_time">'+ele.begin_date+'</span>' +
+                        '</div>'
+            });
+
+            //console.log(adTr)
+            $(".gg_swiper .swiper-wrapper").html(adTr);
+
+            var ggaoSwiper = new Swiper('.gg_swiper', {
+                autoplay: 5000,//可选选项，自动滑动
+                autoplayDisableOnInteraction: false,
+                paginationClickable: true,
+                loop: true
+            });
+
+            $('.gg_swiper .gg_swiper_boc').on({
+                mouseover: function () {
+                    // console.log(11)
+                    ggaoSwiper.stopAutoplay()
+                },
+                mouseout: function () {
+                    // console.log(22)
+                    ggaoSwiper.startAutoplay()
+                }
+            });
+
+        });
+
+        $(".gg_swiper").on({click:function () {
+            var aa = [];
+            var id = $(this).attr('data-id');
+            var str = '';
+
+            $.each(res_data, function (idx,abc) {
+                if(abc.notify_id== id){
+
+                    var sTer = abc;
+                    res_data.splice(idx,1);
+                    res_data.unshift(sTer);
+                    //console.log(res_data,'5555');
+                    $.each(res_data, function (i, e){
+
+                        var strs = e.content.split("&nbsp;");
+                        for(var i=0;i<strs.length;i++){
+                            strs[i].replace('&nbsp;',' ');
+                        }
+                        strs = strs.join("");
+                        //console.log(strs,'5555');return;
+
+                        var str_nb = strs.split("nbsp;");
+                        for(var i=0;i<str_nb.length;i++){
+                            str_nb[i].replace('nbsp;',' ');
+                        }
+                        str_nb = str_nb.join("");
+                        //console.log(str_nb,'5555');return;
+
+                        var str_amp = str_nb.split("&amp;");
+                        for(var i=0;i<str_amp.length;i++){
+                            str_amp[i].replace('&amp;',' ');
+                        }
+                        str_amp = str_amp.join("");
+                        //console.log(str_amp,'5555');return;
+
+                        str += '<div class="swiper-slide swiper_box">' +
+                                '<div>' +
+                                '<div class="swiper_title">' +
+                                '<div class="st_left">'+e.subject+'</div>' +
+                                '<div class="st_right">' +
+                                '<span>发布人:</span>' +
+                                '<span>'+e.real_name+'</span>' +
+                                '<span class="fbtime">发布时间:</span>' +
+                                '<span>'+e.begin_date+'</span>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="swiper_text"><p>'+str_amp+'</p></div>' +
+                                '<div class="sb_img_box">' +
+                                '<span class="fujian">查看附件</span><a class="xiazai" target="_blank" href='+'http://it.yandui.com/'+e.attachment_name+' style="color:white;">'+ e.subject+'</a>' +
+                                '<img class="st_login_icon" src="__PUBLIC__/newUI/img/login_icon_1.png">' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>';
+
+
+                    });
+                    $(".lunbo_box .swiper-wrapper").html(str);
+                    // 公告栏模态框
+                    /*var noticeSwiper = new Swiper('.lunbo_box', {
+                        autoplay: 3500,//可选选项，自动滑动
+                        autoplayDisableOnInteraction: false,
+                        paginationClickable: true,
+                        loop: true
+                    });*/
+
+                    $(".notice").fadeIn();
+
+                    $(".notice").on({click:function () {
+                        //console.log(11111)
+                        noticeSwiper.slidePrev();
+                    }},".msk_left");
+
+                    $(".notice").on({click:function () {
+                        //console.log(2222)
+                        noticeSwiper.slideNext();
+                    }},".msk_right");
+
+                    //console.log(res_data,'5555');
+                }
+
+            });
+
+            var noticeSwiper = new Swiper('.lunbo_box', {
+                //autoplay: 3500,//可选选项，自动滑动
+                autoplayDisableOnInteraction: false,
+                paginationClickable: true,
+                loop: true
+            });
+
+            $('.lunbo_box .swiper_box>div').on({
+                mouseover: function () {
+                    // console.log(11)
+                    noticeSwiper.stopAutoplay();
+                },
+                mouseout: function () {
+                    // console.log(22)
+                    noticeSwiper.startAutoplay();
+                }
+            });
+
+            $(".notice").on({click:function () {
+
+                $(".notice").fadeOut();
+
+            }},".notice_img");
+
+
+        }},".gg_swiper_boc");
+    })
+</script>
+</body>
+</html>
+

@@ -1,0 +1,21 @@
+<form id="tableForm">
+    <table class="dialogTable_form w ha">
+        <tr>
+            <th>角色名称:</th>
+            <td><input type="text" name="title" value="{$data['title']}"/></td>
+        </tr>
+        <tr>
+            <th>数据范围:</th>
+            <td><bselect name="data_range" options="op_data_range" selected="data['data_range']"/></td>
+        </tr>
+        <tr>
+            <th>角色说明:</th>
+            <td><input type="text" name="desc" value="{$data['desc']}"/></td>
+        </tr>
+        <tr>
+            <th>状态:</th>
+            <td><bselect name="status" options="op_status" selected="data['status']"/></td>
+        </tr>
+        <input type="hidden" name="id" value="{$data.id}" />
+    </table>
+</form>

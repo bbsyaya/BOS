@@ -1,0 +1,240 @@
+<extend name="Public/base"/>
+<block name="body">
+<div class="subMainBox">
+    <div class="screenCn fl w ha">
+        <style type="text/css">
+            .f{float:left}.Wdate{width:35%!important}.wda{width:25%!important;display:inline-block}.cx{background:#dcdcdc;color:#333;margin-left:10px}.ca{color:#1a72d6!important}.f{float:left}.Wdate{width:150px!important;height:28px!important;line-height:28px!important;padding-left:5px}.wda{width:30%!important;display:inline-block}.cx{background:#dcdcdc;color:#333;margin-left:10px}.chsec{height:28px!important;line-height:28px!important;float:left!important;width:200px!important;margin-top:5px!important;padding-left:5px!important}.mgl{margin-left:20px}
+        </style>
+        <div class="screenOperate fl w">
+            <div class="line fr h"></div>
+           
+        </div>
+        <div class="screenList fl w">
+            <form action="/RiskCheckStatistics/outmoneyCheck.html" id="search_form">
+            <table>
+                <tbody>
+                <tr>
+                <td colspan="">
+                    <span class="f">归属月份：</span>
+                    <span class="f">
+                        <input  name="boss_sdate" id="boss_sdate"  onclick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$map['boss_sdate']}" type="text">
+                        到
+                        <input  name="boss_edate" id="boss_edate" onclick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$map['boss_edate']}" type="text">
+                    </span>
+                    <span class="f mgl">业务线：</span>
+                    <span class="f">
+                        <select style="width:100px;" class="chsec" name="lineid" id="lineid"><option>加载中...</option></select>
+                        <script type="text/javascript">
+                        var ck="{$map['lineid']}";
+                        </script>
+                    </span>
+                    <span class="f mgl" >供应商名称：</span>
+                    <span class="f ">
+                        <input id="supname" name="supname" value="{$map['supname']}" type="text" class="chsec">
+                    </span>
+                </td>
+                </tr>
+                <tr>
+                    <td >
+                        <input id="search_btn" value="查询" type="submit">
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+            </form>
+        </div>
+        <div class="dataCn fl w ha">
+        <table class="dataTable_ dataTable1">
+            <thead>
+            <tr>
+                <th>Boss</th>
+                <th>用友</th>
+                <th>银行流水</th>
+                <th rowspan="2" style="width:4%;" title="凭证类型">凭证类型</th>
+            </tr>
+            <tr>
+                <td>
+                    <table class="dataTable_ dataTable1">
+                        <tbody>
+                            <tr>
+                                <th>归属时间</th>
+                                <th>业务线</th>
+                                <th>供应商</th>
+                                <th>结算单金额</th>
+                                <th>明细</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <table class="dataTable_ dataTable1">
+                        <tbody>
+                            <tr>
+                                <th>凭证号</th>
+                                <th>供应商</th>
+                                <th>金额</th>
+                                <th>记账时间</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <table class="dataTable_ dataTable1">
+                        <tbody>
+                            <tr>
+                                <th>付款日期</th>
+                                <th>付款账户</th>
+                                <th>付款金额</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table class="dataTable_ dataTable1">
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>(单位：元)总计：</td>
+                                <td title="加载中..." id="total_boss_jiesuan_money">加载中...</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <table class="dataTable_ dataTable1">
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>(单位：元)总计：</td>
+                                <td title="加载中..." id="total_yongyong">加载中...</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <table class="dataTable_ dataTable1">
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>(单位：元)总计：</td>
+                                <td title="加载中..." id="total_bank">加载中...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+            <!-- data list -->
+            <notempty name="pzlist">
+                <volist name="pzlist" id="vo" key="k">
+                        <if condition="$k%2==0"><tr bankcode="{$vo["pay_id_str"]}" class="tr-a" k="{$k}"><else /><tr  bankcode="{$vo["pay_id_str"]}" class="tr-b"></if>
+                            <td>
+                                <table class="dataTable_ dataTable1 htable">
+                                    <tbody>
+                                        <?php if(count($vo["boss_list"])>0){
+                                            foreach ($vo["boss_list"] as $kb => $vb) {
+                                                ?>
+                                                <tr class="zk-pfls">
+                                                    <td title="{$vb["strdate"]} - {$vb["enddate"]} ">{$vb["strdate"]|strtotime|date="m.d",###}-{$vb["enddate"]|strtotime|date="m.d",###}</td>
+                                                    <td title="{$vb["line_name"]}">{$vb["line_name"]}</td>
+                                                    <td title="{$vb["suname"]}">{$vb["suname"]}</td>
+                                                    <td title="{$vb["yinshou_money"]}">{$vb["yinshou_money"]}</td>
+                                                    <td><a class="ca" href="/Home/Makesettlement/settlementOut?id={$vb['id']}" target="_blank">明细</a></td>
+                                                </tr>
+                                                <?php
+                                            }
+                                            }else{
+                                                ?>
+                                            <tr class="zk-pfls">
+                                                <td colspan="5">
+                                                    <div class="no-datas">无 Boss数据！</div>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                            } ?>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>
+                                <table class="dataTable_ dataTable1 htable">
+                                    <tbody>
+                                    <?php if(count($vo["pz_list"])>0){
+                                    foreach ($vo["pz_list"] as $kb => $vb) {
+                                        ?>
+                                        <tr class="zk-pfls">
+                                            <td>{$vb["csign_ino_id"]}</td>
+                                            <td title="{$vb["cVenName"]}">{$vb["cVenName"]}</td>
+                                            <td title="{$vb["money"]}">{$vb["money"]}</td>
+                                            <td title="{$vb["dDate"]}">{$vb["dDate"]|strtotime|date="m.d",###}</td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    }else{
+                                        ?>
+                                    <tr class="zk-pfls">
+                                        <td colspan="4">
+                                            <div class="no-datas">无用友数据！</div>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    } ?>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>
+                                <table class="dataTable_ dataTable1 htable">
+                                    <tbody>
+                                    <?php if(count($vo["bank_list"])>0){
+                                    foreach ($vo["bank_list"] as $kb => $vb) {
+                                        ?>
+                                        <tr class="zk-pfls">
+                                            <td title="{$vb["pay_date"]}">{$vb["pay_date"]|strtotime|date="m.d",###}</td>
+                                            <td title="{$vb["pay_num"]}">{$vb["pay_num"]}</td>
+                                            <td title="{$vb["pay_money"]}">{$vb["pay_money"]}</td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    }else{
+                                        ?>
+                                    <tr class="zk-pfls">
+                                        <td colspan="4">
+                                            <div class="no-datas">无银行流水数据！</div>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    } ?>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td><?php if($vo["csign"]){ ?> {$vo["csign"]} <?php  }else{ ?> -- <?php } ?></td>
+                        </tr>
+                </volist>
+                <else />
+                <tr>
+                    <td colspan="4">
+                        <div class="no-datas"><notempty name="error">{$error}<else />暂无数据！</notempty></div>
+                    </td>
+                </tr>
+            </notempty>
+          
+            <!-- end data list -->
+            </thead>
+            <tbody>  
+            </tbody>
+        </table>
+        <notempty name="pzlist">
+            <div class="no-datas">{$page}</div>
+        </notempty>
+    </div>
+    </div>
+</div>
+<script type="text/javascript">var pType="outmoneyCheck";</script>
+<script type="text/javascript" src="/Public/OA/js/inmoney.js"></script>
+</block>

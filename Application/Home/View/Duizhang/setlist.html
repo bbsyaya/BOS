@@ -1,0 +1,131 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+			<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+			<script type="text/javascript">
+
+			$(function() {
+
+
+
+
+				//全选反选
+				$(".dialogTable_list").on({change:function() {
+					if ($(this).is(":checked")) {
+						//alert(1);alert($(this).parents('tr').siblings('tr').find('td:first input:checkbox').length);
+						$(this).parents('tr').siblings('tr').find('td:first input:checkbox').prop("checked", true);//attr("checked", "checked");
+					} else {
+						$(this).parents('tr').siblings('tr').find('td:first input:checkbox').removeAttr("checked");
+					}
+				}},"#selectAll");
+
+			});
+		</script>
+</block>
+<block name="body">
+<script>
+function mkemail(){
+				var cid=0;
+				$('input[type="checkbox"]').each(function(){
+					if ($(this).is(":checked")==true)cid=1;
+				})
+				if(cid)$('#comidform').submit();
+				else layer.msg('你没有选择任何结算单');
+			}
+			function ydz(){
+				var cid='';
+				$('input[type="checkbox"]').each(function(){
+					if ($(this).is(":checked")==true)cid+=$(this).val()+',';
+				})
+				if(cid){
+					$.post('/Home/Duizhang/ydz',{"id":cid},function(data){
+						if(data.status==1)window.location.reload();	
+					},'json')
+				}else layer.msg('你没有选择任何结算单');
+			}
+			</script>
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">选择结算单</span>
+				<span>结算单管理</span>
+			</div>
+			<div class="ri_work">Generate revenue statement</div>
+		</div>
+
+
+				<div class="screenBox swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<form action="/Home/Duizhang/setlist" method='get'>
+								<div class="swiperRight" style="height:75px;">
+									<table class="tableBox">
+										<tr>
+										<input type="hidden" name="advid" value="{:I('get.advid')}"/>
+											<th>产品名称：</th>
+											<td><input type="text" name='comname' value="{:I('get.comname')}" /></td>
+											<th>销售人员：</th>
+											<td><input type="text" name='username' value="{:I('get.username')}" /></td>
+
+											<td>
+												<input type="submit" value="查询" />
+											</td>
+										</tr>
+
+									</table>
+								</div>
+							</form>
+							<!--end 基础查询-->
+						</div>
+					</div>
+				</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<span class="addAdv advBtn">
+								<input type="button" value="起草邮件" onclick="mkemail()" class="J_generateBill" />
+								<input type="button" value="设为已对账" onclick="ydz()" class="J_generateBill" />
+							</span>
+						</div>
+					</div>
+				<form action="/Home/Duizhang/makeemail" method="post" id='comidform'>
+				<input type='hidden' name='strtime' value="{$strtime}"/>
+				<input type='hidden' name='endtime' value="{$endtime}"/>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th width="40"><input type="checkbox" /></th>
+							<th>产品名称</th>
+							<th>广告主名称</th>
+							<th>账单期间</th>
+							<th>结算金额</th>
+							<th>结算主体</th>
+							<th>状态</th>
+							<th>所属销售</th>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name='data' id='v'>
+							<tr>
+								<td><input type="checkbox" name='id[]' value="{$v.id}" /></td><!--<neq name='v.error' value=''>disabled="disabled" title="{$v.error}"</neq>-->
+								<td>{$v.comname}</td>
+								<td>{$v.advername}</td>
+								<td>{$v.date}</td>
+								<td>{$v.settlementmoney|twonum}</td>
+								<td>{$v.jszt}</td>
+								<td>{:C('option.insettlement_status')[$v['status']]}</td>
+								<td>{$v.real_name}</td>
+							</tr>
+						</volist>
+						
+						</tbody>
+					</table>
+				</form>
+					<!--分页-->
+					{$_page}
+				</div>
+	</div>
+
+</block>

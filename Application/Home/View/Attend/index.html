@@ -1,0 +1,307 @@
+<extend name="Public/base"/>
+
+<block name="script">
+    <script type="text/javascript" src="__JS__/bootbox.min.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+    <style type="text/css">
+        .explainList li {
+            width: 92%;
+            height: 56px;
+            border-bottom: 1px solid #ddd;
+            line-height: 56px;
+            padding: 0 4%;
+            color: #666666;
+            font-size: 14px;
+            overflow: hidden;
+        }
+        .explainList li input[type="radio"] {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        var option_obj = Object();
+        function remark_check(REGISTER_TYPE,REGISTER_TIME,LOG_DATE,obj_c,dk) {
+            option_obj = obj_c;
+            $.get("{:U('get_checkin_remark')}",{
+                REGISTER_TYPE:REGISTER_TYPE,
+                REGISTER_TIME:REGISTER_TIME,
+                LOG_DATE:LOG_DATE,
+                OP : 1
+            },function(data){
+                $("input[name=sava_para]").val(REGISTER_TYPE+","+REGISTER_TIME+","+LOG_DATE);
+                $(".cd").hide();
+                if(dk==1){
+                    var str ='';
+                    str = '<tr><th></th></tr>' +
+                            '<tr><th style="text-align: center;"><textarea class="checkingIn_explain_ter" maxlength="100" id="CONTENT" name="CONTENT" disabled></textarea></th></tr>';
+                    $(".dialogTable_form").html(str);
+                }else if(dk==0){
+                    $(".cd").show();
+                }
+
+                $("#CONTENT").val('');
+                $("#CONTENT").val(data);
+                $(".uploadingDialog").attr("dk",dk);
+                $(".uploadingDialog").dialog("open");
+            });
+        }
+
+        function save_list(dk){
+            if(dk == 1){
+                var CONTENT = $(".checkingIn_explain_ter").val();
+            }else if(dk == 0){
+                var CONTENT = $("input[name='explain']:checked").val();
+            }
+            var para = $("input[name=sava_para]").val();
+            var sava_para = para.split(",");
+            //alert(sava_para);return;
+            $.get("{:U('get_checkin_remark')}",{
+                REGISTER_TYPE:sava_para[0],
+                REGISTER_TIME:sava_para[1],
+                LOG_DATE:sava_para[2],
+                CONTENT:CONTENT ,
+                OP : 2
+            },function(data){
+                if(CONTENT == "") option_obj.value="说明";
+                else  option_obj.value="查看";
+                $(".checkingIn_explain_ter").html("");
+                $(".checkingIn_explain").hide();
+            });
+        }
+
+        $(function() {
+            $(".cd").hide();
+            $(".query-btn").click(function(){
+                var date1 = $("input[name='date1']").val();
+                var date2 = $("input[name='date2']").val();
+                $.get("{:U('get_checkinfo')}",{
+                    date1:date1,
+                    date2:date2
+                },function(data){
+                    $(".radiusTab").html('');
+                    $(".radiusTab").html(data);
+                });
+            });
+
+            var Popupe = new PopupBase();
+            Popupe.show('.query-btn', '.mask,.popup');
+            Popupe.hide('.close','.mask,.popup');
+            /*Popupe.show('.explain-btn', '.mask,.explain');
+            Popupe.hide('.close','.mask,.popup,.explain');*/
+
+            if($("#wdk").val()>3){
+                var message = '你<font color=\"red\">未打卡</font>次数已超出，请按时打卡！';
+                bootbox.dialog({message: message,});
+            }else if($("#wdk").val() == 3){
+                var message = '你<font color=\"red\">未打卡</font>次数即将超出考勤免罚次数，请按时打卡！';
+                bootbox.dialog({message: message,});
+            }
+
+            $(".uploadingDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "650",
+                height: "430",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        var dk = $(this).attr('dk');
+                        save_list(dk);
+                        $(this).dialog("close");
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+        });
+        </script>
+</block>
+
+<block name="body">
+    <div class="subCon">
+        <div class="query">
+            <form action="{:U('index')}" id="search_form" method="get">
+            <table class="queryTable">
+                <tbody>
+                <tr>
+                    <th>按姓名：</th>
+                    <td><input type="text" name="name" value="{$Think.get.name}"></td>
+                    <th>按角色：</th>
+                    <td>
+                        <input type="text" name="role" value="{$Think.get.role}">
+                    </td>
+                    <th>按部门：</th>
+                    <td><input type="text" name="depart" value="{$Think.get.depart}"></td>
+                    <td><input name="" type="button" value="选择"></td>
+                </tr>
+                <tr>
+                    <th>起止日期：</th>
+                    <td><input name="date1" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$Think.get.date1}"/></td>
+                    <th>截止日期：</th>
+                    <td><input name="date2" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$Think.get.date2}"/></td>
+                    <td colspan="2">
+                        <input id="search_btn" type="submit" value="查询" />
+                        <input type="hidden" name="p" value="1"/>
+                        <input class="query-btn" name="" type="button" value="查询考勤说明">
+                        <!--<input name="" type="button" value="提交考勤说明"></td>-->
+                </tr>
+                </tbody>
+            </table>
+            </form>
+        </div>
+    </div>
+
+    <input type="hidden" name="sava_para" value=""  />
+    <input type="hidden" id="wdk" name="wdk" value="{$wdk}"  />
+
+    <div class="workListBox">
+        <p class="workTitle"><span>迟到：<i>{$cd}次</i></span><span>早退：<i>{$zt}次</i></span><span>未打卡：<i>{$wdk}次</i></span></p>
+        <table class="listTable tabThBg" ><!--style="margin-top: 40px;"-->
+            <thead>
+            <tr>
+                <td style="font-weight: bold;">姓名</td>
+                <td style="font-weight: bold;">日期</td>
+                <td style="font-weight: bold;">{$s_time}</td>
+                <td style="font-weight: bold;">{$e_time}</td>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name='list' id='v'>
+            <tr>
+                <input type="hidden" id="date_y" name="date_y" value="{$v.date_y}">
+                <td>{$v.username}</td>
+                <td>{$v.date}</td>
+                <!--上班-->
+                <if condition="$v['in_on'] eq '未打卡'"><!--未打卡-->
+                    <td><span style="color: red;">{$v.in_on}</span>&nbsp;&nbsp;
+                        <php> if(!empty($v['content']) or !empty($v['remark'])){</php>
+                        <input type="button" value="查看" onclick="remark_check('1','','{$v.date_y}',this,1)">
+                        <php> }else{</php>
+                        <input type="button" value="说明" onclick="remark_check('1','','{$v.date_y}',this,0)">
+                        <php> }</php>
+                    </td>
+                <elseif condition="$v['ty'] eq 1" /><!--迟到-->
+                    <td><span style="color: red;">{$v.in_on}&nbsp;&nbsp;迟到</span>&nbsp;&nbsp;
+                        <php>if(!empty($v['content']) or !empty($v['remark'])){</php>
+                        <input type="button" value="查看" onclick="remark_check('1','','{$v.date_y}',this,1)">
+                        <php> }else{</php>
+                        <input type="button" value="说明" onclick="remark_check('1','','{$v.date_y}',this,0)">
+                        <php> }</php>
+                    </td>
+                <elseif condition="$v['in_on'] eq '公休日'" /><!--公休日-->
+                    <td><span class="rest">{$v.in_on}</span>
+                        <php> if(!empty($v['content']) or !empty($v['remark'])){</php>
+                        <input type="button" value="查看" onclick="remark_check('1','','{$v.date_y}',this,1)">
+                        <php> }else{</php>
+                        <input type="button" value="说明" onclick="remark_check('1','','{$v.date_y}',this,0)">
+                        <php> }</php>
+                    </td>
+                <elseif condition="$v['ty'] eq 3" /><!--迟到-->
+                    <td><span style="color: red;">{$v.in_on}</span>&nbsp;&nbsp;
+                        <php>if(!empty($v['content']) or !empty($v['remark'])){</php>
+                        <input type="button" value="查看" onclick="remark_check('1','','{$v.date_y}',this,1)">
+                        <php> }else{</php>
+                        <input type="button" value="说明" onclick="remark_check('1','','{$v.date_y}',this,0)">
+                        <php> }</php>
+                    </td>
+                <else />
+                    <td>{$v.in_on}</td>
+                </if>
+                <!--下班-->
+                <if condition="$v['off_on'] eq '未打卡'"><!--未打卡-->
+                    <td><span style="color: red;">{$v.off_on}</span>&nbsp;&nbsp;
+                        <php> if(!empty($v['content_a']) or !empty($v['remark_a'])){</php>
+                        <input type="button" value="查看" onclick="remark_check('2','','{$v.date_y}',this,1)">
+                        <php> }else{</php>
+                        <input type="button" value="说明" onclick="remark_check('2','','{$v.date_y}',this,0)">
+                        <php> }</php>
+                    </td>
+                    <elseif condition="$v['ty'] eq 2" /><!--早退-->
+                    <td><span style="color: red;">{$v.off_on}&nbsp;&nbsp;早退</span>&nbsp;&nbsp;
+                        <php> if(!empty($v['content_a']) or !empty($v['remark_a'])){</php>
+                        <input type="button" value="查看" onclick="remark_check('2','','{$v.date_y}',this,1)">
+                        <php> }else{</php>
+                        <input type="button" value="说明" onclick="remark_check('2','','{$v.date_y}',this,0)">
+                        <php> }</php>
+                    </td>
+                    <elseif condition="$v['off_on'] eq '公休日'" /><!--公休日-->
+                    <td><span class="rest">{$v.off_on}</span>
+                        <php> if(!empty($v['content_a']) or !empty($v['remark_a'])){</php>
+                        <input type="button" value="查看" onclick="remark_check('2','','{$v.date_y}',this,1)">
+                        <php> }else{</php>
+                        <input type="button" value="说明" onclick="remark_check('2','','{$v.date_y}',this,0)">
+                        <php> }</php>
+                    </td>
+                    <elseif condition="$v['ty'] eq 3" /><!--早退-->
+                    <td><span style="color: red;">{$v.off_on}</span>&nbsp;&nbsp;
+                        <php> if(!empty($v['content_a']) or !empty($v['remark_a'])){</php>
+                        <input type="button" value="查看" onclick="remark_check('2','','{$v.date_y}',this,1)">
+                        <php> }else{</php>
+                        <input type="button" value="说明" onclick="remark_check('2','','{$v.date_y}',this,0)">
+                        <php> }</php>
+                    </td>
+                    <else />
+                    <td>{$v.off_on}</td>
+                </if>
+            </tr>
+            </volist>
+            </tbody>
+        </table>
+    </div>
+    <!--end 主体-->
+    <!--遮罩层-->
+    <div class="mask"></div>
+    <!--end 遮罩层-->
+    <!--考勤说明详情弹出层-->
+    <div class="popupPublic popup">
+        <!--列表-->
+        <div class="tableList">
+            <table class="listTable radiusTab">
+            </table>
+        </div>
+        <!--end 列表-->
+        <!--关闭按钮-->
+        <div class="btnBox">
+            <input class="close" name="" type="button" value="关闭">
+        </div>
+        <!--end 关闭按钮-->
+    </div>
+    <!--end 考勤说明详情弹出层-->
+    <!--考勤说明弹出层-->
+    <!--<div class="popupPublic explain">
+        <h2>考勤说明</h2>
+        <div class="explainCon">
+            <ul class="explainList">
+                <li><input name="explain" type="radio" checked>迟到</li><input name="" type="text" placeholder="请填相关流程">
+                <li><input name="explain" type="radio">早退</li>
+                <li><input name="explain" type="radio">旷工</li>
+                <li><input name="explain" type="radio">未打卡</li>
+            </ul>
+        </div>
+        <div class="btnBox">
+            <input class="close" name="" type="button" value="关闭">
+        </div>
+    </div>-->
+    <!--弹出框-->
+
+    <div class="uploadingDialog" title="如迟到或早退原因等">
+            <table class="dialogTable_form w ha">
+                <tr class="cd">
+                    <th style="text-align: center;">
+                        <div class="explainCon">
+                            <ul class="explainList">
+                                <volist name="attend_remark" id="vo">
+                                    <li><input name="explain" type="radio" value="{$vo['name']}">{$vo.name}</li>
+                                </volist>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+            </table>
+    </div>
+</block>

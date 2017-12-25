@@ -1,0 +1,427 @@
+<extend name="Public/base"/>
+<block name="script">
+	<script type="text/javascript">
+			function subauditdataformsub(){
+				var bool=false;
+				$('.dataTable tbody :checkbox').each(function(){
+					if($(this).is(':checked'))bool=true;
+				})
+				document.subauditdataform.target="newpage";
+				if(bool)document.subauditdataform.submit()
+				else alert('请选中您要提交的数据');
+			}
+			$(function() {
+
+				if(getCookie('boss30_on_'+getHref()+'_t_left_state')!='activate' || getCookie('boss30_on_'+getHref()+'_t_left_state')=='' || getCookie('boss30_on_'+getHref()+'_t_left_state')==null || getCookie('boss30_on_'+getHref()+'_t_left_state')==undefined) {
+					setCookie('boss30_on_'+getHref()+'_t_left','11110000');
+				}
+
+				$(".batchRemarkDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "450",
+					height: "250",
+					modal: true,
+					show: "scale",
+					buttons: {						
+						"确定":function() {
+							$(".dataTable tbody :checkbox").each(function(){
+								if($(this).is(":checked")){
+									//同步备注
+									$(this).parents("tr").find(".J_remark").find("option").each(function(c){
+											if($(this).text()==$(".J_remarkInfoSelect").val()){
+												$(this).attr("selected","selected")
+											}else{
+												$(this).removeAttr("selected","selected")
+											}
+										});
+									$.post('/Daydata/addDaydata',{'date':$(this).parents('tr').find('td').eq(2).text(),'jfid':$(this).parents('tr').find('td').eq(5).attr('data'),'remarks':$(this).parents('tr').find('td').eq(16).find('.J_remark').val()},function(){
+										});
+								}
+							});							
+							$(this).dialog("close");							
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//批量备注对话框
+				$(".J_batchRemark").click(function(){
+					$(".batchRemarkDialog").dialog("open");
+				});
+				
+				//对话框批数据导入
+				$(".dataEntryDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "450",
+					height: "250",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});				
+				//数据导入对话框
+				$(".J_dataEntry").click(function(){
+					$(".dataEntryDialog").dialog("open");
+				});
+				
+
+				function countSum(){
+					var validSumV=0;
+					var moneySumV=0;
+					$(".J_valid").each(function(i){
+						if($(this).val()!=""){
+							
+							var thisV=parseFloat($(this).val());
+							if($(this).parents("tr").find("td").eq(9).text()!='CPT' && $(this).parents("tr").find("td").eq(9).text()!='CPS'){
+								thisV=parseInt($(this).val());
+								$(this).val(thisV);
+							}else{
+								thisV=Math.round($(this).val()*100)/100;
+								$(this).val(thisV);
+							}
+							validSumV+=thisV;
+							//单个金额调整
+							var priceStr=$(this).parents("tr").find(".J_price").attr('data-pricetype');
+
+							if(priceStr=='1'){
+								var thisPriceV=parseFloat($(this).parents("tr").find(".J_price").text());
+							}else if(priceStr=='2'){
+								var thisPriceJson=eval($(this).parents("tr").find(".J_price").attr('data-price'));
+								for(var i in thisPriceJson){
+									if(thisPriceJson[i].num!='+' && thisV<thisPriceJson[i].num){
+										var thisPriceV=thisPriceJson[i].price;
+										break;
+									}else if(thisPriceJson[i].num=='+'){
+										var thisPriceV=thisPriceJson[i].price;
+									}
+								}
+							}else{
+								var thisPriceV=$(this).parents("tr").find(".J_price").find('input').val();
+							}
+							if($(this).parents("tr").find("td").eq(9).text()=='CPM')thisPriceV=thisPriceV/1000;
+							$(this).parents("tr").find(".J_money").text(Math.round(thisPriceV*thisV*100,2)/100);
+						}
+					});
+					$(".J_money").each(function(i){
+						if($(this).text()!=""){
+							moneySumV+=parseFloat($(this).text());
+						}
+					});
+					moneySumV=Math.round(moneySumV*100)/100;
+					$(".J_validSum").text(validSumV);
+					$(".J_moneySum").text(moneySumV);
+				}
+				countSum();//初始化
+				
+				//有效数据变更
+				$(".J_valid").change(function(){
+					countSum();
+					changetr=$(this).parents('tr');
+					var priceStr=$(this).parents("tr").find(".J_price").attr('data-pricetype');
+					var thisV=parseFloat($(this).val());
+					if($(this).parents("tr").find("td").eq(9).text()!='CPT' && $(this).parents("tr").find("td").eq(9).text()!='CPS'){
+						thisV=parseInt($(this).val());
+						$(this).val(thisV);
+					}else{
+								thisV=Math.round($(this).val()*100)/100;
+								$(this).val(thisV);
+							}
+					if(priceStr=='1'){
+						var thisPriceV=parseFloat($(this).parents("tr").find(".J_price").text());
+					}else if(priceStr=='2'){
+						var thisPriceJson=eval($(this).parents("tr").find(".J_price").attr('data-price'));
+						for(var i in thisPriceJson){
+							if(thisPriceJson[i].num!='+' && thisV<thisPriceJson[i].num){
+								var thisPriceV=thisPriceJson[i].price;
+								break;
+							}else if(thisPriceJson[i].num=='+'){
+								var thisPriceV=thisPriceJson[i].price;
+							}
+						}
+					}else{
+						var thisPriceV=$(this).parents("tr").find(".J_price").find('input').val();
+					}
+					if($(this).parents("tr").find("td").eq(9).text()=='CPM')thisPriceV=thisPriceV/1000;
+					$.post('/Daydata/addDaydata',{'date':$(this).parents('tr').find('td').eq(2).text(),'jfid':$(this).parents('tr').find('td').eq(5).attr('data'),'datanum':$(this).val(),'price':thisPriceV,'remarks':$(this).parents('tr').find('td').eq(16).find('.J_remark').val()},function(res){
+						changetr.find('input[type="checkbox"]').val(res);
+					});
+				});
+				$(".J_price").find('input').change(function(){
+					countSum();
+					changetr=$(this).parents('tr');
+					var price=$(this).val();
+					$.post('/Daydata/addDaydata',{'date':$(this).parents('tr').find('td').eq(2).text(),'jfid':$(this).parents('tr').find('td').eq(5).attr('data'),'datanum':$(this).parents('tr').find('td').eq(10).find('input').val(),'price':price,'remarks':$(this).parents('tr').find('td').eq(16).find('.J_remark').val()},function(res){
+						changetr.find('input[type="checkbox"]').val(res);
+					});
+				});
+
+
+				$('#sel_ywline').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+					var tmpSelected = $('#sel_ywline').val();
+					if (tmpSelected != null) {
+						$('#ywline').val(tmpSelected);
+					} else {
+						$('#ywline').val("");
+					}
+				});
+				$('#sel_status').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+					var tmpSelected = $('#sel_status').val();
+					if (tmpSelected != null) {
+						$('#status').val(tmpSelected);
+					} else {
+						$('#status').val("");
+					}
+				});
+
+			});
+		</script>
+</block>
+<block name="body">
+	<div class="subMainBox" goal="t_left">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">数据录入</span>
+				<span>数据管理</span>
+			</div>
+			<div class="ri_work">Data Entry</div>
+
+			<div class="dataTable_columnCa_b pa">
+				<div class="dataTable_columnCn_b"></div>
+				<div class="dataTableShow_close_b tc">关闭</div>
+			</div>
+		</div>
+		<div><span class="field_customize">查询自定义</span></div>
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+
+						<input type="button" value="批量备注" class="J_batchRemark" />
+						<input type="button" value="提交审核" class="" onclick="subauditdataformsub()"/>
+						<input type="button" value="筛选" class="J_openScreen" />	
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					<form action="/Daydata/indata" method='get'>
+					<div class="screenList fl w">
+						<table>
+							<tr>
+								<th>时间：</th>
+								<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>	
+								<th>广告主名称：</th>
+								<td><input type="text" name='ggzname' value="{:I('get.ggzname')}"/></td>
+								<th>产品名称：</th>
+								<td><input type="text" name='comname' value="{:I('get.comname')}"/></td>
+								<th>计费标识名称：</th>
+								<td><input type="text" name='jfname' value="{:I('get.jfname')}"/></td>
+							</tr>
+							<tr>
+								<th class="expertScreen">计费标识ID：</th>
+								<td class="expertScreen"><input type="text" name='jfid' value="{:I('get.jfid')}"/></td>
+								<th class="expertScreen">业务线：</th>
+								<td class="expertScreen"><select name='ywline'>
+									<option value='0'>全部</option>
+									<volist name='ywline' id='v'>
+									<option value="{$v.id}">{$v.name}</option>
+									</volist>
+								</select></td>
+								<th class="expertScreen">分配状态：</th>
+								<td class="expertScreen"><select name='status'>
+									<option value="1">使用中</option>
+									<option value="2">已停止</option>
+									<option value="3">已回收</option>
+								</select></td>
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					</form>
+				</div>-->
+				<!--筛选-->
+				<div class="screenBox">
+							<form action="/Daydata/indata" method='get' id="search_form">
+								<!--基础查询-->
+
+								<div class="t_left">
+									<div class="ziduan">
+											<label>时间: </label>
+											<input readonly="true" style="width: 70px;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width: 70px;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/>
+									</div>
+									<div class="ziduan">
+										<label>广告主: </label>
+										<input type="text" name='ggzname' value="{:I('get.ggzname')}"/>
+									</div>
+									<div class="ziduan">
+										<label>产品: </label>
+										<input type="text" name='comname' value="{:I('get.comname')}"/>
+									</div>
+									<div class="ziduan">
+										<label>计费标识: </label>
+										<input type="text" name='jfname' value="{:I('get.jfname')}"/>
+									</div>
+									<div class="ziduan">
+										<label>标识ID: </label>
+										<input type="text" name='jfid' value="{:I('get.jfid')}"/>
+									</div>
+									<div class="ziduan">
+										<label>业务线: </label>
+										<select class="selectpicker" id='sel_ywline'>
+											<option value='0'>全部</option>
+											<volist name='ywline' id='v'>
+												<option value="{$v.id}">{$v.name}</option>
+											</volist>
+										</select>
+										<input type="hidden"  class="form-control" id="ywline" name="ywline">
+									</div>
+									<div class="ziduan">
+										<label>分配状态: </label>
+										<select class="selectpicker" id='sel_status'>
+											<option value="1">使用中</option>
+											<option value="2">已停止</option>
+											<option value="3">已回收</option>
+										</select>
+										<input type="hidden"  class="form-control" id="status" name="status">
+									</div>
+									<div class="ziduan">
+										<label>分类: </label>
+										<select name="type">
+											<option value="1">全网</option>
+											<option value="2">本站</option>
+										</select>
+									</div>
+								</div>
+								<div class="t_right"><input type="submit" value="查询" /></div>
+							</form>
+				</div>
+
+				<!--数据表-->
+				<style type="text/css">
+					.te{margin-left: 0!important;}
+				</style>
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+					<div class="advancedLeft">
+						<span class="addAdv advBtn">
+							<input type="button" value="批量备注" class="J_batchRemark" />
+						</span>
+						<span class="export advBtn te"><input type="button" value="提交审核" class="" onclick="subauditdataformsub()"/></span>
+					</div>
+					</div>
+					<form action="/Daydata/subaudit" method='post' name='subauditdataform'>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th width="40"><input type="checkbox" /></th>
+							<th style="width:0">ID</th>
+							<th>日期</th>
+							<th>广告主名称</th>
+							<th>产品名称</th>
+							<th>计费标识ID</th>
+							<th>计费标识名称</th>
+
+							<th>销售</th>
+							
+							<th>单价</th>
+							<th>计费模式</th>
+							<th>有效数据</th>
+							<th>金额</th>
+							<th>后台地址</th>
+							<th>账号</th>
+							<th>密码</th>
+							<th>分配状态</th>
+							
+							<th>备注</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>汇总</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td class="J_validSum">0</td>
+							<td class="J_moneySum">0</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<volist name='data' id='v'>
+							<tr>
+								<td><input type="checkbox" name='idlist[]' value="{$v.yzkey}"/></td>
+								<td>{$v.id}</td>
+								<td>{$v.date}</td>
+								<td>{$v.advname}</td>
+								<td>{$v.comname}</td>
+								<td data="{$v.id}">{$v.code}</td>
+								<td>{$v.name}</td>
+								<td>{$v.real_name}</td>
+								
+								<td class="J_price" data-price='{$v.price|tieredprice_decodetojson}' data-pricetype="{$v.price_type}"><eq name="v.price_type" value='2'>{$v.price|tieredprice_decodetostring}</eq><eq name='v.price_type' value='3'><input type='text' name='price' value="{$v.price}"/></eq><eq name='v.price_type' value='1'>{$v.price}</eq></td>
+								<td>{:C('option.charging_mode')[$v['charging_mode']]}</td>
+								<td><input type="text" class="J_valid" value="{$v.datanum}"/></td>
+								<td class="J_money">{$v.money}</td>
+								<td><a href="http://{$v.back_url}" target="_blank">{$v.back_url}</a></td>
+								<td>{$v.account}</td>
+								<td>{$v.password}</td>
+								<td><eq name="v.fstatus" value="1">使用中<else/><eq name="v.fstatus" value="0">已停止<else/>已回收</eq></eq></td>
+								
+								<td><select name='remarks{$v.yzkey}' class="J_remark"> 
+								  <option value="">请选择</option>
+						          <option <eq name="v.remarks" value="官方后台无数据">selected="selected"</eq> value="官方后台无数据">官方后台无数据</option>
+						          <option <eq name="v.remarks" value="未返回数据截图">selected="selected"</eq> value="未返回数据截图">未返回数据截图</option>
+						          <option <eq name="v.remarks" value="官方后台延迟出数据">selected="selected"</eq> value="官方后台延迟出数据">官方后台延迟出数据</option>
+						          <option <eq name="v.remarks" value="一周录一次">selected="selected"</eq> value="一周录一次">一周录一次</option>
+						          <option <eq name="v.remarks" value="。。。。。。">selected="selected"</eq> value="。。。。。。">。。。。。。</option></select></td>
+					        </tr>
+						</volist>
+						</tbody>
+					</table>
+					</form>
+				</div>
+				{$_page}
+			</div>
+		<div class="batchRemarkDialog" title="批量备注">
+			<table class="dialogTable_form w ha">
+				<tr>
+					<th></th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>备注信息<span class="must">*</span>:</th>
+					<td><select class="J_remarkInfoSelect"> 
+								  <option value="">请选择</option>
+						          <option value="官方后台无数据">官方后台无数据</option>
+						          <option value="未返回数据截图">未返回数据截图</option>
+						          <option value="官方后台延迟出数据">官方后台延迟出数据</option>
+						          <option value="一周录一次">一周录一次</option>
+						          <option value="。。。。。。">。。。。。。</option></select></td>
+				</tr>				
+			</table>
+		</div>
+	</div>
+</block>
+
+

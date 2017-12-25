@@ -1,0 +1,415 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+	<script type="text/javascript" src="__JS__/bootbox.min.js"></script>
+	<script type="text/javascript">
+	var nowid;
+			$(function() {
+
+				if(getCookie('boss30_on_'+getHref()+'_t_left_state')!='activate' || getCookie('boss30_on_'+getHref()+'_t_left_state')=='' || getCookie('boss30_on_'+getHref()+'_t_left_state')==null || getCookie('boss30_on_'+getHref()+'_t_left_state')==undefined) {
+					setCookie('boss30_on_'+getHref()+'_t_left','11110000000');
+				}
+				//对话框（通过）
+				$(".passDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "400",
+					height: "200",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确认":function(){
+							$('#newpageiframe').attr('src',"/Makesettlement/settlementOutOk?type=2&id="+nowid);
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//通过对话框
+				$(".J_pass").click(function(){
+					nowid=$(this).attr('data');
+					$(".passDialog").dialog("open");
+				});
+				//对话框（不通过）
+				$(".flunkDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "400",
+					height: "250",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确认":function(){
+							$('#newpageiframe').attr('src',"/Makesettlement/settlementOutNo?id="+nowid+"&yy="+$('#selectyy').val());
+
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				$(".J_flunk").click(function(){
+					nowid=$(this).attr('data');
+					$(".flunkDialog").dialog("open");
+				});
+
+				/*2016.12.21
+				 * 用友系统对接 同步采购发票数据到U8
+				 * */
+				$(".J_PbillData").click(function(){
+					$(".uploadingDialog").dialog("open");
+				});
+
+				$(".uploadingDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "450",
+					height: "200",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							bootbox.dialog({message: "请耐心等待，正在同步数据...", });
+							var t_strtime = $("input[name='t_strtime']").val();
+
+							$.post("{:U('PbillData')}",{
+								t_strtime : t_strtime
+							},function(data){
+								if(data == "TRUE"){
+									location.reload();
+								}else{
+									alert(data);
+								}
+							});
+
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				$('#js_status').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+					var tmpSelected = $('#js_status').val();
+					if (tmpSelected != null) {
+						$('#status').val(tmpSelected);
+					} else {
+						$('#status').val("");
+					}
+				});
+
+
+				$(".next").on('click',function(e){
+					//console.log(e.target);return;
+					if(e.target == this){
+						//mySwiper.slideNext();
+						//$(".subMainBox #t1").css("dispaly","none");
+						//$(".subMainBox #t2").css("dispaly","block");
+						$("#t1").hide();
+						$("#t2").show();
+					}
+				});
+				$(".screenBox .aa").on('click',function(e){
+					if(e.target == this){
+						//mySwiper.slideNext();
+						$("#t1").hide();
+						$("#t2").show();
+					}
+				});
+
+				$(".prev").on('click',function(e){
+					if(e.target == this){
+						//mySwiper.slidePrev();
+						$("#t1").show();
+						$("#t2").hide();
+					}
+				});
+
+				$(".screenBox .bb").on('click',function(e){
+					if(e.target == this){
+						//mySwiper.slidePrev();
+						$("#t1").show();
+						$("#t2").hide();
+					}
+				});
+
+			});
+		</script>
+</block>
+<block name="body">
+	<div class="subMainBox" goal="t_left">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">成本结算单列表</span>
+				<span>结算单管理</span>
+			</div>
+			<div class="ri_work">Cost settlement list</div>
+
+			<div class="dataTable_columnCa_b pa">
+				<div class="dataTable_columnCn_b"></div>
+				<div class="dataTableShow_close_b tc">关闭</div>
+			</div>
+		</div>
+
+		<div><span class="field_customize">查询自定义</span></div>
+				<!--筛选-->
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<input type="button" value="导出" class="" onclick="window.open('/Makesettlement/downloadsetoutlist'+window.location.search)"/>
+						<input type="button" value="筛选" class="J_openScreen" />
+						&lt;!&ndash;<input type="button" value="同步采购发票信息" class="J_PbillData" />&ndash;&gt;
+						<a href="/Makesettlement/index" target="_blank">同步采购发票信息</a>
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					    <form action="/Makesettlement/settlementOutList" method='get'>
+					<div class="screenList fl w">
+						<table>
+							<tr>
+								<th>供应商名称：</th>
+								<td><input type="text" name='ggzname' value="{:I('get.ggzname')}"/></td>
+								<th>产品名称：</th>
+								<td><input type="text" name='comname' value="{:I('get.comname')}"/></td>
+								<th>所属商务：</th>
+								<td><input type="text" name='jfname' value="{:I('get.jfname')}"/></td>
+								<th>时间：</th>
+								<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>
+							</tr>
+							<tr>
+								<th>结算单状态：</th>
+								<td>
+									<select name="status">
+										<option value="0">全部</option>
+									  	<option value="1">待审核</option>
+									  	<option value="2">已审核</option>
+									  	<option value="6">已作废</option>
+									</select>
+								</td>
+								<th>结算单编号：</th>
+								<td><input type="text" name="id" value="{:I('get.id')}"/></td>
+								<th>生成时间：</th>
+								<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="addstrtime" value="{:I('get.addstrtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="addendtime" value="{:I('get.addendtime')}"/></td>
+								<th>邮箱：</th>
+								<td><input type="text" name='email' value="{:I('get.email')}"></td>
+							</tr>
+							<tr>
+								<th>收款方名称：</th>
+								<td>
+									<input type="text" name="skname"  value="{:I('get.skname')}"/>
+								</td>
+								<td></td>
+								<td colspan="5">
+									<input type="submit" value="查询" />
+									<input type="button" value="取消" class="J_closeScreen" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					</form>
+				</div>-->
+				<style type="text/css">
+					.aa,.bb{top: 25px;margin-right: 25px;}
+					.ac{ width: 100%;
+						height: 40px;
+						line-height: 40px;
+						font-size: 19px;
+						color: #666666;
+						margin-top: -12px;}
+				</style>
+				<div class="screenBox">
+							<form action="/Makesettlement/settlementOutList" method='get' id="search_form">
+								<div class="t_left">
+									<div class="ziduan">
+										<label>供应商: </label>
+										<input type="text" name='ggzname' value="{:I('get.ggzname')}"/>
+									</div>
+									<div class="ziduan">
+										<label>产品名称: </label>
+										<input type="text" name='comname' value="{:I('get.comname')}"/>
+									</div>
+									<div class="ziduan">
+										<label>所属商务: </label>
+										<input type="text" name='jfname' value="{:I('get.jfname')}"/>
+									</div>
+
+									<div class="ziduan">
+										<label>账单开始: </label>
+										<input readonly="true"  class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>
+									</div>
+
+									<div class="ziduan">
+										<label>账单结束: </label>
+										<input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/>
+									</div>
+
+									<div class="ziduan">
+											<label>状态: </label>
+											<td>
+												<select class="selectpicker" id="js_status">
+													<option value="0">全部</option>
+													<option value="1">待审核</option>
+													<option value="2">已审核</option>
+													<option value="6">已作废</option>
+												</select>
+												<input type="hidden"  class="form-control" id="status" name="status" value="{:I('get.status')}">
+									</div>
+									<div class="ziduan">
+											<label>编号: </label>
+											<input type="text" name="id" value="{:I('get.id')}"/>
+									</div>
+									<div class="ziduan">
+										<label>生成开始: </label>
+										<input readonly="true"  class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="addstrtime" value="{:I('get.addstrtime')}"/>
+									</div>
+									<div class="ziduan">
+										<label>生成结束: </label>
+										<input readonly="true"  class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="addendtime" value="{:I('get.addendtime')}"/>
+									</div>
+									<div class="ziduan">
+										<label>邮箱: </label>
+										<input type="text" name='email' value="{:I('get.email')}">
+									</div>
+									<div class="ziduan">
+										<label>收款方: </label>
+										<input type="text" name="skname"  value="{:I('get.skname')}"/>
+									</div>
+
+								</div>
+								<div class="t_right"><input type="submit" value="查询" /></div>
+							</form>
+				</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+						<style type="text/css">
+							.te{margin-left: 0!important;padding: 0 30px;}
+						</style>
+						<div class="advancedLeft">
+							<span class="addAdv advBtn"><input type="button" value="导出" class="" onclick="window.open('/Makesettlement/downloadsetoutlist'+window.location.search)"/></span>
+							<span class="export advBtn te"><a href="/Makesettlement/index" target="_blank">同步采购发票</a></span>
+						</div>
+					</div>
+					<form action="subaudit" method='post' name='subauditdataform'>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th>结算单编号</th>
+							<th>供应商名称</th>
+							<th>收款方名称</th>
+							<th>产品名称</th>
+							<th>账单期间</th>
+							<th>结算金额（含税）</th>
+							<th>税点</th>
+							<th>不含税金额</th>
+							<th>所属商务</th>
+							<th>状态</th>
+							<th width="130px">操作</th>
+							<th>查看日报</th>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name='getSum' id='val'>
+							<tr>
+								<td>求和</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>{$val.settlementmoney}</td>
+								<td></td>
+								<td>{$val.notaxmoney}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</volist>
+						<volist name='data' id='v'>
+							<tr>
+								<td>{$v.id}</td>
+								<td>{$v.advname}</td>
+								<td>{$v.fukuanname}</td>
+								<td>{$v.comname}</td>
+								<td>{$v.strdate}-{$v.enddate}</td>
+								<td>{$v.settlementmoney|twonum}</td>
+								<td>{$v.tax}</td>
+								<td>{$v.notaxmoney|twonum}</td>
+								<td>{$v.real_name}</td>
+								<td>{:C('option.outsettlement_status')[$v['status']]}</td>
+								<td>
+									<a href="/Makesettlement/settlementOut?id={$v.id}">查看</a>&nbsp;
+									<eq name='v.status' value='1'>
+									<a class="J_pass" data='{$v.id}'>通过</a>&nbsp;
+									<a class="J_flunk" data='{$v.id}'>不通过</a>&nbsp;
+									</eq>
+								</td>
+								<td><a target="_blank" href="/Report/dayReport?strtime={$v.strdate}&endtime={$v.enddate}&outzt[]={$v.jsztid}&superid[]={$v.superid}<php>
+									$jfarr=explode(',',$v['alljfid']);
+									foreach($jfarr as $v_jf){
+										echo '&jfid[]='.$v_jf;
+									}
+								</php>">查看</a></td>
+					        </tr>
+						</volist>
+						</tbody>
+					</table>
+					</form>
+					{$_page}
+				</div>
+
+			</div>
+	</div>
+			<!--弹出框（通过） -->
+		<div class="passDialog" title="通过">
+			<br /><br />
+			<p class="tc">请确定审核通过！</p>
+		</div>
+	<!--弹出框（不通过） -->
+		<div class="flunkDialog" title="不通过">
+			<table class="dialogTable_form w ha">
+				<tr>
+					<th></th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>选择原因<span class="must">*</span>:</th>
+					<td><select id='selectyy'>
+					<volist name='dic' id='v'>
+						<option value="{$v.name}">{$v.name}</option>
+					</volist>
+					</select></td>
+				</tr>
+				
+			</table>
+		</div>
+
+		<!--弹出框 -->
+		<div class="uploadingDialog" title="同步采购发票信息">
+			<form id="ciForm" enctype="multipart/form-data" action="{:U('uploadImg')}" method="post">
+				<table class="dialogTable_form w ha">
+					<tr>
+						<th>日期月份选择：</th>
+						<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="t_strtime" />
+					</tr>
+					<!--<tr>
+						<th>选择合同<span class="must">*</span>:</th>
+						<td><input type="file" id="contractImg"  name="contractImg" multiple="multiple" />
+							<input type="hidden" id="cid" name="cid">
+						</td>
+					</tr>-->
+				</table>
+			</form>
+		</div>
+</block>
+
+

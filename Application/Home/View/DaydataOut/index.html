@@ -1,0 +1,23 @@
+<html>
+<body>
+<form method='get' action="">
+<table>
+<tr><td>时间</td><td><input type='text' name='strtime'/>-<input type='text' name='endtime'/></td></tr>
+<tr><td>计费标识</td><td><input type='text' name='jfname'/></td></tr>
+<tr><td>产品名称</td><td><input type='text' name='comname'/></td></tr>
+<tr><td></td><td><input type='submit'/></td></tr>
+</table>
+</form>
+<a href="/DaydataOut/add" target="_blank">新增</a>
+<table>
+<tr><td>产品</td><td>计费标识</td><td>日期</td><td>金额</td><td>修改</td></tr>
+<volist name="data" id='v'>
+<tr>
+	<td>{$v.comname}</td><td>{$v.jfname}</td><td>{$v.adddate}</td><td>{$v.newmoney}</td><td>
+		<a target="_blank" href="/DaydataOut/edit?id={$v.id}">修改</a>
+	</td>
+</tr>
+</volist>
+</table>
+</body>
+</html>

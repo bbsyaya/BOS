@@ -1,0 +1,66 @@
+<extend name="Public/base"/>
+<block name="style">
+    <meta charset="UTF-8">
+    <title>流程管理</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/daterangepicker.css">
+</block>
+<block name="script">
+    <script type="text/javascript" src="__PUBLIC__/OA/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+    <!--双日期插件-->
+    <script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/jquery.timepicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/jquery.datepair.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/datepicker.js"></script>
+</block>
+
+<block name="body">
+    <div class="subConten">
+    <!--面包屑-->
+    <div class="crumbs"><a href="">OA管理</a>&nbsp;&gt;&nbsp;<a href="">流程管理</a>&nbsp;&gt;&nbsp;<span>发起流程</span></div>
+    <!--end 面包屑-->
+    <!--内容-->
+    <div class="subCon">
+        <!--条件查询-->
+        <div class="query">
+            <table class="queryTable">
+                <tbody>
+                    <tr>
+                        <td align=center><input name="" onclick="window.location='/OA/Index/add?type=1'" type="submit" value="财务类"></td>
+                        <td align=center><input name="" onclick="window.location='/OA/Index/add?type=2'" type="submit" value="行政类"></td>
+                        <td align=center><input name="" onclick="window.location='/OA/Index/add?type=3'" type="submit" value="人力资源类"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <!-- end 条件查询-->
+        <!--发起流程列表-->
+        <div class="workListBox">
+            <table class="listTable Js_tableCon">
+                <thead>
+                    <tr>
+                        <th>流程名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <volist name='data' id='v'>
+                    <tr>
+                        <td>{$v.name}</td>
+                        <td><a class="rest" href="/OA/Index/begin?id={$v.id}">发起流程</a></td>
+                    </tr>
+                </volist>
+
+                </tbody>
+            </table>
+            
+        </div>
+        <!--end 发起流程列表-->
+    </div>
+    <!--end 内容-->
+</div>
+</block>

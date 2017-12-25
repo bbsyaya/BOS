@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="__CSS__/base.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/common.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/page.css" rel="stylesheet" type="text/css" />
+    <script src="__MODULE__/jquery-2.1.1.min.js" type="text/javascript"></script>
+				<script>
+					function DX(n){
+								if(n=='' || isNaN(n) || n==0 || n=='0')return '零';
+								if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n))
+						        return "数据非法";
+						        var unit = "千百拾亿千百拾万千百拾元角分", str = "";
+						            n += "00";
+						        var p = n.indexOf('.');
+						        if (p >= 0)
+						            n = n.substring(0, p) + n.substr(p+1, 2);
+						            unit = unit.substr(unit.length - n.length);
+						        for (var i=0; i < n.length; i++)
+						            str += '零壹贰叁肆伍陆柒捌玖'.charAt(n.charAt(i)) + unit.charAt(i);
+						        return str.replace(/零(千|百|拾|角)/g, "零").replace(/(零)+/g, "零").replace(/零(万|亿|元)/g, "$1").replace(/(亿)万|壹(拾)/g, "$1$2").replace(/^元零?|零分/g, "").replace(/元$/g, "元整");
+							}
+					$(function() {
+						$('.DXmoney').html(DX({$data['yrkmoney']}));
+					})
+				</script>
+				<!--筛选-->
+		<style>
+			.dataTable1 tr td{white-space:normal;}
+		</style>
+</head>
+<body>				
+				<!--数据表-->
+				<div class="dataCn fl w ha">
+					<div class="dataFormTitle">基础信息</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr>
+								<td>到账日期</td><td>摘要</td><td>到款账户</td><td>到款金额</td><td>备注</td>
+							</tr>
+							<tr>
+								<td>{$data.adddate}</td><td>{$data.remarks2}</td><td>{$data.receivablesname}</td><td>{$data.money|twonum}</td><td>{$data.remarks}</td>
+							</tr>
+							<tr><td>合计认款金额</td><td>{$data.yrkmoney}</td><td>认款金额大写</td><td class="DXmoney"></td></tr>
+						</tbody>
+					</table>
+
+					<br/><br/>
+
+					<div class="dataFormTitle">认款记录</div>
+					<table class="dataTable dataTable1">
+						<tbody>
+							<tr><td>广告主名称</td><td>产品名称</td><td style="width:140px">业务线</td><td>起止日期</td><td style="width:170px">结算主体</td><td style="width:70px">所属销售</td><td style="width:120px">认款金额</td><td style="width:70px">认款人</td></tr>
+							<tr>
+								<td></td><td></td><td></td><td></td><td></td><td></td><td>{$allrk|twonum}</td><td></td>
+							</tr>
+							<volist name='jldata' id='v'>
+								<tr><td>{$v.advername}</td><td>{$v.comname}</td><td>{$v.linename}</td><td>{$v.strdate}-{$v.enddate}</td><td>{$v.jszt}</td><td>{$v.salername}</td><td>{$v.money|twonum}</td><td>{$v.rkname}</td></tr>
+							</volist>
+						</tbody>
+					</table>
+				</div>
+				<br/><br/>
+				<div class="dataFormOperate">
+					<a onclick="window.print()">打印</a>
+					<a onclick="top.location='/Finance/adminMoney'">返回</a>
+				</div>
+			</div>
+
+
+
+</body>
+</html>

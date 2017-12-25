@@ -1,0 +1,192 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<style type="text/css">
+	label{font-weight:normal!important}.wd300{width:68% !important}.wd100{width:100% !important}.dayTwo-1{width:28%!important}.fd-k{margin-top:20px}.fs-color{color:#1269cc!important;border-bottom-color:#1269cc!important}.btnBox{padding-bottom:100px!important}.a-com{border:medium none;border-radius:3px;color:#fff;height:36px;margin:0 15px;background:#1269cc none repeat scroll 0 0;width:110px;line-height:36px;display:inline-block;color:#fff!important;font-size:14px;text-align:center}.submit{width: auto !important;padding: 0px 20px !important;height: 36px;line-height: 36px;}.btnBox input[type="button"]{ margin: 0px !important;}.glzw{color:#1269cc !important;font-size:12px;margin-left:8px;text-decoration: underline !important;}.dayTwo-a{width:48% !important;}.entryList li .entryCon label{width: 20% !important;height: 44px !important;overflow: hidden;line-height: 44px !important;display: inline-block !important; float: left;}.bz-txt{height: 150px;border:1px solid #ddd;border-radius: 3px;padding: 5px;width: 87%;}.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){width: 75% !important;height: 40px !important;}.bootstrap-select > .dropdown-toggle{height: 40px !important;}.bootstrap-select.btn-group .dropdown-menu li{width: 100% !important; height: 24px !important;}.dropup .dropdown-menu, .navbar-fixed-bottom .dropdown .dropdown-menu{top:44px !important;}.bootstrap-select.btn-group .dropdown-menu{height: 200px !important;}.creatoa, .queryTable input[type="button"], .chos-btn{
+    background: #1269cc none repeat scroll 0 0;
+    min-width: 70px;
+    padding: 0 5px;border: medium none;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 12px;
+    height: 30px;
+}.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){min-width: auto !important;}
+</style>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<script type="text/javascript">
+	var _defult={};
+</script>
+<!--主体-->
+<div class="subConten  fl w">
+    <!--内容-->
+    <div class="subCon  fl w">
+    <fieldset class="fl w">
+		<legend class="fs-color">基本信息</legend>
+        <form action="/Home/InteSystem/saveInfo.html" method="get" id="dataForm">
+         <?php if($query==200){ $readonly = "disabled='disabled'"; } ?>
+			<ul class="entryList">
+				<li>
+					<p class="entryCon">
+						<label for="">公司名称</label>
+						<input name="company_name" id="company_name" {$readonly} value="{$one['company_name']}" class="items require"  placeholder="请输入公司名称,必填"  type="text">
+					</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">合作方（产品）</label>
+				<input name="partner" id="partner" class="items require"  {$readonly} value="{$one['partner']}"   placeholder="请输入合作方（产品）,必填" data-v="" type="text">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">计费模式</label>
+				<span class="dayTime">
+				<select name="bil_method" id="bil_method"  {$readonly}>
+				<?php foreach ($charging_mode_options as $k => $v) { ?>
+				<option value="{$k}" <?php if($k==$one['bil_method']){ ?> selected="selected" <?php } ?> >{$v}</option>
+				<?php } ?>
+				</select>
+
+				</span>
+				</p>
+				</li>
+			
+				<li>
+				<p class="entryCon">
+				<label for="" >地域</label>
+				<input  placeholder="请输入地域"  {$readonly}   name="area"  id="area" type="text" class="items require"   value="{$one['area']}">
+				</p>
+				</li>
+				
+				
+				<li>
+				<p class="entryCon">
+				<label for="">标签</label>
+				<span class="dayTime">
+				<input type="text" placeholder="请输入标签" {$readonly} class="items require" id="target" name="target"   value="{$one['target']}"></span>
+				</p>
+				</li>
+				<li>
+
+				<p class="entryCon">
+				<label for="">产品优势</label>
+				<input name="adver_advan" id="adver_advan"  {$readonly} type="text"  placeholder="请输入广告主优势（价格、时间、预算）"  class="items zditem require" value="{$one['adver_advan']}">
+				</p>
+				</li>
+				<li>
+
+				<p class="entryCon">
+				<label for="">体量化</label>
+				<input name="volume" id="volume" type="text"  {$readonly} class="items zditem" placeholder="请输入体量化"   value="{$one['volume']}" placeholder="请输入体量化">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">关联度</label>
+				<input name="relevance" id="relevance"  {$readonly} placeholder="请输入关联度（与我司业务）"   type="text" class="items" value="{$one['relevance']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="" style="width:25% !important;">历史合作案例</label>
+				<input name="history_case" id="history_case"  {$readonly}  placeholder="请输入历史合作案例"    style="width:70% !important;" type="text" class="items"  value="{$one['history_case']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">指派部门跟进</label>
+				<input class="votetxt items require"  {$readonly} name="depart_names" id="depart_names"  <?php if($query!=200){ ?> style="width:55% !important;"<?php }else{ ?> style="width:75% !important;" <?php  } ?>  placeholder="不可输入"   readonly="readonly"type="text" value="{$one['depart_names']}">
+				 <?php if($query!=200){ ?>  <input name="" id="choseDepart" type="button" value="选择部门" class="chos-btn"  style="width:15% !important;min-width:auto !important;"> <?php } ?>
+		        <input type="hidden" id="depart_id" name="depart_id" value="{$one['depart_id']}" />
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">信息收集者</label>
+				<select name="create_uid" id="create_uid" class="selectpicker1 require"  data-live-search="true"  {$readonly}>
+				<option >加载中...</option>
+				</select>
+				<script type="text/javascript">_defult.create_uid="{$one['create_uid']}";</script>
+
+				<!-- <input name="need_user" id="need_user" type="text" placeholder="请输入需求人" class="items" value="{$one['need_user']}"> -->
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">需求人</label>
+				<select name="need_user" id="need_user" class="selectpicker1 require"  data-live-search="true"  {$readonly}>
+				<option >加载中...</option>
+				</select>
+				<script type="text/javascript">_defult.need_user="{$one['need_user']}";</script>
+
+				<!-- <input name="need_user" id="need_user" type="text" placeholder="请输入需求人" class="items" value="{$one['need_user']}"> -->
+				</p>
+				</li>
+			
+				<li>
+				<p class="entryCon">
+				<label for="">联系人</label>
+				<input name="contact_user" {$readonly} id="contact_user"  placeholder="请输入联系人" type="text" class="items require" value="{$one['contact_user']}">
+				</p>
+				</li>
+				
+				<li>
+				<p class="entryCon">
+				<label for="">联系方式</label>
+				<input name="contact_way" {$readonly} placeholder="请输入联系方式" id="contact_way" type="text" class="items require" value="{$one['contact_way']}">
+				</p>
+				</li>
+				
+				<li>
+				<p class="entryCon">
+				<label for="">需求类型</label>
+				<select name="demand_type" id="demand_type"  {$readonly} >
+				<?php foreach ($demand_type_options as $k => $v) { ?>
+				<option value="{$k}" <?php if($k==$one['demand_type']){ ?> selected="selected" <?php } ?> >{$v}</option>
+				<?php } ?>
+				</select>
+				</p>
+				</li>
+				<li style="width:100%;height:auto !important;line-height:auto !important;">
+					<p class="entryCon" style="width:100%;height:auto !important;line-height:auto !important;">
+					<label for="" style="width:5% !important;">备注</label>
+					<?php if($one['remark']){
+						?>
+						<textarea class="bz-txt items"   {$readonly} placeholder="请输入备注" name="remark" id="remark">{$one['remark']}</textarea>
+						<?php }else{
+							?>
+							<textarea class="bz-txt items"  {$readonly}  placeholder="请输入备注" name="remark" id="remark"></textarea>
+							<?php 
+						}?>
+					
+					</p>
+				</li>
+				
+			</ul>
+
+
+	        <!--按钮-->
+	        <div class="btnBox fl w" style="text-align: center;">
+	        <?php if($query!=200){ ?> <input class="submit" name="" type="button" value="保存资料" onclick="E.saveData(this)" id="btnsave"> <?php } ?>
+	            
+	             <a href="/Home/InteSystem/extendCustomer.html"  class="a-com">返回列表</a>
+	            <input type="hidden" name="extid" id="extid" value="{$one['id']}" />
+	        </div>
+        </form>
+    </fieldset>
+        <!--end 按钮-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<link rel="stylesheet" href="__MODULE__/jqueryztree3.5/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" src="/Public/Home/js/extend.js?v={:getVersion()}"></script>
+<div class="authorizationDialog" title="选择部门">
+    <!--结构树-->
+    <ul id="treeDepart" class="ztree"></ul>
+</div>
+</block>

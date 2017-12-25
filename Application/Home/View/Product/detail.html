@@ -1,0 +1,358 @@
+<extend name="Public/base"/>
+<block name="body">
+    <!--数据表-->
+    <form  action="{:U('update')}" method="post" enctype="multipart/form-data">
+        <div class="dataCn fl w ha">
+        <div class="dataFormContainer">
+            <div class="dataFormTitle">基础信息（产品=推广活动）</div>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>产品编码：</th>
+                        <td>{$data.code}</td>
+                        <th>产品名称：<span class="required">*</span></th>
+                        <td>{$data.name}</td>
+                        <th>产品类型：<span class="required">*</span></th>
+                        <td>{$op_product_type[$data['type']]}</td>
+                    </tr>
+                    <tr>
+                        <th>广告主名称：<span class="required">*</span></th>
+                        <td>
+                            {$data_adname}
+                        </td>
+                        <th>接入业务线：<span class="required">*</span></th>
+                        <td>
+                            {$data_blname}
+                        </td>
+                        <th>签订主体：<span class="required">*</span></th>
+                        <td>{$data_sign_body}</td>
+
+                    </tr>
+                    <tr>
+                        <th>产品大类：<span class="required">*</span></th>
+                        <td>
+                            {$data.category}
+                        </td>
+                        <th>分类明细：<span class="required">*</span></th>
+                        <td>
+                            {$data.category2}
+                        </td>
+                        <th>来源类型：<span class="required">*</span></th>
+                        <td>{$op_order_source_type[$data['source_type']]}</td>
+                        
+                    </tr>
+                    <tr>
+                        <th>责任销售：<span class="required">*</span></th>
+                        <td>
+                            {$data_saler}
+                        </td>
+                          
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="dataFormTitle">订单信息</div>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>合作状态：<span class="required">*</span></th>
+                        <td>{$op_order_cooperate_state[$data['cooperate_state']]}</td>
+                        <th class="J_zs">合同OA流水号：<span class="required">*</span></th>
+                        <td class="J_zs"><input type="text" item-type="c_num" class="J_dataSelect" readonly="readonly" name="contract_num" value="{$data.contract_num}" dialog-title="OA流水号/广告主名称/签订主体"/></td>
+                        <th class="J_zs">网签：<span class="required">*</span></th>
+                        <td class="J_zs">{$data.contract_webinfo}</td>
+                        <th class="J_cs" style="display: none;">测试类型：<span class="required">*</span></th>
+                        <td class="J_cs" style="display: none;">{$op_order_test_type[$data['order_test_type']]}</td>
+                        <th class="J_cs" style="display: none;">测试指标：<span class="required">*</span></th>
+                        <td class="J_cs" style="display: none;">
+                            <!--<select class="J_sj" style="display: none;"><option>1天</option><option>2天</option><option>1天~30天</option></select>
+                            <input class="J_lj" type="text" />
+                            <input class="J_je" type="text" style="display: none;" />-->
+                            <input type="text" name="order_test_quota" value="{$data.order_test_quota}" placeholder="天"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <if condition="$data['cooperate_state'] eq 1">
+                            <th>合同有效期：<span class="required">*</span></th>
+                            <td>起{$data.contract_s_duration}
+                                止{$data.contract_e_duration}
+                            </td>
+                        </if>
+                        <th>订单类型：<span class="required">*</span></th>
+                        <td>{$op_order_type[$data['order_type']]}</td>
+                        <th>发票类型：<span class="required">*</span></th>
+                        <td>{$op_invoice_type[$data['invoice_type']]}</td>
+                    </tr>
+                    <tr>
+                        <th>返量周期：<span class="required">*</span></th>
+                        <td>{$op_return_cycle[$data['return_cycle']]}</td>
+                        <th>结算周期：<span class="required">*</span></th>
+                        <td>{$op_settlement_cycle[$data['settle_cycle']]}</td>
+                        <th>对账时间(天)：<span class="required">*</span></th>
+                        <td>{$data.reconciliation_day}</td>
+                    </tr>
+                    <tr>
+                        <th>开票时间(天)：<span class="required">*</span></th>
+                        <td>{$data.bill_day}</td>
+                        <th>收款时间(天)：<span class="required">*</span></th>
+                        <td>{$data.receivables_day}</td>
+                        <th>计费模式：<span class="required">*</span></th>
+                        <td>{$op_charging_mode[$data['charging_mode']]}</td>
+                    </tr>
+                    <tr>
+                        <th>价格类型：<span class="required">*</span></th>
+                        <td>
+                            {$op_price_type[$data['price_type']]}
+                        </td>
+                        <th>价格：<span class="required">*</span></th>
+                        <td><input type="text" name="price" value="{$data.price}"/></td>
+                        <th></th>
+                        <td>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="dataFormTitle">安装包信息</div>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>返量方式：<span class="required">*</span></th>
+                        <td>{$op_return_type[$data['package_return_type']]}</td>
+                        <th class="J_yj">邮件地址：<span class="required">*</span></th>
+                        <td class="J_yj">{$data['package_return_email']}</td>
+                        <th class="J_yj"></th>
+                        <td class="J_yj"></td>
+                        <th class="J_gfht" style="display: none;">后台账号：<span class="required">*</span></th>
+                        <td class="J_gfht" style="display: none;">{$data['package_return_account']}</td>
+                        <th class="J_gfht" style="display: none;">密码：<span class="required">*</span></th>
+                        <td class="J_gfht" style="display: none;">{$data['package_return_passwd']}</td>
+                    </tr>
+                    <tr>
+                        <th>安装包大小<span class="required">*</span></th>
+                        <td>{$op_package_size[$data['package_size']]}</td>
+                        <th>质量要求：<span class="required">*</span></th>
+                        <td>{$data.quality_requirements}</td>
+                        <th>核检规则：<span class="required">*</span></th>
+                        <td>{$data.qr_check_rule}</td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class="dataFormTitle">对接人信息</div>
+            <div class="dataFormContent">
+                <table id="fin_receiver_tab" class="dynamicTable oppositeJoint">
+                    <tr>
+                        <th>姓名</th>
+                        <th>电话</th>
+                        <th>QQ</th>
+                        <th>邮箱</th>
+                    </tr>
+                    <foreach name="data_contacts" item="item" >
+                        <tr>
+                            <td>{$item.name}</td>
+                            <td>{$item.mobile}</td>
+                            <td>{$item.qq}</td>
+                            <td>{$item.email}</td>
+                        </tr>
+                    </foreach>
+                </table>
+            </div>
+
+            <div class="dataFormTitle">规划业务线</div>
+            <div class="dataFormContent">
+                <table class="dynamicTable oppositeJoint">
+                    <tr>
+                        <th>业务线分类</th>
+                        <th>业务线</th>
+                    </tr>
+
+                    <volist name="data_plane_bl" id="item" >
+                        <tr>
+                            <td>
+                                {$data_bl_type[$item['bl_type']]}
+                            </td>
+                            <td>
+                                {$item.name}
+                            </td>
+                        </tr>
+                    </volist>
+                </table>
+            </div>
+
+
+            <div class="dataFormTitle">计费标识信息&nbsp;&nbsp;<a target="_blank" href="{:U('ChargingLogo/index?prot_id='.$data['id'])}">查看更多</a></div>
+            <style type="text/css">
+            .no-data{height:50px;line-height:50px;text-align:center;width:100%;display:inline-block}.doDataDelete{cursor:pointer}.pagen{text-align:center;display:inline-block;display:none}.listtb{width:100%;display:inline-block}.listtb tr td{width:8%;display:inline-block;padding:5px 1px}.listtb tbody{width:100%;display:inline}.listtb tbody tr{width:100%;display:inline;float: left;}.pagen{line-height:28px}.pagen a{background-color:#f0f0f0;border-radius:3px;color:#808080!important;cursor:pointer;display:inline-block;font-size:12px;height:28px;line-height:28px;margin-left:3px;margin-right:3px;overflow:hidden;padding-left:9px;padding-right:9px;white-space:nowrap;width:auto}.pagen span{border-radius:3px;cursor:pointer;display:inline-block;font-size:12px;height:28px;line-height:28px;margin-left:3px;margin-right:3px;overflow:hidden;padding-left:9px;padding-right:9px;white-space:nowrap;width:auto;background-color:#1a72d6;color:#fff!important}
+            </style>
+            <div class="dataFormContent">
+                <table class="dynamicTable oppositeJoint">
+                    <caption align="bottom">
+                        <div class="pagen" id="pagen" style="float:right;"></div>
+                    </caption>
+                    <tbody id="tbody">
+                        <tr>
+                            <th>计费标识ID</th>
+                            <th>计费标识名称（广告）</th>
+                            <th>链接地址</th>
+                            <th>价格类型</th>
+                            <th>价格</th>
+                            <th>计费模式</th>
+                            <th>后台地址</th>
+                            <th>账号</th>
+                            <th>密码</th>
+                        </tr>
+                        <tr id="loaingtr" style="height:451px;">
+                            <td colspan="9">
+                                <div class="no-data" id="ltip">加载中....</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <volist name="clList" id="item">
+                        <tr>
+                            <td>{$item.code}</td>
+                            <td>{$item.name}</td>
+                            <td>
+                                <if condition="!empty($item['promotion_url']) AND ($item['promotion_url_type'] eq 1)">
+                                    <a target="_blank" href="http://{$Think.server.HTTP_HOST}{$item['promotion_url']}">下载</a><br/>
+                                <else/>
+                                    {$item['promotion_url']}
+                                </if>
+                            </td>
+                            <td>{$op_price_type[$item['price_type']]}</td>
+                            <td>{$item.price}</td>
+                            <td>{$op_charging_mode[$item['charging_mode']]}</td>
+                            <td>{$item.back_url}</td>
+                            <td>{$item.account}</td>
+                            <td>{$item.password}</td>
+                        </tr>
+                    </volist>
+                </table>
+                <script type="text/javascript">
+                    var J = {
+                        init:function(){
+                            setTimeout(this.lazyCharLog(1),10000);
+                        },
+                        lazyCharLog:function(nowPage){
+                            var id = "{$proid}";
+                            if(id){
+                                $("#loaingtr").nextAll().remove();
+                                $("#loaingtr").show();
+                                $("#tbody").height(456);
+                                $.get("/Product/lazyChargLog.html",{id:id,p:nowPage},function(data){
+                                    if(data.logo_list){
+                                        if(data.logo_list.length<10) $("#tbody").height("auto");
+                                        J.makeHtml(data);
+                                    }else{
+                                        $("#ltip").html("暂无数据");
+                                    }
+                                });
+                            }else{
+                                $("#ltip").html("暂无数据");
+                            }
+                        },
+                        makeHtml:function(data){
+                            var http_url = "{$Think.server.HTTP_HOST}";
+                            var page = data.page;
+                            
+                            $.each(data.logo_list,function(i,o){
+                                var ht="";
+                                ht+='<tr>';
+                                ht+='<td>'+o.code+'</td>';
+                                ht+='<td>'+o.name+'</td>';
+                                // var promotion_url_type="";
+                                // if(o.promotion_url_type==2){
+                                //     promotion_url_type = '<input type="text" name="charginglogo['+i+'][url]" value="'+o.promotion_url+'" placeholder="填写后链接类型为普通链接" id="charginglogo_url_'+i+'"/><br/>';
+                                // }else{
+                                //     promotion_url_type = '<input type="text" name="charginglogo['+i+'][url]" placeholder="填写后链接类型为普通链接"/><br/>';
+                                // }
+                                // ht+='<td style="line-height: 20px">'+promotion_url_type+'</td>';
+                                // ht+='<td><input type="file" class="upfile" id="upid_'+i+'"/><input type="hidden" name="charginglogo['+i+'][clpk_url]" value="'+o.promotion_url+'"/></td>';
+                                var promotion_url_ = "/";
+                                if(o.promotion_url && (o.promotion_url_type==1)){
+                                    promotion_url_='<a target="_blank" href="http://'+http_url+o.promotion_url+'">下载</a>';
+                                }
+                                ht+='<td>'+promotion_url_+'</td>';
+                                //price_type
+                                var price_type_select_="";
+                                $.each(data.price_type_list,function(si,so){
+                                    if(si==o.price_type){
+                                        price_type_select_=so;
+                                    }
+                                });
+                                ht+='<td>'+price_type_select_+'</td>';
+                                ht+='<td>'+o.price+'</td>';
+                                //charging_mode
+                                var price_type_select_q="";
+                                $.each(data.op_charging_mode,function(oi,oo){
+                                    if(oi==o.charging_mode){
+                                        price_type_select_q=oo;
+                                    }
+                                });
+                                ht+='<td>'+price_type_select_q+'</td>';
+                                ht+='<td>'+o.back_url+'</td>';
+                                ht+='<td>'+o.account+'</td>';
+                                ht+='<td>'+o.password+'</td>';
+                                // ht+='<td><span item-id="'+o.id+'" item-type="charginglogo" class="doDataDelete">删除</span></td>';
+                                // ht+='<input type="hidden" name="charginglogo['+i+'][id]" value="'+o.id+'"/>';
+                                // ht+='<input type="hidden" name="charginglogo['+i+'][prot_id]" value="'+o.prot_id+'"/>';
+                                // ht+='<input type="hidden" name="charginglogo['+i+'][ad_id]" value="'+o.ad_id+'"/>';
+                                ht+='</tr>'
+                                $("#loaingtr").after(ht).show();
+                            });
+                            $("#pagen").html("");
+                            $("#pagen").html(page).show();
+                            $("#loaingtr").hide();
+                        }
+                    };
+                    $(function(){J.init();});
+                </script>
+            </div>
+
+            <div class="dataFormOperate">
+                <a href="{:U('index')}">返回</a>
+            </div>
+        </div>
+
+        </div>
+    </form>
+
+    <!--————————————————————————————————————————————————————————————————————————————————————————————————————-->
+    <!--弹出框（广告主联系人） -->
+    <div class="dataSelectDialog" title="广告主名称、接入业务线、责任销售、合同编号">
+    </div>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        jQuery(function($) {
+
+            //返量方式切换
+            var flfs = "{$data['package_return_type']}";
+            if(flfs == 2) {
+                $(".J_gfht").hide();
+                $(".J_yj").show();
+            } else if(flfs == 1) {
+                $(".J_yj").hide();
+                $(".J_gfht").show();
+            }
+
+
+            //合作状态切换
+            var costate = "{$data['cooperate_state']}";
+            if(costate==2){
+                $(".J_zs").hide();
+                $(".J_cs").show();
+            }else if(costate==1){
+                $(".J_zs").show();
+                $(".J_cs").hide();
+            }else if(costate==3){
+
+            }
+
+        });
+    </script>
+</block>

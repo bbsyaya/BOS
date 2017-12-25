@@ -1,0 +1,52 @@
+<extend name="Public/base"/>
+
+<block name="body">
+
+    <div class="dataCn fl w ha">
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>产品</th>
+                <th>结算周期</th>
+                <th>结算起止日期</th>
+                <th>金额</th>
+                <th>对账时间</th>
+                <th>逾期天数</th>
+                <th>开票时间</th>
+                <th>逾期天数</th>
+                <th>收款时间</th>
+                <th>逾期天数</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="list" id="item"  >
+                <tr>
+                    <td>{$i}</td>
+                    <td>{$item.name}</td>
+                    <td>{$op_settlement_cycle[$item['settle_cycle']]}</td>
+                    <td>{$item.settle_date_section}</td>
+                    <td>{$item.money|number_format=###,2}</td>
+                    <td>{$item.Reconciliation_date|date="Ymd",###}</td>
+                    <td>{$item.Reconciliation_overdue_day}</td>
+                    <td>{$item.bill_date|date="Ymd",###}</td>
+                    <td>{$item.bill_overdue_day}</td>
+                    <td>{$item.receivables_date|date="Ymd",###}</td>
+                    <td>{$item.receivables_overdue_day}</td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    {$_page}
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        $(function() {
+
+
+        });
+    </script>
+</block>

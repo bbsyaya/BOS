@@ -1,0 +1,38 @@
+<extend name="Public/base"/>
+<block name="body">
+    <!--数据表-->
+    <form id="dataform"  action="{:U('edittag_do')}" method="post" enctype="multipart/form-data">
+    <div class="dataCn fl w ha">
+        <div class="dataFormContainer">
+            <div class="dataFormTitle">基本信息</div>
+            <input type='hidden' name="id" value="{:I('get.id')}"/>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>标签名：</th>
+                        <td><input id="tagname" type="text" name="tagname" value="{$data.tagname}" /></td>
+                        <th>标签分类：<span class="required">*</span></th>
+                        <td><select name="pid">
+                    <option value="0">无</option>
+                    <volist name="pdata" id='v'>
+                    <option <eq name="data.pid" value="$v.id">selected="selected"</eq> value="{$v.id}">{$v.tagname}</option>
+                    </volist>
+                    </select></td>
+                    </tr>
+                    
+                </table>
+            </div>
+
+   
+            <div class="dataFormOperate">
+                <input id="submitForm" type="submit" value="保存" />
+            </div>
+        </div>
+
+    </div>
+    </form>
+
+
+</block>
+
+

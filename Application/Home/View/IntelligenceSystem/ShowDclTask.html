@@ -1,0 +1,48 @@
+<extend name="Public/basehtml"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+
+ <div class="add-qb-sec d-f " style="display:block;">
+        
+   <div class="d-f add-tisp" id="add_task" style="display:block;border:0px;margin-top:0px;">
+            <div class="add-txt-s d-f">
+                <textarea class="d-f txt-area" placeholder="请输入任务标题" id="rw_yj_title">{$one["head_title"]}</textarea>
+            </div>
+            <div class="d-f ad-fze ">
+                <span class="fz-es">负责人：</span>
+                <style>
+    .rft-sec{
+        width: 350px !important;
+        border:0px;
+    }
+    .dropup .dropdown-menu, .navbar-fixed-bottom .dropdown .dropdown-menu{
+        height: 120px !important;
+    }
+                </style>
+    <select class="rft-sec" id="rw_fze" style="width:300px;" data-actions-box="true" data-done-button="true" data-live-search="true">
+        <option>加载中...</option>
+        
+    </select>
+    <script type="text/javascript">
+    var de={};
+    de.rw_fze='{$one["pri_uid"]}';
+    </script>
+</div>
+<div class="d-f frz-wls">
+<?php  if(!$one['id']){ ?>   <input type="button" class="add-qibs" id="cj_rw_1"   value="进入下一步流程"   onclick="In.saveRw(1)"/> <?php } ?>
+    <input type="button" class="add-qibs" id="cj_rw"  <?php  if($one['id']>0){ ?> value="保存任务"  <?php }else{ ?> value="创建任务" <?php } ?>   onclick="In.saveRw(0)"/>
+
+     
+</div>
+        </div>
+ </div>
+ <input type="hidden" id="hd_task_id" value="{$one['id']}" />
+  <input type="hidden" id="hd_mr_id" value="{$zqb_id}" />
+<script type="text/javascript" src="/Public/static/layer/layer.js"></script>
+<script type="text/javascript" src="/Public/Home/js/qb.createtask.js?v={:getVersion()}"></script>
+</block>

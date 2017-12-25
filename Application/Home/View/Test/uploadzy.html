@@ -1,0 +1,87 @@
+<extend name="Public/base"/>
+<block name="body">
+	<form action="/Home/Test/uploadzy.html" method="post" enctype="multipart/form-data">
+		<input type="file" value="" name="upfile"/><br/><br/>
+		<input type="hidden" value="upshow023" name="upshow" />
+		<input type="submit" />
+	</form>
+	<br/>
+	<br/>
+	<?php if($error){ ?>  <div>错误：{$error}</div> <?php } ?>
+	<?php if($file_path){ ?>  <div>路径：{$file_path}</div> <?php } ?>
+
+
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+	<script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+	<script type="text/javascript">
+	var L={
+		init:function(){
+			this.importEntry();
+		},
+		importEntry:function(){
+	    	var button = $('#importPro');
+			new AjaxUpload(button,{
+				action: "/Home/Test/noUpdateFileName.html",
+				name: 'files',
+				onSubmit:function(){
+					layer.msg("上传中...",{time:99999999});
+				},
+				onComplete: function(file, response){
+					var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+					if(list.status==1){
+						var lj="路径："+list.data;
+						$("#wjname").html(lj);
+                        button.next().val(list.data);
+                    }
+					layer.alert(list.msg);
+					layer.closeAll();
+				}
+			});
+	    },
+	    addLogMes:function(){
+			var v=$("#msgxx").val();
+			if(v==""){
+				$("#msgxx").focus();
+			}else{
+				var params={};
+				params.msgxx = v;
+				params.task_id = $("#hd_task_id").val();
+				params.fileurl=$("#upfj").val();
+				if(params.fileurl){
+					params.has_img
+				}
+				// console.log(params);
+				$("#lybtn").attr("onclick","").val("操作中...");
+				$("#lyanform").submit();
+				// $.post("/Home/IntelligenceSystem/addLogMesSer.html",params,function(data){
+				// 	$("#lybtn").attr("onclick","qb.addLogMes()").val("留言");
+				// 	// qb.loadLog(0);
+				// });
+			}
+		}
+	};
+	$(function(){L.init();});
+	</script>
+	<input  type="button" value="ajax上传文件，不限制类型" id="importPro"/>
+	<div id="wjname"></div>
+	<br><br>
+
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+
+	<div class="d-f ">
+        <form action="/Home/Test/test1127.html" id="lyanform" method="post" enctype="multipart/form-data" >
+            <input type="text" class="hf-txlsk" placeholder="说点什么留个脚印也好！" name="msgxx" id="msgxx"/>
+
+            <span  class="shc-fjj-s"  title="上传附件" >
+                <input type="file" class="shc-fjj" title="上传附件" name="attendfilename" id="upfj"/>
+            </span>
+            <input type="hidden" id="hd_attach_url" value="" />
+            <input type="button" id="lybtn" value="留言" class="tx-zi" onclick="L.addLogMes()" style="margin-left:2%;" />
+            <input type="hidden" value="30" id="hd_task_id" name="hd_task_id" />
+            <input type="hidden" value="30" id="has_img" name="has_img" />
+        </form>
+        </div>
+
+
+
+</block>

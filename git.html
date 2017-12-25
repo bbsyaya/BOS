@@ -1,0 +1,2047 @@
+
+<div class='input_group'><span class="input_span">XXXX:</span><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH'})" type="text" name="XXXXX" /></span></div>
+
+//部门负责人ID
+92,110,139,439,633,654,666,671,749,95
+/*
+请休假流程
+*/
+
+
+<script>
+function GetDateDiff(startDate,endDate)  
+{  
+    var startTime = new Date(Date.parse(startDate.replace(/-/g,   "/"))).getTime();     
+    var endTime = new Date(Date.parse(endDate.replace(/-/g,   "/"))).getTime();     
+    var dates = Math.abs((startTime - endTime))/(1000*60*60*24);     
+    return  dates;    
+}
+$(function(){
+	$('#tableform').submit(function(){
+		$('input[name="x95f845_10"]').val(GetDateDiff($('input[name="x95f845_8"]').val(),$('input[name="x95f845_9"]').val()));
+	})
+})
+</script>
+<div class='input_group'><span class='input_span'>申请人:</span><input class="nowuser" type="text" name="x95f845_0" style="width:px"><input class="nowuserid" type="hidden" name="nowuserid" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请部门:</span><input class="nowbumen" type="text" name="x95f845_1" style="width:px"></div>
+<div class='input_group'><span class="dayTimeBox"><span class='input_span'>申请日期:</span><input class="nowdate" type="text" name="x95f845_2" class="start_rise date start"></span></div>
+<div class='input_group'><span class='input_span'>OA编号:</span><input class="nowid" type="text" name="x95f845_3" style="width:px"></div>
+<div class='input_group'><span class='input_span'>岗位名称:</span><input class="nowgw" type="text" name="x95f845_4" style="width:px"></div>
+<div id="input_radio_content"><span class='input_span'>岗位级别:</span><input name="x95f845_5" type="radio" class="bitian" value="经理及以上">经理及以上&nbsp;<input name="x95f845_5" type="radio" class="bitian" value="员工">员工&nbsp;</div>
+<div id="input_radio_content"><span class='input_span'>休假事宜:</span><input name="x95f845_6" class="bitian" type="radio" value="调休">调休&nbsp;<input name="x95f845_6" type="radio" class="bitian" value="事假">事假&nbsp;<input name="x95f845_6" type="radio" class="bitian" value="病假">病假&nbsp;<input name="x95f845_6" type="radio" class="bitian" value="年休假">年休假&nbsp;<input name="x95f845_6" type="radio" class="bitian" value="婚假">婚假&nbsp;<input name="x95f845_6" type="radio" class="bitian" value="生育假">生育假&nbsp;<input name="x95f845_6" type="radio" class="bitian" value="看护假">看护假&nbsp;<input name="x95f845_6" type="radio" class="bitian" value="丧假">丧假&nbsp;<input name="x95f845_6" type="radio" class="bitian" value="工伤假">工伤假&nbsp;<input name="x95f845_6" type="radio" class="bitian" value="其他">其他&nbsp;</div>
+    <div class="textarea">
+        <div class='input_span'>备注:</div>
+        <textarea style="border-radius: 5px;font-size:16px;border:1px solid #ddd;width:618px;padding:2px;" name="x95f845_7" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+<div><span class='input_span'>休假时间:<span class="reSpan">*</span></span><input type="hidden" class="bitian" name="x95f845_10" style="width:px"><input readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('x95f845_8','x95f845_9',this,dp);},dateFmt:'yyyy-MM-dd HH:mm'})" type="text" name="x95f845_8" />至<input readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('x95f845_8','x95f845_9',this,dp);},dateFmt:'yyyy-MM-dd HH:mm'})" type="text" name="x95f845_9" /></div>
+<div class='input_radio_content'><span class='input_span'>所需材料:</span><input name="x95f845_11" type="radio" value="医院诊疗证明">医院诊疗证明&nbsp;<input name="x95f845_11" type="radio" value="工作证明">工作证明&nbsp;<input name="x95f845_11" type="radio" value="结婚证复印件">结婚证复印件&nbsp;<input name="x95f845_11" type="radio" value="准生证">准生证&nbsp;<input name="x95f845_11" type="radio" value="其他">其他&nbsp;<input checked="checked" name="x95f845_11" type="radio" value="无">无&nbsp;</div>
+
+
+/*
+加班流程
+*/
+
+<div class='input_group'><span class='input_span'>申请人:</span><input class="nowuser" type="text" name="x45be09_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请部门:</span><input class="nowbumen" type="text" name="x45be09_1" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请时间:</span><input class="nowdate" type="text" name="x45be09_2" class="start_rise date start"></div>
+<div class='input_group'><span class='input_span'>OA编号:</span><input class="nowid" type="text" name="x45be09_3" style="width:px"></div>
+<div class='input_group'><span class='input_span'>岗位名称:</span><input class="nowgw" type="text" name="x45be09_4" style="width:px"></div>
+<div><span class='input_span'>
+加班时段:<span class="reSpan">*</span></span><input class="bitian" readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('x45be09_5','x45be09_6',this,dp);},dateFmt:'yyyy-MM-dd HH:mm'})" type="text" name="x45be09_5" />至<input class="bitian" readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('x45be09_5','x45be09_6',this,dp);},dateFmt:'yyyy-MM-dd HH:mm'})" type="text" name="x45be09_6" /></div>
+<div class="textarea" style="width:100%;">
+        <div class='input_span'>加班工作具体内容:<span class="reSpan">*</span></div>
+        <textarea class="bitian" style="border-radius: 5px;font-size:16px;border:1px solid #ddd;padding:2px;width:618px;" name="x45be09_7" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+<input type="hidden" class="nowgw" name="x45be09_8" style="width:px">
+
+
+/*业务合同审批流程*/
+
+<div class="input_group">
+   <span class="input_span">申请人:</span>
+   <input class="nowuser yw-htput" type="text" name="x72668e_0" style="width:px" />
+   <input class="nowuserid " type="hidden" name="userid" style="width:px" />
+  </div> 
+  <div class="input_group">
+   <span class="input_span">申请部门:</span>
+   <input class="nowbumen yw-htput" type="text" name="x72668e_1" style="width:px" />
+  </div> 
+  <div class="input_group">
+   <span class="input_span">申请日期:</span>
+   <input class="start_rise date start yw-htput" type="text" name="x72668e_2" />
+  </div> 
+  <div class="input_group">
+   <span class="input_span">OA编号:</span>
+   <input class="nowid yw-htput" type="text" name="x72668e_3" style="width:px" />
+  </div> 
+  <div id="input_radio_content">
+   <span class="input_span">类别:<span class="reSpan">*</span></span>
+   <input class="bitian" name="x72668e_4" type="radio" value="新签" />新签&nbsp;
+   <input name="x72668e_4" type="radio" value="续签" />续签&nbsp;
+   <input name="x72668e_4" type="radio" value="终止" />终止&nbsp;
+   <input name="x72668e_4" type="radio" value="变更" />变更&nbsp;
+   <div class="input_group yw-yxbh">
+    <span class="input_span yw-xiybh">原协议编号:</span>
+    <input type="text" name="x72668e_5" class="opdio" url="/OA/Ajax/showallhetong" style="width:180px" />
+    <a href="javascript:void(0);" class="opdio"  url="/OA/Ajax/showallhetong">选择</a>
+   </div> 
+  </div> 
+  <div class="input_group" style="width:80%">
+   <span class="input_span">客户名称:<span class="reSpan">*</span></span>
+   <input class="bitian" type="text" name="x72668e_6" style="width:78%" />
+  </div> 
+  <div class="input_group">
+   <span class="input_span">签订主体:<span class="reSpan">*</span></span>
+   <select class="bitian sel_input" name="x72668e_7" style="width:px"><option selected="" value="上饶市网聚天下科技有限公司">上饶市网聚天下科技有限公司</option> <option value="重庆趣玩科技有限公司">重庆趣玩科技有限公司</option> <option value="上海趣比科技有限公司">上海趣比科技有限公司</option> <option value="上海趣比科技有限公司重庆分公司">上海趣比科技有限公司重庆分公司</option> <option value="重庆趣玩科技有限公司北京分公司">重庆趣玩科技有限公司北京分公司</option> <option value="上饶网聚天下科技有限公司重庆分公司">上饶网聚天下科技有限公司重庆分公司</option> <option value="其他">其他</option> </select>
+  </div> 
+  <div id="input_radio_content">
+   <span class="input_span">合同内容归口:<span class="reSpan">*</span></span>
+   <input class="bitian yw-htlx" name="x72668e_8" type="radio" value="销售合同" />销售合同&nbsp;
+   <input class="bitian yw-htlx" name="x72668e_8" type="radio" value="推广合同" />推广合同&nbsp;
+  </div> 
+
+<div style="width:100%;">
+ 
+  <div class="input_group">
+   <span class="input_span">合同责任人:<span class="reSpan">*</span></span>
+   <input type="text" name="x72668e_9" url="/OA/Ajax/getalluser" class="opdio bitian" />
+  </div> 
+  <div class="input_group">
+   <span class="input_span">业务线:</span>
+   <select class="sel_input" name="x72668e_10" style="width:px"><option selected="" value="优效分发平台">优效分发平台</option> <option value="优效SSP平台">优效SSP平台</option> <option value="优效DMP平台">优效DMP平台</option> <option value="优效开发者平台">优效开发者平台</option> <option value="优效短代支付平台">优效短代支付平台</option> <option value="优效创业者平台">优效创业者平台</option> <option value="优效广告主平台">优效广告主平台</option> <option value="点心生活">点心生活</option> <option value="短信增值服务（SP）">短信增值服务（SP）</option> <option value="移动广告应用（SDK）">移动广告应用（SDK）</option> <option value="酷屏">酷屏</option> <option value="点心桌面">点心桌面</option> <option value="商业软件">商业软件</option> <option value="CDN平台">CDN平台</option> <option value="华龙网">华龙网</option> <option value="流量运营服务">流量运营服务</option> <option value="商业软件矩阵">商业软件矩阵</option> <option value="用户软件矩阵">用户软件矩阵</option> <option value="优效地推平台">优效地推平台</option> <option value="优效分发平台(新)">优效分发平台(新)</option> <option value="酷屏(新)">酷屏(新)</option> <option value="今日资讯">今日资讯</option> <option value="今日资讯(新)">今日资讯(新)</option> <option value="测试业务线">测试业务线</option> <option value="产品发行">产品发行</option> <option value="ADX平台">ADX平台</option> <option value="优效分发平台（一）">优效分发平台（一）</option> <option value="优效SSP平台（一）">优效SSP平台（一）</option> <option value="优效分发平台（二）">优效分发平台（二）</option> <option value="优效SSP平台（二）">优效SSP平台（二）</option> <option value="优效营销平台">优效营销平台</option></select>
+  </div> 
+
+</div>
+
+
+  <div id="input_radio_content">
+   <span class="input_span">合同类型:<span class="reSpan">*</span></span>
+   <input class="bitian" name="x72668e_11" type="radio" value="常规合同" />常规合同&nbsp;
+   <input class="bitian" name="x72668e_11" type="radio" value="框架协议" />框架协议&nbsp;
+   <input class="bitian" name="x72668e_11" type="radio" value="补充协议" />补充协议&nbsp;
+  </div> 
+  <div>
+   <span class="input_span">协议时间:<span class="reSpan">*</span></span>
+   <input class="Wdate" readonly="true" onclick="WdatePicker({onpicking:function(dp){checktime('x72668e_12','x72668e_13',this,dp);},dateFmt:'yyyy-MM-dd HH'})" type="text" name="x72668e_12" />至
+   <input class="Wdate" readonly="true" onclick="WdatePicker({onpicking:function(dp){checktime('x72668e_12','x72668e_13',this,dp);},dateFmt:'yyyy-MM-dd HH'})" type="text" name="x72668e_13" />
+  </div> 
+  <div class="input_group yw-qdrq">
+   <span class="input_span">拟定签订日期:</span>
+   <input readonly="true" class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH'})" type="text" name="x72668e_14" />
+  </div> 
+  <script>
+$(function(){
+    $('input[name="x72668e_8"]').click(function(){
+        //判断是否已签合同
+        $.post('/OA/Ajax/showhetonginfo',{"kehu":$('input[name="x72668e_6"]').val(),"zt":$('select[name="x72668e_7"]').val(),"type":$(this).val()},function(res){
+            if(res!='')alert("已签订合同,OA编号为"+res);return;
+        })
+    })
+})
+</script>
+
+
+/*行政合同*/
+
+
+
+<div class='input_group'><span class='input_span'>申请人:</span><input class="nowuser" type="text" name="xf159bb_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请部门:</span><input class="nowbumen" type="text" name="xf159bb_1" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请日期:</span><input class="nowdate" type="text" name="xf159bb_2" class="start_rise date start"></div>
+<div class='input_group'><span class='input_span'>OA编号:</span><input class="nowid" type="text" name="xf159bb_3" style="width:px"></div>
+<div id="input_radio_content"><span class='input_span'>类别:<span class="reSpan">*</span></span><input class="bitian" name="xf159bb_4" type="radio" value="新签">新签&nbsp;<input name="xf159bb_4" class="bitian" type="radio" value="续签">续签&nbsp;<input name="xf159bb_4" class="bitian" type="radio" value="终止">终止&nbsp;<input name="xf159bb_4" type="radio" class="bitian" value="变更">变更&nbsp;</div>
+<div class='input_group'><span class='input_span'>原协议编号:</span><input type="text" name="xf159bb_5" class='opdio' url='/OA/Ajax/showallhetong' style="width:180px"><a href='javascript:void(0);' class='opdio' url='/OA/Ajax/showallhetong' style="margin-left:5px">选择</a></div>
+<div class='input_group'><span class='input_span'>合同甲方:<span class="reSpan">*</span></span><input class="bitian" type="text" name="xf159bb_6" style="width:px"></div>
+<div class='input_group'><span class='input_span'>合同乙方:<span class="reSpan">*</span></span><input class="bitian" type="text" name="xf159bb_7" style="width:px"></div>
+<div id="input_radio_content"><span class='input_span'>合同内容归口:<span class="reSpan">*</span></span><input class="bitian" name="xf159bb_8" type="radio" value="行政人事合同">行政人事合同&nbsp;<input class="bitian" name="xf159bb_8" type="radio" value="财务类合同">财务类合同&nbsp;<input class="bitian" name="xf159bb_8" type="radio" value="其他合同">其他合同&nbsp;</div>
+
+
+<div style="width:100%;">
+<div class='input_group'><span class='input_span'>合同责任人:<span class="reSpan">*</span></span><input type="text" name="xf159bb_9" url='/OA/Ajax/getalluser' class="opdio bitian"/></div>
+
+<div class='input_group'><span class='input_span'>合同金额:</span><input data_type="int" type="text" name="xf159bb_10" style="width:px"></div>
+
+</div>
+
+
+
+<div id="input_radio_content"><span class='input_span'>合同类型:<span class="reSpan">*</span></span><input class="bitian" name="xf159bb_11" type="radio" value="常规合同">常规合同&nbsp;<input class="bitian" name="xf159bb_11" type="radio" value="框架协议">框架协议&nbsp;<input class="bitian" name="xf159bb_11" type="radio" value="补充协议">补充协议&nbsp;</div>
+<div><span class='input_span'>协议时间:<span class="reSpan">*</span></span><input class="bitian" readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('xf159bb_12','xf159bb_13',this,dp);},dateFmt:'yyyy-MM-dd HH'})" type="text" name="xf159bb_12" />至<input class="bitian" readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('xf159bb_12','xf159bb_13',this,dp);},dateFmt:'yyyy-MM-dd HH'})" type="text" name="xf159bb_13" /></div>
+<div><span class='input_span'>拟定签订日期:</span><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH'})" type="text" name="xf159bb_14" /></div>
+<div class='input_group' style="width:100%;"><span class='input_span'>存档编号:</span><input type="text" name="xf159bb_15" style="width:px"></div>
+<div class='input_group'><span class='input_span'>行政部存档人:</span><input type="text" name="xf159bb_16"/></div>
+<div class='input_group'><span class='input_span'>存档日期:</span><input type="text" name="xf159bb_17" class="start_rise date start"></div>
+<div class='input_group'><span class='input_span'>副本存留:</span><input type="text" name="xf159bb_18"/></div>
+
+
+/*外出申请*/
+
+<div><span class="input_span">填表日期:</span><input type="text" name="x2c0a8d_14" readonly="true" class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH'})"></div>
+
+<div style="width:100%;padding-top:20px">
+<div class='input_group'><span class='input_span'>姓名:</span><input class="nowuser" type="text" name="x2c0a8d_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>员工编号:</span><input class="nowuserid" type="text" name="x2c0a8d_1" style="width:px"></div>
+</div>
+
+<div class='input_group'><span class='input_span'>所属部门:</span><input class="nowbumen" type="text" name="x2c0a8d_2" style="width:px"></div>
+<div class='input_group'><span class='input_span'>职务:</span><input class="nowgw" type="text" name="x2c0a8d_3" style="width:px"></div>
+<div class='input_group'><span class='input_span'>联系电话:</span><input type="text" name="x2c0a8d_4" style="width:px"></div>
+<div class='input_group'><span class='input_span'>电子邮件:</span><input type="text" name="x2c0a8d_5" style="width:px"></div>
+<div class='input_group'><span class='input_span'>外出单位:</span><input type="text" name="x2c0a8d_6" style="width:px"></div>
+<div class='input_group'><span class='input_span'>外出地点:</span><input type="text" name="x2c0a8d_7" style="width:px"></div>
+<div><span class='input_span'>外出时间:</span><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH'})" type="text" name="x2c0a8d_8" />
+至<input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH'})" type="text" name="x2c0a8d_9" /></div>
+<div class="textarea"  style="width:100%;">
+        <div class='input_span'>外出事由:</div>
+        <textarea style="border-radius: 5px;font-size:16px;border:1px solid #ddd;padding:2px;width:618px;" name="x2c0a8d_10" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+<div class="textarea"  style="width:100%;">
+        <div class='input_span'>外出期间<br/>工作安排:</div>
+        <textarea style="border-radius: 5px;font-size:16px;border:1px solid #ddd;padding:2px;width:618px;" name="x2c0a8d_11" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+<div class="textarea"  style="width:100%;">
+        <div class='input_span'>部门经理意见:</div>
+        <textarea style="border-radius: 5px;font-size:16px;border:1px solid #ddd;padding:2px;width:618px;" name="x2c0a8d_12" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+<div class="textarea" style="width:100%;">
+        <div class='input_span'>人事部经理意见:</div>
+        <textarea style="border-radius: 5px;font-size:16px;border:1px solid #ddd;padding:2px;width:618px;" name="x2c0a8d_13" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+
+
+/*出差申请*/
+
+<div class='input_group'><span class='input_span'>申请人:</span><input class="nowuser" type="text" name="xe38d6e_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请部门:</span><input class="nowbumen" type="text" name="xe38d6e_1" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请日期:</span><input class="nowdate" type="text" name="xe38d6e_2" class="start_rise date start"></div>
+<div class='input_group'><span class='input_span'>OA编号:</span><input class="nowid" type="text" name="xe38d6e_3" style="width:px"></div>
+<div class='input_group'><span class='input_span'>职位:</span><input class="nowgw" type="text" name="xe38d6e_4" style="width:px"></div>
+<div id="input_radio_content"><span class='input_span'>岗位级别:<span class="reSpan">*</span></span><input class="bitian" name="xe38d6e_5" type="radio" value="经理及以上">经理及以上&nbsp;<input name="xe38d6e_5" type="radio" value="员工">员工&nbsp;</div>
+<div><span class='input_span'>出差日期:<span class="reSpan">*</span></span><input class="bitian" readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('xe38d6e_6','xe38d6e_7',this,dp);},dateFmt:'yyyy-MM-dd HH'})" type="text" name="xe38d6e_6" />至<input class="bitian" readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('xe38d6e_6','xe38d6e_7',this,dp);},dateFmt:'yyyy-MM-dd HH'})" type="text" name="xe38d6e_7" />
+<input type="hidden" name="xe38d6e_8" style="width:px"></div>
+<div class='input_group' style="width:100%;"><span class='input_span'>起程起点:<span class="reSpan">*</span></span><input class="bitian" type="text" name="xe38d6e_9" style="width:px"></div>
+<div class='input_group'><span class='input_span'>启程终点:<span class="reSpan">*</span></span><input class="bitian" type="text" name="xe38d6e_10" style="width:px"></div>
+<div class='input_group'><span class='input_span'>回程起点:<span class="reSpan">*</span></span><input class="bitian" type="text" name="xe38d6e_11" style="width:px"></div>
+<div class='input_group'><span class='input_span'>回程终点:<span class="reSpan">*</span></span><input class="bitian" type="text" name="xe38d6e_12" style="width:px"></div>
+<div class="textarea">
+        <div class='input_span'>出差目的:<span class="reSpan">*</span></div>
+        <textarea class="bitian" style="border-radius: 5px;font-size:16px;width:618px;border:1px solid #ddd;padding:2px;" name="xe38d6e_13" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+<div class='input_group'><span class='input_span'>机票费用:</span><input data_type="int" class='mo' type="text" name="xe38d6e_14" style="width:px"></div>
+<div class='input_group'><span class='input_span'>住宿费用:</span><input data_type="int" class='mo' type="text" name="xe38d6e_15" style="width:px"></div>
+<div class='input_group'><span class='input_span'>宴请费用:</span><input data_type="int" class='mo' type="text" name="xe38d6e_16" style="width:px"></div>
+<div class='input_group'><span class='input_span'>餐费补助:</span><input data_type="int" class='mo' type="text" name="xe38d6e_17" style="width:px"></div>
+<div class='input_group'><span class='input_span'>会务费用:</span><input data_type="int" class='mo' type="text" name="xe38d6e_18" style="width:px"></div>
+<div class='input_group'><span class='input_span'>其他费用:</span><input data_type="int" class='mo' type="text" name="xe38d6e_19" style="width:px"></div>
+<div><span class='input_span'>合计:</span><input data_type="int" type="text" name="xe38d6e_20" style="width:px"></div>
+<div id="input_radio_content" style="width:38%"><span class='input_span'>是否订票:<span class="reSpan">*</span></span><input class="bitian" name="xe38d6e_21" type="radio" value="是">是&nbsp;<input class="bitian" name="xe38d6e_21" type="radio" value="否">否&nbsp;</div>
+<div class='input_group'><span class='input_span'>其他说明:</span><input type="text" name="xe38d6e_22" style="width:px"></div>
+<script>
+function GetDateDiff(startDate,endDate)  
+{  
+    var startTime = new Date(Date.parse(startDate.replace(/-/g,   "/"))).getTime();     
+    var endTime = new Date(Date.parse(endDate.replace(/-/g,   "/"))).getTime();     
+    var dates = Math.abs((startTime - endTime))/(1000*60*60*24);     
+    return  dates;    
+}
+$(function(){
+    $('#tableform').submit(function(){
+        $('input[name="xe38d6e_8"]').val(GetDateDiff($('input[name="xe38d6e_6"]').val(),$('input[name="xe38d6e_7"]').val()));
+    })
+    $('.mo').change(function(){
+        var allm=0;
+        $('.mo').each(function(){
+            var tm=$(this).val();
+            if(!tm)tm=0;
+            allm+=parseFloat(tm);
+        })
+        $('input[name="xe38d6e_20"]').val(allm);
+    })
+})
+</script>
+
+/*考勤说明*/
+<script>
+function getkaoqingdata(){
+    if($('input[name="xdae2a3_1"]').val()!='' && $('input[name="xdae2a3_2"]').val()!=''){
+$("#loadhtml").html("加载中....");
+            $.get('/OA/Attend/get_checkinfo',{"date1":$('input[name="xdae2a3_1"]').val(),"date2":$('input[name="xdae2a3_2"]').val()},function(res){
+$("#loadhtml").html("加载中....");
+                $('textarea[name="xdae2a3_3"]').html(res);
+               $('.content').html(res);
+            })
+        }
+}
+$(function(){
+$("#loadhtml").html("加载中....");
+   if(!$('textarea[name="xdae2a3_3"]').val())getkaoqingdata();
+
+$("#loadhtml").html("加载中....");
+    $('.content').html($('textarea[name="xdae2a3_3"]').val());
+})
+</script>
+<div class='input_group'><span class='input_span'>姓名:</span><input type="text" name="xdae2a3_0" class="nowuser" style="width:px"></div>
+<div><span class='input_span'>考勤开始日期:</span><input readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('xdae2a3_1','xdae2a3_2',this,dp);},dateFmt:'yyyy-MM-dd'})" onChange="getkaoqingdata()" type="text" name="xdae2a3_1" />至<input readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('xdae2a3_1','xdae2a3_2',this,dp);},dateFmt:'yyyy-MM-dd'})" onChange="getkaoqingdata()" type="text" name="xdae2a3_2" /></div>
+<div class="textarea" style="display:none">
+        <div class='input_span'></div>
+        <textarea style="border-radius: 5px;font-size:16px;" name="xdae2a3_3" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+<div class="content" style="width:100%;display:inline-block;text-align:center;" id="loadhtml">加载中....</div>
+
+/*公文审批*/
+
+<div class='input_group'><span class='input_span'>申请人:</span><input class="nowuser" type="text" name="xa4d9cb_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请部门:</span><input class="nowbumen" type="text" name="xa4d9cb_1" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请时间:</span><input class="nowdate" type="text" name="xa4d9cb_2"></div>
+<div class='input_group'><span class='input_span'>OA编号:</span><input class="nowid" type="text" name="xa4d9cb_3" style="width:px"></div>
+<div class='input_group'><span class='input_span'>公文名称:</span><input type="text" name="xa4d9cb_4" style="width:px"></div>
+<div class='input_group'><span class='input_span'>撰稿人:</span><input type="text" name="xa4d9cb_5" style="width:px"></div>
+<div id="input_radio_content"><span class='input_span'>公文类型:</span><input name="xa4d9cb_6" type="radio" value="外部公文">外部公文&nbsp;<input name="xa4d9cb_6" type="radio" value="内部通知">内部通知&nbsp;<input name="xa4d9cb_6" type="radio" value="人事命令">人事命令&nbsp;<input name="xa4d9cb_6" type="radio" value="管理规范">管理规范&nbsp;</div>
+<div class='input_group'><span class='input_span'>主送单位:</span><input class="opdio" url="/OA/Ajax/getallbumen" type="text" name="xa4d9cb_7" style="width:px"></div>
+<div class='input_group'><span class='input_span'>抄送单位:</span><input class="opdio" url="/OA/Ajax/getallbumen" type="text" name="xa4d9cb_8" style="width:px"></div>
+<div class='input_group'><span class='input_span'>生效日期:</span><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="xa4d9cb_9" /></div>
+<div class="textarea">
+        <div class='input_span'>制度目的:</div>
+        <textarea style="border-radius: 5px;font-size:16px;border:1px solid #ddd;padding:2px;" name="xa4d9cb_10" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+
+
+/*员工转正审批流程*/
+
+<div class='input_group'><span class='input_span'>员工姓名:</span><input class="nowuser" type="text" name="x02207c_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>所属部门:</span><input class="nowbumen" type="text" name="x02207c_1" style="width:px"></div>
+<div id="input_radio_content"><span class='input_span'>级别:</span><input name="x02207c_2" type="radio" value="经理">经理&nbsp;<input name="x02207c_2" type="radio" value="员工">员工&nbsp;</div>
+<div class='input_group'><span class='input_span'>入职时间:</span><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="x02207c_3" /></div>
+<div class='input_group'><span class='input_span'>岗位名称:</span><input class="nowgw" type="text" name="x02207c_4" style="width:px"></div>
+
+/*员工离职*/
+<script>
+  $(function(){
+    $.post('/OA/Ajax/getortheroastatus',{},function(data){
+      $('#ortheroastatus').html(data.msg);
+    },'json');
+  })
+</script>
+<div class='input_group'><span class='input_span'>姓名:</span><input class="nowuser" type="text" name="x13166f_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>所在部门:</span><input class="nowbumen" type="text" name="x13166f_1" style="width:px"></div>
+<div id="input_radio_content"><span class='input_span'>级别:</span><input name="x13166f_2" class="bitian" type="radio" value="经理">经理&nbsp;<input name="x13166f_2" type="radio" class="bitian" value="员工">员工&nbsp;</div>
+<div class='input_group'><span class='input_span'>入职时间:</span><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="x13166f_3" /></div>
+<div class='input_group'><span class='input_span'>劳动合同到期日:</span><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="x13166f_4" /></div>
+<div class="input_group">
+  <span class="input_span" >工作交接人:</span>
+  <input type="text" name="x13166f_9" url="/OA/Ajax/getalluser" class="opdio" >
+</div>
+<div id="input_radio_content"><span class='input_span'>离职类别:</span><input name="x13166f_6" type="radio" class="bitian" value="辞职">辞职&nbsp;<input name="x13166f_6" type="radio" class="bitian" value="辞退">辞退&nbsp;<input name="x13166f_6" type="radio" class="bitian" value="除名">除名&nbsp;<input name="x13166f_6" type="radio" class="bitian" value="自动离职">自动离职&nbsp;<input name="x13166f_6" class="bitian" type="radio" value="合同到期">合同到期&nbsp;<input name="x13166f_6" class="bitian" type="radio" value="其他">其他&nbsp; </div>
+<div class='input_group'><span class='input_span'>正式离职时间:</span><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="x13166f_5" /></div>
+<div id="input_radio_content"><span class='input_span'>员工类型:</span><input name="x13166f_7" type="radio" value="合同">合同&nbsp;<input name="x13166f_7" type="radio" value="实习">实习&nbsp;<input name="x13166f_7" type="radio" value="聘用">聘用&nbsp;<input name="x13166f_7" type="radio" value="其他">其他&nbsp;</div>
+<div class="textarea">
+        <div class='input_span'>离职申请说明:</div>
+        <textarea style="border-radius: 5px;font-size:16px;" name="x13166f_8" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+<div id="ortheroastatus"></div>
+/*办公用品*/
+
+<div class='input_group'><span class='input_span'>申购人:</span><input class="nowuser" type="text" name="xb9b4a2_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申购部门:</span><input class="nowbumen" type="text" name="xb9b4a2_1" style="width:px"></div>
+<div class='input_group'><span class='input_span'>OA编号:</span><input class="nowid" type="text" name="xb9b4a2_2" style="width:px"></div>
+<div class='input_group'><span class='input_span'>类别:</span><select class="sel_input" name="xb9b4a2_3"><option value="域名">域名</option><option value="办公用品">办公用品</option><option value="其它">其它</option></select></div>
+<div class='input_group'><span class='input_span'>物品名称:</span><input type="text" name="xb9b4a2_4" style="width:px"></div>
+<div class='input_group'><span class='input_span'>用途说明:</span><input type="text" name="xb9b4a2_5" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申购数量:</span><input data_type="int" type="text" name="xb9b4a2_6" style="width:px"></div>
+<div class='input_group'><span class='input_span'>备注:</span><input type="text" name="xb9b4a2_7" style="width:px"></div>
+<div class='input_group'><span class='input_span'>供应商:</span><input type="text" name="xb9b4a2_8" style="width:px"></div>
+<div class='input_group'><span class='input_span'>采购数量:</span><input data_type="int" type="text" name="xb9b4a2_9" style="width:px"></div>
+<div class='input_group'><span class='input_span'>单价:</span><input data_type="int" type="text" name="xb9b4a2_10" style="width:px"></div>
+<div class='input_group'><span class='input_span'>折扣优惠:</span><input type="text" name="xb9b4a2_11" style="width:px"></div>
+<div class='input_group'><span class='input_span'>发票说明:</span><input type="text" name="xb9b4a2_12" style="width:px"></div>
+<div class='input_group'><span class='input_span'>采购总价:</span><input data_type="int" type="text" name="xb9b4a2_13" style="width:px"></div>
+<div class='input_group'><span class='input_span'>建议商家:</span><input type="text" name="xb9b4a2_14" style="width:px"></div>
+
+
+/*盖章申请单*/
+
+
+<div class='input_group'><span class='input_span'>申请人:</span><input class="nowuser" type="text" name="xe87944_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请部门:</span><input class="nowbumen" type="text" name="xe87944_1" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请日期:</span><input class="nowdate" type="text" name="xe87944_2" class="start_rise date start"></div>
+<div class='input_group'><span class='input_span'>OA编号:</span><input class="nowid" type="text" name="xe87944_3" style="width:px"></div>
+<div id="input_radio_content"><span class='input_span'>盖章说明:<span class="reSpan">*</span></span><input class="bitian" name="xe87944_4" type="radio" value="业务合作文档">业务合作文档&nbsp;<input class="bitian" name="xe87944_4" type="radio" value="人事行政文档">人事行政文档&nbsp;<input class="bitian" name="xe87944_4" type="radio" value="其他">其他&nbsp;</div>
+<div class='input_group'><span class='input_span'>所属单位:<span class="reSpan">*</span></span><select class="sel_input bitian" name="xe87944_5" style="width:px"><option value="重庆趣玩科技有限公司">重庆趣玩科技有限公司</option><option value="上海趣比科技有限公司">上海趣比科技有限公司</option><option value="上饶市网聚天下科技有限公司">上饶市网聚天下科技有限公司</option></select></div>
+<div id="input_radio_content"><span class='input_span'>资质选项:<span class="reSpan">*</span></span><input class="bitian" name="xe87944_6" type="radio" value="公章">公章&nbsp;<input class="bitian" name="xe87944_6" type="radio" value="合同章">合同章&nbsp;</div>
+<div class="textarea">
+        <div class='input_span'>备注:</div>
+        <textarea style="border-radius: 5px;font-size:16px;border:1px solid #ddd;padding:2px;width:618px;" name="xe87944_7" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+
+
+/*销假申请*/
+
+<div class='input_group'><span class='input_span'>申请人:</span><input class="nowuser" type="text" name="x5098d0_0" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请部门:</span><input class="nowbumen" type="text" name="x5098d0_1" style="width:px"></div>
+<div class='input_group'><span class='input_span'>申请时间:</span><input class="nowdate" type="text" name="x5098d0_2" class="start_rise date start"></div>
+<div class='input_group'><span class='input_span'>OA编号:</span><input class="nowid" type="text" name="x5098d0_3" style="width:px"></div>
+<div class='input_group'><span class='input_span'>入职时间:</span><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="x5098d0_4" /></div>
+<div class='input_group'><span class='input_span'>岗位名称:</span><input type="text" name="x5098d0_5" style="width:px"></div>
+<div id="input_radio_content"><span class='input_span'>类别:</span><input name="x5098d0_6" class="bitian" type="radio" value="调休">调休&nbsp;<input class="bitian" name="x5098d0_6" type="radio" value="事假">事假&nbsp;<input name="x5098d0_6" class="bitian" type="radio" value="病假">病假&nbsp;<input name="x5098d0_6" class="bitian" type="radio" value="年休假">年休假&nbsp;<input name="x5098d0_6" type="radio" class="bitian" value="看护假">看护假&nbsp;<input name="x5098d0_6" type="radio" class="bitian" value="生育假">生育假&nbsp;<input name="x5098d0_6" type="radio" class="bitian" value="丧假">丧假&nbsp;<input name="x5098d0_6" type="radio" class="bitian" value="婚假">婚假&nbsp;<input name="x5098d0_6" type="radio" class="bitian" value="工伤假">工伤假&nbsp;<input name="x5098d0_6" type="radio" class="bitian" value="其他">其他&nbsp;</div>
+<div><span class='input_span'>销假时间:</span><input class="bitian" readonly="true" class="Wdate" onClick="WdatePicker({onpicking:function(dp){checktime('x5098d0_7','x5098d0_8',this,dp);},dateFmt:'yyyy-MM-dd HH'})" type="text" name="x5098d0_7" />
+至<input readonly="true" class="Wdate" class="bitian" onClick="WdatePicker({onpicking:function(dp){checktime('x5098d0_7','x5098d0_8',this,dp);},dateFmt:'yyyy-MM-dd HH'})" type="text" name="x5098d0_8" />
+<input type="hidden" name="x5098d0_9" style="width:px"></div>
+<div class="textarea" style="width:100%;">
+        <div class='input_span'>备注:</div>
+        <textarea style="border-radius: 5px;font-size:16px;border:1px solid #ddd;padding:2px;width:618px;" name="x5098d0_10" id="" cols="55" rows="8"></textarea>
+        <br style="clear:both;" />
+    </div>
+<script>
+function GetDateDiff(startDate,endDate)  
+{  
+    var startTime = new Date(Date.parse(startDate.replace(/-/g,   "/"))).getTime();     
+    var endTime = new Date(Date.parse(endDate.replace(/-/g,   "/"))).getTime();     
+    var dates = Math.abs((startTime - endTime))/(1000*60*60*24);     
+    return  dates;    
+}
+$(function(){
+    $('#tableform').submit(function(){
+        $('input[name="x5098d0_9"]').val(GetDateDiff($('input[name="x5098d0_7"]').val(),$('input[name="x5098d0_8"]').val()));
+    })
+})
+</script>
+
+
+
+
+
+
+/*费用报销*/
+
+
+
+
+
+<script>
+var money_detail_num=1;
+function addTr(obj){
+    $(obj).parents('tr').prev().after('<tr class="money_detail">'+
+         '<td>'+money_detail_num+'</td><td colspan="5"><select class="selectList1 bitian" data="费用类别" style="width: 280px" id="cost_type">'+
+        '<option value="" selected="selected">&#160;</option>'+
+        '<option value="工资/奖金/提成/社保/公积金/礼金">工资/奖金/提成/社保/公积金/礼金</option>'+
+        '<option value="房租/物管/水电/绿化环保">房租/物管/水电/绿化环保</option>'+
+        '<option value="差旅/市内交通费/车辆消耗">差旅/市内交通费/车辆消耗</option>'+
+        '<option value="餐饮/食品">餐饮/食品</option>'+
+        '<option value="咨询服务费/审计费">咨询服务费/审计费</option>'+
+        '<option value="税费相关">税费相关</option>'+
+        '<option value="物资采购（包括固定资产/办公耗材等）">物资采购（包括固定资产/办公耗材等）</option>'+
+        '<option value="电话宽带费/邮寄/维修保养">电话宽带费/邮寄/维修保养</option>'+
+        '<option value="招聘/培训费">招聘/培训费</option>'+
+        '<option value="广告/宣传费">广告/宣传费</option>'+
+        '<option value="服务器费用">服务器费用</option>'+
+        '<option value="其他">其他</option>'+
+        '</select></td><td colspan="2"><input data="金额" data_type="int" type="text" class="money_t bitian"/></td>'+  
+        '</tr>');
+    money_detail_num++;
+}
+function delTr(obj){
+    $(obj).parents('tr').prev().remove();
+}
+function countTr(){
+    var allmoney_t=0;
+    $('.money_detail').each(function(){
+        if(!$(this).find('.money_t').val())return;
+        allmoney_t+=parseFloat($(this).find('.money_t').val());
+    })
+    if(isNaN(allmoney_t))allmoney_t='-';
+    else allmoney_t=allmoney_t.toFixed(2);
+    $('input[name="xb27546_9"]').val(allmoney_t);
+    $('input[name="xb27546_9"]').parent().next().next().html(DX(allmoney_t));
+    if(!isNaN($('input[name="xb27546_10"]').val())){
+        var ytb=$('input[name="xb27546_9"]').val()-$('input[name="xb27546_10"]').val();
+        $('.ytbmoney').val(ytb.toFixed(2));
+        $('.ytbmoney').parent().next().next().html(DX($('.ytbmoney').val()));
+    }
+}
+function openinput(str){
+    var allinput=str.split(',');
+    for(var i=0;i<allinput.length;i++){
+        thisinput=$('input[name="'+allinput[i]+'"]');
+        thisinput.css('background','#fff').attr('readonly',false);
+    }
+}
+function closeinput(str){
+    var allinput=str.split(',');
+    for(var i=0;i<allinput.length;i++){
+        thisinput=$('input[name="'+allinput[i]+'"]');
+        thisinput.css('background','#ccc').attr('readonly',true);
+    }
+}
+function _init(){
+    //初始化
+    changestatus_11($('input[name="xb27546_11"][checked="checked"]'));
+    changestatus_12($('input[name="xb27546_12"][checked="checked"]'));
+    //填充明细数据
+    var atype=$('input[name="xb27546_20"]').val().split(',');
+    var amo=$('input[name="xb27546_7"]').val().split(',');
+    var tobj=$('#detail_tr');
+    for(var j=0;j<atype.length;j++){
+        var i=j+1;
+        tobj.after('<tr class="money_detail">'+
+         '<td>'+i+'</td><td colspan="5"><select class="selectList1" data="费用类别" style="width: 280px" id="cost_type">'+
+        '<option value="" selected="selected">&#160;</option>'+
+        '<option value="工资/奖金/提成/社保/公积金/礼金">工资/奖金/提成/社保/公积金/礼金</option>'+
+        '<option value="房租/物管/水电/绿化环保">房租/物管/水电/绿化环保</option>'+
+        '<option value="差旅/市内交通费/车辆消耗">差旅/市内交通费/车辆消耗</option>'+
+        '<option value="餐饮/食品">餐饮/食品</option>'+
+        '<option value="咨询服务费/审计费">咨询服务费/审计费</option>'+
+        '<option value="税费相关">税费相关</option>'+
+        '<option value="物资采购（包括固定资产/办公耗材等）">物资采购（包括固定资产/办公耗材等）</option>'+
+        '<option value="电话宽带费/邮寄/维修保养">电话宽带费/邮寄/维修保养</option>'+
+        '<option value="招聘/培训费">招聘/培训费</option>'+
+        '<option value="广告/宣传费">广告/宣传费</option>'+
+        '<option value="服务器费用">服务器费用</option>'+
+        '<option value="其他">其他</option>'+
+        '</select></td><td colspan="2"><input data="金额" data_type="int" type="text" class="money_t bitian"/></td>'+  
+        '</tr>');
+        tobj=$('.money_detail:last');
+    }
+    if($('.money_detail').length==0){
+        tobj.after('<tr class="money_detail">'+
+         '<td>'+1+'</td><td colspan="5"><select class="selectList1" data="费用类别" style="width: 280px" id="cost_type">'+
+        '<option value="" selected="selected">&#160;</option>'+
+        '<option value="工资/奖金/提成/社保/公积金/礼金">工资/奖金/提成/社保/公积金/礼金</option>'+
+        '<option value="房租/物管/水电/绿化环保">房租/物管/水电/绿化环保</option>'+
+        '<option value="差旅/市内交通费/车辆消耗">差旅/市内交通费/车辆消耗</option>'+
+        '<option value="餐饮/食品">餐饮/食品</option>'+
+        '<option value="咨询服务费/审计费">咨询服务费/审计费</option>'+
+        '<option value="税费相关">税费相关</option>'+
+        '<option value="物资采购（包括固定资产/办公耗材等）">物资采购（包括固定资产/办公耗材等）</option>'+
+        '<option value="电话宽带费/邮寄/维修保养">电话宽带费/邮寄/维修保养</option>'+
+        '<option value="招聘/培训费">招聘/培训费</option>'+
+        '<option value="广告/宣传费">广告/宣传费</option>'+
+        '<option value="服务器费用">服务器费用</option>'+
+        '<option value="其他">其他</option>'+
+        '</select></td><td colspan="2"><input data="金额" data_type="int" type="text" class="money_t bitian"/></td>'+  
+        '</tr>');
+    }else{
+        for(var o=0;o<atype.length;o++){
+            if(alldata && alldata['nowsort']>0){
+                $('.money_detail').eq(o).find('.selectList1').html('<option>'+atype[o]+'</option>');
+            }else{
+                $('.money_detail').eq(o).find('option').each(function(){
+                    if($(this).val()==atype[o])$(this).attr('selected',true);
+                })
+            }
+            
+            $('.money_detail').eq(o).find('.money_t').val(amo[o]);
+        }
+    }
+    $('.ytbmoney').val($('input[name="xb27546_9"]').val()-$('input[name="xb27546_10"]').val());
+    $('.ytbmoney').parent().next().next().html(DX($('.ytbmoney').val()));
+    $('input[name="xb27546_9"]').parent().next().next().html(DX($('input[name="xb27546_9"]').val()));
+}
+function changestatus_11(obj){
+    //修改支付方式
+    if(obj.val()=='银行转账'){
+        openinput('xb27546_15,xb27546_16,xb27546_17,xb27546_18');
+    }else{
+        closeinput('xb27546_15,xb27546_16,xb27546_17,xb27546_18');
+    }
+}
+function changestatus_12(obj){
+    //修改冲借原款
+    if(obj.val()=='是'){
+        openinput('xb27546_13,xb27546_14');
+    }else{
+        closeinput('xb27546_13,xb27546_14');
+    }
+}
+$(function(){
+    $('input[name="xb27546_0"]').parents('form').submit(function(){
+        var alltype=new Array();
+        var allmoney=new Array();
+        for(var i=0;i<$('.money_detail').length;i++){
+            if(i==0)$('input[name="xb27546_5"]').val($('.money_detail').eq(i).find('#cost_type').val());
+            alltype[i]=$('.money_detail').eq(i).find('#cost_type').val();
+            allmoney[i]=$('.money_detail').eq(i).find('.money_t').val();
+        }
+        $('input[name="xb27546_20"]').val(alltype.toString());
+        $('input[name="xb27546_7"]').val(allmoney.toString());
+    })
+    $('input[name="xb27546_11"]').change(function(){
+        changestatus_11($(this))
+    })
+    $('input[name="xb27546_12"]').change(function(){
+        changestatus_12($(this))
+    })
+    $('input[name="xb27546_13"]').change(function(){
+        $.post('/OA/Ajax/getoldjkmoney',{"id":$('input[name="xb27546_13"]').val()},function(data){
+            $('input[name="xb27546_14"]').val(data.money);
+        },'json')
+    })
+    $('input[name="xb27546_10"]').change(function(){
+        var thismoney=$('input[name="xb27546_9"]').val()-$('input[name="xb27546_10"]').val();
+        thismoney=thismoney.toFixed(2);
+        $('.ytbmoney').val(thismoney);
+        $('.ytbmoney').parent().next().next().html(DX($('.ytbmoney').val()));
+        if(thismoney<0)closeinput('xb27546_15,xb27546_16,xb27546_17,xb27546_18');
+    })
+    $(".apply_tb").on({change:function(){
+        countTr();          
+            }},'.money_t');
+    $('input[name="xb27546_18"]').change(function(){
+        if($('.dataSelectDialog').find('tr').length>0){
+            $('.dataSelectDialog').find('tr').each(function(){
+                if($(this).find('td').eq(1).html()==$('input[name="xb27546_18"]').val()){
+                    $('input[name="xb27546_17"]').val($(this).find('td').eq(2).html());
+                }
+            })
+        }
+    })
+    _init();
+})
+</script>
+<div class="apply_container" style="padding-top:0px;">
+
+<table style="width:100%;border:0px;">
+    <tbody><tr>
+      <td style="text-align:center;border-right: 1px solid #cecece;">公司名称：</td>
+       <td style="text-align:left;border-right: 1px solid #cecece;"><input class="nowgs" name="xb27546_2" style="border:none;width:220px;padding:0px 0 0 5px" type="text"></td>
+       <td style="text-align:center;border-right: 1px solid #cecece;">申请人：</td>
+       <td style="text-align:left;border-right: 1px solid #cecece;"><input class="nowuser" name="xb27546_0" style="width:130px;border:none;padding:0px 0 0 5px" type="text"></td>
+       <td style="text-align:center;border-right: 1px solid #cecece;">申请部门：</td>
+       <td style="text-align:left;border-right: 1px solid #cecece;"><input class="nowbumen" name="xb27546_1" style="width:180px;border:none;padding:0px 0 0 5px" type="text"></td>
+        <td style="text-align:center;border-right: 1px solid #cecece;">OA编号：</td>
+       <td><input class="nowid" name="xb27546_3" style="width:80px;border:none;padding:0px 0 0 5px" type="text"></td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="apply_tb">
+    <tbody>
+        <tr id='youknow' class="prhide">
+        <th>费用说明<span class="reSpan">*</span></th><td colspan="7"><textarea class="bitian" name="xb27546_6" style="width:100%;height:80px;"></textarea></td>
+        </tr>
+
+        </tr>
+        <tr id='detail_tr'>
+            <th>序号<input type="hidden" name="xb27546_20" style="width:px"></th>
+            <th colspan="5">费用类别(请按票据类型选择)<span class="reSpan">*</span><span class="hiddenSpan"><input class="bitian" type="hidden" data="费用类别" name="xb27546_5" value="" /></span></th>
+            
+            <th colspan="2" style="border-right:0px !important;">金额(￥)<span class="reSpan">*</span><span class="hiddenSpan"><input class="bitian" type="hidden" name="xb27546_7" value="" title="金额" /></span></th>
+            
+        </tr>
+        <tr>
+            <td colspan="8"><input type="button" value="添加" title="添加" onclick="addTr(this)" /><input type="button" value="删除" onclick="delTr(this)" name="DATA_328" title="删除" /><input type="button" value="计算金额" onclick="countTr()" name="DATA_329" title="计算" /></td>
+        </tr>
+        <tr>
+            <td>合计</td>
+            <td colspan="3"><input data_type="int" class="bitian" type="text" title="合计" prec="2" name="xb27546_9" value="0" /></td>
+            <td>大写</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td>冲原借款</td>
+            <td colspan="3"><input type='radio' name='xb27546_12' value="是"/>是<input type='radio' name='xb27546_12' value="否"/>否</td>
+            <td colspan="2">原借款/预付单号</td>
+            <td colspan="2"><input type="text" hidden="0" align="left" title="原借款/预付单号" class="iptText opdio" url="/OA/Ajax/getmyjkinfo" style="text-align: left; width: 150px;" name="xb27546_13" /></td>
+        </tr>
+        <tr>
+            <td>本次核销金额</td>
+            <td colspan="3"><input class="bitian" type="text" title="本次核销金额" data_type="int" prec="2" name="xb27546_10" value="0"/></td>
+            <td colspan="2">原借款 / 预付金额</td>
+            <td colspan="2"><input type="text" align="left" title="原借款/预付金额" data_type="int" style="text-align: left" name="xb27546_14" /></td>
+        </tr>
+        
+        <tr>
+            <td>应补/退金额<span class="reSpan">*</span></td>
+            <td colspan="3"><input data_type="int" type="text" align="left" title="应补/退金额" class="iptText_borderBottom ytbmoney"  style=" width: 80%" /></td>
+            <td>大写</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td>支付方式<span class="reSpan">*</span></td>
+            <td colspan="3"><input class="bitian" type='radio' name='xb27546_11' value="银行转账"/>银行转账<input class="bitian" type='radio' name='xb27546_11' value="自动扣款"/>自动扣款<input class="bitian" type='radio' name='xb27546_11' value="现金支付"/>现金支付</td>
+            <td colspan="2">收款人名称<span class="reSpan">*</span></td>
+            <td colspan="2"><input type="text" align="left" title="收款人" class="bitian" style="text-align: left" name="xb27546_15" /></td>
+        </tr>
+        <tr>
+            <td>银行账号<span class="reSpan">*</span></td>
+            <td colspan="3"><input type="text" class="bitian yhzh opdio2" url="/OA/Ajax/getbankinfo" align="left" title="银行账号"  data_type="int" style="text-align: left" name="xb27546_18" /></td>
+            <td colspan="2">开户行<span class="reSpan">*</span></td>
+            <td colspan="2"><input type="text" align="left" title="开户行网点" class="bitian" style="text-align: left" name="xb27546_17" /></td>
+        </tr>
+        <tr>
+            <td class="height72">备注</td>
+            <td colspan="7"><textarea title="备注" class="iptTexr" value="" rich="0" name="xb27546_19"></textarea></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+
+
+/*借款申请---借支/行政类预付款申请单*/
+
+
+<script>
+$(function(){
+    $('input[name="x782c92_5"]').parent().next().next().html(DX($('input[name="x782c92_5"]').val()));
+    $('input[name="x782c92_5"]').change(function(){
+        $(this).parent().next().next().html(DX($(this).val()));
+    })
+})
+</script>
+<div class="apply_container">
+<table class="apply_tb">
+    <tbody>
+        <tr>
+          
+            <td>公司名称</td>
+            <td style="width:200px;"><input title="公司名称" class="nowgs" name="x782c92_0" style="width:90%;" type="text"></td>
+            <td style="width:65px;">申请人</td>
+            <td style="width:151px;"><input title="申请人" class="nowuser" name="x782c92_1" style="width:90%;" type="text"><input name="userid" class="nowuserid" value="761" type="hidden"></td>
+            <td style="width:90px;">申请部门</td>
+            <td><input class="nowbumen" title="申请部门" name="x782c92_2" style="width:90%;" type="text"></td>
+            <td style="width:70px;">OA编号</td>
+            <td><input title="OA编号" class="nowid" name="x782c92_3" type="text"></td>
+        </tr>
+        <tr>
+            <td>借款/预付用途<span class="reSpan">*</span></td>
+            <td colspan="7"><input class="bitian" type="text" align="left" class="iptText_borderBottom" style=" width: 80%" name="x782c92_4" /></td>
+        </tr>
+        <tr>
+            <td>借款/预付金额<span class="reSpan">*</span></td>
+            <td colspan="3"><input class="bitian" type="text" title="合计" data_type="int" prec="2" name="x782c92_5" /></td>
+            <td>大写</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td>职级</td>
+            <td colspan="3"><select class="sel_input" name="x782c92_6" style="width:px"><option value="员工">员工</option><option value="主管">主管</option><option value="经理">经理</option><option value="总监">总监</option><option value="副总裁">副总裁</option><option value="总裁">总裁</option></select></td>
+            <td>收款人名称<span class="reSpan">*</span></td>
+            <td colspan="3"><input class="bitian" type="text" title="合计" prec="2" name="x782c92_7"  /></td>
+        </tr>
+        <tr>
+            <td>银行账号<span class="reSpan">*</span></td>
+            <td colspan="3"><input data_type="int" class="bitian yhzh" type="text" title="合计" prec="2" name="x782c92_8" /></td>
+            <td>开户行<span class="reSpan">*</span></td>
+            <td colspan="3"><input class="bitian" type="text" title="合计" prec="2" name="x782c92_9" /></td>
+        </tr>
+        
+    </tbody>
+</table>
+</div>
+
+
+
+
+/*退款申请*/
+
+
+<script>
+function openinput(str){
+    var allinput=str.split(',');
+    for(var i=0;i<allinput.length;i++){
+        thisinput=$('input[name="'+allinput[i]+'"]');
+        thisinput.css('background','#fff').attr('readonly',false);
+    }
+}
+function closeinput(str){
+    var allinput=str.split(',');
+    for(var i=0;i<allinput.length;i++){
+        thisinput=$('input[name="'+allinput[i]+'"]');
+        thisinput.css('background','#ccc').attr('readonly',true);
+    }
+}
+function changestatus_11(obj){
+    //修改支付方式
+    if(obj.val()=='银行转账'){
+        openinput('x2a1540_12,x2a1540_13');
+    }else{
+        closeinput('x2a1540_12,x2a1540_13');
+    }
+}
+$(function(){
+    $('input[name="x2a1540_8"]').val($('input[name="x2a1540_6"]').val()-$('input[name="x2a1540_7"]').val());
+    $('input[name="x2a1540_8"]').parent().next().next().html(DX($('input[name="x2a1540_8"]').val()));
+    $('input[name="x2a1540_6"]').change(function(){
+        $('input[name="x2a1540_8"]').val($('input[name="x2a1540_6"]').val()-$('input[name="x2a1540_7"]').val());
+        $('input[name="x2a1540_8"]').parent().next().next().html(DX($('input[name="x2a1540_8"]').val()));
+    })
+    $('input[name="x2a1540_7"]').change(function(){
+        $('input[name="x2a1540_8"]').val($('input[name="x2a1540_6"]').val()-$('input[name="x2a1540_7"]').val());
+        $('input[name="x2a1540_8"]').parent().next().next().html(DX($('input[name="x2a1540_8"]').val()));
+    })
+    $('input[name="x2a1540_11"]').change(function(){
+        changestatus_11($(this));
+    })
+})
+</script>
+<div class="apply_container">
+<input class="bitian" type="hidden" name="x2a1540_14" style="width:px">
+<table class="apply_tb">
+    <tbody>
+        <tr>
+            <td>公司名称</td>
+            <td style="width:200px;"><input type="text" title="公司名称" class="nowgs" name="x2a1540_0" style="width:90%" /></td>
+            <td style="width:90px;">申请人</td>
+            <td style="width:90px;"><input type="text" title="申请人" class="nowuser"  name="x2a1540_1" style="width:90%"/></td>
+            <td>申请部门</td>
+            <td><input type="text" class="nowbumen" title="申请部门" name="x2a1540_2" /></td>
+            <td>OA编号</td>
+            <td><input type="text" title="OA编号" class="nowid"  name="x2a1540_3" style="width:90%"/></td>
+        </tr>
+        <tr>
+            <td>到款时间<span class="reSpan">*</span></td>
+            <td style="width:200px;"><input class="bitian" readonly="readonly" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH'})" type="text" name="x2a1540_4" style="width:90%"/></td>
+            <td style="width:90px;">到款账户<span class="reSpan">*</span></td>
+            <td style="width:90px;"><input type="text"  class="bitian" name="x2a1540_5" style="width:90%"/></td>
+            <td>到账金额<span class="reSpan">*</span></td>
+            <td><input type="text" data_type="int" class="bitian" name="x2a1540_6" value="0" style="width:90%"/></td>
+            <td>消耗金额<span class="reSpan">*</span></td>
+            <td><input type="text"  data_type="int" class="bitian" name="x2a1540_7" value="0" style="width:90%"/></td>
+        </tr>
+
+        <tr>
+            <td>退款金额<span class="reSpan">*</span></td>
+            <td colspan="3"><input data_type="int" class="bitian" type="text" prec="2" name="x2a1540_8" /></td>
+            <td>金额大写</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td>退款原因<span class="reSpan">*</span></td>
+            <td colspan="7"><textarea class="bitian" name="x2a1540_9" style="width:100%;height:60px"></textarea></td>
+        </tr><tr>
+            <td>收款人名称</td>
+            <td colspan="3"><input type="text" class="CALC" classname="CALC" prec="2" name="x2a1540_10" /></td>
+            <td>支付方式</td>
+            <td colspan="3"><input name="x2a1540_11" type="radio" value="银行转账">银行转账&nbsp;<input name="x2a1540_11" type="radio" value="现金">现金&nbsp;</td>
+        </tr><tr>
+            <td>银行账号</td>
+            <td colspan="3"><input class="bitian yhzh" data_type="int" type="text" name="x2a1540_12" style="width:px"></td>
+            <td>开户行</td>
+            <td colspan="3"><input class="bitian" type="text" name="x2a1540_13" style="width:px"></td>
+        </tr>
+
+    </tbody>
+</table>
+</div>
+
+
+/*成本支付*/
+
+<script>
+function tianchongtable(){
+    var idarr=$('input[name="x739c8a_13"]').val().split(',');
+    var comarr=$('input[name="x739c8a_14"]').val().split(',');
+    var buarr=$('input[name="x739c8a_15"]').val().split(',');
+    var datearr=$('input[name="x739c8a_16"]').val().split(',');
+    var moneyarr=$('input[name="x739c8a_17"]').val().split(',');
+    var aduserarr=$('input[name="x739c8a_19"]').val().split(',');
+    var auditerarr=$('input[name="x739c8a_18"]').val().split(',');
+    var tobj=$('#detail_tr');
+    for(var j=0;j<idarr.length;j++){
+        tobj.after('<tr class="money_detail"><td><a target="_blank" href="/Home/Index/main?mainurl=/Makesettlement/settlementOut?id='+idarr[j]+'">'+idarr[j]+'</a></td><td>'+comarr[j]+'</td><td>'+buarr[j]+'</td><td colspan="2">'+datearr[j]+'</td><td>'+moneyarr[j]+'<a href="javascript:;" class="changelist_a del_a" style="color:red">删除</a></td></tr>');
+        tobj=$('.money_detail:last');
+    }
+    $('.DXmoney').html(DX($('input[name="x739c8a_8"]').val()))
+    $('.DXmoney2').html(DX($('input[name="x739c8a_9"]').val()))
+}
+function _init(){
+    //初始化
+
+    //填充明细数据
+    tianchongtable();
+    //显示最近三笔记录
+    $.get('/OA/Ajax/getsuperlastdata',{"id":$('input[name="x739c8a_20"]').val()},function(data){
+        for(var o in data){
+            if(data[o].name !='') {
+
+                $('#lastdata').after("<p><a target='_blank' href='/OA/Index/lc_detail?id=" + data[o].id + "'>" + data[o].name + "&nbsp;&nbsp;&nbsp;&nbsp;" + data[o].addtime + "</a></p>");
+            }else{
+                $('#lastdata').after("<p><a target='_blank' href='/OA/Index/lc_detail?id=" + data[o].id + "'>" +"&nbsp;&nbsp;&nbsp;&nbsp;" + data[o].addtime + "</a></p>");
+            }
+        }
+        
+    },'json')
+}
+$(function(){
+    _init();
+    if(alldata.nowsort!=0)$('.changelist_a').hide();
+
+    $('#changelist').change(function(){
+        $.post('/OA/Ajax/getsetdetail',{"id":$(this).val(),'liuchenid':$('input[name="x739c8a_1"]').val()},function(data){
+            if(data.status!=1){
+                alert(data.msg);
+                var str_13='';
+                $('.money_detail').each(function(){
+                    str_13+=$(this).find('a').html()+',';
+                })
+                $('input[name="x739c8a_13"]').val(str_13.substring(0,str_13.length-1));
+            }else{
+                $('.money_detail').remove();
+                $('input[name="x739c8a_0"]').val(data.data.x739c8a_0);
+                $('input[name="x739c8a_2"]').val(data.data.x739c8a_2);
+                $('input[name="x739c8a_3"]').val(data.data.x739c8a_3);
+                $('input[name="x739c8a_4"]').val(data.data.x739c8a_4);
+                $('input[name="x739c8a_5"]').val(data.data.x739c8a_5);
+                $('input[name="x739c8a_6"]').val(data.data.x739c8a_6);
+                $('input[name="x739c8a_7"]').val(data.data.x739c8a_7);
+                $('input[name="x739c8a_8"]').val(data.data.x739c8a_8);
+                $('input[name="x739c8a_9"]').val(data.data.x739c8a_9);
+                $('input[name="x739c8a_10"]').val(data.data.x739c8a_10);
+                $('input[name="x739c8a_11"]').val(data.data.x739c8a_11);
+                $('input[name="x739c8a_12"]').val(data.data.x739c8a_12);
+                $('input[name="x739c8a_20"]').val(data.data.x739c8a_20);
+                $('input[name="x739c8a_13"]').val(data.data.x739c8a_13);
+                $('input[name="x739c8a_14"]').val(data.data.x739c8a_14);
+                $('input[name="x739c8a_15"]').val(data.data.x739c8a_15);
+                $('input[name="x739c8a_16"]').val(data.data.x739c8a_16);
+                $('input[name="x739c8a_17"]').val(data.data.x739c8a_17);
+                tianchongtable();
+            }
+            
+        },'json')
+    })
+    $('.apply_tb').on({
+        click:function(){
+            $(this).parents('.money_detail').remove();
+            var str='';
+            for(var ti=0;ti<$('.money_detail').length;ti++){
+                str+=$('.money_detail').eq(ti).find('td').eq(0).find('a').html()+',';
+            }
+            $('#changelist').val(str.substring(0,str.length-1));
+            $('#changelist').change();
+            $('.changelist_a').show();
+        }
+    },'.del_a');
+})
+</script>
+
+<div class="apply_container" data="wl_status"  style="padding-top:0px;">
+<input type="hidden" name="x739c8a_20" style="width:px">
+<input type="hidden" name="x739c8a_13" id="changelist" class="opdio" url="/OA/Ajax/checksetoutlist">
+<input type="hidden" name="x739c8a_14" style="width:px">
+<input type="hidden" name="x739c8a_15" style="width:px">
+<input type="hidden" name="x739c8a_16" style="width:px">
+<input type="hidden" name="x739c8a_17" style="width:px">
+<input type="hidden"  name="x739c8a_18" />
+<input type="hidden"  name="x739c8a_19" />
+<div class="apply_container"  style="padding-top:0px;">
+
+<table style="width:100%;border:0px;">
+    <tbody><tr>
+      <td style="text-align:center;border-right:1px solid #cecece;width: 167px">公司名称：</td>
+       <td style="border-right:1px solid #cecece;"><input class="nowgs" name="x739c8a_0" style="border:none;width:460px;" type="text"></td>
+       <td style="text-align:center;border-right:1px solid #cecece;">OA编号：</td>
+       <td><input title="OA编号" class="nowid" name="x739c8a_1" style="border:0px;" type="text"></td>
+    </tr>
+  </tbody></table>
+
+
+<!-- 公司名称：<input class="nowgs" type="text" name="x739c8a_0" style="border:none;width:580px;" />OA编号：<input type="text" title="OA编号" class="nowid"  name="x739c8a_1" /> -->
+<table class="apply_tb">
+    <tbody>
+
+        <tr>
+            <td>项目名称<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text"  name="x739c8a_2" /></td>
+            <td>供应商名称<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text"  name="x739c8a_3" /></td>
+        </tr>
+        <tr>
+            <td>发票类型<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text"  name="x739c8a_4" /></td>
+            <td>是否扣税<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text"  name="x739c8a_5" /></td>
+        </tr>
+        <tr>
+            <td>预付单号<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text"  name="x739c8a_6" /></td>
+            <td>预付款余额<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text"  name="x739c8a_7" /></td>
+        </tr>
+        <tr>
+            <td>本次核销金额（小写）<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text"  name="x739c8a_8" /></td>
+            <td>本次核销金额（大写）<span class="reSpan">*</span></td>
+            <td colspan="2" class="DXmoney"></td>
+        </tr>
+        <tr>
+            <td>本次结算金额（小写）<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text"  name="x739c8a_9" /></td>
+            <td>本次结算金额（大写）<span class="reSpan">*</span></td>
+            <td colspan="2" class="DXmoney2"></td>
+        </tr>
+        <tr>
+            <td>收款人名称<span class="reSpan">*</span></td>
+            <td colspan="5"><input class="bitian" type="text"  name="x739c8a_10" /></td>
+            
+        </tr>
+        <tr>
+            
+            <td>开户行<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text"  name="x739c8a_12" /></td>
+            <td>银行账号<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian yhzh" type="text"  name="x739c8a_11" /></td>
+
+        </tr>
+        <tr id="detail_tr">
+            <td>对账单编号</td>
+            <td>产品名称</td>
+            <td>商务人员</td>
+            <td colspan="2">账单期间</td>
+            <td>金额<a style="color:red" class="changelist_a" href="javascript:$('#changelist').click();">选择结算单</a></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<div class="prhide" style="padding:5px 10px;">
+<p id='lastdata'>此供应商最近三次支付记录：</p>
+
+</div>
+
+
+/*差旅费报销*/
+<script>
+function openinput(str){
+    var allinput=str.split(',');
+    for(var i=0;i<allinput.length;i++){
+        thisinput=$('input[name="'+allinput[i]+'"]');
+        thisinput.css('background','#fff').attr('readonly',false);
+    }
+}
+function closeinput(str){
+    var allinput=str.split(',');
+    for(var i=0;i<allinput.length;i++){
+        thisinput=$('input[name="'+allinput[i]+'"]');
+        thisinput.css('background','#ccc').attr('readonly',true);
+    }
+}
+
+function changestatus_11(obj){
+    //修改支付方式
+    if(obj.val()=='银行转账'){
+        openinput('xb4cef4_21,xb4cef4_19,xb4cef4_17');
+    }else{
+        closeinput('xb4cef4_21,xb4cef4_19,xb4cef4_17');
+    }
+}
+$(function(){
+    $('.mo').change(function(){
+        var allm=0;
+        $('.mo').each(function(){
+            var tm=$(this).val();
+            if(!tm)tm=0;
+            allm+=parseFloat(tm);
+        })
+        if(isNaN(allm))allm='-';
+        $('input[name="xb4cef4_18"]').val(allm.toFixed(2));
+        $('input[name="xb4cef4_20"]').val(DX(allm));
+        var tbm=$('input[name="xb4cef4_18"]').val()-$('.oldm').val();
+        if(isNaN(tbm))tbm='-';
+        $('input[name="xb4cef4_13"]').val(tbm);
+    })
+    $('.oldm').change(function(){
+        var tbm=$('input[name="xb4cef4_18"]').val()-$('.oldm').val();
+        if(isNaN(tbm))tbm='-';
+        $('input[name="xb4cef4_13"]').val(tbm);
+    })
+    $('input[name="xb4cef4_15"]').change(function(){
+        changestatus_11($(this))
+    })
+})
+</script>
+
+<div class="apply_container" style="padding:0px;">
+
+<table style="width:100%;">
+    <tr>
+      <td style="text-align:center;border-right:1px solid #cecece;">公司名称：</td>
+      <td  style="border-right:1px solid #cecece;"><input class="nowgs" name="xb4cef4_0" type="text" style="border:0px;"></td>
+      <td  style="text-align:center;border-right:1px solid #cecece;">申请人：</td>
+      <td style="text-align:center;border-right:1px solid #cecece;"><input class="nowuser" name="xb4cef4_1" style="width:130px;border:0px;" type="text" ></td>
+      <td style="text-align:center;border-right:1px solid #cecece;">申请部门：</td>
+      <td style="text-align:center;border-right:1px solid #cecece;"><input class="nowbumen" name="xb4cef4_2" style="width:190px;border:0px;" type="text" ></td>
+      <td style="text-align:center;border-right:1px solid #cecece;">OA编号：</td>
+      <td><input class="nowid" name="xb4cef4_3" style="width:90px;border:0px;" type="text" ></td>
+    </tr>
+  </table>
+  
+
+
+
+<table class="apply_tb">
+    <tbody>
+
+        <tr>
+            <td>出差人<span class="reSpan">*</span></td>
+            <td><input class="bitian" type="text" prec="2" name="xb4cef4_4" style="width:95%;"/></td>
+            <td>职级<span class="reSpan">*</span></td>
+            <td><select class="bitian" name="xb4cef4_5" style="width:px"><option value="员工">员工</option><option value="主管">主管</option><option value="经理">经理</option><option value="总监">总监</option><option value="副总裁">副总裁</option><option value="总裁">总裁</option></select></td>
+            <td>出差地</td>
+            <td colspan="3"><input class="bitian" type="text" prec="2" name="xb4cef4_6" /></td>
+        </tr>
+        <tr>
+            <td>开始时间<span class="reSpan">*</span></td>
+            <td colspan="3"><input class="bitian" type="text" name="xb4cef4_7" readonly="true" class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH'})"></td>
+            <td>结束时间<span class="reSpan">*</span></td>
+            <td colspan="3"><input class="bitian" type="text" name="xb4cef4_8" readonly="true" class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH'})"></td>
+        </tr><tr>
+            <td>出差总结<span class="reSpan">*</span></td>
+            <td colspan="7"><textarea class="bitian" name="xb4cef4_9" style="width:100%;height:180px"></textarea></td>
+        </tr><tr>
+            <td>住宿费用</td>
+            <td colspan="3"><input data_type="int" class='mo' type="text" name="xb4cef4_10" style="width:px"></td>
+            <td>原借款金额</td>
+            <td colspan="3"><input data_type="int" class='oldm' type="text" name="xb4cef4_11" style="width:px"></td>
+        </tr>
+        <tr>
+            <td>交通费用</td>
+            <td colspan="3"><input data_type="int" class='mo' type="text" name="xb4cef4_12" style="width:px"></td>
+            <td>应补退</td>
+            <td colspan="3"><input data_type="int" readonly="readonly" type="text" name="xb4cef4_13" style="width:px"></td>
+        </tr>
+        <tr>
+            <td>餐费</td>
+            <td colspan="3"><input data_type="int" class='mo' type="text" name="xb4cef4_14" style="width:px"></td>
+            <td>支付方式</td>
+            <td colspan="3"><input name="xb4cef4_15" type="radio" value="银行转账">银行转账&nbsp;<input name="xb4cef4_15" type="radio" value="现金支付">现金支付&nbsp;</td>
+        </tr>
+        <tr>
+            <td>其他</td>
+            <td colspan="3"><input data_type="int" class='mo' type="text" name="xb4cef4_16" style="width:px"></td>
+            <td>收款人名称</td>
+            <td colspan="3"><input type="text" name="xb4cef4_17" style="width:px"></td>
+        </tr>
+        <tr>
+            <td>报销合计</td>
+            <td colspan="3"><input data_type="int" type="text" name="xb4cef4_18" style="width:px"></td>
+            <td>银行账号</td>
+            <td colspan="3"><input data_type="int" type="text" class="yhzh" name="xb4cef4_19" style="width:px"></td>
+        </tr>
+        <tr>
+            <td>大写</td>
+            <td colspan="3"><input type="text" name="xb4cef4_20" style="width:px"></td>
+            <td>开户行</td>
+            <td colspan="3"><input type="text" name="xb4cef4_21" style="width:px"></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+//成本预付申请
+<script>
+
+$(function(){
+    $('input[name="x05b464_4"]').change(function(){
+        $('input[name="x05b464_5"]').val(DX($('input[name="x05b464_4"]').val()));
+    })
+    $.get('/OA/Ajax/getallline',{},function(data){
+        for(o in data){
+          $('#xmmc').append('<option value="'+data[o].id+'">'+data[o].name+'</option>'); 
+        }
+        $('#xmmc').val($('input[name="x05b464_2"]').val());
+    },'json')
+    $('#xmmc').change(function(){
+        $('input[name="x05b464_2"]').val($('#xmmc').val());
+    })
+    $('input[name="x05b464_10"]').change(function(){
+        $.post('/OA/Ajax/getsupfinfo',{"id":$(this).val(),"lineid":$('#xmmc').val()},function(res){
+            $('input[name="x05b464_3"]').val(res.x05b464_3);
+            $('input[name="x05b464_6"]').val(res.x05b464_6);
+            $('input[name="x05b464_8"]').val(res.x05b464_8);
+            $('input[name="x05b464_7"]').val(res.x05b464_7);
+        },'json')
+    })
+})
+</script>
+<div class="apply_container"  style="padding-top:0px !important;">
+<input type="hidden" name="x05b464_9" style="width:px">
+<input type="hidden" name="x05b464_10" id="supid" class="opdio" url="/OA/Ajax/getsuper">
+<input type="hidden" name="x05b464_2" value="1"/>
+<table class="apply_tb">
+    <tbody>
+        <tr>
+            <td style="border-left:0px !important;border-top:0px !important;">公司名称</td>
+            <td  colspan="3"  style="text-align:left;border-top:0px !important;"><input type="text" title="公司名称" class="nowgs" name="x05b464_0" style="float:left;width:95%;margin-left:3% !important;"/></td>
+            <td  style="border-top:0px !important;">OA编号</td>
+            <td  style="border-top:0px !important;"><input type="text" title="OA编号" class="nowid" class="nowid" name="x05b464_1" style="float:left;width:95%;margin-left:3% !important;"/></td>
+        </tr>
+        <tr>
+            <td>项目名称<span class="reSpan">*</span></td>
+            <td colspan="2" style="text-align:left;"><select class="sel_input" id="xmmc" style="float:left;width:95%;margin-left:3% !important;"></select>
+            <td>供应商名称<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text" name="x05b464_3" onclick="$('#supid').click()" style="float:left;width:95%;margin-left:3% !important;"></td>
+        </tr><tr>
+            <td>预付金额（小写）<span class="reSpan">*</span></td>
+            <td colspan="2"><input data_type="int" class="bitian" type="text" name="x05b464_4" style="float:left;width:95%;margin-left:3% !important;" ></td>
+            <td>预付金额（大写）<span class="reSpan">*</span></td>
+            <td colspan="2"><input class="bitian" type="text" name="x05b464_5" style="float:left;width:95%  !important;margin-left:3% !important;"></td>
+        </tr>
+        <tr>
+            <td>收款人名称</td>
+            <td><input type="text" name="x05b464_6" style="float:left;width:95%  !important;margin-left:3% !important;"/></td>
+            <td>银行账号</td>
+            <td><input data_type="int" type="text" class="yhzh" name="x05b464_7" style="float:left;width:95%  !important;margin-left:3% !important;"/></td>
+            <td>开户行</td>
+            <td><input type="text" name="x05b464_8" style="float:left;width:95%  !important;margin-left:3% !important;"/></td>
+        </tr>
+        
+    </tbody>
+</table>
+
+
+//旧成本支付
+
+
+
+<script>
+function _init(){
+    //初始化
+
+    //填充明细数据
+    var idarr=$('input[name="x29cc4e_17"]').val().split(',');
+    var comarr=$('input[name="x29cc4e_18"]').val().split(',');
+    var buarr=$('input[name="x29cc4e_19"]').val().split(',');
+    var datearr=$('input[name="x29cc4e_20"]').val().split(',');
+    var moneyarr=$('input[name="x29cc4e_21"]').val().split(',');
+    var aduserarr=$('input[name="x29cc4e_22"]').val().split(',');
+    var tobj=$('#detail_tr');
+    for(var j=0;j<idarr.length;j++){
+        if(idarr[j]=='')continue;
+        tobj.after('<tr class="money_detail"><td>'+idarr[j]+'</td><td>'+comarr[j]+'</td><td colspan="2">'+buarr[j]+'</td><td>'+datearr[j]+'</td><td>'+moneyarr[j]+'</td><td colspan="2">'+aduserarr[j]+'</td></tr>');
+        tobj=$('.money_detail:last');
+    }
+    $('.dxfkje').html(DX($('input[name="x29cc4e_16"]').val()))
+}
+$(function(){
+    _init();
+})
+</script>
+
+<div class="apply_container">
+<input type="hidden" name="x29cc4e_17" style="width:px">
+<input type="hidden" name="x29cc4e_18" style="width:px">
+<input type="hidden" name="x29cc4e_19" style="width:px">
+<input type="hidden" name="x29cc4e_20" style="width:px">
+<input type="hidden" name="x29cc4e_21" style="width:px">
+<input type="hidden"  name="x29cc4e_22" />
+
+<table class="apply_tb">
+    <tbody>
+        <tr>
+            <td>申请人</td>
+            <td><input type="text" title="申请人" class="nowuser" name="x29cc4e_0" /></td>
+            <td>申请部门</td>
+            <td><input type="text" title="申请部门" class="nowbumen" name="x29cc4e_1" /></td>
+            <td>申请日期</td>
+            <td><input type="text" title="申请日期" class="nowdate" name="x29cc4e_2" /></td>
+            <td>OA编号</td>
+            <td><input type="text" title="OA编号" class="nowid"  name="x29cc4e_3" /></td>
+        </tr>
+        <tr>
+            <td>支付类型</td>
+            <td colspan="7"><input name="x29cc4e_4" type="radio" value="预付款">预付款&nbsp;<input name="x29cc4e_4" type="radio" value="结算款">结算款</td>
+        </tr>
+        <tr>
+            <td>业务分类</td>
+            <td colspan="3"><select name="x29cc4e_5" style="width:px"><option value="优效平台">优效平台</option><option value="自研产品">自研产品</option><option value="云服务">云服务</option><option value="站群服务">站群服务</option><option value="其他">其他</option></select></td>
+            <td>业务线</td>
+            <td colspan="3"><select title="业务线" name="x29cc4e_6" class="selectList1" id="pl_id">              <option selected="" value="优效分发平台">优效分发平台</option>              <option value="优效SSP平台">优效SSP平台</option>        <option value="优效营销平台">优效营销平台</option>              <option value="优效DMP平台">优效DMP平台</option>              <option value="优效开发者平台">优效开发者平台</option>              <option value="优效短代支付平台">优效短代支付平台</option>              <option value="优效创业者平台">优效创业者平台</option>              <option value="优效广告主平台">优效广告主平台</option>              <option value="优效分发平台（一）">优效分发平台（一）</option>              <option value="优效分发平台（二）">优效分发平台（二）</option>              <option value="优效发行平台">优效发行平台</option>              <option value="优效SSP平台（二）">优效SSP平台（二）</option>              <option value="商业软件矩阵">商业软件矩阵</option>              <option value="用户软件矩阵">用户软件矩阵</option>              <option value="今日资讯（新）">今日资讯（新）</option>              <option value="酷屏（新）">酷屏（新）</option>              <option value="CDN平台">CDN平台</option>              <option value="流量运营服务">流量运营服务</option>              <option value="063游戏">063游戏</option>              <option value="优效地推平台">优效地推平台</option>              <option value="优效分发平台（新）">优效分发平台（新）</option>              </select></td>
+        </tr>
+        <tr>
+            <td>供应商名称</td>
+            <td colspan="7"><input type="text"  name="x29cc4e_7" /><input type="hidden" name="x29cc4e_23" style="width:px"></td>
+        </tr>
+        <tr>
+            <td>发票类型</td>
+            <td colspan="3"><select name="x29cc4e_8" style="width:px"><option value="增值税专用发票">增值税专用发票</option><option value="增值税普通发票">增值税普通发票</option><option value="其他">其他</option></select></td>
+            <td>发票编号</td>
+            <td colspan="3"><input type="text"  name="x29cc4e_9" /></td>
+        </tr>
+        <tr>
+            <td>收款方名称</td>
+            <td colspan="3"><input type="text"  name="x29cc4e_10" /></td>
+            <td>预付款金额</td>
+            <td colspan="3"><input type="text"  name="x29cc4e_11" /></td>
+        </tr>
+        <tr>
+            <td>开户银行名称</td>
+            <td colspan="3"><input type="text"  name="x29cc4e_12" /></td>
+            <td>开户银行账号</td>
+            <td colspan="3"><input type="text" class='yhzh'  name="x29cc4e_13" /></td>
+        </tr>
+        <tr>
+            <td>合同约定支付时间</td>
+            <td colspan="3"><input type="text" name="x29cc4e_14" readonly="true" class="Wdate" onclick="WdatePicker({dateFmt:" yyyy-mm-dd="" hh'})'=""></td>
+            <td>备注</td>
+            <td colspan="3"><input type="text"  name="x29cc4e_15" /></td>
+        </tr>
+        <tr>
+            <td>付款金额</td>
+            <td colspan="3"><input type="text"  name="x29cc4e_16" /></td>
+            <td>付款金额大写</td>
+            <td colspan="3" class="dxfkje"></td>
+        </tr>
+        <tr id="detail_tr">
+            <td style="width:100px;">对账单编号</td><td style="width:200px;">产品名称</td><td colspan="2">账单期间</td><td style="width:100px;">商务人员</td><td style="width:150px;">实际结算金额</td><td colspan="2">结算主体</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+
+//旧预付款核销
+
+
+
+<script>
+function _init(){
+    //初始化
+
+    //填充明细数据
+    var idarr=$('input[name="x9de76c_22"]').val().split(',');
+    var comarr=$('input[name="x9de76c_23"]').val().split(',');
+    var buarr=$('input[name="x9de76c_24"]').val().split(',');
+    var datearr=$('input[name="x9de76c_25"]').val().split(',');
+    var moneyarr=$('input[name="x9de76c_26"]').val().split(',');
+    var aduserarr=$('input[name="x9de76c_27"]').val().split(',');
+    var tobj=$('#detail_tr');
+    for(var j=0;j<idarr.length;j++){
+        if(idarr[j]=='')continue;
+        tobj.after('<tr class="money_detail"><td>'+idarr[j]+'</td><td>'+comarr[j]+'</td><td colspan="2">'+buarr[j]+'</td><td>'+datearr[j]+'</td><td>'+moneyarr[j]+'</td><td colspan="2">'+aduserarr[j]+'</td></tr>');
+        tobj=$('.money_detail:last');
+    }
+    $('.dxfkje').html(DX($('input[name="x9de76c_19"]').val()))
+    $('.dxfkje1').html(DX($('input[name="x9de76c_20"]').val()))
+    $('.dxfkje2').html(DX($('input[name="x9de76c_21"]').val()))
+}
+$(function(){
+    _init();
+})
+</script>
+
+<div class="apply_container">
+<input type="hidden" name="x9de76c_22" style="width:px">
+<input type="hidden" name="x9de76c_23" style="width:px">
+<input type="hidden" name="x9de76c_24" style="width:px">
+<input type="hidden" name="x9de76c_25" style="width:px">
+<input type="hidden" name="x9de76c_26" style="width:px">
+<input type="hidden"  name="x9de76c_27" />
+
+<table class="apply_tb">
+    <tbody>
+        <tr>
+            <td>申请人</td>
+            <td><input type="text" title="申请人" class="nowuser" name="x9de76c_0" /></td>
+            <td>申请部门</td>
+            <td><input type="text" title="申请部门" class="nowbumen" name="x9de76c_1" /></td>
+            <td>申请日期</td>
+            <td><input type="text" title="申请日期" class="nowdate" name="x9de76c_2" /></td>
+            <td>OA编号</td>
+            <td><input type="text" title="OA编号" class="nowid"  name="x9de76c_3" /></td>
+        </tr>
+        <tr>
+            <td>业务分类</td>
+            <td colspan="3"><select name="x9de76c_4" style="width:px"><option value="优效平台">优效平台</option><option value="自研产品">自研产品</option><option value="云服务">云服务</option><option value="站群服务">站群服务</option><option value="其他">其他</option></select></td>
+
+            <td>业务线</td>
+            <td colspan="3"><select title="业务线" name="x9de76c_5" class="selectList1" id="pl_id">              <option selected="" value="优效分发平台">优效分发平台</option>              <option value="优效SSP平台">优效SSP平台</option>        <option value="优效营销平台">优效营销平台</option>              <option value="优效DMP平台">优效DMP平台</option>              <option value="优效开发者平台">优效开发者平台</option>              <option value="优效短代支付平台">优效短代支付平台</option>              <option value="优效创业者平台">优效创业者平台</option>              <option value="优效广告主平台">优效广告主平台</option>              <option value="优效分发平台（一）">优效分发平台（一）</option>              <option value="优效分发平台（二）">优效分发平台（二）</option>              <option value="优效发行平台">优效发行平台</option>              <option value="优效SSP平台（二）">优效SSP平台（二）</option>              <option value="商业软件矩阵">商业软件矩阵</option>              <option value="用户软件矩阵">用户软件矩阵</option>              <option value="今日资讯（新）">今日资讯（新）</option>              <option value="酷屏（新）">酷屏（新）</option>              <option value="CDN平台">CDN平台</option>              <option value="流量运营服务">流量运营服务</option>              <option value="063游戏">063游戏</option>              <option value="优效地推平台">优效地推平台</option>              <option value="优效分发平台（新）">优效分发平台（新）</option>              </select></td>
+        </tr>
+        <tr>
+            <td>供应商名称</td>
+            <td colspan="3"><input type="text"  name="x9de76c_6" /><input type="hidden" name="x9de76c_7" style="width:px"></td>
+            <td>供应商等级</td>
+            <td colspan="3"><input type="text"  name="x9de76c_8" /></td>
+        </tr>
+        <tr>
+            <td>支付流水号</td>
+            <td colspan="3"><input type="text"  name="x9de76c_9" /></td>
+            <td>付款日期</td>
+            <td colspan="3"><input type="text" name="x9de76c_10" readonly="true" class="Wdate" onclick="WdatePicker({dateFmt:" yyyy-mm-dd="" hh'})'=""></td>
+        </tr>
+        <tr>
+            <td>原预付款说明</td>
+            <td colspan="7"><textarea name="x9de76c_11" style="width:99%" /></textarea></td>
+        </tr>
+        <tr>
+            <td>核销结果</td>
+            <td colspan="7"><textarea name="x9de76c_12"  style="width:99%" /></textarea></td>
+        </tr>
+        <tr>
+            <td>核销类型</td>
+            <td colspan="3"><select name="x9de76c_13" style="width:99%">              <option value="广告包月核销">广告包月核销</option>              <option value="消耗数据核销">消耗数据核销</option>              <option value="流量采购">流量采购</option>              <option value="模版采购">模版采购</option>              <option value="其他核销">其他核销</option></select></td>
+            <td>中项目</td>
+            <td colspan="3"><select name="x9de76c_14" title="中项目" style="width:99%">              <option selected="" value="流量分发">流量分发</option>              <option value="合作分成">合作分成</option>              <option value="授权金">授权金</option>              <option value="增值业务">增值业务</option>              <option value="研发外包">研发外包</option>              </select></td>
+        </tr>
+        <tr>
+            <td>是否补量</td>
+            <td colspan="3"><input name="x9de76c_15" type="radio" value="是">是&nbsp;<input name="x9de76c_15" type="radio" value="否">否&nbsp;</td>
+            <td>补量情况</td>
+            <td colspan="3"><input type="text"  name="x9de76c_16" /></td>
+        </tr>
+        <tr>
+            <td>其他弥补措施</td>
+            <td colspan="3"><input name="x9de76c_17" type="radio" value="是">是&nbsp;<input name="x9de76c_17" type="radio" value="否">否&nbsp;</td>
+            <td>实施情况</td>
+            <td colspan="3"><input type="text"  name="x9de76c_18" /></td>
+        </tr>
+        <tr>
+            <td>原预付款金额</td>
+            <td colspan="3"><input type="text"  name="x9de76c_19" /></td>
+            <td>原预付款金额大写</td>
+            <td colspan="3" class="dxfkje"></td>
+        </tr>
+        <tr>
+            <td>待核销金额</td>
+            <td colspan="3"><input type="text"  name="x9de76c_20" /></td>
+            <td>待核销金额大写</td>
+            <td colspan="3" class="dxfkje1"></td>
+        </tr>
+        <tr>
+            <td>本次核销金额</td>
+            <td colspan="3"><input type="text"  name="x9de76c_21" /></td>
+            <td>本次核销金额大写</td>
+            <td colspan="3" class="dxfkje2"></td>
+        </tr>
+        <tr id="detail_tr">
+            <td style="width:100px;">对账单编号</td><td style="width:200px;">产品名称</td><td colspan="2">账单期间</td><td style="width:100px;">商务人员</td><td style="width:150px;">实际结算金额</td><td colspan="2">结算主体</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+
+//旧退款申请
+
+
+
+<script>
+function _init(){
+    //初始化
+
+    $('.dxfkje').html(DX($('input[name="x240975_11"]').val()))
+}
+$(function(){
+    _init();
+})
+</script>
+<div class="apply_container">
+
+<table class="apply_tb">
+    <tbody>
+        <tr>
+            <td>申请人</td>
+            <td><input type="text" title="申请人" class="nowuser" name="x240975_0" /></td>
+            <td>申请部门</td>
+            <td colspan="2"><input type="text" title="申请部门" class="nowbumen" name="x240975_1" /></td>
+            <td>申请日期</td>
+            <td><input type="text" title="申请日期" class="nowdate" name="x240975_2" /></td>
+            <td>OA编号</td>
+            <td><input type="text" title="OA编号" class="nowid"  name="x240975_3" /></td>
+        </tr>
+        <tr>
+            <td>退款原因</td>
+            <td colspan="8"><textarea name="x240975_4" style="width:99%" /></textarea></td>
+        </tr>
+        <tr>
+            <td>收入单号</td>
+            <td colspan="2"><input type="text"  name="x240975_5" /></td>
+            <td>登记金额</td>
+            <td colspan="2"><input type="text"  name="x240975_6" /></td>
+            <td>已消耗金额</td>
+            <td colspan="2"><input type="text"  name="x240975_7" /></td>
+        </tr>
+        <tr>
+            <td>业务分类</td>
+            <td colspan="2"><select name="x240975_8" style="width:px"><option value="优效平台">优效平台</option><option value="自研产品">自研产品</option><option value="云服务">云服务</option><option value="站群服务">站群服务</option><option value="其他">其他</option></select></td>
+
+            <td>业务线</td>
+            <td colspan="2"><select title="业务线" name="x240975_9" class="selectList1" id="pl_id">              <option selected="" value="优效分发平台">优效分发平台</option>              <option value="优效SSP平台">优效SSP平台</option>        <option value="优效营销平台">优效营销平台</option>              <option value="优效DMP平台">优效DMP平台</option>              <option value="优效开发者平台">优效开发者平台</option>              <option value="优效短代支付平台">优效短代支付平台</option>              <option value="优效创业者平台">优效创业者平台</option>              <option value="优效广告主平台">优效广告主平台</option>              <option value="优效分发平台（一）">优效分发平台（一）</option>              <option value="优效分发平台（二）">优效分发平台（二）</option>              <option value="优效发行平台">优效发行平台</option>              <option value="优效SSP平台（二）">优效SSP平台（二）</option>              <option value="商业软件矩阵">商业软件矩阵</option>              <option value="用户软件矩阵">用户软件矩阵</option>              <option value="今日资讯（新）">今日资讯（新）</option>              <option value="酷屏（新）">酷屏（新）</option>              <option value="CDN平台">CDN平台</option>              <option value="流量运营服务">流量运营服务</option>              <option value="063游戏">063游戏</option>              <option value="优效地推平台">优效地推平台</option>              <option value="优效分发平台（新）">优效分发平台（新）</option>              </select></td>
+
+            <td>中项目</td>
+            <td colspan="2"><select name="x240975_10" title="中项目" style="width:99%">              <option selected="" value="流量分发">流量分发</option>              <option value="合作分成">合作分成</option>              <option value="授权金">授权金</option>              <option value="增值业务">增值业务</option>              <option value="研发外包">研发外包</option>        <option value="其他">其他</option>      </select></td>
+        </tr>
+
+        <tr>
+            <td>退款金额</td>
+            <td colspan="2"><input type="text"  name="x240975_11" /></td>
+            <td>金额大写</td>
+            <td colspan="5" class="dxfkje"></td>
+        </tr>
+        <tr>
+            <td>开户行</td>
+            <td colspan="2"><input type="text"  name="x240975_12" /></td>
+            <td>客户名称</td>
+            <td colspan="2"><input type="text"  name="x240975_13" /></td>
+            <td>银行账号</td>
+            <td colspan="2"><input type="text"  name="x240975_14" /></td>
+        </tr>
+        <tr>
+            <td>退款时间</td>
+            <td colspan="3"><input type="text" name="x240975_15" readonly="true" class="Wdate" onclick="WdatePicker({dateFmt:" yyyy-mm-dd="" hh'})'=""></td>
+            <td>退款方式</td>
+            <td colspan="4"><input name="x240975_16" type="radio" value="网银1">网银1&nbsp;<input name="x240975_16" type="radio" value="网银2">网银2&nbsp;<input name="x240975_16" type="radio" value="现金 ">现金 &nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+//坏账申请
+
+<div class="apply_container" style="padding-top:0px;">
+<table style="width:100%;border:0px;">
+    <tbody><tr>
+      <td style="text-align:center;border-right: 1px solid #cecece;">申请人：</td>
+       <td style="text-align:left;border-right: 1px solid #cecece;"><input class="nowuser" name="x3361d5_0" style="border:none;width:130px;padding:0px 0 0 5px" type="text"></td>
+       <td style="text-align:center;border-right: 1px solid #cecece;">申请部门：</td>
+       <td style="text-align:left;border-right: 1px solid #cecece;"><input class="nowbumen" name="x3361d5_1" style="width:220px;border:none;padding:0px 0 0 5px" type="text"></td>
+       <td style="text-align:center;border-right: 1px solid #cecece;">申请日期：</td>
+       <td style="text-align:left;border-right: 1px solid #cecece;"><input class="nowdate" name="x3361d5_2" style="width:180px;border:none;padding:0px 0 0 5px" type="text"></td>
+        <td style="text-align:center;border-right: 1px solid #cecece;">OA编号：</td>
+       <td><input class="nowid" name="x3361d5_3" style="width:80px;border:none;padding:0px 0 0 5px" type="text"></td>
+    </tr>
+  </tbody>
+</table>
+<table class="apply_tb">
+    <tbody>
+        
+        <tr>
+            <td rowspan="2">原登记情况</td>
+            <td>大项目<span class="reSpan">*</span></td>
+            <td><input type="text" name="x3361d5_4" style="width:px"></td>
+            <td>中项目<span class="reSpan">*</span></td>
+            <td><input type="text" name="x3361d5_5" style="width:px"></td>
+            <td>小项目<span class="reSpan">*</span></td>
+            <td colspan="2"><input type="text" name="x3361d5_6" style="width:px"></td>
+        </tr>
+        <tr>
+            <td>预收款时间<span class="reSpan">*</span></td>
+            <td><input type="text" name="x3361d5_7" readonly="true" class="Wdate" onclick="WdatePicker({dateFmt:" yyyy-mm-dd="" hh'})'=""></td>
+            <td>到款账户<span class="reSpan">*</span></td>
+            <td><input type="text" name="x3361d5_8" style="width:px"></td>
+            <td>是否含税<span class="reSpan">*</span></td>
+            <td colspan="2"><input name="x3361d5_9" type="radio" value="是">是&nbsp;<input name="x3361d5_9" type="radio" value="否">否&nbsp;</td>
+        </tr>
+        <tr>
+            <td rowspan="2">坏账</td>
+            <td>登记金额<span class="reSpan">*</span></td>
+            <td><input type="text" name="x3361d5_10" style="width:px"></td>
+            <td>实际结算<span class="reSpan">*</span></td>
+            <td><input type="text" name="x3361d5_11" style="width:px"></td>
+            <td>申请坏账<span class="reSpan">*</span></td>
+            <td colspan="2"><input type="text" name="x3361d5_12" style="width:px"></td>
+        </tr>
+        <tr>
+            <td>坏账原因<span class="reSpan">*</span></td>
+            <td colspan="6"><input type="text" name="x3361d5_13" style="width:px"></td>
+        </tr>
+    </tbody>
+</table>
+
+</div>
+
+
+sql
+
+
+-- Adminer 4.2.5 MySQL dump
+
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+DROP TABLE IF EXISTS `boss_oa_40`;
+CREATE TABLE `boss_oa_40` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `xb27546_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `xb27546_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `xb27546_2` varchar(255) DEFAULT NULL COMMENT '公司名称',
+  `xb27546_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `xb27546_5` varchar(255) DEFAULT NULL COMMENT '费用类别',
+  `xb27546_6` varchar(255) DEFAULT NULL COMMENT '摘要',
+  `xb27546_7` varchar(255) DEFAULT NULL COMMENT '金额',
+  `xb27546_8` varchar(255) DEFAULT NULL COMMENT '费用备注',
+  `xb27546_9` varchar(255) DEFAULT NULL COMMENT '合计',
+  `xb27546_10` varchar(255) DEFAULT NULL COMMENT '本次核销金额',
+  `xb27546_11` varchar(32) DEFAULT NULL COMMENT '支付方式',
+  `xb27546_12` varchar(32) DEFAULT NULL COMMENT '冲原借款',
+  `xb27546_13` varchar(255) DEFAULT NULL COMMENT '原借款/预付单号',
+  `xb27546_14` varchar(255) DEFAULT NULL COMMENT '原借款',
+  `xb27546_15` varchar(255) DEFAULT NULL COMMENT '收款人名称',
+  `xb27546_16` varchar(255) DEFAULT NULL,
+  `xb27546_17` varchar(255) DEFAULT NULL COMMENT '开户行',
+  `xb27546_18` varchar(255) DEFAULT NULL COMMENT '银行账号',
+  `xb27546_19` varchar(255) DEFAULT NULL COMMENT '备注',
+  `xb27546_20` varchar(255) DEFAULT '类型列表' COMMENT '序号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_44`;
+CREATE TABLE `boss_oa_44` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x95f845_0` varchar(64) NOT NULL COMMENT '申请人',
+  `x95f845_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `x95f845_2` date DEFAULT NULL COMMENT '申请时间',
+  `x95f845_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `x95f845_4` varchar(255) DEFAULT NULL COMMENT '岗位名称',
+  `x95f845_5` varchar(32) DEFAULT NULL COMMENT '岗位级别',
+  `x95f845_6` varchar(32) DEFAULT NULL COMMENT '休假事宜',
+  `x95f845_7` varchar(255) DEFAULT NULL COMMENT '备注',
+  `x95f845_8` varchar(32) DEFAULT NULL COMMENT '休假开始时间',
+  `x95f845_9` varchar(32) DEFAULT NULL COMMENT '休假结束时间',
+  `x95f845_10` varchar(255) DEFAULT NULL COMMENT '总天数',
+  `x95f845_11` varchar(32) DEFAULT NULL COMMENT '所需材料',
+  `nowuserid` varchar(32) DEFAULT NULL COMMENT '申请人ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_45`;
+CREATE TABLE `boss_oa_45` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x72668e_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `x72668e_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `x72668e_2` date DEFAULT NULL COMMENT '申请日期',
+  `x72668e_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `x72668e_4` varchar(32) DEFAULT NULL COMMENT '类别',
+  `x72668e_5` varchar(255) DEFAULT NULL COMMENT '原协议编号',
+  `x72668e_6` varchar(255) DEFAULT NULL COMMENT '客户名称',
+  `x72668e_7` varchar(63) DEFAULT NULL COMMENT '签订主体',
+  `x72668e_8` varchar(32) DEFAULT NULL COMMENT '合同内容归口',
+  `x72668e_9` varchar(32) DEFAULT NULL COMMENT '合同责任人',
+  `x72668e_10` varchar(63) DEFAULT NULL COMMENT '业务线',
+  `x72668e_11` varchar(32) DEFAULT NULL COMMENT '合同类型',
+  `x72668e_12` date DEFAULT NULL COMMENT '协议开始时间',
+  `x72668e_13` date DEFAULT NULL COMMENT '协议结束时间',
+  `x72668e_14` date DEFAULT NULL COMMENT '拟定签订日期',
+  `userid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_46`;
+CREATE TABLE `boss_oa_46` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `xf159bb_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `xf159bb_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `xf159bb_2` date DEFAULT NULL COMMENT '申请日期',
+  `xf159bb_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `xf159bb_4` varchar(32) DEFAULT NULL COMMENT '类别',
+  `xf159bb_5` varchar(255) DEFAULT NULL COMMENT '原协议编号',
+  `xf159bb_6` varchar(255) DEFAULT NULL COMMENT '合同甲方',
+  `xf159bb_7` varchar(255) DEFAULT NULL COMMENT '合同乙方',
+  `xf159bb_8` varchar(32) DEFAULT NULL COMMENT '合同内容归口',
+  `xf159bb_9` int(11) DEFAULT NULL COMMENT '合同责任人',
+  `xf159bb_10` varchar(255) DEFAULT NULL COMMENT '合同金额',
+  `xf159bb_11` varchar(255) DEFAULT NULL COMMENT '合同类型',
+  `xf159bb_12` date DEFAULT NULL COMMENT '协议开始时间',
+  `xf159bb_13` date DEFAULT NULL COMMENT '协议结束时间',
+  `xf159bb_14` date DEFAULT NULL COMMENT '拟定签订日期',
+  `xf159bb_15` varchar(255) DEFAULT NULL COMMENT '存档编号',
+  `xf159bb_16` int(11) DEFAULT NULL COMMENT '行政部存档人',
+  `xf159bb_17` date DEFAULT NULL COMMENT '存档日期',
+  `xf159bb_18` int(11) DEFAULT NULL COMMENT '副本存留',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_47`;
+CREATE TABLE `boss_oa_47` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x2c0a8d_0` varchar(255) DEFAULT NULL COMMENT '姓名',
+  `x2c0a8d_1` varchar(255) DEFAULT NULL COMMENT '员工编号',
+  `x2c0a8d_2` varchar(255) DEFAULT NULL COMMENT '所属部门',
+  `x2c0a8d_3` varchar(255) DEFAULT NULL COMMENT '职务',
+  `x2c0a8d_4` varchar(255) DEFAULT NULL COMMENT '联系电话',
+  `x2c0a8d_5` varchar(255) DEFAULT NULL COMMENT '电子邮件',
+  `x2c0a8d_6` varchar(255) DEFAULT NULL COMMENT '外出单位',
+  `x2c0a8d_7` varchar(255) DEFAULT NULL COMMENT '外出地点',
+  `x2c0a8d_8` varchar(255) DEFAULT NULL COMMENT '外出开始时间',
+  `x2c0a8d_9` varchar(255) DEFAULT NULL COMMENT '外出结束时间',
+  `x2c0a8d_10` varchar(255) DEFAULT NULL COMMENT '外出事由',
+  `x2c0a8d_11` varchar(255) DEFAULT NULL COMMENT '外出期间工作安排',
+  `x2c0a8d_12` varchar(255) DEFAULT NULL COMMENT '部门经理意见',
+  `x2c0a8d_13` varchar(255) DEFAULT NULL COMMENT '人事部经理意见',
+  `x2c0a8d_14` date DEFAULT NULL COMMENT '填表日期',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_48`;
+CREATE TABLE `boss_oa_48` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `xe38d6e_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `xe38d6e_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `xe38d6e_2` date DEFAULT NULL COMMENT '申请日期',
+  `xe38d6e_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `xe38d6e_4` varchar(255) DEFAULT NULL COMMENT '职位',
+  `xe38d6e_5` varchar(255) DEFAULT NULL COMMENT '岗位级别',
+  `xe38d6e_6` date DEFAULT NULL COMMENT '出差开始日期',
+  `xe38d6e_7` date DEFAULT NULL COMMENT '出差结束日期',
+  `xe38d6e_8` varchar(255) DEFAULT NULL COMMENT '总天数',
+  `xe38d6e_9` varchar(255) DEFAULT NULL COMMENT '起程起点',
+  `xe38d6e_10` varchar(255) DEFAULT NULL COMMENT '启程终点',
+  `xe38d6e_11` varchar(255) DEFAULT NULL COMMENT '回程起点',
+  `xe38d6e_12` varchar(255) DEFAULT NULL COMMENT '回程终点',
+  `xe38d6e_13` varchar(255) DEFAULT NULL COMMENT '出差目的',
+  `xe38d6e_14` varchar(255) DEFAULT NULL COMMENT '机票费用',
+  `xe38d6e_15` varchar(255) DEFAULT NULL COMMENT '住宿费用',
+  `xe38d6e_16` varchar(255) DEFAULT NULL COMMENT '宴请费用',
+  `xe38d6e_17` varchar(255) DEFAULT NULL COMMENT '餐费补助',
+  `xe38d6e_18` varchar(255) DEFAULT NULL COMMENT '会务费用',
+  `xe38d6e_19` varchar(255) DEFAULT NULL COMMENT '其他费用',
+  `xe38d6e_20` varchar(255) DEFAULT NULL COMMENT '合计',
+  `xe38d6e_21` varchar(32) DEFAULT NULL COMMENT '是否订票',
+  `xe38d6e_22` varchar(255) DEFAULT NULL COMMENT '其他说明',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_49`;
+CREATE TABLE `boss_oa_49` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `xdae2a3_0` varchar(255) DEFAULT NULL COMMENT '姓名',
+  `xdae2a3_1` date DEFAULT NULL COMMENT '考勤开始日期',
+  `xdae2a3_2` date DEFAULT NULL COMMENT '考勤结束日期',
+  `xdae2a3_3` varchar(255) DEFAULT NULL COMMENT '详细内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_52`;
+CREATE TABLE `boss_oa_52` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x45be09_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `x45be09_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `x45be09_2` date DEFAULT NULL COMMENT '申请时间',
+  `x45be09_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `x45be09_4` varchar(255) DEFAULT NULL COMMENT '岗位名称',
+  `x45be09_5` date DEFAULT NULL COMMENT '加班开始时段',
+  `x45be09_6` date DEFAULT NULL COMMENT '加班结束时段',
+  `x45be09_7` varchar(255) DEFAULT NULL COMMENT '加班工作具体内容',
+  `x45be09_8` varchar(255) DEFAULT NULL COMMENT '获取当前用户角色',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_53`;
+CREATE TABLE `boss_oa_53` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `xa4d9cb_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `xa4d9cb_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `xa4d9cb_2` date DEFAULT NULL COMMENT '申请时间',
+  `xa4d9cb_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `xa4d9cb_4` varchar(255) DEFAULT NULL COMMENT '公文名称',
+  `xa4d9cb_5` varchar(255) DEFAULT NULL COMMENT '撰稿人',
+  `xa4d9cb_6` varchar(32) DEFAULT NULL COMMENT '公文类型',
+  `xa4d9cb_7` varchar(255) DEFAULT NULL COMMENT '主送单位',
+  `xa4d9cb_8` varchar(255) DEFAULT NULL COMMENT '抄送单位',
+  `xa4d9cb_9` date DEFAULT NULL COMMENT '生效日期',
+  `xa4d9cb_10` varchar(255) DEFAULT NULL COMMENT '制度目的',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_54`;
+CREATE TABLE `boss_oa_54` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x02207c_0` varchar(255) DEFAULT NULL COMMENT '员工姓名',
+  `x02207c_1` varchar(255) DEFAULT NULL COMMENT '所属部门',
+  `x02207c_2` varchar(32) DEFAULT NULL COMMENT '职务',
+  `x02207c_3` date DEFAULT NULL COMMENT '入职时间',
+  `x02207c_4` varchar(255) DEFAULT NULL COMMENT '岗位名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_55`;
+CREATE TABLE `boss_oa_55` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x13166f_0` varchar(255) DEFAULT NULL COMMENT '姓名',
+  `x13166f_1` varchar(255) DEFAULT NULL COMMENT '所在部门',
+  `x13166f_2` varchar(32) DEFAULT NULL COMMENT '职务',
+  `x13166f_3` date DEFAULT NULL COMMENT '入职时间',
+  `x13166f_4` date DEFAULT NULL COMMENT '劳动合同到期日期',
+  `x13166f_5` date DEFAULT NULL COMMENT '正式离职时间',
+  `x13166f_6` varchar(32) DEFAULT NULL COMMENT '离职类别',
+  `x13166f_7` varchar(32) DEFAULT NULL COMMENT '员工类型',
+  `x13166f_8` varchar(255) DEFAULT NULL COMMENT '离职申请说明',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_56`;
+CREATE TABLE `boss_oa_56` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `xb9b4a2_0` varchar(255) DEFAULT NULL COMMENT '申购人',
+  `xb9b4a2_1` varchar(255) DEFAULT NULL COMMENT '申购部门',
+  `xb9b4a2_2` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `xb9b4a2_3` varchar(255) DEFAULT NULL COMMENT '类别',
+  `xb9b4a2_4` varchar(255) DEFAULT NULL COMMENT '物品名称',
+  `xb9b4a2_5` varchar(255) DEFAULT NULL COMMENT '用途说明',
+  `xb9b4a2_6` varchar(255) DEFAULT NULL COMMENT '申购数量',
+  `xb9b4a2_7` varchar(255) DEFAULT NULL COMMENT '备注',
+  `xb9b4a2_8` varchar(255) DEFAULT NULL COMMENT '供应商',
+  `xb9b4a2_9` varchar(255) DEFAULT NULL COMMENT '采购数量',
+  `xb9b4a2_10` varchar(255) DEFAULT NULL COMMENT '单价',
+  `xb9b4a2_11` varchar(255) DEFAULT NULL COMMENT '折扣优惠',
+  `xb9b4a2_12` varchar(255) DEFAULT NULL COMMENT '发票说明',
+  `xb9b4a2_13` varchar(255) DEFAULT NULL COMMENT '采购总价',
+  `xb9b4a2_14` varchar(255) DEFAULT NULL COMMENT '建议商家',
+  `xb9b4a2_15` varchar(255) DEFAULT NULL COMMENT '物品申购详细',
+  `xb9b4a2_16` varchar(255) DEFAULT NULL COMMENT '供应商详细',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_57`;
+CREATE TABLE `boss_oa_57` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `xe87944_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `xe87944_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `xe87944_2` date DEFAULT NULL COMMENT '申请日期',
+  `xe87944_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `xe87944_4` varchar(32) DEFAULT NULL COMMENT '盖章说明',
+  `xe87944_5` varchar(63) DEFAULT NULL COMMENT '所属单位',
+  `xe87944_6` varchar(32) DEFAULT NULL COMMENT '资质选项',
+  `xe87944_7` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_58`;
+CREATE TABLE `boss_oa_58` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x5098d0_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `x5098d0_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `x5098d0_2` date DEFAULT NULL COMMENT '申请时间',
+  `x5098d0_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `x5098d0_4` date DEFAULT NULL COMMENT '入职时间',
+  `x5098d0_5` varchar(255) DEFAULT NULL COMMENT '岗位名称',
+  `x5098d0_6` varchar(32) DEFAULT NULL COMMENT '类别',
+  `x5098d0_7` date DEFAULT NULL COMMENT '销假开始时间',
+  `x5098d0_8` date DEFAULT NULL COMMENT '销假结束时间',
+  `x5098d0_9` varchar(255) DEFAULT NULL COMMENT '总天数',
+  `x5098d0_10` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_60`;
+CREATE TABLE `boss_oa_60` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` varchar(255) DEFAULT NULL COMMENT '用户ID',
+  `x782c92_0` varchar(255) DEFAULT NULL COMMENT '公司名称',
+  `x782c92_1` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `x782c92_2` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `x782c92_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `x782c92_4` varchar(255) DEFAULT NULL COMMENT '借款/预付用途',
+  `x782c92_5` varchar(255) DEFAULT NULL COMMENT '借款/预付金额',
+  `x782c92_6` varchar(255) DEFAULT NULL COMMENT '大写',
+  `x782c92_7` varchar(255) DEFAULT NULL COMMENT '职级',
+  `x782c92_8` varchar(255) DEFAULT NULL COMMENT '银行账号',
+  `x782c92_9` varchar(255) DEFAULT NULL COMMENT '开户行',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_63`;
+CREATE TABLE `boss_oa_63` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x2a1540_0` varchar(255) DEFAULT NULL COMMENT '公司名称',
+  `x2a1540_1` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `x2a1540_2` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `x2a1540_3` varchar(255) DEFAULT NULL COMMENT '编号',
+  `x2a1540_4` date DEFAULT NULL COMMENT '到款时间',
+  `x2a1540_5` varchar(255) DEFAULT NULL COMMENT '到款账户',
+  `x2a1540_6` varchar(255) DEFAULT NULL COMMENT '到账金额',
+  `x2a1540_7` varchar(255) DEFAULT NULL COMMENT '消耗金额',
+  `x2a1540_8` varchar(255) DEFAULT NULL COMMENT '退款金额(小写)',
+  `x2a1540_9` varchar(255) DEFAULT NULL COMMENT '退款原因',
+  `x2a1540_10` varchar(255) DEFAULT NULL COMMENT '收款人名称',
+  `x2a1540_11` varchar(255) DEFAULT NULL COMMENT '支付方式',
+  `x2a1540_12` varchar(255) DEFAULT NULL COMMENT '银行账号',
+  `x2a1540_13` varchar(255) DEFAULT NULL COMMENT '开户行',
+  `x2a1540_14` varchar(255) DEFAULT NULL COMMENT '到款流水编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_64`;
+CREATE TABLE `boss_oa_64` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `xb4cef4_0` varchar(255) DEFAULT NULL COMMENT '公司名称',
+  `xb4cef4_1` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `xb4cef4_2` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `xb4cef4_3` varchar(255) DEFAULT NULL COMMENT '编号',
+  `xb4cef4_4` varchar(255) DEFAULT NULL COMMENT '出差人',
+  `xb4cef4_5` varchar(255) DEFAULT NULL COMMENT '职级',
+  `xb4cef4_6` varchar(255) DEFAULT NULL COMMENT '出差地',
+  `xb4cef4_7` varchar(255) DEFAULT NULL COMMENT '开始时间',
+  `xb4cef4_8` date DEFAULT NULL COMMENT '结束时间',
+  `xb4cef4_9` text COMMENT '出差总结',
+  `xb4cef4_10` varchar(255) DEFAULT NULL COMMENT '住宿费用',
+  `xb4cef4_11` varchar(255) DEFAULT NULL COMMENT '原借款金额',
+  `xb4cef4_12` varchar(255) DEFAULT NULL COMMENT '交通费用',
+  `xb4cef4_13` varchar(255) DEFAULT NULL COMMENT '应补退',
+  `xb4cef4_14` varchar(255) DEFAULT NULL COMMENT '招待相关',
+  `xb4cef4_15` varchar(32) DEFAULT NULL COMMENT '支付方式',
+  `xb4cef4_16` varchar(255) DEFAULT NULL COMMENT '其他',
+  `xb4cef4_17` varchar(255) DEFAULT NULL COMMENT '收款人名称',
+  `xb4cef4_18` varchar(255) DEFAULT NULL COMMENT '报销合计',
+  `xb4cef4_19` varchar(255) DEFAULT NULL COMMENT '银行账号',
+  `xb4cef4_20` varchar(255) DEFAULT NULL COMMENT '大写',
+  `xb4cef4_21` varchar(255) DEFAULT NULL COMMENT '开户行',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_65`;
+CREATE TABLE `boss_oa_65` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x05b464_0` varchar(255) DEFAULT NULL COMMENT '公司名称',
+  `x05b464_1` varchar(255) DEFAULT NULL COMMENT '编号',
+  `x05b464_2` varchar(255) DEFAULT NULL COMMENT '项目名称',
+  `x05b464_3` varchar(255) DEFAULT NULL COMMENT '供应商名称',
+  `x05b464_4` varchar(255) DEFAULT NULL COMMENT '预付金额（小写）',
+  `x05b464_5` varchar(255) DEFAULT NULL COMMENT '预付金额（大写）',
+  `x05b464_6` varchar(255) DEFAULT NULL COMMENT '收款人名称',
+  `x05b464_7` varchar(255) DEFAULT NULL COMMENT '银行账号',
+  `x05b464_8` varchar(255) DEFAULT NULL COMMENT '开户行',
+  `x05b464_9` varchar(255) DEFAULT NULL COMMENT '已核销金额',
+  `x05b464_10` varchar(255) DEFAULT NULL COMMENT '供应商ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_66`;
+CREATE TABLE `boss_oa_66` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x739c8a_0` varchar(255) DEFAULT NULL COMMENT '公司名称',
+  `x739c8a_1` varchar(255) DEFAULT NULL COMMENT '编号',
+  `x739c8a_2` varchar(255) DEFAULT NULL COMMENT '项目名称',
+  `x739c8a_3` varchar(255) DEFAULT NULL COMMENT '供应商名称',
+  `x739c8a_4` varchar(255) DEFAULT NULL COMMENT '发票类型',
+  `x739c8a_5` varchar(255) DEFAULT NULL COMMENT '是否扣税',
+  `x739c8a_6` varchar(255) DEFAULT NULL COMMENT '预付单号',
+  `x739c8a_7` varchar(255) DEFAULT NULL COMMENT '预付款余额',
+  `x739c8a_8` varchar(255) DEFAULT NULL COMMENT '本次核销金额',
+  `x739c8a_9` varchar(255) DEFAULT NULL COMMENT '本次结算金额',
+  `x739c8a_10` varchar(255) DEFAULT NULL COMMENT '收款人名称',
+  `x739c8a_11` varchar(255) DEFAULT NULL COMMENT '银行账号',
+  `x739c8a_12` varchar(255) DEFAULT NULL COMMENT '开户行',
+  `x739c8a_13` varchar(255) DEFAULT NULL COMMENT '对账单编号',
+  `x739c8a_14` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `x739c8a_15` varchar(255) DEFAULT NULL COMMENT '商务人员',
+  `x739c8a_16` varchar(255) DEFAULT NULL COMMENT '账单期间',
+  `x739c8a_17` varchar(255) DEFAULT NULL COMMENT '金额',
+  `x739c8a_18` varchar(255) DEFAULT NULL COMMENT '历史审核记录',
+  `x739c8a_19` varchar(255) DEFAULT NULL COMMENT '数据录入',
+  `x739c8a_20` varchar(255) DEFAULT NULL COMMENT '供应商ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_67`;
+CREATE TABLE `boss_oa_67` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x29cc4e_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `x29cc4e_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `x29cc4e_2` varchar(255) DEFAULT NULL COMMENT '申请日期',
+  `x29cc4e_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `x29cc4e_4` varchar(32) DEFAULT NULL COMMENT '支付类型',
+  `x29cc4e_5` varchar(63) DEFAULT NULL COMMENT '业务分类',
+  `x29cc4e_6` varchar(63) DEFAULT NULL COMMENT '业务线',
+  `x29cc4e_7` varchar(255) DEFAULT NULL COMMENT '供应商名称',
+  `x29cc4e_8` varchar(63) DEFAULT NULL COMMENT '发票类型',
+  `x29cc4e_9` varchar(255) DEFAULT NULL COMMENT '发票编号',
+  `x29cc4e_10` varchar(255) DEFAULT NULL COMMENT '收款方名称',
+  `x29cc4e_11` varchar(255) DEFAULT NULL COMMENT '预付款金额',
+  `x29cc4e_12` varchar(255) DEFAULT NULL COMMENT '开户银行名称',
+  `x29cc4e_13` varchar(255) DEFAULT NULL COMMENT '开户银行账号',
+  `x29cc4e_14` date DEFAULT NULL COMMENT '合同约定支付时间',
+  `x29cc4e_15` varchar(255) DEFAULT NULL COMMENT '备注',
+  `x29cc4e_16` varchar(255) DEFAULT NULL COMMENT '付款金额',
+  `x29cc4e_17` varchar(255) DEFAULT NULL COMMENT '对账单编号',
+  `x29cc4e_18` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `x29cc4e_19` varchar(255) DEFAULT NULL COMMENT '账单期间',
+  `x29cc4e_20` varchar(255) DEFAULT NULL COMMENT '商务人员',
+  `x29cc4e_21` varchar(255) DEFAULT NULL COMMENT '实际结算金额',
+  `x29cc4e_22` varchar(255) DEFAULT NULL COMMENT '结算主体',
+  `x29cc4e_23` varchar(255) DEFAULT NULL COMMENT '供应商id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_68`;
+CREATE TABLE `boss_oa_68` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x9de76c_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `x9de76c_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `x9de76c_2` varchar(255) DEFAULT NULL COMMENT '申请日期',
+  `x9de76c_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `x9de76c_4` varchar(63) DEFAULT NULL COMMENT '业务分类',
+  `x9de76c_5` varchar(63) DEFAULT NULL COMMENT '业务线',
+  `x9de76c_6` varchar(255) DEFAULT NULL COMMENT '供应商名称',
+  `x9de76c_7` varchar(255) DEFAULT NULL COMMENT '供应商ID',
+  `x9de76c_8` varchar(255) DEFAULT NULL COMMENT '供应商等级',
+  `x9de76c_9` varchar(255) DEFAULT NULL COMMENT '支付流水号',
+  `x9de76c_10` date DEFAULT NULL COMMENT '付款日期',
+  `x9de76c_11` varchar(255) DEFAULT NULL COMMENT '原预付款说明',
+  `x9de76c_12` varchar(255) DEFAULT NULL COMMENT '核销结果（质量/效果）',
+  `x9de76c_13` varchar(63) DEFAULT NULL COMMENT '核销类型',
+  `x9de76c_14` varchar(63) DEFAULT NULL COMMENT '中项目',
+  `x9de76c_15` varchar(32) DEFAULT NULL COMMENT '是否补量',
+  `x9de76c_16` varchar(255) DEFAULT NULL COMMENT '补量情况',
+  `x9de76c_17` varchar(32) DEFAULT NULL COMMENT '其他弥补措施',
+  `x9de76c_18` varchar(255) DEFAULT NULL COMMENT '实施情况',
+  `x9de76c_19` varchar(255) DEFAULT NULL COMMENT '原预付款金额',
+  `x9de76c_20` varchar(255) DEFAULT NULL COMMENT '待核销金额',
+  `x9de76c_21` varchar(255) DEFAULT NULL COMMENT '本次核销金额',
+  `x9de76c_22` varchar(255) DEFAULT NULL COMMENT '对账单编号',
+  `x9de76c_23` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `x9de76c_24` varchar(255) DEFAULT NULL COMMENT '账单期间',
+  `x9de76c_25` varchar(255) DEFAULT NULL COMMENT '商务人员',
+  `x9de76c_26` varchar(255) DEFAULT NULL COMMENT '实际结算金额',
+  `x9de76c_27` varchar(255) DEFAULT NULL COMMENT '结算主体',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `boss_oa_69`;
+CREATE TABLE `boss_oa_69` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x240975_0` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `x240975_1` varchar(255) DEFAULT NULL COMMENT '申请部门',
+  `x240975_2` varchar(255) DEFAULT NULL COMMENT '申请日期',
+  `x240975_3` varchar(255) DEFAULT NULL COMMENT 'OA编号',
+  `x240975_4` varchar(255) DEFAULT NULL COMMENT '退款原因',
+  `x240975_5` varchar(255) DEFAULT NULL COMMENT '收入单号',
+  `x240975_6` varchar(255) DEFAULT NULL COMMENT '登记金额',
+  `x240975_7` varchar(255) DEFAULT NULL COMMENT '已消耗金额',
+  `x240975_8` varchar(63) DEFAULT NULL COMMENT '业务分类',
+  `x240975_9` varchar(63) DEFAULT NULL COMMENT '业务线',
+  `x240975_10` varchar(63) DEFAULT NULL COMMENT '中项目',
+  `x240975_11` varchar(255) DEFAULT NULL COMMENT '退款金额',
+  `x240975_12` varchar(255) DEFAULT NULL COMMENT '开户行',
+  `x240975_13` varchar(255) DEFAULT NULL COMMENT '客户名称',
+  `x240975_14` varchar(255) DEFAULT NULL COMMENT '银行账号',
+  `x240975_15` date DEFAULT NULL COMMENT '退款时间',
+  `x240975_16` varchar(32) DEFAULT NULL COMMENT '退款方式',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- 2017-07-20 02:42:01

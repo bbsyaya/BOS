@@ -1,0 +1,160 @@
+<extend name="Public/base"/>
+<block name="script">
+    <script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/jquery.media.js"></script>
+</block>
+<block name="body">
+    <include file="Public/commonoa" />
+    <style type="text/css">
+        label{font-weight:normal!important}.wd300{width:68% !important}.wd100{width:100% !important}.dayTwo-1{width:28%!important}.fd-k{margin-top:20px}.fs-color{color:#1269cc!important;border-bottom-color:#1269cc!important}.btnBox{padding-bottom:100px!important}.a-com{border:medium none;border-radius:3px;color:#fff;height:36px;margin:0 15px;background:#1269cc none repeat scroll 0 0;width:110px;line-height:36px;display:inline-block;color:#fff!important;font-size:14px;text-align:center}.submit{width: auto !important;padding: 0px 20px !important;height: 36px;line-height: 36px;}.btnBox input[type="button"]{ margin: 0px !important;}.glzw{color:#1269cc !important;font-size:12px;margin-left:8px;text-decoration: underline !important;}.dayTwo-a{width:48% !important;}.entryList li .entryCon label{width: 20% !important;height: 44px !important;overflow: hidden;line-height: 44px !important;display: inline-block !important; float: left;}.xt-sz{color:#1269cc !important;}.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){width: 60% !important;}.bootstrap-select.btn-group .dropdown-menu li{width: 100% !important; height: 32px !important; line-height: 32px  !important;}
+        #pic{
+            width:800px;
+            height:500px;
+        }
+        #shows{
+            width:100px;
+            height:100px;
+            border-radius:50% ;
+            margin:20px auto;
+            cursor: pointer;
+        }
+        .ba{padding:0 5px;display: inline-block;background-color: #1a72d6;font-size: 12px;width: 76px;height: 32px;line-height: 32px;text-align: center;color: white !important;vertical-align: top;border-radius: 5px;}
+        .dataFormOperates{float: left;width: 100%;height: 50px; text-align: center; line-height: 50px;}
+    </style>
+    <div class="subConten  fl w">
+        <!--内容-->
+        <div class="subCon  fl w">
+            <form action="/OA/TalentPool/update" method="get" id="dataform" enctype="multipart/form-data">
+
+                <fieldset class="fd-k fl w">
+                    <legend class="fs-color"><a href="/OA/HrManage/hrList" style="color: #1269cc">人事办公</a>-><a href="/OA/TalentPool/index" style="color: #1269cc">人才储备库</a>->新增人才储备</legend>
+                    <ul class="entryList">
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryThree"  style="width:30% !important;">人才编号</label>
+                                <php>if($data['numbering']){</php>
+                                {$data['numbering']}
+                                <php>}</php>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>姓名</label>
+                                {$data['name']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>头像</label>
+                                <img id="shows" src="/{$data['avatar_path']}">
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>性别</label>
+                                {$data['sex']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>人才层级</label>
+                                {$data['talent_level']}
+                            </p>
+                        </li>
+                        <li></li>
+                        <li>
+                            <p class="entryCon">
+                                <label>可胜任岗位</label>
+                                {$data['competent_positions']}
+                            </p>
+                        </li>
+
+                        <li>
+                            <p class="entryCon">
+                                <label>学历</label>
+                                {$data['education']}
+                            </p>
+                        </li>
+                        <li></li>
+                        <li>
+                            <p class="entryCon">
+                                <label>工作开始时间</label>
+                                {$data.start_time}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>联系电话</label>
+                                {$data['phone']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>QQ</label>
+                                {$data['qq']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>微信</label>
+                                {$data['wechat']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>最近工作经历一</label>
+                                {$data['work_experience_one']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>最近工作经历二</label>
+                                {$data['work_experience_two']}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>人才情况说明</label>
+                                {$data['remark']}
+                            </p>
+                        </li>
+                    </ul>
+                </fieldset>
+
+                <fieldset class="fd-k fl w">
+                    <legend class="fs-color"></legend>
+                    <span class="ysc_class">已上传文件：<a href="/{$data.annex_path}" id="ysc" >{$data.annex}</a></span>
+
+                    <input type="hidden" id="annex" name="annex">
+                    <input type="hidden" id="annex_path" name="annex_path">
+                </fieldset>
+
+                <div class="dataFormOperates">
+                    <a href="{:U('index')}" id="fan" class="ba">返回</a>
+                </div>
+
+                <fieldset class="fd-k fl w">
+                    <php>if($data['annex_path'] && $data['id'] && $data['path']==1)$aa = 'style="display: block;"';else $aa = 'style="display: none;"';</php>
+                    <php>if($data['annex_path'] && $data['id'] && $data['path']==2)$bb = 'style="display: block;"';else $bb = 'style="display: none;"';</php>
+                    <a id="media" class="media" href="{$data['annex_path']}" {$aa}></a>
+                    <img id="pic" src="{$data['annex_path']}" {$bb}>
+
+                    <a href="{$data['annex_path']}" target="_blank">{$data['annex']}</a>
+
+                </fieldset>
+
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="__PUBLIC__/static/jquery.media.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var path_id = "{$data.path}";
+            if (path_id == 1) {
+                $('a.media').media({width: 800, height: 600});
+            }
+        });
+    </script>
+</block>

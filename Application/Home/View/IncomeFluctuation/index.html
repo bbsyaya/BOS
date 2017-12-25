@@ -1,0 +1,252 @@
+<extend name="Public/base"/>
+<block name="body">
+<div class="subMainBox">
+    <div class="ri_header">
+        <div class="ri_title_box">
+            <span class="clip-text">收入波动</span>
+            <span>风控中心</span>
+        </div>
+        <div class="ri_work">Income fluctuation</div>
+    </div>
+    <!--<div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <input id="doExport" type="button" value="下载报表" class="" />
+            &lt;!&ndash;<input type="button" value="下载导入模板" onclick="window.open('/白名单导入模板.xls')" />
+            <input class="J_uploading" type="button" value="导入客户付款信息" class="" />&ndash;&gt;
+            <input type="button" value="高级筛选" class="J_openScreen" />
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+            <div class="line fr h"></div>
+        </div>
+        <div class="screenList fl w">
+            <form action="{:U('index')}" id="search_form">
+                <table>
+                    <tr>
+                        <th>时间(天数)：</th>
+                        <td><input type="text" name="days" value="{$Think.get.days}"></td>
+                        <th>总毛利：</th>
+                        <td><input type="text" name="gross_profit" value="{$Think.get.gross_profit}"></td>
+                        <th>业务线：</th>
+                        <td>
+                            <select name='lineid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="0">全部</option>
+                                <volist name="linelist" id='v'>
+                                    <option <php>if(in_array($v['id'],I('get.lineid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </volist>
+                            </select>
+                        </td>
+                        <th>广告主：</th>
+                        <td>
+                            <select name='adverid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="0">全部</option>
+                                <volist name="adverlist" id='v'>
+                                    <option <php>if(in_array($v['id'],I('get.adverid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="expertScreen">产品：</th>
+                        <td class="expertScreen">
+                            <select name='comid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="0">全部</option>
+                                <volist name="comlist" id='v'>
+                                    <option <php>if(in_array($v['id'],I('get.comid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </volist>
+                            </select>
+                        </td>
+                        <th class="expertScreen">销售：</th>
+                        <td class="expertScreen">
+                            <select name='salerid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="0">全部</option>
+                                <volist name="userlist" id='v'>
+                                    <option <php>if(in_array($v['id'],I('get.salerid')))echo "selected='selected'";</php> value="{$v.id}">{$v.real_name}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            <input id="search_btn" type="submit" value="查询" />
+                            <input type="hidden" name="p" value="1"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>-->
+
+    <div class="screenBox swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <form action="{:U('index')}" id="search_form">
+
+                    <div class="swiperRight">
+                        <table class="tableBox">
+                            <tr>
+                                <th>时间(天数)：</th>
+                                <td><input type="text" name="days" value="{$Think.get.days}"></td>
+                                <th>总毛利：</th>
+                                <td><input type="text" name="gross_profit" value="{$Think.get.gross_profit}"></td>
+                                <th>业务线：</th>
+                                <td>
+                                    <select name='lineid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                        <option value="0">全部</option>
+                                        <volist name="linelist" id='v'>
+                                            <option <php>if(in_array($v['id'],I('get.lineid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                        </volist>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input id="search_btn" type="submit" value="查询" />
+                                    <input type="hidden" name="p" value="1"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>广告主：</th>
+                                <td>
+                                    <select name='adverid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                        <option value="0">全部</option>
+                                        <volist name="adverlist" id='v'>
+                                            <option <php>if(in_array($v['id'],I('get.adverid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                        </volist>
+                                    </select>
+                                </td>
+                                <th>产品：</th>
+                                <td>
+                                    <select name='comid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                        <option value="0">全部</option>
+                                        <volist name="comlist" id='v'>
+                                            <option <php>if(in_array($v['id'],I('get.comid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                        </volist>
+                                    </select>
+                                </td>
+                                <th>销售：</th>
+                                <td>
+                                    <select name='salerid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                        <option value="0">全部</option>
+                                        <volist name="userlist" id='v'>
+                                            <option <php>if(in_array($v['id'],I('get.salerid')))echo "selected='selected'";</php> value="{$v.id}">{$v.real_name}</option>
+                                        </volist>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </form>
+                <!--end 基础查询-->
+            </div>
+        </div>
+    </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit">
+            <div class="advancedLeft">
+                <span class="addAdv advBtn">
+                    <input id="doExport" type="button" value="下载报表" class="" />
+                </span>
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>业务线</th>
+                <th>广告主</th>
+                <th>产品</th>
+                <th>收入</th>
+                <th>成本</th>
+                <th>毛利额</th>
+                <th>毛利率</th>
+                <th>销售</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>汇总</td>
+                <td></td>
+                <td></td>
+                <td>{$sumData.inmoney}</td>
+                <td>{$sumData.outmoney}</td>
+                <td>{$sumData.mlr}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <volist name="list" id="item">
+                <tr>
+                    <td>{$item.bl_name}</td>
+                    <td>{$item.adv_name}</td>
+                    <td>{$item.pro_name}</td>
+                    <td>{$item.inmoney}</td>
+                    <td>{$item.outmoney}</td>
+                    <td>{$item.mlr}</td>
+                    <td>{$item.mll}</td>
+                    <td>{$item.real_name}</td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+        {$_page}
+    </div>
+</div>
+
+    <!--弹出框-->
+    <div class="uploadingDialog" title="导入文件选择">
+        <form action='/WhiteList/export_a' target="newpage" id="uploadexcel" method='post' enctype="multipart/form-data">
+            <table class="dialogTable_form w ha">
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>导入数据<span class="must">*</span>:</th>
+                    <td><input type="file" name='file' multiple="multiple" /></td>
+                    <td><input type="hidden" id="year_ye" name="year_ye"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</block>
+<block name="script">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".J_uploading").click(function(){
+                $(".uploadingDialog").dialog("open");
+            });
+
+            $(".uploadingDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "450",
+                height: "200",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        $(this).dialog("close");
+                        $('#uploadexcel').submit();
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+
+            $("#doExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export')}";
+                window.location.href=url+'?'+param;
+            });
+        });
+    </script>
+</block>

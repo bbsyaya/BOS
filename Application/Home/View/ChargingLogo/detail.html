@@ -1,0 +1,77 @@
+<extend name="Public/base"/>
+<block name="body">
+    <!--筛选-->
+    <div class="screenCn fl w ha">
+        <btoolbar options="" search="false" />
+    </div>
+
+    <!--数据表-->
+    <div class="dataCn fl w ha">
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>交易记录编号</th>
+                <th>名称</th>
+                <th>计费标识ID</th>
+                <th>产品名称</th>
+                <th>广告主名称</th>
+                <th>结算主体</th>
+                <th>供应商名称</th>
+                <th>接入业务线</th>
+                <th>分配业务线</th>
+                <th>接入单价</th>
+                <th>推广价格</th>
+                <th>计费模式</th>
+                <th>返量周期</th>
+                <th>结算周期</th>
+                <th>扣量比例</th>
+                <th>内部结算利润率</th>
+                <th>开始日期</th>
+                <th>结束日期</th>
+                <th>分配状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <notempty name="list">
+                <volist name="list" id="item">
+                    <tr>
+                        <td>{$item.id}</td>
+                        <td>{$item.code}</td>
+                        <td>{$item.name}</td>
+                        <td>{$item.cl_id}</td>
+                        <td>{$item.prot_id}</td>
+                        <td>{$item.ad_id}</td>
+                        <td>{$item.sb_id}</td>
+                        <td>{$item.sup_id}</td>
+                        <td>{$item.pro_bl_name}</td>
+                        <td>{$item.bl_id}</td>
+                        <td>{$item.price}</td>
+                        <td>{$item.promotion_price}</td>
+                        <td>{$op_charging_mode[$item['charging_mode']]}</td>
+                        <td>{$op_return_cycle[$item['return_cycle']]}</td>
+                        <td>{$op_settlement_cycle[$item['settlement_cycle']]}</td>
+                        <td>{$item.deduction_ratio}</td>
+                        <td>{$item.in_settlement_prate}</td>
+                        <td>{$item.promotion_stime}</td>
+                        <td>{$item.promotion_etime}</td>
+                        <td>{$op_chargingLogo_status[$item['status']]}</td>
+                    </tr>
+                </volist>
+            <else />
+                <tr>
+                <td colspan="20" >
+                    <div class="no-datas">暂无数据！！</div>
+                </td>
+                </tr>
+            </notempty>
+                
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    {$_page}
+</block>
+<block name="script">
+
+</block>

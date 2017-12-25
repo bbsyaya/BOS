@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-stand" />
+    <title>boss3.0管理平台 </title>
+    <link href="__CSS__/base.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/common.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/page.css" rel="stylesheet" type="text/css" />
+    <!--jquery-->
+    <script src="__MODULE__/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <!--jquery UI-->
+    <link rel="stylesheet" href="__MODULE__/jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css" />
+    <link rel="stylesheet" href="__CSS__/jqueryUI_reset.css" />
+    <link rel="stylesheet" href="__CSS__/reset.css" />
+    <link rel="stylesheet" type="text/css" href="__MODULE__/bootstrapselect/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="__MODULE__/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js" ></script>
+    <script type="text/javascript" src="__MODULE__/highcharts/highcharts.js"></script>
+    <script type="text/javascript" src="__MODULE__/highcharts/exporting.js"></script>
+    <script src="__MODULE__/jquery.form.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+    <script src="__JS__/common.js" type="text/javascript"></script>
+    <script src="__JS__/common_xieqiang.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__STATIC__/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__MODULE__/bootstrapselect/bootstrap.min.js"></script>
+</head>
+<body>
+<!-- 跟进记录 -->
+<include file="Public/commonoa" />
+<style type="text/css">
+body{font-size: 12px !important;}
+	label{font-weight:normal!important}.wd300{width:68% !important}.wd100{width:100% !important}.dayTwo-1{width:28%!important}.fd-k{margin-top:20px}.fs-color{color:#1269cc!important;border-bottom-color:#1269cc!important}.btnBox{padding-bottom:100px!important}.a-com{border:medium none;border-radius:3px;color:#fff;height:36px;margin:0 15px;background:#1269cc none repeat scroll 0 0;width:110px;line-height:36px;display:inline-block;color:#fff!important;font-size:14px;text-align:center}.submit{width: auto !important;padding: 0px 20px !important;height: 36px;line-height: 36px;}.btnBox input[type="button"]{ margin: 0px !important;}.glzw{color:#1269cc !important;font-size:12px;margin-left:8px;text-decoration: underline !important;}.dayTwo-a{width:48% !important;}.entryList li .entryCon label{width: 60px !important;height: 44px !important;overflow: hidden;line-height: 44px !important;display: inline-block !important; float: left;}.bz-txt{height: 150px;border:1px solid #ddd;border-radius: 3px;padding: 5px;width: 92%;}.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){width: 75% !important;height: 40px !important;}.bootstrap-select > .dropdown-toggle{height: 40px !important;}.bootstrap-select.btn-group .dropdown-menu li{width: 100% !important; height: 24px !important;}.dropup .dropdown-menu, .navbar-fixed-bottom .dropdown .dropdown-menu{top:44px !important;}.bootstrap-select.btn-group .dropdown-menu{height: 200px !important;}.creatoa, .queryTable input[type="button"], .chos-btn{
+    background: #1269cc none repeat scroll 0 0;
+    min-width: 70px;
+    padding: 0 5px;border: medium none;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 12px;
+    height: 30px;
+}.pad-sec{padding:2% 2% 10% 2%;width: 96%;display: inline-block;}.entryList li .entryCon{width: 100% !important;}
+.wsl-s{
+    width: 60% !important;
+}
+</style>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<div class="pad-sec">
+	<fieldset class="fl w">
+		<legend class="fs-color">添加跟进记录</legend>
+        <form action="/Home/InteSystem/saveFollow.html" method="get" id="dataForm">
+			<ul class="entryList">
+				<li>
+					<p class="entryCon">
+						<label for="">拜访方式</label>
+						<input name="visit_way" id="visit_way" value="" class="items wsl-s"  placeholder="请输入拜访方式"  type="text">
+					</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">跟进结果</label>
+				<input name="result" id="result" class="items wsl-s"  value=""   placeholder="请输入跟进结果" data-v="" type="text">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">目前状态</label>
+				<span class="dayTime wsl-s">
+				<select name="status" id="status" class="">
+						<?php foreach ($extendOptions as $k => $v) { ?>
+						<option value="{$k}" <?php if($k==$one['status']){ ?> selected="selected" <?php } ?> >{$v}</option>
+						<?php } ?>
+					</select>
+					</span>
+				</p>
+				</li>
+                <li>
+                <p class="entryCon">
+                <label for="">跟进时间</label>
+                <input name="visit_time" id="visit_time" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="items wsl-s"  value=""   placeholder="请选择跟进时间" data-v="" type="text">
+                </p>
+                </li>
+				<li style="width:100%;height:auto !important;line-height:auto !important;">
+					<p class="entryCon" style="width:100%;height:auto !important;line-height:auto !important;">
+					<label for="" style="width:60px !important;">备注</label>
+					<textarea class="bz-txt items" style="width:70% !important;"  placeholder="请输入备注,存在的困难点、帮助需求等" name="remark" id="remark"></textarea>
+					</p>
+				</li>
+			</ul>
+
+
+	        <!--按钮-->
+	        <div class="btnBox fl w" style="text-align: center;padding-bottom:10px !important;">
+	        <input class="submit" name="" type="button" value="保存跟进记录" onclick="E.saveData(this)" id="btnsave">
+            <input type="hidden" name="extid" id="extid" value="{$extid}" />
+            <input type="hidden" name="type_id" id="type_id" value="{$type_id}" />
+	        </div>
+        </form>
+	</fieldset>
+
+	<fieldset class="fl w">
+		<legend class="fs-color">跟进记录</legend>
+		<div class="workListBox">
+            <table class="listTable Js_tableCon">
+                <thead>
+                    <tr>
+                    <th style="width:5%">id</th>
+                        <th>时间</th>
+                        <th>跟进人</th>
+                        <th>拜访方式</th>
+                        <th>跟进结果</th>
+                        <th>目前状态</th>
+                        <th title="备注（存在的困难点、帮助需求等）">备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                    <volist name="list" id="vo">
+                        <tr>
+                        <td title="{$vo['id']}"><span>{$vo['id']}</span></td>
+                            <td title="{$vo['visit_time']|strtotime|date='Y-m-d',###}"><span>{$vo['visit_time']|strtotime|date='Y-m-d',###}</span></td>
+                            <td title="{$vo["real_name"]}"><span>{$vo["real_name"]}</span></td>
+                            <td title="{$vo["visit_way"]}"><span>{$vo["visit_way"]}</span></td>
+                            <td title="{$vo["result"]}"><span>{$vo["result"]}</span></td>
+                             <?php $status_str = $extendOptions[$vo["status"]] ?>
+                            <td title="{$status_str}"><span>{$status_str}</span></td>
+                            <td title="{$vo["remark"]}"><span>{$vo["remark"]}</span></td>
+                            
+                        </tr>
+                    </volist>
+                    <else />
+                    <tr>
+                        <td  colspan="7"><div class="no-datas">暂无数据！！</div></td>
+                    </tr> 
+                </notempty>
+                </tbody>
+            </table>
+            <notempty name="list">
+                <div class="no-datas">{$page}</div>
+            </notempty>
+        </div>
+	</fieldset>
+</div>
+<script type="text/javascript" src="/Public/Home/js/expand.js?v={:getVersion()}"></script>
+</body>
+</html>

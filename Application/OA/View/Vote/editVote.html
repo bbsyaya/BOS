@@ -1,0 +1,233 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<!--发起流程弹出层-->
+<style type="text/css">
+	.fq-res{position:relative;width:100%}.c-fq{position:absolute;z-index:222;top:-35px;right:10px;color:#fff!important}.ui-dialog-buttons{z-index:2000!important}.wd100{width:175px!important}.fleft{float:left}.xx-pt{height:44px;padding:0 10px;width:410px!important;border:1px solid #d8d8d8;border-radius:3px;color:#666;font-size:14px}.wd90{width:90px}.disnone{display:none}.com-btn{background:#1269cc none repeat scroll 0 0;min-width:70px;padding:0 5px;border:medium none;border-radius:3px;color:#fff;font-size:14px;height:30px;cursor:pointer}.addItems{margin-left:90px;margin-top:8px}.problems_item{margin-top:10px!important}.voteBox .voteConBox .voteQuestion{height:auto!important}.xx-wz{margin-top:8px}.sc-went{cursor:pointer}.imgxz{width:30px;height:15px;margin-left:8px}.voteBox{height:auto!important;margin-left:0!important;margin-top:0!important;width:90%!important;margin-left:5%!important}.popupPublic{background:#f9f9f9 none repeat scroll 0 0;border-radius:6px;display:block!important;left:0!important;overflow:hidden;padding-bottom:0!important;position:static!important;top:0!important}.voteBox .voteConBox{height:auto!important}.voteBox .voteConBox p{width:100%!important}.problems_item{margin:10px 0 0 0 !important}.btnBox{position:fixed;bottom:0;background:#fff;width:100%;left:0}.btn-db{border:1px solid #d8d8d8;border-radius:3px;height:36px;margin-right:20px;width:110px}.fab-s{background:#1269cc none repeat scroll 0 0;width:110px;border:medium none;border-radius:3px;color:#fff;height:36px;margin:0 15px;margin-left: 300px;}body{font-size: 12px !important;}
+</style>
+<script type="text/javascript" src="__PUBLIC__/Home/js/ajaxupload.js"></script>
+<div class="popupPublic voteBox Js_vote" style="">
+	<form action="" id="voteForm" >
+	   
+	    <div class="voteConBox">
+	        <p><label for="">投票名称</label><input name="vname" id="vname" value="{$vote['vname']}" type="text"></p>
+	        <p>
+		        <label for="">开始时间</label><input onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="wd100 fleft" name="start_time" id="start_time" type="text" value="{$vote['start_time']|strtotime|date="Y-m-d",###}">
+		        <label for="" style="margin-left:20px;">结束时间</label><input onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="wd100 fleft"  name="end_time" id="end_time"type="text" value="{$vote['end_time']|strtotime|date="Y-m-d",###}">
+
+	        </p>
+	        <p><label for="">投票须知</label>
+			<?php if($vote['instruct']){ ?>
+			<textarea name="instruct" id="instruct">{:trim($vote['instruct'])} </textarea>
+			<?php }else{ ?>
+			<textarea name="instruct" id="instruct">所有人只能投一次，如果发现拉票现象，下次不能再参与投票。
+			</textarea>
+			<?php } ?>
+	        </p>
+	        
+	        
+	        <p>
+	        <label for="">注意事项</label>
+			<?php if($vote['attention']){ ?>
+				<textarea name="attention" id="attention">{:trim($vote['attention'])} </textarea>
+			<?php }else{ ?>
+				<textarea name="attention" id="attention">所有人只能投一次，如果发现拉票现象，下次不能再参与投票。
+				</textarea>
+			<?php } ?>
+	         </p>
+	        <p><label for="">投票部门</label>
+		        <input class="votetxt" name="departs" id="departs" style="width:360px;"  readonly="readonly"type="text" value="{$vote['departs']}">
+		        <input name="" id="choseDepart" type="button" value="选择部门">
+		        <input type="hidden" id="departs_ids" name="departs_ids" value="{$vote['departs_ids']}" />
+	        </p>
+	        <div class="problems_list">
+	        <notempty name="prolist">
+		        <volist name="prolist" id="vo" key="key">
+		        		<div class="voteQuestion problems_item" data-index="{$key}" id="problems_item_{$key}" >
+		        			<input type="hidden" value="{$vo['id']}" id="problems_id_{$key}" name="problems_id[]"/>
+					        <p class="voteQuesCon"><font class="p_title">【问题{$key}】</font><?php if($key>1){ ?> <span class="sc-went" onclick="Box.delProblems({$key})">【删除问题】</span> <?php } ?></p>
+				            <p class="voteQuesCon"><label for="">投票问题</label><input id="problems_title_{$key}" name="problems_title[{$key}][titlename]" type="text" value="{$vo['title']}"></p>
+				            <p class="voteQuesCon voteRadio">
+					            <label class="voteLabel" style="width:90px;"  for="">问题类型</label>
+					            <span>
+					            <input id="problems_type_{$key}" name="problems_type_{$key}[]" value="0" onclick="Box.pTypeChose(0,{$key})" <?php if($vo['type']==0){ ?> checked="checked"  <?php } ?>   type="radio" >&nbsp;&nbsp;单选
+					            </span>
+					            <span>
+					            <input id="0problems_type_{$key}" name="problems_type_{$key}[]" value="1" onclick="Box.pTypeChose(1,{$key})" <?php if($vo['type']==1){ ?> checked="checked"  <?php } ?> type="radio">&nbsp;&nbsp;多选
+					            </span>
+					             <span><input id="1problems_type_{$key}" name="problems_type_{$key}[]" value="2" <?php if($vo['type']==2){ ?> checked="checked"  <?php } ?>   onclick="Box.pTypeChose(2,{$key})" type="radio">&nbsp;&nbsp;文本输入框</span>
+				            </p>
+				            <p class="voteQuesCon voteRadio <?php if($vo['type']==2){ ?> disnone<?php } ?>"  id="a_item_type_{$key}">
+					            <label for="">选项类型</label>
+					            <span>
+					            <input id="item_type_{$key}" name="item_type_{$key}" data-pid="{$key}" value="0" class="item_type" <?php if($vo['vtype']==0){ ?> checked="checked"  <?php } ?> type="radio" >&nbsp;&nbsp;文字
+					            </span>
+					            <span>
+					            <input data-pid="{$key}" type="radio" id="0item_type_{$key}" name="item_type_{$key}" class="item_type" value="1" <?php if($vo['vtype']==1){ ?> checked="checked"  <?php } ?>>&nbsp;&nbsp;图片
+					            </span>
+				            </p>
+				            <div class="voteQuesCon <?php if($vo['type']==2){ ?> disnone<?php } ?>"  id="b_item_type_{$key}" >
+				            <div class="probles_items <?php if($vo['vtype']==1){ ?> disnone<?php } ?>" id="wz_items_{$key}" >
+				            	<?php 
+				            	if($vo["vtype"]==0){
+					            	if($vo["items"]){ 
+					            		foreach ($vo["items"] as $k => $v) {
+					            				if($k==0){
+					            					$k++;
+					            			?>
+												<div class="xx-wz" data-i="{$k}"><label for="" class="wd90">选项标题</label>
+													<input type="text" id="item_title_{$key}_{$k}" name="item_title_{$key}[]" class="xx-pt items " data-pid="{$key}" value="{$v['title']}"/>
+													<input type="hidden" value="{$v['id']}" id="problems_items_id{$k}" name="problems_items_id[]"/>
+												</div>
+				            			<?php
+					            		}else{
+					            			$k++;
+				            			?>
+											<div class="xx-wz" data-i="{$k}">
+												<label for="" class="wd90">选项标题</label>
+												<input type="text" id="item_title_{$key}_{$k}" name="item_title_{$key}[]" class="xx-pt items " data-pid="{$key}" style="width:325px !important;"  value="{$v['title']}"/>
+												<input type="button" class="com-btn" onclick="Box.delWzItems(this)" data-pid="{$key}" value="删除选项" style="margin-left:8px;"/>
+												<input type="hidden" value="{$v['id']}" id="problems_items_id{$k}" name="problems_items_id[]"/>
+											</div>
+				            			<?php
+					            		}
+					            		}
+					            	}
+			            		}else{
+			            			?>
+		            			<div class="xx-wz" data-i="1"><label for="" class="wd90">选项标题</label>
+									<input type="text" id="item_title_{$key}_1" name="item_title_{$key}[]" class="xx-pt items " data-pid="{$key}"/>
+								</div>
+		            			<?php
+		            			} ?>
+					            </div>
+					            <div id="img_items_{$key}" class=" probles_items <?php if($vo['vtype']==0){ ?> disnone<?php } ?>">
+									<?php 
+									if($vo["vtype"]==1){
+										if($vo["items"]){
+											foreach ($vo["items"] as $k => $v) {
+												if($v["img_url"]=="其它") continue;
+					            				if($k==0){
+					            					$k++;
+				            					?>
+													<div class="xx-wz" data-i="{$k}">
+														<label for="" class="wd90">选择图片</label><input type="button" data-pid="{$key}" id="item_img_url_{$key}_{$k}" name="item_img_url_{$key}[]" data-i="{$k}" class="com-btn items upbtn" value="选择图片" />
+														<img src="<?php if($v['img_url'] && ($v['img_url']!="其它")){ ?> {$v['img_url']} <?php } ?>" class="<?php if(!$v['img_url']){ ?> disnone <?php } ?> imgxz">
+														<input type="hidden" id="hidden_item_img_url_{$key}_{$k}" name="hidden_item_img_url_{$key}[]" class="wd100" data-pid="{$key}" value="{$v['img_url']}" />
+														<input type="hidden" value="{$v['id']}" id="problems_items_id{$k}" name="problems_items_id[]"/>
+													</div>
+				            					<?php
+					            				}else{
+					            					$k++;
+		            							?>
+												<div class="xx-wz"  data-i="{$k}">
+												<label for="" class="wd90">选择图片</label>
+												<input type="button" data-i="{$k}"  data-pid="{$key}" id="item_img_url_{$key}_{$k}" name="item_img_url_{$key}[]"  class="com-btn items upbtn" value="选择图片" />
+												<img src="<?php if($v['img_url']){ ?> {$v['img_url']} <?php } ?>" class="<?php if(!$v['img_url']){ ?> disnone <?php } ?> imgxz">
+												<input type="button" class="com-btn" onclick="Box.delImgItems(this)" data-pid="{$key}" value="删除图片选项" style="margin-left:8px;"/>
+												<input type="hidden" id="hidden_item_img_url_{$key}_{$k}" name="hidden_item_img_url_{$key}[]" class="wd100" data-pid="{$key}" value="{$v['img_url']}"/>
+												<input type="hidden" value="{$v['id']}" id="problems_items_id{$k}" name="problems_items_id[]"/>
+											</div>
+		            							<?php
+					            				}
+					            			}
+				            			}
+									}else{
+									?>
+									<div class="xx-wz" data-i="1">
+										<label for="" class="wd90">选择图片</label><input type="button" data-pid="{$key}" id="item_img_url_{$key}_1" name="item_img_url_{$key}[]"  class="com-btn items" value="选择图片" />
+										<img src="" class="disnone imgxz">
+										<input type="hidden" id="hidden_item_img_url_{$key}_1" name="hidden_item_img_url_{$key}[]" class="wd100" data-pid="{$key}"/>
+									</div>
+									<?php
+									} ?>
+									
+
+								</div>
+								<input type="button" class="addItems com-btn " onclick="Box.addItems(this)" data-pid="{$key}" value="增加选项" />
+				            </div>
+				            <p class="voteQuesCon voteRadio <?php if($vo['type']==2){ ?> disnone<?php } ?>"  id="c_item_type_{$key}">
+					            <label class="voteLabel"   style="width:120px;"  for="">是否可自定义选项</label>
+					            <span>
+					            <input type="radio" id="problems_is_custom_{$key}" name="problems_is_custom_{$key}[]" value="0" <?php if($vo['is_custom']==0){ ?> checked="checked"  <?php } ?> >&nbsp;&nbsp;可以
+					            </span>
+					            <span>
+					            <input type="radio" id="0problems_is_custom_{$key}" name="problems_is_custom_{$key}[]" value="1" <?php if($vo['is_custom']==1){ ?> checked="checked"  <?php } ?> >&nbsp;&nbsp;不可以
+					            </span>
+				            </p>
+				        </div>
+		        	</volist>
+	        	<else />
+	        	<div class="voteQuestion problems_item" data-index="1" id="problems_item_1">
+		        	<p class="voteQuesCon"><font class="p_title">【问题1】</font></p>
+		            <p class="voteQuesCon"><label for="">投票问题</label><input id="problems_title_1" name="problems_title[1][titlename]" type="text"></p>
+		            <p class="voteQuesCon voteRadio">
+			            <label class="voteLabel" style="width:90px;"  for="">问题类型</label>
+			            <span><input id="problems_type_1" name="problems_type_1[]" value="0"  onclick="Box.pTypeChose(0,1)"  checked="checked"  type="radio" >&nbsp;&nbsp;单选</span>
+			            <span><input id="0problems_type_1" name="problems_type_1[]" value="1"  onclick="Box.pTypeChose(1,1)"  type="radio">&nbsp;&nbsp;多选</span>
+			            <span><input id="1problems_type_1" name="problems_type_1[]" value="2"   onclick="Box.pTypeChose(2,1)" type="radio">&nbsp;&nbsp;文本输入框</span>
+		            </p>
+		            <p class="voteQuesCon voteRadio"  id="a_item_type_1">
+			            <label for="">选项类型</label>
+			            <span>
+			            <input id="item_type_1" name="item_type_1" data-pid="1" value="0" class="item_type" checked="checked" type="radio" >&nbsp;&nbsp;文字
+			            </span>
+			            <span>
+			            <input data-pid="1" type="radio" id="0item_type_1" name="item_type_1" class="item_type" value="1" >&nbsp;&nbsp;图片
+			            </span>
+		            </p>
+		            <div class="voteQuesCon"  id="b_item_type_1">
+			            <div class="probles_items" id="wz_items_1">
+			            	<div class="xx-wz" data-i="1"><label for="" class="wd90">选项标题</label><input type="text" id="item_title_1_1" name="item_title_1[]" class="xx-pt items " data-pid="1"/></div>
+			            </div>
+			            <div id="img_items_1" class="disnone probles_items">
+							<div class="xx-wz" data-i="1">
+							<label for="" class="wd90">选择图片</label><input type="button" data-pid="1" id="item_img_url_1_1" name="item_img_url_1[]"  class="com-btn items" value="选择图片" />
+							<img src="" class="disnone imgxz">
+							<input type="hidden" id="hidden_item_img_url_1_1" name="hidden_item_img_url_1[]" class="wd100" data-pid="1"/>
+							</div>
+						</div>
+						<input type="button" class="addItems com-btn " data-pid="1" onclick="Box.addItems(this)" value="增加选项" />
+		            </div>
+		            <p class="voteQuesCon voteRadio"  id="c_item_type_1">
+			            <label class="voteLabel"   style="width:120px;"  for="">是否可自定义选项</label>
+			            <span>
+			            <input type="radio" id="problems_is_custom_1" name="problems_is_custom_1[]" value="0" checked="checked">&nbsp;&nbsp;可以
+			            </span>
+			            <span>
+			            <input type="radio" id="0problems_is_custom_1" name="problems_is_custom_1[]" value="1">&nbsp;&nbsp;不可以
+			            </span>
+		            </p>
+		        </div>
+	        </notempty>
+	        	
+	        
+		    <!-- end vote  -->
+	        </div>
+	    </div>
+		   
+	    <!--按钮-->
+	    <div class="btnBox1">
+	    <input type="hidden" id="vid" name="vid" value="{$vote['id']}" />
+	        <input class="question_btn left btn-db" name="" id="addProblems" type="button" value="加一个问题">
+	        <input class="submit  fab-s" name="" type="button" value="保存投票信息" id="sendVote" onclick="Box.sendVote()">
+	    </div>
+	    <!--end 按钮-->
+	</form>
+</div>
+<div style="width:100%;margin-top:100px;"></div>
+<!--end 发起流程弹出层-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+<!--双日期插件-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" href="__MODULE__/jqueryztree3.5/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/editvote.js"></script>
+ <!--弹出框（部门） -->
+<div class="authorizationDialog" title="选择部门">
+    <!--结构树-->
+    <ul id="treeDepart" class="ztree"></ul>
+</div>
+</block>

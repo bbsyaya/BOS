@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 设置 viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 兼容国产浏览器的高速模式 -->
+    <meta name="renderer" content="webkit">
+    <title>{:getSiteTitle($webTitle)} </title>
+    <script src="__PUBLIC__/newUI/js/jquery-1.9.1.min.js"></script>
+    <script src="__PUBLIC__/newUI/js/swiper-3.4.2.jquery.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script>
+    var alltanmu=[];
+    var allnum=0;
+    var nowtime=0;
+    var is_close=false;
+    var allwjz=[];
+    var color=['#878192','#6f27ea','#c47ff3','#7379eb','#b48d9f','#e97ab7','#d85b52','#6758fd','#fcfffd','#edb2ca']
+    var team="{$_SESSION['userinfo']['depart_name']}";
+    var user_name="{$_SESSION['userinfo']['realname']}";
+
+
+    function tanmu_do(){
+        if($('#tanmu .tanmu_content').height()<1){
+            setTimeout("tanmu_do()",1000);
+            return;
+        }
+        if(alltanmu.length>0){
+            //未加载区有内容
+            if(nowtime%1000==0){
+                var allwidth=$(document.body).width();
+                for(var i in alltanmu){
+                    var top=Math.round(Math.random()*($('#tanmu .tanmu_content').height()-30));
+//                //<span  class="tanmu_broser">'+10+'</span>'
+                    $('#tanmu .tanmu_content').append('<p class="left_do" style=" border-radius: 10px; cursor: pointer; padding: 0 15px; overflow:hidden;height:30px;color:#fff;font-size:24px;position:absolute;left:'+allwidth+'px;top:'+top+'px;">'+'<span>'+alltanmu[i]+'</span>'+'</p>');
+                    alltanmu.splice(i,1);
+                    break;
+                }
+
+            }
+        }else{
+            //如果已全部加载完，重新获取数据mouseout mouseleave
+            setTimeout("tanmu_getdata()",5);
+            return;
+        }
+        $('#tanmu .tanmu_content').find('.left_do').each(function(){
+            $(this).css('left',(parseInt($(this).css('left'))-1)+'px');
+            if(parseInt($(this).offset().left)*-1==$(this).width())$(this).remove();
+        })
+        nowtime+=5;
+        if(is_close)setTimeout("tanmu_do()",5);
+    }
+
+    function tanmu_getdata(){
+        $.post('/Home/Ajax/getalltanmu',{},function(data){
+            allnum=0;
+            if(data.length>0){
+                for(var o in data){
+                    alltanmu[allnum]=data[o].content;
+                    allnum++;
+                }
+                tanmu_do();
+            }
+        },'json');
+    }
+    function tanmu_add(str){
+        alltanmu[allnum]=str;
+        allnum++;
+    }
+    function addnewtanmu(){
+
+        var content=$('#tanmu_form').find('input').val();
+        if(content.length>=35){
+            layer.msg('最多可以留35个字哦！');
+            return;
+        }
+        if(content.replace(/(^\s*)|(\s*$)/g, '')==''){
+            layer.msg('不能提交空数据！');
+            return;
+        }
+        $.post('/Home/Ajax/addnewtanmu',{"content":content},function(data){
+            if(data.status==1){
+                $('#tanmu_form').find('input').val('');
+                layer.msg('发送成功');
+                tanmu_add(content);
+            }
+        },'json')
+    }
+    function myopen(obj,time){
+//        $('.close_tanmu').css('background','none')
+        obj.animate({
+            top:'0',
+            height: '100%'
+        },time);
+        if(team=="IT研发部" && user_name!="黄钰钏"){
+            $('.close_tanmu').fadeIn();
+        }else {
+            setTimeout("$('.close_tanmu').fadeIn()",3000);
+        }
+
+    }
+    function myclose(obj,time){
+        height=$(document.body).height();
+        obj.animate({
+            top:height+'px',
+            height: '0'
+        },time);
+        setTimeout("$('.showtanmu').fadeIn()",1000);
+    }
+
+
+    $(function(){
+        tanmu_getdata();
+        <eq name="is_tanmu" value="1">
+
+        if(team=="IT研发部" && user_name!="黄钰钏"){
+            return
+        }else {
+            myopen($('#tanmu'),1000);
+        }
+        $('.showtanmu').fadeOut();
+        is_close=true;
+        </eq>
+        $('#tanmu .tanmu_content').on({
+            mouseover: function () {
+                $(this).removeClass('left_do')
+                $(this).addClass('index')
+
+
+            },
+            mouseout: function () {
+                $(this).addClass('left_do')
+                $(this).removeClass('index')
+
+            },
+            click: function () {
+                $(this).addClass('tanmu_p')
+                $(this).addClass('tanmu_p')
+                var i =parseInt(10*Math.random())
+                $(this).css('color',color[i])
+            }
+    },'p');
+
+    })
+    </script>
+    <link href="__PUBLIC__/newUI/css/myCss.css" type="text/css" rel="stylesheet">
+    <style>
+
+
+       @media screen and (min-width:1px) and (max-width:1440px){#allcontent{transform:scale(.75)}}
+       @media screen and (min-width:1440px) and (max-width:1600px){#allcontent{transform:scale(.76)}}@media screen and (min-width:1600px) and (max-width:1920px){#allcontent{transform:scale(.77)}}@media screen and (min-width:1920px){#allcontent{transform:scale(.7)}}
+
+       html{min-height:100vh}
+       body{min-height:100vh;background:url(/Public/newUI/images/login_back.jpg) center center no-repeat;background-size:cover;font-family:'微软雅黑'!important}.copyright{text-align:center;color:#d3d5da;line-height:24px;font-size:14px;position:absolute;bottom:5%;left:0;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top_content{width:80%;height:60px;margin:0 auto}.top_content_line{width:80%;height:1px;margin:0 auto;background:url(/Public/newUI/images/top_content_line.png) no-repeat;padding-bottom:15px}.top_content_left{width:48%;height:100%;position:relative;display:inline-block}.top_content_left>span{width:250px;min-width:249px;line-height:60px;color:#FFF;font-size:34px}.top_content_left>span:nth-of-type(2){color:rgba(255,255,255,.6);font-size:17px;margin-left:10px}.top_content_right{width:240px;height:55px;float:right;background:url(/Public/newUI/images/login_icon.png) center center no-repeat;background-size:cover}.messageIcon_number{display:block;position:absolute;top:0;right:-6px;width:auto;padding:0 2px;height:15px;border-radius:6px;background-color:#fc4c42;line-height:15px;text-align:center;font-size:10px;color:#fff}.main_block{width:80%;min-width:50%;height:450px;margin:100px auto 0 auto}.main_block_left{float:left;width:50%;height:100%}.main_block_left_word_con{width:500px;height:100%;position:relative}.left_lines{position:absolute;height:auto;width:100%;left:0;top:200px}.word_style1{display:block;width:400px;height:60px;background:url(/Public/newUI/images/welcome.png) center center no-repeat;background-size:cover}.word_style2{font-size:20px;color:rgba(255,255,255,.8);line-height:60px;margin-top:20px}.ueser_name{font-size:34px;color:white;line-height:60px;word-spacing:8px;letter-spacing:8px;font-weight:bold}.word_style3{font-size:24px;color:#fff;line-height:34px}.word_style4{font-size:20px;color:rgba(255,255,255,.6);line-height:18px;margin-bottom:20px}.main_block_right{float:right;width:50%;height:100%;box-sizing:border-box}.main_block_right_word_con{float:right;width:427px;height:100%;overflow:hidden}.main_block_right_top_oa{height:180px;width:100%;background:url(/Public/newUI/images/oa_d.png)center no-repeat;background-size:110%;cursor:pointer;border-radius:10px}.oa_h{height:180px;width:100%;background:url(/Public/newUI/images/oa_h.png)center no-repeat;background-size:110%;cursor:pointer;border-radius:10px}.main_block_right_divider{height:30px;width:100%}.main_block_right_bottom_boss{height:180px;width:100%;background:url(/Public/newUI/images/bos_d.png)center no-repeat;background-size:150%;cursor:pointer;border-radius:10px}.bos_h{height:180px;width:100%;background:url(/Public/newUI/images/bos_h.png)center no-repeat;background-size:150%;cursor:pointer;border-radius:10px}.goto_oa{float:right;font-size:36px;color:#ac36ff;font-weight:bold;padding:20px 30px 0 0}.goto_oa>span{display:block;width:70px;height:50px;background:url(/Public/newUI/images/oa_icon_d.png)center no-repeat;float:right;padding:60px 0 0 0}.goto_bos{float:left;font-size:36px;color:#4977e6;font-weight:bold;padding:20px 0 0 30px}.goto_bos>span{display:block;width:70px;height:50px;background:url(/Public/newUI/images/bos_icon_d.png)center no-repeat;float:left;padding:60px 0 0 0}
+        #tanmu{ position: absolute;width: 100%;height: 100%;top:100hv;height: 0;overflow: hidden ;}
+        #tanmu .bg{background: #000;opacity:0.3;width: 100%;height: 100%;position: absolute;top:0;z-index: -1;}
+        #tanmu .tanmu_top{background: url(/Public/newUI/img/tanmu_bg_top.png) repeat-x;height: 229px;width: 100%;overflow: hidden;}
+        #tanmu .tanmu_buttom{background: url(/Public/newUI/img/tanmu_bg_buttom.png) repeat-x;position: absolute;bottom: 0;height: 229px;width: 100%;}
+        #tanmu .tanmu_center{width: 1200px;margin: 0 auto;height: 100%;}
+        #tanmu .tanmu_top .tanmu_center{background: url(/Public/newUI/img/tanmu_bg_title_1.png) no-repeat right center;height: 136px;margin-top: 35px;}
+        #tanmu .tanmu_top .tanmu_center .close_tanmu{display: none; width: 30px;height: 30px;text-align: center;line-height: 30px; font-size: 30px;color: white; position: absolute;top:30px;right: 80px;background: url(/Public/newUI/img/close_tanmu.png) center center;cursor:pointer;width: 22px;height: 22px;}
+        #tanmu .tanmu_buttom .tanmu_center{background: url(/Public/newUI/img/tanmu_bg_footer.png) no-repeat center center; position: relative;}
+        #tanmu .tanmu_buttom .tanmu_center .tanmu_but_top{background: url(/Public/newUI/img/tanmu_bg_footer_top.png) no-repeat center center; position: absolute;top:60px;left: 0;width: 100%;height: 50px;z-index: 1;animation: animat 1s infinite;}
+        #tanmu .tanmu_content .tanmu_broser{line-height: 25px; margin-left: 15px; padding-left: 25px;background: url(/Public/newUI/img/add_advicon.png) no-repeat left top; font-size: 25px; color: #fe8b44}
+        #tanmu .tanmu_content .tanmu_p{ background-color:#9b8cb5}
+        #tanmu .tanmu_content .index{ z-index: 999;}
+        #tanmu .tanmu_day{font-style: italic;margin-left: 1014px;font-size: 76px;line-height:86px;font-family: '微软雅黑';font-weight: bold;color: #ffc807;}
+        #tanmu .tanmu_wanchen div{float: left;}
+        #tanmu .tanmu_wanchen .m{font-style: italic;margin-left: 678px;width: 38px;font-size: 30px;line-height:36px;color: #ffc807;font-family: '微软雅黑';font-weight: bold;}
+        #tanmu .tanmu_wanchen .d{font-style: italic;margin-left: 34px;width: 38px;font-size: 30px;line-height:36px;color: #ffc807;font-family: '微软雅黑';font-weight: bold;}
+        #tanmu .tanmu_wanchen .mb{font-style: italic;margin-left: 305px;font-size: 36px;line-height:36px;color: #ffc807;font-family: '微软雅黑';font-weight: bold;}
+        #tanmu_form input{border:none;width: 660px;color:#fd6100;font-weight: bold;font-family: '微软雅黑';font-style: italic;font-size: 16px;line-height: 36px;margin-top: 129px;margin-left: 245px;float: left;}
+        #tanmu_form a{display: inline-block;width: 129px;height: 43px;margin-top: 130px;float: left;}
+        #tanmu_form span{display: inline-block;width: 55px;height: 87px;margin-top: 96px;float: left;}
+        #tanmu .tanmu_content{position: absolute;top:25%;height: 50%;width: 100%;overflow: hidden;z-index: 55;}
+        .showtanmu{position: absolute;top: 80hv;background: url('/Public/newUI/img/opentanmu.png');width: 243px;height: 121px;cursor:pointer;right:50px;}
+
+       @keyframes animat{
+           0%{transform:  scale(0.8,0.8); opacity: 1;}
+           25%{transform:  scale(1,1); opacity: 0.8;}
+           100%{transform:  scale(0.8,0.8); opacity: 1;}
+       }
+        .diaoyan{position: absolute;
+            width: 243px;
+            height: 101px;
+            cursor: pointer;
+            right: 50px;
+            font-size: 25px;
+            margin-top: -70px;}
+       .diaoyan a{text-decoration: none;
+           color: #FF5C41;
+           letter-spacing: 3px;
+       text-decoration: underline;}
+
+    </style>
+</head>
+<body>
+<div id="allcontent">
+    <div class="top_content">
+        <div class="top_content_left">
+            <span>重庆话语智能办公平台</span>
+            <span>INTELLIGENT OFFICE PLATEFORM</span>
+        </div>
+        <div class="top_content_right">
+
+        </div>
+    </div>
+    <div class="top_content_line"></div>
+    <div class="main_block">
+        <div class="main_block_left">
+            <div class="main_block_left_word_con">
+                <p class="word_style1"></p>
+                <p class="word_style2">
+                    <span class="ueser_name"><php>echo $_SESSION['userinfo']['realname'];</php></span>
+                    <span><eq name="data_user.gender" value="1">美女<else/>帅哥</eq></span>
+                    <span> 祝你工作开心</span>
+                </p>
+                <div class="left_lines">
+                    <p class="word_style3">人尽其才 , 才尽其用</p>
+                    <p class="word_style4">Of men and use</p>
+                    <p class="word_style3">共建 、 共享 、 共成长</p>
+                    <p class="word_style4">sharing and growing together</p>
+                    <p class="word_style3">互助互信 、分担分享 、 感恩包容</p>
+                    <p class="word_style4">Mutual trust, share the share, Thanksgiving tolerance</p>
+                </div>
+            </div>
+        </div>
+        <div class="main_block_right">
+            <div class="main_block_right_word_con">
+                <div class="main_block_right_top_oa">
+                    <div class="goto_oa " onclick="window.location='/OA/Index/index'">
+                        <div>话语OA系统</div>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="main_block_right_divider">
+
+                </div>
+                <div class="main_block_right_bottom_boss" onclick="window.location='/Home/Index/bos_index'">
+                    <div class="goto_bos">
+                        <div>话语BOS系统</div>
+                        <span></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="copyright">
+        版权所有 : 重庆话语科技有限公司 &nbsp;&nbsp; 公司地址 : 重庆市渝中区华盛路10号企业天地2号楼19楼1-6
+    </div>
+
+
+    <div id="tanmu">
+        <div class="bg"></div>
+        <div class="tanmu_content"></div>
+        <div class="tanmu_top">
+            <div class="tanmu_center">
+                <div class="close_tanmu" onclick="myclose($('#tanmu'),1000);is_close=false;"></div>
+                <p class="tanmu_day"><php>
+                echo floor((strtotime('2018-01-01')-time())/3600/24);
+                </php></p>
+                <div class="tanmu_wanchen">
+                    <span></span>
+                    <!--
+                        <div class="m"><php>echo date('m');</php></div>
+                        <div class="d"><php>echo date('d');</php></div>
+                        <div class="mb">{$wc}</div>
+
+                        -->
+                </div>
+            </div>
+        </div>
+        <div class="tanmu_buttom">
+            <div class="tanmu_center">
+                <div class="tanmu_but_top"></div>
+              <div id="tanmu_form">
+                <span></span>
+                <input type="text" name="content"/>
+                <a href="javascript:;" onclick="addnewtanmu()"></a>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="diaoyan"><a href="https://www.wjx.cn/jq/18958797.aspx" target="_blank">员工行为小调研</a></div>
+    <div class="showtanmu" onclick="myopen($('#tanmu'),1000);$('.showtanmu').fadeOut();is_close=true;tanmu_do();"></div>
+<script>
+    $(function () {
+
+        $('.main_block_right_top_oa').on( "mouseover", function () {
+           $(this).addClass('oa_h').find('.goto_oa').css('color','white');
+           $(this).find('.goto_oa>span').css('background','url(/Public/newUI/images/oa_icon_h.png)center no-repeat');
+
+        }).on( "mouseleave", function (e) {
+            $(this).removeClass('oa_h').find('.goto_oa').css('color','#AC36FF');
+            $(this).find('.goto_oa>span').css('background','url(/Public/newUI/images/oa_icon_d.png)center no-repeat');
+
+        }).on('click',function () {
+
+        })
+
+        $('.main_block_right_bottom_boss').on( "mouseover", function () {
+            $(this).addClass('bos_h').find('.goto_bos').css('color','white');
+            $(this).find('.goto_bos>span').css('background','url(/Public/newUI/images/bos_icon_h.png)center no-repeat');
+
+        }).on( "mouseleave", function (e) {
+            $(this).removeClass('bos_h').find('.goto_bos').css('color','#4977E6');
+            $(this).find('.goto_bos>span').css('background','url(/Public/newUI/images/bos_icon_d.png)center no-repeat');
+
+        }).on('click',function () {
+
+        })
+    })
+</script>
+</body>
+</html>

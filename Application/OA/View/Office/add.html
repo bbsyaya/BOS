@@ -1,0 +1,37 @@
+
+
+<form id="tableForm">
+    <table class="dialogTable_form w ha">
+        <tr>
+            <th>办公用品名称:</th>
+            <td><input type="text" style="padding:0px 5px !important;" name="officename" id="officename" value="{$data['name']}"/></td>
+        </tr>
+        <tr>
+            <th>规格:</th>
+            <td><input type="text" style="padding:0px 5px !important;" name="format" id="format" value="{$data['format']}"/></td>
+        </tr>
+        <tr>
+            <th>单位:</th>
+            <td><input type="text" style="padding:0px 5px !important;" name="unit" id="unit" value="{$data['unit']}"/></td>
+        </tr>
+        <tr>
+            <th>单价:</th>
+            <td><input type="text" style="padding:0px 5px !important;" name="price" id="price" value="{$data['price']}"/></td>
+        </tr>
+        <tr>
+            <th>现有数量:</th>
+            <td><input type="text" style="padding:0px 5px !important;" name="stock" id="stock" value="{$data['stock']}"/></td>
+        </tr>
+        <tr>
+            <th>备注:</th>
+            <td><input type="text" style="padding:0px 5px !important;" name="remark" id="remark" value="{$data['remark']}"/></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>
+            <input type="button" value="保存" onclick="box.saveData(this)" />
+            <input type="hidden" name="pid" id="pid" value="{$data.id}" />
+            </td>
+        </tr>
+    </table>
+</form>

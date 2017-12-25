@@ -1,0 +1,758 @@
+<script src="../../../../../../../Users/dailang/DL/PC端工作文件/bos3.yandui.com/Public/newUI/js/huiyishi.js"></script>
+<extend name="Public/base"/>
+
+<block name="style">
+    <link rel="stylesheet" href="__PUBLIC__/newUI/css/huiyishi.css?v={:GetVersion()}">
+    <link rel="stylesheet" href="__PUBLIC__/newUI/css/jquery.range.css?v={:GetVersion()}">
+
+
+    <script>
+    var initdata={"wolonggang":new Array(),"taoyuan":new Array(),"guandu":new Array(),"chibi":new Array()};
+
+    //var initdata={"wolonggang":[{"strtime":"2017-09-21 09:30","endtime":"2017-09-21 10:15","name":"黄钰钏",'id':23},{"strtime":"2017-09-21 14:15","endtime":"2017-09-21 15:15","name":"黄钰钏"}],'taoyuan':[]};
+    function daychange(dp){
+        this_time=dp.cal.getNewDateStr();
+        window.location="?date="+new Date().Format('yyyy-')+this_time.replace('月','-').replace('日','');
+    }
+
+    var uid={$uid};
+    var room_id='';
+
+    var thisday='<php>if(I("get.date")=='')echo date("Y-m-d");else echo I("get.date");</php> ';
+    <php>
+    if(I("get.date")!='')echo "var thisday_zh='".date('m月d日',strtotime(I('get.date')))."';";
+    else echo "var thisday_zh='';";
+    </php>
+
+    $(function(){
+        getalldata(thisday);
+        var time_arr={};
+
+        $('.body_content').on({click:function(event){
+            var e = event || window.event;
+            var offset_left =e.offsetX;
+            var item_width = $('.bottom').width() / 18;
+            var left= (Math.floor(offset_left/item_width))
+
+            var max=$(this).attr('data-colm');
+             if($(this).children().length>0){
+             }else {
+                 $(this).html('<div class="yd_yes_box"></div>')
+                 $(this).find('.yd_yes_box').slider({
+                     range: true,
+                     min: 0,
+                     max: max,
+                     values: [ 0, 1 ],
+                     slide: function( event, ui ) {
+                         var first=parseInt(ui.values[ 0 ]) ;
+                         var last=parseInt(ui.values[ 1 ]);
+//                    console.log(ui.values[ 0 ],ui.values[ 1 ]);
+                         var line_wigth=(((last-first)/2)/max)*100+((first/max)*100)+'%';
+                         var bb=$(this).siblings('.add_btn');
+                         $(bb).css('left',line_wigth);
+//                         拖动重叠
+                         if(first==last){
+                             $('.add_btn').fadeOut();
+                         }else {
+                             $('.add_btn').fadeIn();
+                             var type = $(this).parents('.time_box').attr('data-type');
+                             var start_time = $(this).parents('.yd_yes').attr('data-start').split(" ")[1];
+                             var _index=parseInt(time_index(type,start_time));
+                             time_arr=data_time(type,first+_index,last+_index);
+                         }
+                     }
+                 });
+                 $(this).find('a').first().attr('id','a_first');
+                 $(this).find('a').last().attr('id','a_last');
+                 var str = "<div class='add_btn' style='left: "+(0.5/max)*100+"%"+"'></div>"
+                 $(this).append(str);
+                 time_arr={};
+             }
+
+           var yd_yes=$(this).parents('.room').siblings().find('.yd_yes');
+            $(yd_yes).html('');
+            $(this).siblings('.yd_yes').html('');
+            $(this).parent().siblings().find('.yd_yes').html('');
+
+
+        }},'.yd_yes')
+
+//        防止事件冒泡
+//        $('.body_content').on({click:function(event){
+//            M.stopmp(M.getEvent(event));
+//            console.log('add_huiyi')
+////            event.stopPropagation();
+//        }},'.add_huiyi')
+
+        $('.body_content').on({click:function(){
+            var _this=this;
+            var address=$(this).parents('.room').find('.bigtitle').find('b').html();
+
+            //                判断如果没有拖动触发事件
+            if($.isEmptyObject(time_arr)){
+                var type = $(_this).parents('.time_box').attr('data-type');
+                var start_time = $(_this).parents('.yd_yes').attr('data-start').split(" ")[1];
+                var start_index=parseInt(time_index(type,start_time));
+                var end_index=parseInt(start_index+1);
+                time_arr=data_time(type,start_index,end_index);
+            }
+
+            var now_time=Date.parse(new Date());
+            var start_time=thisday+time_arr.start_time;
+                start_time=parseInt(get_unix_time(start_time))
+            if(start_time>=now_time){
+                var loading1=layer.msg("努力加载中...");
+                $.get('/OA/MeetRoom/checkhuiyishi',{},function(data){
+                    layer.close(loading1);
+                    openda('checkhuiyishi',address,data,0,time_arr);
+                },'json')
+            }else {
+                var loading1=layer.msg("不能选择已经过去的时间");
+                setInterval(function () {
+                    layer.close(loading1);
+                },1500)
+            }
+
+        }},'.add_btn')
+
+        $('.body_content').on({click:function(){
+            var this_id=$(this).attr('data');
+            var address=$(this).parents('.room').find('.bigtitle').find('b').html();
+            var loading1= layer.msg("努力加载中...");
+
+            $.get('/OA/MeetRoom/checkhuiyishi',{'id':this_id},function(data){
+                layer.close(loading1);
+
+                openda('checkhuiyishi',address,data,1,time_arr);
+            },'json')
+        }},'.yd_no')
+        showdate();
+        if(!thisday_zh)$('.Wdate').val(new Date().Format('MM月dd日'));
+        else $('.Wdate').val(thisday_zh);
+        $('#btn_close').click(function(){
+            $('.mask').hide();
+        })
+        $('.mask').click(function (event) {
+            if(event.target==this){
+              $(this).hide();
+                $('body').removeClass('over_flow')
+            }else {
+                return ;
+            }
+
+        })
+
+        $('.out_btn').click(function () {
+
+            //询问框
+            var  layer_box= layer.confirm('确定要删除吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.get('/OA/MeetRoom/DelMeet',{id:room_id},function(data){
+                if(data.status==0){
+                    layer.alert(data.msg)
+                }else{
+                    window.location.reload();
+                }
+            },'json')
+            }, function(){
+                layer.close(layer_box);
+            });
+
+
+//            console.log('取消会议室')
+//            console.log(room_id)
+
+
+        })
+        $('.model_close_img_e').click(function (event) {
+            if(event.target==this){
+                $('.mask').hide();
+                $('body').removeClass('over_flow')
+            }else {
+                return ;
+            }
+
+        })
+        $('#btn_ok').click(function(){
+//            console.log($('.doday').html())
+
+
+            var stime=$('input[name="start_time"]').val();
+            var etime=$('input[name="end_time"]').val();
+            var alert;
+            if(etime<=stime){
+                alert=layer.msg('结束时间不能小于或等于开始时间');
+                setInterval(function () {
+                    layer.close(alert);
+                },1000)
+                return;
+            }else if(stime<'09' || (stime>='12' && stime<'13:30') || stime>='18'){
+                alert=layer.msg('开始时间无效');
+                setInterval(function () {
+                    layer.close(alert);
+                },1000)
+                return;
+            }else if(etime<='09' || (etime>'12:00' && etime<='13:30') || etime>'18:00'){
+                alert=layer.msg('结束时间无效');
+                setInterval(function () {
+                    layer.close(alert);
+                },1000)
+                return;
+            }else if($('.do_content_input_zt').val()==''){
+                alert=layer.msg('请填写会议主题');
+                setInterval(function () {
+                    layer.close(alert);
+                },1000)
+                return;
+            }else if($('.selectpicker').val()==null){
+                alert=layer.msg('请选择参会人员');
+                setInterval(function () {
+                    layer.close(alert);
+                },1000)
+                return;
+            }else if(thisday+stime<=new Date().Format('yyyy-MM-dd hh:mm')){
+                alert=layer.msg('不能选择已经过去的时间');
+                setInterval(function () {
+                    layer.close(alert);
+                },1000)
+                return;
+            }else if(stime<'12' && etime>='13'){
+                alert=layer.msg('时间不能包含下班时间和中午休息时间');
+                setInterval(function () {
+                    layer.close(alert);
+                },1000)
+                return;
+            }
+
+
+
+            var whether_val='';
+            if($('input[name="is_xz"]').is(':checked'))whether_val+='1';
+            if($('input[name="is_tx"]').is(':checked'))whether_val+='2';
+            var data={
+                the_date:$('.mask').find('.dia_list').find('.date').html(),
+                start_time:$('.mask').find('.dia_list').find('.start_time').html(),
+                end_time:$('.mask').find('.dia_list').find('.end_time').html(),
+                create_id:$('.mask').find('.dia_list').find('.name').html(),
+                title:$('.mask').find('.dia_list').find('.do_content_input_zt').val(),
+                 userid:$('.selectpicker').val().join(','),
+                 content:$('.do_content_input_info').val(),
+                 meetroom_name:$('.mask').find('.dia_list').find('.room').html(),
+                 whether:whether_val
+            }
+            console.log(data,'data')
+
+//            {"the_date":$('.doday').html(),"start_time":$('input[name="start_time"]').val(),"end_time":$('input[name="end_time"]').val(),"create_id":$('#checkhuiyishi').find('.do_div_content_user').find('span').html(),"title":$('.do_content_input_zt').val(),'userid':$('.selectpicker').val().join(','),"content":$('.do_content_input_info').val(),"meetroom_name":$('#checkhuiyishi').find('.do_div_content_address').find('span').html(),"whether":whether_val}
+            $.post('/OA/MeetRoom/inhuiyishi',data,function(data){
+                if(data.status==0){
+                    layer.alert(data.msg)
+                }else{
+                    window.location.reload();
+                }
+            },'json')
+        })
+         $("input[name='is_tx']").prop("checked",true);
+    })
+    </script>
+    <script src="__PUBLIC__/newUI/js/huiyishi.js?v={:GetVersion()}" type="text/javascript"></script>
+</block>
+
+<block name="body">
+    <div class="content">
+        <div class="header">
+             <p class="titil_p"><font class="title_b">会议室预定申请</font>行政办公</p>
+            <p class="tishi"><img src="__PUBLIC__/newUI/img/web/deng.png"/>温馨提示：请预定会议室的同学按预定的时间使用会议室，不出现预定而不用，使用超时等情况，提高会议效率从我做起！</p>
+            <div class="nowtime">
+                <font class="font_blue">北京时间</font><font class="font_nowday">2017-09-09</font><font class="font_we">星期六</font><font class="font_time"><b>09：09</b></font><font class="font_ap">PM</font>
+            </div>
+        </div>
+        <div class="body">
+            <div class="body_header">
+                <p><b>选择日期</b></p>
+                <div class="tixing">
+                    <input type="text" id="nowday_input" readonly="true" value="请选择时间" class="Wdate" onclick="WdatePicker({dateFmt:'MM月dd日',onpicking:function(dp){daychange(dp);}})" />
+                    <span class="tx_tshi"><img src="__PUBLIC__/newUI/img/web/deng.png"/>请选择会议室和会议时段</span>
+                    <span class="tx_no"></span>可预订<span class="tx_yes"></span>已预订<font></font>
+                </div>
+            </div>
+            <div class="room">
+                <div class="bigtitle wlg_bg hy-left">
+                    <b>卧龙岗</b>
+                </div>
+
+                <div class="body_content wolonggang">
+                    <div class="top mar_top_s time_box" data-type="top">
+
+                    </div>
+                    <div class="line">
+                        <table>
+                            <tr>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td class="border_bold_rihgt"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="time">
+                        <table>
+                            <tr>
+                                <td class="font_bold text_left">09:00</td>
+                                <td  colspan="2" >09:30</td>
+                                <td  colspan="2" class="font_bold">10:00</td>
+                                <td  colspan="2">10:30</td>
+                                <td  colspan="2" class="font_bold">11:00</td>
+                                <td  colspan="2">11:30</td>
+                                <td class="font_bold text_right">12:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="bottom time_box" data-type="bottom">
+                    </div>
+                    <div class="b_line">
+                        <table>
+                            <tr>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td class="border_bold_rihgt"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="b_time">
+
+                        <table>
+                            <tr>
+                                <td class=" text_left">13:30</td>
+                                <td  colspan="2" class="font_bold">14:00</td>
+                                <td  colspan="2" >14:30</td>
+                                <td  colspan="2" class="font_bold">15:00</td>
+                                <td  colspan="2" >15:30</td>
+                                <td  colspan="2" class="font_bold">16:00</td>
+                                <td  colspan="2" >16:30</td>
+                                <td  colspan="2" class="font_bold">17:00</td>
+                                <td  colspan="2" >17:30</td>
+                                <td class="font_bold text_right">18:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="room">
+                <div class="bigtitle ty_bg hy-left">
+                    <b>桃园</b>
+                </div>
+                <div class="body_content taoyuan">
+                    <div class="top mar_top_s time_box" data-type="top">
+                    </div>
+                    <div class="line">
+                        <table>
+                            <tr>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td class="border_bold_rihgt"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="time">
+                        <table>
+                            <tr>
+                                <td class="font_bold text_left">09:00</td>
+                                <td  colspan="2" >09:30</td>
+                                <td  colspan="2" class="font_bold">10:00</td>
+                                <td  colspan="2">10:30</td>
+                                <td  colspan="2" class="font_bold">11:00</td>
+                                <td  colspan="2">11:30</td>
+                                <td class="font_bold text_right">12:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="bottom time_box" data-type="bottom">
+                    </div>
+                    <div class="b_line">
+                        <table>
+                            <tr>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td class="border_bold_rihgt"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="b_time">
+
+                        <table>
+                            <tr>
+                                <td class=" text_left">13:30</td>
+                                <td  colspan="2" class="font_bold">14:00</td>
+                                <td  colspan="2" >14:30</td>
+                                <td  colspan="2" class="font_bold">15:00</td>
+                                <td  colspan="2" >15:30</td>
+                                <td  colspan="2" class="font_bold">16:00</td>
+                                <td  colspan="2" >16:30</td>
+                                <td  colspan="2" class="font_bold">17:00</td>
+                                <td  colspan="2" >17:30</td>
+                                <td class="font_bold text_right">18:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="room">
+                <div class="bigtitle gd_bg hy-left">
+                    <b>官渡</b>
+                </div>
+                <div class="body_content guandu">
+                    <div class="top mar_top_s time_box" data-type="top">
+                    </div>
+                    <div class="line">
+                        <table>
+                            <tr>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td class="border_bold_rihgt"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="time">
+                        <table>
+                            <tr>
+                                <td class="font_bold text_left">09:00</td>
+                                <td  colspan="2" >09:30</td>
+                                <td  colspan="2" class="font_bold">10:00</td>
+                                <td  colspan="2">10:30</td>
+                                <td  colspan="2" class="font_bold">11:00</td>
+                                <td  colspan="2">11:30</td>
+                                <td class="font_bold text_right">12:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="bottom time_box" data-type="bottom">
+                    </div>
+                    <div class="b_line">
+                        <table>
+                            <tr>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td class="border_bold_rihgt"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="b_time">
+
+                        <table>
+                            <tr>
+                                <td class=" text_left">13:30</td>
+                                <td  colspan="2" class="font_bold">14:00</td>
+                                <td  colspan="2" >14:30</td>
+                                <td  colspan="2" class="font_bold">15:00</td>
+                                <td  colspan="2" >15:30</td>
+                                <td  colspan="2" class="font_bold">16:00</td>
+                                <td  colspan="2" >16:30</td>
+                                <td  colspan="2" class="font_bold">17:00</td>
+                                <td  colspan="2" >17:30</td>
+                                <td class="font_bold text_right">18:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="room noborder">
+                <div class="bigtitle cb_bg hy-left">
+                    <b>赤壁</b>
+                </div>
+                <div class="body_content chibi">
+                    <div class="top mar_top_s time_box" data-type="top">
+                    </div>
+                    <div class="line">
+                        <table>
+                            <tr>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td class="border_bold_rihgt"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="time">
+                        <table>
+                            <tr>
+                                <td class="font_bold text_left">09:00</td>
+                                <td  colspan="2" >09:30</td>
+                                <td  colspan="2" class="font_bold">10:00</td>
+                                <td  colspan="2">10:30</td>
+                                <td  colspan="2" class="font_bold">11:00</td>
+                                <td  colspan="2">11:30</td>
+                                <td class="font_bold text_right">12:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="bottom time_box" data-type="bottom">
+                    </div>
+                    <div class="b_line">
+                        <table>
+                            <tr>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td></td>
+                                <td class="border_bold"></td>
+                                <td class="border_bold_rihgt"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="b_time">
+
+                        <table>
+                            <tr>
+                                <td class=" text_left">13:30</td>
+                                <td  colspan="2" class="font_bold">14:00</td>
+                                <td  colspan="2" >14:30</td>
+                                <td  colspan="2" class="font_bold">15:00</td>
+                                <td  colspan="2" >15:30</td>
+                                <td  colspan="2" class="font_bold">16:00</td>
+                                <td  colspan="2" >16:30</td>
+                                <td  colspan="2" class="font_bold">17:00</td>
+                                <td  colspan="2" >17:30</td>
+                                <td class="font_bold text_right">18:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--弹出层-->
+    <div class="mask">
+        <div class="dialog_content">
+            <div class="dialog_header">
+                <img class="model_close_img_e" src="__PUBLIC__/newUI/img/close_img.png" alt="">
+                <div class="dia_header_title">
+                    <div class="hy_title">请填写预订信息</div>
+                    <div>Fill in the booking information</div>
+                </div>
+            </div>
+            <div class="dia_list">
+                <div class="line_sw"></div>
+                <div class="madle_creat_box">
+                    <div class="creat_header">
+                        <div class="header_left">会议室：<span class="room room_name">桃园</span></div>
+                        <div class="header_center">时间：
+                            <span class="date">12月14日</span>
+                            <span class="start_time">13:30</span>
+                            <span>~</span>
+                            <span class="end_time">16:30</span>
+                        </div>
+                        <div class="header_right">预定人：<span class="name">代浪</span></div>
+                    </div>
+                    <div class="centent_list mar_top_ss">
+                        <div class="list_lable">
+                            <lable>会议主题</lable><img src="__PUBLIC__/newUI/img/web/xing.png"/>
+                        </div>
+                        <input  type="text" class="do_content_input_zt"/>
+                    </div>
+                    <div class="centent_list">
+                        <div class="list_lable">
+                            <lable>参会人员</lable><img src="__PUBLIC__/newUI/img/web/xing.png"/>
+                        </div>
+                        <select  name='userid' multiple class="do_content_input_user selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+                            <volist name="alluser" id='v'>
+                                <option value="{$v.id}">{$v.real_name}</option>
+                            </volist>
+                        </select>
+                    </div>
+                    <div class="centent_list ">
+                        <div class="list_lable">
+                            <lable>会议说明</lable>
+                        </div>
+                        <textarea  class="do_content_input_info"></textarea>
+                    </div>
+                    <div class="centent_list ">
+                        <span class="help"><input class="check_input" type='checkbox' name="is_xz" value="1">是否需要行政协助</span><span><input class="check_input" type='checkbox' name="is_tx" value="1">发送会议提醒</span>
+                    </div>
+
+                </div>
+                <div class="bott_box mar_boot">
+                    <button id="btn_ok" class="go_tihuan">确定</button>
+                    <button id="btn_close" class="go_back">取消</button>
+                </div>
+                <div class="madle_watch_box">
+                    <div class="creat_header mar_top_ss">
+                        <div class="header_left">会议室：<span class="room room_name">桃园</span></div>
+                        <div class="header_center">时间：
+                            <span class="date">12月14日</span>
+                            <span class="start_time">13:30</span>
+                            <span>~</span>
+                            <span class="end_time">16:30</span>
+                        </div>
+                        <div class="header_right myself_both">预定人：<span class="name">代浪</span></div>
+                    </div>
+                    <div class="creat_header myself_box">
+                        <div class="header_right  pad_left text_left">预定人：<span class="name">代浪</span></div>
+                        <button class="out_btn">取消会议</button>
+                    </div>
+                    <p class="tishi  room_tishi myself_box"><img src="__PUBLIC__/newUI/img/web/deng.png"/>亲爱的话粉：请合理使用会议室资源，会议开始前30分钟可取消！</p>
+                    <div class="dash_line"></div>
+                    <div class="centent_list">
+                        <div class="list_left">会议主题：</div>
+                        <div class="list_right color_l title">无</div>
+                    </div>
+                    <div class="centent_list">
+                        <div class="list_left">参会人员：</div>
+                        <div class="list_right color_l add_name">无</div>
+                    </div>
+                    <div class="centent_list">
+                        <div class="list_left">会议说明：</div>
+                        <div class="list_right color_deful room_info">无</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!--<div class="alldo_bg">-->
+
+    <!--</div>-->
+    <!--<div class="alldo">-->
+        <!--<div class="do_div" id="checkhuiyishi">-->
+            <!--<img class="model_close_img" src="__PUBLIC__/newUI/img/close_img.png" alt="">-->
+            <!--<p id="model_title" class="title zh">请填写预订信息</p>-->
+            <!--<p class="title en">Fill in the booking information</p>-->
+            <!--<div class="do_div_content">-->
+                <!--<ul>-->
+                    <!--<li>-->
+                        <!--<div class="do_div_content_address">-->
+                            <!--会议室：<span>卧龙岗</span>-->
+                        <!--</div>-->
+                        <!--<div class="do_div_content_time">-->
+                            <!--时间：<span><span class="doday">-->
+    <!--</span> <input type="text" style="width:80px" readonly="true" class=" input"  name="start_time"/><span>~</span><input type="text" style="width:80px" readonly="true" class=" input"  name="end_time"/></span>-->
+                        <!--</div>-->
+                        <!--<div class="do_div_content_user">-->
+                            <!--预定人：<span>黄钰钏</span>-->
+                        <!--</div>-->
+                    <!--</li>-->
+
+                    <!--<li>-->
+                        <!--会议主题<img src="__PUBLIC__/newUI/img/web/xing.png"/><input  type="text" class="do_content_input_zt"/>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--参会人员<img src="__PUBLIC__/newUI/img/web/xing.png"/>-->
+                        <!--<select  name='userid' multiple class="do_content_input_user selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">-->
+                        <!--<volist name="alluser" id='v'>-->
+                        <!--<option value="{$v.id}">{$v.real_name}</option>-->
+                        <!--</volist>-->
+                        <!--</select>-->
+                        <!--<div class="modle_pep"></div>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<font class="info_text">说    明</font>-->
+                        <!--<textarea  class="do_content_input_info"></textarea>-->
+                        <!--<div class="modle_info">是否需要行政协助</div>-->
+                    <!--</li>-->
+                    <!--<li class="checkbox_li">-->
+                        <!--<span><input class="check_input" type='checkbox' name="is_xz" value="1">是否需要行政协助</span><span><input class="check_input" type='checkbox' name="is_tx" value="1">发送会议提醒</span>-->
+                    <!--</li>-->
+                    <!--<li class="check_box">-->
+                        <!--<div class="check_button_div"><button class="checkon"/>确  定</button><button class="checkout"/>取  消</button></div>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+</block>

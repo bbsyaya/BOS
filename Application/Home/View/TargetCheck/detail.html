@@ -1,0 +1,302 @@
+<extend name="Public/base"/>
+<block name="script">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/css/targetcheck.css">
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("#tijiao").click(function(){
+                //提交
+                var id = $(this).attr('data_id');
+                $.get("{:U('change_status')}",{id:id,status:4},function(data){
+                    if(data.status == 1){
+                        layer.alert(data.msg);
+                        window.location.href="{:U('index')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                });
+            });
+
+            $("#queren").click(function(){
+                //确认
+                var id = $(this).attr('data_id');
+                $.get("{:U('change_status')}",{id:id,status:5},function(data){
+                    if(data.status == 1){
+                        layer.alert(data.msg);
+                        window.location.href="{:U('index')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                });
+            });
+
+            $("#jujue").click(function(){
+                //拒绝
+                var id = $(this).attr('data_id');
+                $.get("{:U('change_status')}",{id:id,status:6},function(data){
+                    if(data.status == 1){
+                        layer.alert(data.msg);
+                        window.location.href="{:U('index')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                });
+            });
+
+            $(".check_finish").click(function(){
+                var traffic_light = $(this).attr('fm');
+                if(traffic_light == 2){
+                    layer.alert("当前跟进信息为红灯，不能完成");return;
+                }else if(traffic_light == 3){
+                    layer.alert("当前跟进信息为黄灯，不能完成");return;
+                }
+
+                //boss_step_status.id
+                var bss_id = $(this).attr('bss_id');
+                //boss_target_check.id
+                var btc_id = $(this).attr('btc_id');
+
+                $.get("{:U('change_step_status')}",{bss_id:bss_id,btc_id:btc_id},function(data){
+                    if(data.status == 1){
+                        layer.alert(data.msg);
+                        window.location.href="{:U('index')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                });
+            });
+
+            $('#content').keydown(function(){
+                if(event.keyCode == 13)
+                {
+                    alert('你输入的内容为1：' + $('#content').val());
+                }
+            });
+
+            $(".comfit").click(function(){
+                var id = $(this).attr('data-id');
+                $("#conf_"+id+"").show();
+            });
+
+            $(".dataFormTables").on({click:function(){
+                $(this).parents('tr').hide();
+            }},"#btn_close");
+
+            $(".go_tihuan").click(function(){
+                var content = $("#content").val();
+                if(content == ''){
+                    layer.alert("请输入回复信息");return;
+                }
+                var objButton=$(this);
+                objButton.val('提交中').attr('disabled',true);
+                var form   = $("#dataform");
+                var url    = form.attr('action');
+                $("#dataform").ajaxSubmit({
+                    type: 'post',
+                    url: url,
+                    timeout: 5000,
+                    success:function(ret){
+                        objButton.val('确定').attr('disabled',false);
+                        if(ret.status == 1){
+                            layer.alert(ret.msg);
+                            location.reload();
+                        }else{
+                            layer.alert(ret.msg);
+                        }
+
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
+</block>
+<block name="body">
+    <div class="subMainBox">
+        <style type="text/css">
+            #sub{
+                line-height: 30px;
+                color: #4776e6;
+                font-size: 14px;
+                font-family: 'Microsoft YaHei';
+                min-width: 75px;
+                padding: 0 5px;
+                cursor: pointer;
+                border-radius: 15px;
+                border: 1px solid #4776e6;
+                display: inline-block;
+                box-sizing: border-box;
+                margin-right: 20px;;
+            }
+            #fan{
+                line-height: 30px;
+                color: #4776e6;
+                font-size: 14px;
+                font-family: 'Microsoft YaHei';
+                min-width: 75px;
+                padding: 0 5px;
+                cursor: pointer;
+                border-radius: 15px;
+                border: 1px solid #4776e6;
+                display: inline-block;
+                box-sizing: border-box;
+            }
+            .xian{background: url("/Public/newUI/img/xian.png");height: 1px;margin-bottom: 15px;}
+            .rep{
+                color: #4776e6;
+            }
+        </style>
+
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text"><a href="/TargetCheck/index">风控目标管理</a></span>&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size: 20px;">-></a>
+                <span><a href="/TargetCheck/index">控制目标管理</a></span>
+            </div>
+
+            <div class="dataTable_columnCa_b pa">
+                <div class="dataTable_columnCn_b"></div>
+                <div class="dataTableShow_close_b tc">关闭</div>
+            </div>
+        </div>
+        <div class="xian"></div>
+
+        <div class="dataFormTitle" style="background-color: #E6F1FF;color: #4776e6;">控制目标管理</div>
+            <div class="dataFormContent">
+                <table class="dataFormTables">
+                    <tr>
+                        <th>控制目标：</th>
+                        <td colspan="3">
+                            {$adInfo.goal_name}
+                        </td>
+                        <th>控制主体：</th>
+                        <td colspan="3">
+                            {$adInfo.main_name}
+                        </td>
+                    </tr>
+
+                    <tr id="desc">
+                        <th>控制目标描述：</th>
+                        <td colspan="7">{$adInfo.target_desc}</td>
+                    </tr>
+                    <tr>
+                        <th>总责任人：</th>
+                        <td colspan="3">
+                            {$adInfo.real_name}
+                        </td>
+                        <th>对接人：</th>
+                        <td colspan="3">
+                            {$adInfo.dock_user}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>月份：</th>
+                        <td colspan="7">
+                            {$adInfo.start_time}
+                        </td>
+                    </tr>
+
+                    <tr class="add_step">
+                        <th>当前进度：</th>
+                        <td colspan="7">
+                        <volist name="allStepData" id="s" key="k">
+                        <?php if($allStepData_num == $k)$aa = '';else $aa = '->';?>
+                        <php>if($s['ssid'] == $stepData['ssid'] or $s['status'] == 2){</php>
+
+                        <span class="" style="border: 1px solid #EDEDED;font-size: 16px;background-color: #ABC2F8;border-radius: 15px;min-width: 75px;display: inline-block;box-sizing: border-box;">步骤{$s.sid}</span><span style="font-size: 16px;"> {$aa} </span>
+                        <php>}else{</php>
+
+                            <span class="" style="border: 1px solid #EDEDED;font-size: 16px;background-color: #EDEDED;border-radius: 15px;min-width: 75px;display: inline-block;box-sizing: border-box;">步骤{$s.sid}</span><span style="font-size: 16px;"> {$aa} </span>
+                        <php>}</php>
+                        </volist>
+                        </td>
+                    </tr>
+
+                    <volist name="section_stepData" id="s_s">
+                    <tr>
+                        <th>步骤{$s_s.sid}：</th>
+                        <td>
+                            {$s_s.name}
+                        </td>
+                        <th>附件：</th>
+                        <td>
+                            <a href="/{$s_s.annex_path}" target="_blank">{$s_s.annex}</a>
+                        </td>
+                        <td colspan="4">
+                            <in name="uid" value="$s_s.user">
+                            <php>if($s['status'] !=2){</php>
+                            <input type="radio" bss_id="{$s_s.ssid}" btc_id="{$s_s.tid}" fm="{$traffic_light}" class="check_finish" name="check" value="2">完成
+                            <php>}</php>
+                            </in>
+                        </td>
+                    </tr>
+                    </volist>
+
+                    <tr>
+                        <th colspan="8" style="text-align: left;">检查情况：</th>
+                    </tr>
+                    <volist name="follow_manage" id="fm">
+                    <tr class="st">
+                        <td><b>{$fm.start_time}</b></td>
+                        <td><b>{$fm.real_name}</b></td>
+                        <th><b>跟进情况：</b></th>
+                        <td colspan="5"><b>{$fm.follow_desc}</b><br />
+                            <b>附件：</b><a href="/{$fm.follow_path}" target="_blank">{$fm.follow_annex}</a>&nbsp;&nbsp;&nbsp;&nbsp;<b>{$fm.traffic_light}</b> &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="comfit" data-id="{$fm.id}" value="回复">
+                        </td>
+                    </tr>
+                    <volist name="fm[follow_reply]" id="fr">
+                    <tr class="rep" style="background-color: #ebebeb;">
+                        <td></td>
+                        <td></td>
+                        <td>{$fr.add_time}</td>
+                        <td>{$fr.real_name}</td>
+                        <th>回复：</th>
+                        <td colspan="3">{$fr.content}<br />
+                            附件：<a href="/{$fm.annex_path}" target="_blank">{$fr.annex}</a>
+                        </td>
+                    </tr>
+                    </volist>
+
+                    <php>$aa = '671,'.$s['user'].','.$adInfo['responsible'].','.$adInfo['create_id'];</php>
+                    <in name="uid" value="$aa">
+                    <form id="dataform"  action="{:U('follow_reply')}" method="post" enctype="multipart/form-data">
+                        <tr style="color: #4776e6;display: none;" id="conf_{$fm.id}">
+                            <input type="hidden" id="fm_id" name="fm_id" value="{$fm['id']}">
+                            <input type="hidden"  name="tc_id" value="{$adInfo.id}">
+
+                            <th colspan="3">回复：</th>
+                            <td colspan="5">
+                                <input type="text" id="content" name="content" style="border: 1px;background-color: #F8F8F8;height: 30px;margin-top: 5px;" placeholder="请输入回复信息" />
+                                <input type="file" name="follow_file" style="margin-top: 5px;">
+                                <input type="button" class="go_tihuan" value="确定" />&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="button" id="btn_close" d-id="conf_{$fm.id}" value="取消" />
+                            </td>
+                        </tr>
+                    </form>
+                    </in>
+
+                    </volist>
+                </table>
+            </div>
+
+                <div class="dataFormOperate">
+                    <input type="hidden" name="id" value="{$adInfo.id}" />
+                    <php>if($adInfo['status'] !=5 && $adInfo['status'] !=4){</php>
+                    <in name="uid" value="596,$adInfo.responsible">
+                    <input id="tijiao" type="button" value="提交完成" data_id="{$adInfo.id}" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    </in>
+                    <php>}</php>
+                    <a href="{:U('index')}" id="fan">返回</a>
+                </div>
+
+                <php>if($adInfo['status'] !=5){</php>
+                <in name="uid" value="596,671">
+                    <div class="dataFormOperate">
+                        <input type="hidden" name="id" value="{$adInfo.id}" />
+                        <input id="queren" type="button" value="确认" data_id="{$adInfo.id}" />&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id="jujue" type="button" value="拒绝" dara_id="{$adInfo.id}" />
+                    </div>
+                </in>
+                <php>}</php>
+    </div>
+</block>

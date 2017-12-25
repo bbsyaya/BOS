@@ -1,0 +1,89 @@
+<extend name="Public/base"/>
+<block name="body">
+	<script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+	<script type="text/javascript">
+	var L={
+		init:function(){
+			this.importEntry();this.importProdanwei();this.updateYginfo();this.importxueli();
+		},
+		updateYginfo:function(){
+	    	var button = $('#updateYginfo');
+			new AjaxUpload(button,{
+				action: "/Home/Test/updateYginfo.html",
+				name: 'files',
+				onSubmit:function(){
+					button.html("导入中...");
+				},
+				onComplete: function(file, response){
+					var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+					if(list.logdata){
+						L.createForm(list.logdata);
+					}
+					layer.alert(list.msg);
+				}
+			});
+	    },
+		importEntry:function(){
+	    	var button = $('#importPro');
+			new AjaxUpload(button,{
+				action: "/Home/Test/importDepart.html",
+				name: 'files',
+				onSubmit:function(){
+					button.html("导入中...");
+				},
+				onComplete: function(file, response){
+					var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+					if(list.logdata){
+						L.createForm(list.logdata);
+					}
+					layer.alert(list.msg);
+				}
+			});
+	    },
+	    importProdanwei:function(){
+	    	var button = $('#importProdanwei');
+			new AjaxUpload(button,{
+				action: "/Home/Test/importProdanwei.html",
+				name: 'files',
+				onSubmit:function(){
+					button.html("导入中...");
+				},
+				onComplete: function(file, response){
+					var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+					if(list.logdata){
+						L.createForm(list.logdata);
+					}
+					layer.alert(list.msg);
+				}
+			});
+	    },
+	    importxueli:function(){
+	    	var button = $('#updatexueli');
+			new AjaxUpload(button,{
+				action: "/Home/Test/importxueli.html",
+				name: 'files',
+				onSubmit:function(){
+					button.html("导入中...");
+				},
+				onComplete: function(file, response){
+					var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+					if(list.logdata){
+						L.createForm(list.logdata);
+					}
+					layer.alert(list.msg);
+				}
+			});
+	    },
+	    createForm:function(logdata){
+	        var html_="<form id=\"logForm\" method='post' target=\"_blank\" action=\"/Public/showLog.html\"><input type=\"hidden\" name=\"datalog\" value=\""+logdata+"\"/></form>";
+	        $("body").append(html_);
+	        $("#logForm").submit();
+	    }
+	};
+	$(function(){L.init();});
+	</script>
+	<a href="javascript:void(0);" id="importPro">上传同步部门数据</a><br><br>
+	<a href="javascript:void(0);" id="importProdanwei">上传同步办公用品单位</a><br><br>
+	<a href="javascript:void(0);" id="updateYginfo">修复员工基础信息--1111-</a><br><br>
+	<a href="javascript:void(0);" id="updatexueli">修复员工学历</a><br><br>
+</block>

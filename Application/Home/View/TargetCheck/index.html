@@ -1,0 +1,397 @@
+<extend name="Public/base"/>
+<block name="script">
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/css/targetcheck.css">
+    <script type="text/javascript">
+        $(function(){
+            $('#sel_status').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+                var tmpSelected = $('#sel_status').val();
+                if (tmpSelected != null) {
+                    $('#status').val(tmpSelected);
+                } else {
+                    $('#status').val("");
+                }
+            });
+            var st = $("#status").val();
+            if(st){
+                $('#sel_status').find("option[value="+st+"]").attr("selected", "true");
+                $("#sel_status").selectpicker('refresh');
+            }
+
+
+            $('#sel_goal_manage').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+                var tmpSelected = $('#sel_goal_manage').val();
+
+                if (tmpSelected != null) {
+                    $('#goal_manages').val(tmpSelected);
+                } else {
+                    $('#goal_manages').val("");
+                }
+            });
+            var sts = $("#goal_manages").val();
+            if(sts){
+                $('#sel_goal_manage').find("option[value="+sts+"]").attr("selected", "true");
+                $("#sel_goal_manage").selectpicker('refresh');
+            }
+
+
+            $('#sel_main_body').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+                var tmpSelected = $('#sel_main_body').val();
+                if (tmpSelected != null) {
+                    $('#main_bodys').val(tmpSelected);
+                } else {
+                    $('#main_bodys').val("");
+                }
+            });
+            var stss = $("#main_bodys").val();
+            if(stss){
+                $('#sel_main_body').find("option[value="+stss+"]").attr("selected", "true");
+                $("#sel_main_body").selectpicker('refresh');
+            }
+
+            $(".follow_up").click(function(){
+                var id = $(this).attr('data_id');
+                $.get("{:U('targetCheck_sel')}",{id:id},function(data){
+                    var tar = data.target;
+                    var step = data.step_status;
+                    //console.log(tar);
+                    $(".mubiao").text(tar.goal_name);
+                    $("#mubiao").val(tar.goal_name);
+                    $(".fuze").text(tar.real_name);
+                    $(".zhuti").text(tar.main_name);
+                    $(".dock").text(tar.dock_user);
+                    $(".buzhou").text(step.name);
+                    $("#tc_id").val(tar.id);
+                    $("#mid").val(tar.goal_id);
+                    $("#sid").val(step.id);
+                    $("#dock").val(tar.butt);
+                });
+                $(".mask").fadeToggle();
+            });
+
+            $(".mask #btn_close").click(function () {
+                $(".mask").fadeOut();
+
+            });
+            $(".mask").click(function (event) {
+                if (event.target == this) {
+                    $(".mask").fadeOut();
+                }
+
+            });
+
+            $(".go_tihuan").click(function(){
+                var traffic_light = $("#traffic_light").val();
+                var follow_desc = $("#follow_desc").val();
+                if(traffic_light == '' ||  follow_desc== ''){
+                    layer.alert("请输入或者选择跟进信息");return;
+                }
+                var objButton=$(this);
+                objButton.val('提交中').attr('disabled',true);
+                var form   = $("#dataform");
+                var url    = form.attr('action');
+                $("#dataform").ajaxSubmit({
+                    type: 'post',
+                    url: url,
+                    timeout: 5000,
+                    success:function(ret){
+                        objButton.val('确定').attr('disabled',false);
+                        if(ret.status == 1){
+                            layer.alert(ret.msg);
+                            location.reload();
+                        }else{
+                            layer.alert(ret.msg);
+                        }
+
+                    }
+                });
+                return false;
+            });
+
+            $(".confirm").click(function(){
+                //确认->控制中
+                var id = $(this).attr('data_id');
+                $.get("{:U('change_status')}",{id:id,status:1},function(data){
+                    if(data.status == 1){
+                        layer.alert(data.msg);
+                        window.location.href="{:U('index')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                });
+            });
+
+            $(".refuse").click(function(){
+                //拒绝
+                var id = $(this).attr('data_id');
+                $.get("{:U('change_status')}",{id:id,status:6},function(data){
+                    if(data.status == 1){
+                        layer.alert(data.msg);
+                        window.location.href="{:U('index')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                });
+            });
+
+            $('.check-all').click(function(){
+                $('.ids').prop('checked',this.checked);
+            });
+            $('.ids').click(function(){
+                var option = $('.ids');
+                option.each(function(i) {
+                    if(!this.checked){
+                        $('.check-all').prop('checked',false);
+                        return false;
+                    }else{
+                        $('.check-all').prop('checked',true);
+                    }
+                });
+            });
+
+            $(".copy_control").click(function(){
+                var chk_value =[];
+                $('input[name="tid"]:checked').each(function(){
+                    chk_value.push($(this).val());
+
+                });
+                if(chk_value ==''){
+                    layer.alert("请选择数据");return;
+                }
+                $.post("{:U('copy_control')}",{id:chk_value},function(data){
+                    if(data.status == 1){
+                        layer.alert(data.msg);
+                        window.location.href="{:U('index')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                });
+            })
+
+        })
+    </script>
+</block>
+<block name="body">
+    <style type="text/css">
+        .dataFormTables{table-layout: fixed;margin-left: 20px;width: 91%;}
+        .dataFormTables caption{color: #656c82; height: 50px; line-height: 50px; white-space: nowrap; overflow: hidden;}
+        .dataFormTables tr th, .dataFormTables tr td{color: #656c82; height: 40px; line-height: 40px; text-align: center; border: solid 1px #CCCCCC;}
+        .dataFormTables tr th{background-color: #EFEFEF;}
+        .xian{background: url("/Public/newUI/img/xian.png");height: 1px;margin-bottom: 5px;}
+        .fc{margin-top: 15px;}
+        .tishi{font-size: 14px;
+            font-family: 'Microsoft YaHei';
+            color: #666;
+            height: 30px;
+            line-height: 30px;
+            padding: 0 20px 0 40px;
+            text-align: center;
+            float: left;
+            margin-left: 30px;
+            margin-top: 5px;}
+    </style>
+    <div class="subMainBox" goal="t_left">
+        <!--面包屑-->
+
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text"><a href="/TargetCheck/index">风控目标管理</a></span>&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size: 20px;">-></a>
+                <span><a href="/TargetCheck/index">控制目标管理</a></span>
+            </div>
+
+            <div class="dataTable_columnCa_b pa">
+                <div class="dataTable_columnCn_b"></div>
+                <div class="dataTableShow_close_b tc">关闭</div>
+            </div>
+        </div>
+        <div class="xian"></div>
+        <div>
+            <span class="field_customize fc">查询自定义</span>
+            <span class="tishi">步骤提示（第一步：新建控制主体，第二步新建目标步骤，第三部新建控制目标（选择））</span>
+        </div>
+
+        <div class="screenBox">
+            <form action="{:U('index')}" id="search_form">
+                <div class="t_left">
+
+                    <div class="ziduan">
+                        <label>控制目标: &nbsp;</label>
+                        <bselect class="selectpicker" id="sel_goal_manage" options="goal_manage" selected="_GET['goal_manage']" first="请选择"/>
+                        <input type="hidden"  class="form-control" id="goal_manages" name="goal_manages" value="{$Think.get.goal_manages}">
+                    </div>
+                    <div class="ziduan">
+                        <label>控制主体: &nbsp;</label>
+                        <bselect class="selectpicker" id="sel_main_body" options="main_body" selected="_GET['main_body']" first="请选择"/>
+                        <input type="hidden"  class="form-control" id="main_bodys" name="main_bodys" value="{$Think.get.main_bodys}">
+                    </div>
+                    <div class="ziduan">
+                        <label>月份: &nbsp;</label>
+                        <input name="str_time" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$Think.get.str_time}"/>
+                    </div>
+                    <div class="ziduan">
+                        <label>状态: </label>
+                        <select id="sel_status" class="selectpicker">
+                            <option value="" selected="selected">全部</option>
+                            <option value="7">创建</option>
+                            <option value="1">控制中</option>
+                            <option value="2">红灯</option>
+                            <option value="3">黄灯</option>
+                            <option value="4">完成待确认</option>
+                            <option value="5">完成</option>
+                            <option value="6">拒绝</option>
+                        </select>
+                        <input type="hidden"  class="form-control" id="status" name="status" value="{$Think.get.status}">
+                    </div>
+                </div>
+
+                <div class="t_right" style="z-index: 100;"><input type="submit" value="查 询" /></div>
+            </form>
+        </div>
+
+        <div class="dataCn fl w ha" id="table_con">
+            <!--列表头部功能-->
+            <div class="advancedTit"  goal="dataTable1">
+
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+
+                <div class="advancedLeft tt">
+                    <span class="addAdv advBtn"><a href="{:U('edit')}">新增</a></span>
+                    <span class="addAdv advBtn"><a href="#" class="copy_control">复制控制目标</a></span>
+                </div>
+
+                <table class="dataTable dataTable1">
+                    <thead>
+                    <tr>
+                        <th><input class="check-all" name="" type="checkbox">全选</th>
+                        <th>序号</th>
+                        <th>月份</th>
+                        <th>控制目标</th>
+                        <th>控制主体</th>
+                        <th>当前步骤</th>
+                        <th>责任人</th>
+                        <th>完成周期</th>
+                        <th>状态</th>
+                        <th width="150">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <notempty name="list">
+                        <volist name="list" id="item">
+                            <tr>
+                                <td><input class="ids" type="checkbox" name="tid" value="{$item.id}"></td>
+                                <td>{$item.id}</td>
+                                <td>{$item.create_time}</td>
+                                <td>{$item.goal}</td>
+                                <td>{$item.main_body}</td>
+                                <td style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{$item.step}</td>
+                                <td>{$item.real_name}</td>
+                                <td>{$item.cycle}</td>
+                                <td>{$item.st}</td>
+                                <td>
+                                    <php>$ac = $item[create_id].','.$item[step_user].','.$item[responsible].','.'671';</php>
+                                <php>if($item['status'] != 5){</php>
+                                    <in name="uid" value="$ac">
+                                    <a href="{:U('edit?id='.$item['id'])}">编辑</a>&nbsp;&nbsp;
+                                    </in>
+                                        <php>if($item['status'] == 0){</php>
+
+                                        <a href="#" class="confirm" data_id="{$item['id']}">确认</a>&nbsp;&nbsp;
+                                        <a href="#" class="refuse" data_id="{$item['id']}">拒绝</a>
+                                        <php>}else{</php>
+
+                                        <in name="uid" value="$ac">
+                                            <a href="#" class="follow_up" data_id="{$item['id']}">跟进</a>&nbsp;&nbsp;
+                                        </in>
+                                        <php>}</php>
+                                <php>}</php>
+                                    <a href="{:U('detail?id='.$item['id'])}">查看</a>
+                                </td>
+                            </tr>
+                        </volist>
+                        <else />
+                        <tr>
+                            <td colspan="8">
+                                <div class="no-datas">暂无数据！！</div>
+                            </td>
+                        </tr>
+                    </notempty>
+                    </tbody>
+                </table>
+                <!--分页-->
+                {$_page}
+            </div>
+        </div>
+    </div>
+
+    <div class="mask">
+        <div class="dia_tishi"></div>
+        <div class="dialog_content" style="height: 55%;">
+            <div class="dialog_header">
+                <div class="dia_header_title">
+                    <div>控制目标跟进</div>
+                </div>
+            </div>
+            <span class="dialog_content_edit"></span>
+            <div class="clearfix selected_box">
+            </div>
+            <form id="dataform" action="{:U('add_follow_manage')}" method="post" enctype="multipart/form-data">
+            <div class="dia_list">
+                <table class="dataFormTables" style="width: 620px;">
+                    <tr>
+                        <th>控制目标：</th>
+                        <td class="mubiao"></td>
+                        <th>负责人：</th>
+                        <td class="fuze"></td>
+                    </tr>
+                    <tr>
+                        <th>控制主体：</th>
+                        <td class="zhuti"></td>
+                        <th>对接人：</th>
+                        <td class="dock"></td>
+                    </tr>
+                    <tr>
+                        <th>当前步骤：</th>
+                        <td class="buzhou"></td>
+                        <th>红绿灯：</th>
+                        <td>
+                            <select id="traffic_light" name="traffic_light" style="width: 100%;">
+                                <option value="" selected="selected">请选择</option>
+                                <option value="2">红灯</option>
+                                <option value="3">黄灯</option>
+                                <option value="1">绿灯</option>
+                                <option value="4">无</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>检查情况：</th>
+                        <td colspan="3">
+                            <textarea style="width: 440px;height: 55px;" id="follow_desc" name="follow_desc"></textarea>
+                            <input type="hidden" id="tc_id" name="tc_id">
+                            <input type="hidden" id="mid" name="mid">
+                            <input type="hidden" id="sid" name="sid">
+                            <input type="hidden" id="dock" name="dock">
+                            <input type="hidden" id="mubiao" name="mubiao">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>附件：</th>
+                        <td><input type="file" name="follow_manage_file"></td>
+                        <td colspan="2"><input type="radio" name="remind" value="1">提醒对接人</td>
+                    </tr>
+                </table>
+            </div>
+            </form>
+
+            <div class="bott_box" style="text-align: center;margin-top: 20px;">
+                <!--<button class="go_tihuan">确定</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <button id="btn_close">取消</button>-->
+                <input type="button" class="go_tihuan" value="确定" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" id="btn_close" value="取消" />
+            </div>
+        </div>
+    </div>
+</block>

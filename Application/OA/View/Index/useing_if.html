@@ -1,0 +1,791 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <heac>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <link rel="stylesheet" href="__MODULE__/jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css" />
+    <link rel="stylesheet" href="__CSS__/jqueryUI_reset.css" />
+    <style>
+    <eq name="youknow" value="0">
+    #youknow{
+        display: none;
+    }
+    </eq>
+    .form_content{
+        width:1000px;
+        font-size:15px ;
+        color:#666;
+    }
+    .form_content .verify span.have_img{
+        line-height: 20px;
+        margin-top: 10px;
+    }
+    .form_content>div{
+        padding:5px 0px 5px 0px;
+    }
+    #input_content>div{
+        padding:10px 0px 4px 0px;
+    }
+    .form_content .input_group{
+        display: inline-block;
+        width:38%;
+    }
+
+    .input_span{
+        margin-top: 8px;
+        display: block;
+        width:120px;
+        text-align: right;
+        float: left;
+        padding-right: 10px;
+    }
+    .form_content input[type=text]{
+        width:240px;
+        height:36px;
+        border-radius: 2px;
+        border:1px solid #ddd ;
+        font-size:16px;
+        line-height:36px;
+    }
+    /*.OA_input{
+        margin-left: 23px;
+    }*/
+    #input_radio_content input:first-child{
+        margin-left: 0;
+    }
+    .form_content input[type=radio]{
+        margin: 11px 0px 11px 25px;
+    }
+    /*.form_content input[type=checkbox]{
+        margin-left:17px;
+    }*/
+    .form_content .verify{
+        display:inline-block;
+        width:150px;
+        height:150px;
+
+        font-size: 14px;
+        border:1px solid #eee;
+        padding:0px;
+    }
+    .form_content .verify p{
+        text-align: center;
+        background-color:#1268CB;
+        height:30px;
+        line-height: 30px;
+        color: #fff;
+        margin:0;
+        padding: 2px;
+    }
+    .form_content .verify{
+        background-color: #fafafa;
+        border-radius: 5px;
+    }
+    .form_content .verify span{
+        text-align: center;
+        line-height: 100px;
+        display:block;
+        color:#3385ff;
+    }
+    .form_content .time_input{
+        background:url("img/calender.jpg") 213px center no-repeat;
+        margin:0 2px;
+    }
+    .form_content .textarea *{
+        float:left;
+        
+    }
+    .form_content .textarea{
+        overflow: hidden;
+    }
+    .btn_agree,.btn_disagree,.btn_disagree2{
+        height:36px;
+        border:none;
+        border-radius: 5px;
+        padding:5px 10px;
+        margin: 0 10px;
+        color:#fff;
+        font-size: 14px;
+    }
+    button:hover{
+        cursor: pointer;
+    }
+    .btn_agree{
+        background-color: #1269CC;
+    }
+    .btn_disagree,.btn_disagree2{
+        background-color: #ADCC2B;
+    }
+    .sel_input{
+        width:240px;
+        height:45px;
+        border:1px solid #ddd;
+        border-radius: 5px;
+        padding:0 20px;
+    }
+        .reSpan{
+        color:#F00;
+    }
+    .hiddenSpan{
+        display:none;
+    }
+    @charset "utf-8";
+.projectTable_container{position: relative;color: #58585c;left: 50%;width: 1000px;height: auto;font-size: 14px;margin-left: -500px;margin-bottom: 100px;overflow: hidden;}
+.tableForm{margin: 0px;}
+.projectTable_title{color: #2c99ff;width: 100%;height: 80px;font-family: "微软雅黑";text-align: center;line-height: 80px;font-size: 24px;letter-spacing: 2px;overflow: hidden;}
+/*----------------------------------申请和审计表单---------------------------------------*/
+.apply_container,
+.audity_container{width: 100%;height: auto;overflow: hidden;}
+.audity_container{margin-top: -1px;}
+.apply_tb,
+.audity_tb{width: 100%;height: auto;table-layout: fixed;border-spacing: 0px;empty-cells: show;border-collapse: collapse;}
+.apply_tb tr,
+.audity_tb tr{}
+.apply_tb tr th,
+.audity_tb tr th{color: #000000;padding: 0px;height: 35px;margin: 0px;text-align: center;line-height: 30px;font-weight: 100;border: solid 1px #1f497d;}
+.apply_tb tr td,
+/*.audity_tb tr td{color: #000000; height: auto; line-height: 30px; text-align: center;margin: 0px;padding: 0px;white-space: nowrap;text-overflow: ellipsis;border: solid 1px #1f497d;overflow-x: hidden;}*/
+.audity_tb tr td{color:#000000;height:35px;text-align:center;line-height:30px;margin:0px;padding:0px;white-space:nowrap;text-overflow:ellipsis;border:solid 1px #1f497d;overflow-x:hidden;}
+.audity_tb tr td{text-align: left;height: 60px;line-height: 60px;}
+.audity_tb tr td.tc{text-align: center;}
+/*--------------------------------动态表单----------------------------------*/
+.applyDynamic_tb{min-width: 101%;min-height: 101%;margin-top: -2px;margin-left: -2px;table-layout: fixed;border-collapse: collapse;border-spacing: 0px;}
+.applyDynamic_tb tr{}
+.applyDynamic_tb tr th,
+.applyDynamic_tb tr td{height: 30px;text-align: center;line-height: 30px;font-weight: 100;border: none;border-top: solid 1px #1f497d;border-left: solid 1px #1f497d;}
+.applyDynamic_tb tr td{height: 30px;line-height: 30px;}
+.applyDynamic_tb tr td .iptText{height: 30px;line-height: 30px;}
+.applyDynamic_tb tr td .iptButton{margin-top: 16px;}
+/*------------------------------------公用--------------------------------------------*/
+/*所有文本框*/
+.iptText{display:inline-block;width: 100%;height: 100%; min-height:30px; line-height: 30px;padding: 0px;margin: 0px; border: none; outline: none; vertical-align: middle; }
+/*底边文本框*/
+.iptText_borderBottom{width: 50%;height: 22px;line-height: 22px; margin-top: 6px; margin-bottom: 6px; vertical-align: middle; border: none;border-bottom: #d5d5d5 1px solid;}
+/*时间文本框*/
+.iptText_time{width: 130px;height: 22px;line-height: 22px; margin-top: 6px; margin-bottom: 6px; vertical-align: middle; border: none;border-bottom: #d5d5d5 1px solid;}
+/*所有文本域*/
+.iptTexr{width: 100%;height: 100%;padding: 2px;margin: 0px; white-space:normal; line-height:22px; border: none;overflow: hidden; }
+/*所有下拉框*/
+.selectList1{width: 80%;height: 30px;padding-left: 4px;margin: 4px;border-style: none;border: 1px solid #d5d5d5;cursor: pointer;}
+.selectList2{max-width: 50%;height: 30px;padding-left: 4px;margin: 4px;margin-left: 25px;border-style: none;border: 1px solid #d5d5d5;cursor: pointer; vertical-align: middle;}
+/*所有按钮*/
+.iptButton{color: #474747;width: 86px;height: 31px;padding: 0px;margin: 0px;font-size: 14px;line-height: 31px;text-align: center;border: none;cursor: pointer;background-repeat: no-repeat;}
+.iptButton:hover{background-image: url(../img/button_focus.png);}
+/*所有label*/
+.labels{width: auto;padding: 0px;margin: 0px;font-size: 14px;cursor: pointer;}
+/*所有单选框*/
+.iptRadio{padding: 0px;margin: 0px;cursor: pointer;}
+/*所有复选框*/
+.iptCkx{cursor: pointer;line-height: 12px;}
+/*特殊高度*/
+.apply_tb tr .height72,
+.audity_tb tr .height72{height: 72px;line-height: 22px;white-space: normal;}
+/*自动换行*/
+.apply_tb tr .autoWrap,
+.audity_tb tr .autoWrap{height: auto;white-space: normal;line-height: 22px;}
+/*自动高度*/
+.apply_tb tr .autoHeight,
+.audity_tb tr .autoHeight{height: auto;}
+/*左边分类宽度固定*/
+.leftTitle{width:60px; height:auto;}
+/*------------------------------------------------样式重置------------------------------------------------*/
+
+/*------------------------------------------------针对通达覆盖样式*/
+/*动态表单按钮*/
+.apply_tb tr td button,
+.apply_tb tr td input[type="button"]{color: #474747;width: 86px;height: 31px;padding: 0px;margin: 4px 10px;font-size: 14px;line-height: 31px;text-align: center;border: none;cursor: pointer; background:none; background-image: url(/theme/workflow/2016/common/img/button.png);background-repeat: no-repeat;}
+.audity_tb tr td input[type="button"]{color: #474747;width: 86px;height: 31px;padding: 0px;margin: 0px;font-size: 14px;line-height: 31px;text-align: center;border: none;cursor: pointer; background:none;background-image: url(/theme/workflow/2016/common/img/button.png);background-repeat: no-repeat;}
+.projectTable_container tr td button:focus,
+.projectTable_container tr td input[type="button"]:focus{border: none; outline: none;}
+.projectTable_container tr td button:hover,
+.projectTable_container tr td input[type="button"]:hover{background-image: url(/theme/workflow/2016/common/img/button_focus.png);}
+
+/*动态表单文本框*/
+.LIST_VIEW_HEADER .BigInput,
+.LIST_VIEW .BigInput{width: 100%;height: 100%;padding: 0px;margin: 0px;line-height: 30px;border: none;margin-top: -1px;background: none;border: none;}
+.LIST_VIEW_HEADER .BigInput:hover,
+.LIST_VIEW .BigInput:hover{background: none;border: none;}
+.LIST_VIEW_HEADER select,
+.LIST_VIEW select{max-width: 50%;height: 30px;padding: 4px;margin: 4px;border: none;border: 1px solid #d5d5d5;cursor: pointer;background: none;}
+.applyDynamic_tb1{margin-top: -1px;}
+.applyDynamic_tb1 tr{}
+.applyDynamic_tb1 tr th,
+.applyDynamic_tb1 tr td{height: 30px;text-align: center;line-height: 30px; font-weight:normal;}
+.applyDynamic_tb1 tr td .iptButton{margin-top: 16px;}
+/*自动数据填充文本框*/
+.AUTO{display:inline-block; width: 100%;height: 100%; min-height:30px;line-height: 30px;padding: 0px;margin: 0px; border: none; outline: none;  }
+/*金额大写*/
+.CALC{display: inline-block; width: 100%;height: 100%; min-height:30px;line-height: 30px; padding: 0px;margin: 0px; border: none; outline: none;  }
+/*审核表单已填字段样式重置*/
+input.bigstatic1,textarea.bigstatic1{color: #000000; max-width: 100%; border: none; background: none;}
+/*签章样式调整*/
+.audity_tb tr td .websign{display: inline-block; width: 300px; height: 60px; margin-left: 200px; margin-top: -30px;}
+.audity_tb tr td div div div{ line-height: 0px; vertical-align:middle;margin-left: 150px; margin-top: -70px;}
+/*------------------------------------------------针对浏览器覆盖样式*/
+/*去除Chrome焦点边框*/
+.iptText:focus,
+.iptTexr:focus,
+.LIST_VIEW_HEADER .BigInput:focus,
+.LIST_VIEW .BigInput:focus,
+.AUTO:focus,
+.CALC:focus{border: none;outline: none;}
+.selectList1:focus,
+.selectList2:focus,
+.LIST_VIEW_HEADER select,
+.LIST_VIEW select{border: none;outline: none;border: 1px solid #d5d5d5;}
+.iptText_time:focus,
+.iptText_borderBottom:focus{border: none;outline: none;border-bottom: #d5d5d5 1px solid;}
+/*去除IE10的“X”*/
+input::-ms-clear{display: none;}
+
+    </style>
+    <script src="__MODULE__/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__MODULE__/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js" ></script>
+    <script src="__MODULE__/jquery.form.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/my97datepicker/WdatePicker.js"></script>
+<script>
+        var tszdlist={$tszdlist};
+        var allinput={$res.tablekeylist};
+        var alldata={$tabledata};
+        var posturl='';
+function getajaxname(){
+        $.post(posturl,{"name":$('#getajaxnameval').val()},function(res){
+            if(res.type=='radio'){
+                var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+                for(var i in res.data){
+                    showhtml+="<tr><td><input type='radio' name='data' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                    if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                    showhtml+="</tr>";
+                }
+                showhtml+="</table>";
+                $('.dataSelectDialog').html(showhtml);
+            }else if(res.type=='checkbox'){
+                var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+                if(res.title)showhtml+=res.title;
+                for(var i in res.data){
+                    showhtml+="<tr><td><input type='checkbox' name='ajaxcheckboxdata' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                    if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                    showhtml+="</tr>";
+                }
+                showhtml+="</table>";
+                $('.dataSelectDialog').html(showhtml);
+            }
+        },'json')
+    }
+
+function printthispage(){
+    window.open('/OA/Index/useing_if?print=1&lcid='+'{:I('get.lcid')}'+'&jdid='+{:I('get.jdid')}+'&txid='+{:I('get.txid')});
+}
+function datatonextb(){
+
+    
+    $('#tableform').submit();
+
+    //上传附件
+    if($('#myfile').val()!=null && $('#myfile').val()!=''){
+        var formData = new FormData();
+        formData.append("myfile", document.getElementById("myfile").files[0]);   
+        $.ajax({
+            url: "/OA/Index/uploadfile",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            /**
+            *必须false才会自动加上正确的Content-Type
+            */
+            contentType: false,
+            /**
+            * 必须false才会避开jQuery对 formdata 的默认处理
+            * XMLHttpRequest会对 formdata 进行正确的处理
+            */
+            processData: false,
+            success: function (data) {
+                if (data.status == "true") {
+                     $('input[name="filename"]').val(data.data.filename);
+                     $('input[name="filepath"]').val(data.data.file);
+                     postformdata();
+                }else if (data.status == "error") {
+                    layer.msg(data.msg);
+                }
+            },
+            error: function () {
+                alert("上传失败！");
+            }
+        });
+    }else{
+        postformdata();
+    }
+
+}
+
+function postformdata(){
+    var AjaxURL= "/OA/Index/check_ok";  
+    $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: AjaxURL,
+            data: $('#tableform').serialize(),
+            success: function (data) {
+                if(data.status==1){
+                    top.opennewwindow(data.url,'转交下一步');
+                }else if(data.status==2){
+                    window.location=data.url;
+                }
+            },
+            error: function(data) {
+                alert("error:"+data.responseText);
+             }
+        });
+}             
+
+
+function subthisform(){
+    $('#typeinput').val(1);
+    $('#qianzhanepw').val('');
+    if(alldata['nowsort']!=0){
+        $(".dataSelectDialog_qianzhang").dialog("open");
+    }else{
+        datatonextb();
+    }
+}
+
+    $(function(){
+
+        if($('.select_user').length>0){
+            $.get('/OA/Ajax/getalluser',{},function(data){
+                str='';
+                for(var i in data){
+                    str+="<option value='"+data[i].id+"'>"+data[i].real_name+"</option>";
+                }
+                $('.select_user').html(str);
+            },'json');
+        }
+        /*if($('.nowuser').length+$('.nowbumen').length+$('.nowdate').length+$('.nowuserid').length+$('.nowgw').length+$('.nowid').length>0){
+            $.get('/OA/Ajax/getnowdata',{},function(res){
+                if($('.nowuser').length>0)$('.nowuser').val(res.nowuser);
+                if($('.nowuserid').length>0)$('.nowuserid').val(res.nowuserid);
+                if($('.nowbumen').length>0)$('.nowbumen').val(res.nowbumen);
+                if($('.nowdate').length>0)$('.nowdate').val(res.nowdate);
+                if($('.nowid').length>0)$('.nowid').val(res.nowid);
+                if($('.nowgw').length>0)$('.nowgw').val(res.nowgw);
+            },'json');
+        }*/
+
+
+        for(var i in allinput){
+            var thisdata=allinput[i];
+            var thiscode=thisdata.code;
+            if(thisdata.type=='text' || thisdata.type=='date'){
+                if($('input[name='+thisdata.code+']').length>0){
+                    $('input[name='+thisdata.code+']').val(alldata[thiscode]);
+                    thisinput2=$('input[name='+thisdata.code+']');
+                }
+                else if($('textarea[name='+thisdata.code+']').length>0){
+                    $('textarea[name='+thisdata.code+']').html(alldata[thiscode]);
+                    thisinput2=$('textarea[name='+thisdata.code+']');
+                }
+                if(alldata['nowsort']!=0){
+                    if(!in_array(thisdata.code,tszdlist))thisinput2.css('background','#eee').css('border','none').css('outline','none').attr('readonly',true);
+                }
+                
+            }
+            if(thisdata.type=='select'){
+                if(alldata['nowsort']!=0){
+                    $('select[name='+thisdata.code+']').html('<option>'+alldata[thiscode]+'</option>');
+                    if(!in_array(thisdata.code,tszdlist))$('select[name='+thisdata.code+']').attr('disabled',true);
+                }else{
+                    $('select[name='+thisdata.code+']').find('option').each(function(){
+                        if(alldata[thiscode]==$(this).val())$(this).attr('selected',true);
+                    })
+                }
+            }
+            if(thisdata.type=='radio'){
+                $('input[name='+thisdata.code+']').each(function(){
+                    if(alldata[thiscode]==$(this).val())$(this).attr('checked',true);
+                })
+                if(alldata['nowsort']!=0){
+                    if(!in_array(thisdata.code,tszdlist))$('input[name='+thisdata.code+']').attr('disabled',true);
+                }
+            }
+            if(thisdata.type=='checkbox'){
+                $('input[name="'+thisdata.code+'[]"]').each(function(){
+                    for(var o in alldata[thiscode]){
+                        if(alldata[thiscode][o]==$(this).val())$(this).attr('checked',true);
+                    }
+                })
+                if(alldata['nowsort']!=0){
+                    if(!in_array(thisdata.code,tszdlist))$('input[name="'+thisdata.code+'[]"]').attr('disabled',true);
+                }
+            }
+        }
+        $('.btn_disagree').click(function(){
+            $('#typeinput').val(2);
+            datatonextb();
+        })
+        $(".dataSelectDialog").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    width: "800",
+                    height: "500",
+                    modal: true,
+                    show: "scale",
+                    buttons: {
+                        "确定":function() {
+                            if($(this).find('input[type="radio"]').length>0){
+                                $(this).find('input[type="radio"]').each(function(){
+                                    if($(this).is(":checked")){
+                                        this_input.val($(this).val());
+                                        this_input.change();
+                                    }
+                                })
+                            }
+                            if($(this).find('input[type="checkbox"]').length>0){
+                                var allvaluestr='';
+                                $(this).find('input[type="checkbox"]').each(function(){
+                                    if($(this).is(":checked")){
+                                        allvaluestr+=$(this).val()+',';
+                                    }
+                                })
+                                this_input.val(allvaluestr.substring(0,allvaluestr.length-1));
+                                this_input.change();
+                            }
+                            $(this).html('');
+                            $(this).dialog("close");
+                        },
+                        "取消":function(){
+                            $(this).html('');
+                            $(this).dialog("close");
+                        }
+                    },
+                });
+        $(".dataSelectDialog_qianzhang").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    width: "600",
+                    height: "200",
+                    modal: true,
+                    show: "scale",
+                    buttons: {
+                        "确定":function() {
+                            $.post('/OA/Qianzhang/check_pw',{"pw":$('#qianzhanepw').val()},function(data){
+                                if(data.type==1){
+                                    $('#is_qz').val(data.path);
+                                    if($('#typeinput').val()==1)datatonextb();
+                                }else{
+                                    layer.alert('密码错误或未设置密码');
+                                }
+                            },'json')
+                            $('#qianzhanepw').val('');
+                            $(this).dialog("close");
+                        },
+                        "取消":function(){
+                            $('#qianzhanepw').val('');
+                            $(this).dialog("close");
+                        }
+                    },
+                });
+        if(alldata['nowsort']==0){
+            $(".form_content").on({click:function(){
+                    this_input=$(this);
+                    posturl=this_input.attr('url');
+                    if(this_input.attr('url')!=''){
+                        if(this_input.attr('data')!='')var data=eval(this_input.attr('data'));
+                        else var data={};
+                        $.post(this_input.attr('url'),data,function(res){
+                            if(res.type=='radio'){
+                                var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+
+                                for(var i in res.data){
+                                    showhtml+="<tr><td style='width:35px'><input type='radio' name='data' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                                    if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                                    showhtml+="</tr>";
+                                }
+                                showhtml+="</table>";
+                                $('.dataSelectDialog').html(showhtml);
+                            }else if(res.type=='checkbox'){
+                                var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+                                if(res.title)showhtml+=res.title;
+                                for(var i in res.data){
+                                    showhtml+="<tr><td style='width:35px'><input type='checkbox' name='ajaxcheckboxdata' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                                    if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                                    showhtml+="</tr>";
+                                }
+                                showhtml+="</table>";
+                                $('.dataSelectDialog').html(showhtml);
+                            }
+                            $(".dataSelectDialog").dialog("open");
+                        },'json');
+                    }else{
+                        $(".dataSelectDialog").dialog("open");
+                    }
+                
+                }},'.opdio');
+                $(".form_content").on({dblclick:function(){
+                    this_input=$(this);
+                    posturl=this_input.attr('url');
+                    if(this_input.attr('url')!=''){
+                        if(this_input.attr('data')!='')var data=eval(this_input.attr('data'));
+                        else var data={};
+                        $.post(this_input.attr('url'),data,function(res){
+                            if(res.type=='radio'){
+                                var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+
+                                for(var i in res.data){
+                                    showhtml+="<tr><td><input type='radio' name='data' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                                    if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                                    showhtml+="</tr>";
+                                }
+                                showhtml+="</table>";
+                                $('.dataSelectDialog').html(showhtml);
+                            }else if(res.type=='checkbox'){
+                                var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+                                if(res.title)showhtml+=res.title;
+                                for(var i in res.data){
+                                    showhtml+="<tr><td><input type='checkbox' name='ajaxcheckboxdata' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                                    if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                                    showhtml+="</tr>";
+                                }
+                                showhtml+="</table>";
+                                $('.dataSelectDialog').html(showhtml);
+                            }
+                            $(".dataSelectDialog").dialog("open");
+                        },'json');
+                    }else{
+                        $(".dataSelectDialog").dialog("open");
+                    }
+                    
+                }},'.opdio2');
+            }
+        $('.banli').click(function(){
+            //签章
+            $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '/OA/Index/check_ok2',
+            data: $('#tableform').serialize(),
+            success: function (data) {
+                if(data.status==1){
+                    layer.msg(data.msg);
+                    window.location="/OA/Index/loading#";
+                }else if(data.status==2){
+                    layer.msg(data.msg);
+                    window.location="/OA/Index/loading#";
+                }
+            },
+            error: function(data) {
+                alert("error:"+data.responseText);
+             }
+        });
+        })
+    })
+    function rechange() {
+        $('#myfile').val('');
+        $('#mydiv').hide();
+    }
+    function mychange() {
+        if($('#myfile').val()!=''){
+            $('#mydiv').show();
+        }
+    }
+    </script>
+
+</head>
+<body>    
+<link rel="stylesheet" href="__PUBLIC__/OA/css/oaliuc.css?v={:getVersion()}">
+<eq name="_GET['print']" value="1">
+<OBJECT id="wb" name="wb" classid=CLSID:8856F961-340A-11D0-A96B-00C04FD705A2 width=0 height=0 VIEWASTEXT><PARAM NAME="ExtentX" VALUE="0"><PARAM NAME="ExtentY" VALUE="0"><PARAM NAME="ViewMode" VALUE="0"><PARAM NAME="Offline" VALUE="0"><PARAM NAME="Silent" VALUE="0"><PARAM NAME="RegisterAsBrowser" VALUE="0"><PARAM NAME="RegisterAsDropTarget" VALUE="1"><PARAM NAME="AutoArrange" VALUE="0"><PARAM NAME="NoClientEdge" VALUE="0"><PARAM NAME="AlignLeft" VALUE="0"><PARAM NAME="NoWebView" VALUE="0"><PARAM NAME="HideFileNames" VALUE="0"><PARAM NAME="SingleClick" VALUE="0"><PARAM NAME="SingleSelection" VALUE="0"><PARAM NAME="NoFolders" VALUE="0"><PARAM NAME="Transparent" VALUE="0"><PARAM NAME="ViewID" VALUE="{0057D0E0-3573-11CF-AE69-08002B2E1262}"><PARAM NAME="Location" VALUE="it.yandui.com"></OBJECT>
+</eq>
+<form id='tableform' enctype="multipart/form-data" method='post' onsubmit="return false">
+<input type='hidden' name='lcid' value="{:I('get.lcid')}"/>
+<input type='hidden' name="jdid" value="{:I('get.jdid')}"/>
+<input type='hidden' name="txid" value="{:I('get.txid')}"/>
+<input type='hidden' name="type" value='1' id='typeinput'/>
+<div style="padding:20px 20px 50px 20px;width:100%;">
+<div class="crumbs" style="padding-bottom:10px;"><a href="/OA/Index/loading" style="color:#1269cc;">我的流程</a>&nbsp;&gt;&nbsp;<span style="color:#999 !important;">办理流程</span></div>
+<!-- 0927 -->
+<notempty name="processAllList">
+    <div class="lc-sec prhide">
+        <div class="lc-neks">
+            <volist name="processAllList" id="vo" key="k">
+                <div class="lc-item <?php if($vo['isshenhe']==1){ ?> lc-on-ed <?php } ?> <?php if($vo['isnow']==1){ ?> lc-on-now <?php } ?>">
+                    {$vo["name"]}
+                   <?php if(!($k==count($processAllList))){ ?> 
+                    <div class="lc-com-rt"></div>
+                    <?php } ?>
+                </div>
+            </volist>
+        </div>
+    </div>
+</notempty>
+
+<!-- end 0927 -->
+    <div class="form_content yw-sec"  style="margin-top:10px;">
+        
+        <eq name="alldata.nowsort" value="0">
+        <div class="yw-titls"><span class="input_span yw-bt yw-btt">标题：</span>
+       <input type="text" name="name" value="{$res.name}"/></div>
+        <else/>
+            <h4 class="prshow" style="color:#2579D9;font-size: 20px;text-align:center;line-height:35px;margin-bottom:20px;display:none;">{$res.printname}</h4>
+            <h4 class="prhide" style="color:#2579D9;font-size: 20px;text-align:center;line-height:35px;margin-bottom:20px;border-bottom:1px solid #cecece;border-bottom:1px solid #cecece;margin-bottom:0px !important;padding-bottom:10px !important;">{$res.name}</h4>
+        </eq>
+        {$res.tablestyle|htmlspecialchars_decode}
+        <eq name="iscd" value="1">
+        <hr/>
+        存档编号：<input type="text" name="chundanghao"/><br/>
+        附件：<input type="file" name="chundangpath"/>
+        </eq>
+        <div style="width:100%;display:inline-block;">
+            <p class="prhide" style="padding-left: 20px;">审批进度</p>
+            <div style="display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around;">
+            <volist name='shenghedata' id='v'>
+                <div class="verify">
+                <php>if($v['is_qz']!=''){</php>
+                    <p>{$v.name}</p>
+                    <span class="have_img">
+                        {$v.val}<br>
+                        <img style="vertical-align: -197%;height:64px;width:103px;" src="{$v.is_qz}" alt="">
+                    </span>
+                <php>}else{</php>
+                    <p>{$v.name}</p>
+                    <span>{$v.val}</span>
+                <php>}</php>
+                </div>
+            </volist>
+            </div>
+        </div>
+        <neq name="res.file" value="">
+            <div>
+            附件：<a href="http://it.yandui.com/download.php?path={$res.file}&name={$res.filename}" target="_blank">{$res.filename}</a>
+            </div>
+        </neq>
+        <eq name="res.sort" value="0">
+        <div  style="width:100%;display:inline-block;padding:5px 20px;">
+            <span style="float:left;height:28px;line-height:28px;">上传附件：</span>
+            <span style="float:left;">
+                <input type='file' name='file' id='myfile' onchange="mychange()"/>
+                <input type="hidden" name="filename"/>
+                <input type="hidden" name="filepath"/>
+                <a id="mydiv" href="javascript:rechange();" style="display:none">取消</a>
+            </span>
+
+        </div>
+        </eq>
+        <input type='hidden' name='is_qz' id='is_qz' value=""/>
+
+        <div class="prhide" style="width:100%;display:inline-block;padding:5px 20px;">
+        <span style="float:left;height:28px;line-height:28px;">会签意见：</span>
+        <span style="float:left;"><textarea name='hqyj' style="width:840px;height:120px;border:1px solid #cecece;"/></textarea></span>
+        <span style="float:left;width:100%;display:inline-block;margin-top:8px;">本步骤审核要点：{$res.yaodian}<eq name="res.yaodian" value="">无</eq></span>
+        </div>
+        <div style="width:100%;display:inline-block;padding:5px 20px 10px 20px !important;">
+            <if condition="$tj_ok eq 1"><button type='button' class="btn_agree prhide" onclick="subthisform();"> 同意/转交下一步 </button>
+            <neq name="alldata.nowsort" value="0"><button class="btn_disagree prhide"> 不同意 </button></neq>
+
+            <elseif condition="$tj_ok eq 2"/><button type='submit' class="btn_disagree2 banli prhide"> 确认办理 </button><button class="btn_disagree prhide"> 不同意 </button><elseif condition="$tj_ok eq 3"/>已办理</if>
+
+            <input type="button" class="btn_disagree2 prhide" onclick="javascript:printthispage();" value="打印" />
+        </div>
+        
+            <div class="prhide"  style="width:100%;display:inline-block;padding:5px 20px 0px 20px !important;">
+                <div class="ye-tisls" style="border-top: 1px solid #cbcbcb;">会签记录：</div>
+                <!-- udpate  -->
+                <div class="jointlyBox">
+                    <ul class="jointlyList">
+                    <notempty name="hqyjlist">
+                     <volist name='hqyjlist' id='v'>
+                        <li>
+                            <p class="stepTxt">会签人：{$v.username}&nbsp;&nbsp;&nbsp;&nbsp;会签时间：{$v.addtime}</p>
+                            <p class="stepCon">会签内容：{$v.content}</p>
+                        </li>
+                    </volist>
+                    <else />
+                    <li style="text-align:center;background:none;border:0px;">暂无记录！！</li>
+                    </notempty>
+                    </ul>
+                </div>
+
+            </div>
+        
+        
+        <div class="prhide yew-secls" style="padding-bottom:25px !important;padding-top:0px !important;">
+            <div style="" class="ye-tisls">办理记录：</div>
+            <div class="jointlyBox">
+            <ul class="jointlyList">
+            <notempty name="blh">
+            <volist name='blh' id='v'>
+            <li>
+            <p class="stepTxt">
+            办理人：<font class="stepCon">{$v.username}</font>&nbsp;&nbsp;&nbsp;&nbsp;
+            办理时间：<font class="stepCon">{$v.addtime}</font>&nbsp;&nbsp;&nbsp;&nbsp;
+            办理内容：<font class="stepCon">{$v.action}</font>
+            </p>
+            </li>
+            </volist>
+            <else />
+                    <li style="text-align:center;background:none;border:0px;">暂无记录！！</li>
+            </notempty>
+            </ul>
+            </div>
+        </div>
+         
+
+        </div>
+    </div>
+</div>
+</form>
+<div class="dataSelectDialog">
+
+</div>
+<div class="dataSelectDialog_qianzhang" title="转交下一步前请先签章">
+    签章密码：<input type="password" id='qianzhanepw'/>
+</div>
+<input type="text" style="width:0px" name="none" />
+<script>
+function format (num) {
+    if(!num)return '0.00';
+    num=Math.round(parseFloat(num)*100)/100;
+    return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+}
+$(function(){
+    $('input[type="text"]').each(function(){
+        if($(this).parent()[0].tagName=='TD')$(this).css('width','100%')
+        $(this).attr('title',$(this).val());
+        if($(this).attr("data_type")=='int'){
+            $(this).css('text-align','center');
+            if(alldata['nowsort']!=0 && !$(this).hasClass('yhzh')){
+                $(this).val(format($(this).val()));
+            }
+        }else{
+            $(this).css('text-align','left');
+        }
+        if(alldata['nowsort']==0){
+            $(this).attr('autocomplete','off');
+        }
+    })
+    $('textarea').css('white-space','normal');
+    <eq name="_GET['print']" value="1">
+    $('.prhide').hide();
+    $('.prshow').show();
+        try{ 
+            wb.execwb(7,1);
+        } 
+        catch (e) 
+        { 
+            window.print();
+        } 
+
+    </eq>
+})
+</script>
+
+</body>
+</html>

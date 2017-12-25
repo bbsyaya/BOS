@@ -1,0 +1,13 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <form action="/OA/Userout/jjdo" method="post">
+    我要将工作交接给：
+<select name='userid' class="do_content_input_user selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+                            <volist name="alluser" id='v'>
+                                <option value="{$v.id}">{$v.real_name}</option>
+                            </volist>
+                        </select>
+    <input type="submit" value="确定"/>
+</form>
+</block>

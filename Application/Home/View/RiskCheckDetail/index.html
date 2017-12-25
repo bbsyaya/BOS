@@ -1,0 +1,282 @@
+<extend name="Public/base"/>
+<block name="script">
+    <link rel="stylesheet" type="text/css" href="__MODULE__/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__MODULE__/bootstrapselect/bootstrap-select.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            if(getCookie('boss30_on_'+getHref()+'_t_left_state')!='activate' || getCookie('boss30_on_'+getHref()+'_t_left_state')=='' || getCookie('boss30_on_'+getHref()+'_t_left_state')==null || getCookie('boss30_on_'+getHref()+'_t_left_state')==undefined) {
+                setCookie('boss30_on_'+getHref()+'_t_left','11110000',30);
+            }
+
+            $("#doExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export')}";
+                window.location.href=url+'?'+param;
+            });
+        })
+    </script>
+</block>
+
+<block name="body">
+<style type="text/css">.dataTable tr td{padding: 0px 5px;}</style>
+<div class="subMainBox" goal="t_left">
+    <div class="ri_header">
+        <div class="ri_title_box">
+            <span class="clip-text">核减数据明细</span>
+            <span>风控中心</span>
+        </div>
+        <div class="ri_work">Details of the downsized data</div>
+
+        <div class="dataTable_columnCa_b pa">
+            <div class="dataTable_columnCn_b"></div>
+            <div class="dataTableShow_close_b tc">关闭</div>
+        </div>
+    </div>
+    <div><span class="field_customize">查询自定义</span></div>
+    <!--<div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            &lt;!&ndash;<input id="doExport" type="button" value="下载报表" class="" />&ndash;&gt;
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+            <div class="line fr h"></div>
+        </div>
+        <div class="screenList fl w">
+            <form action="{:U('index')}" id="search_form" method="get">
+                <table>
+                    <tr>
+                        <th>广告主：</th>
+                        <td>
+                            <select id="adIds" name='adIds' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="" selected="selected">请选择</option>
+                                <foreach name='adverlist' item='v' key='k'>
+                                    <option <php>if(in_array($v['id'],I('get.adIds')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </td>
+                        <th>产品名称：</th>
+                        <td>
+                            <select name='proid' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="" selected="selected">请选择</option>
+                                <foreach name='comlist' item='v' key='k'>
+                                    <option <php>if(in_array($v['id'],I('get.proid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </td>
+                        <th>销售人员：</th>
+                        <td>
+                            <select name='saler' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="" selected="selected">请选择</option>
+                                <foreach name='salelist' item='v' key='k'>
+                                    <option <php>if(in_array($v['id'],I('get.saler')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </td>
+                        <th>业务线：</th>
+                        <td>
+                            <select name='bl' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="" selected="selected">请选择</option>
+                                <foreach name='linelist' item='v' key='k'>
+                                    <option <php>if(in_array($v['id'],I('get.bl')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>供应商：</th>
+                        <td>
+                            <select name='sup' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="" selected="selected">请选择</option>
+                                <foreach name='superlist' item='v' key='k'>
+                                    <option <php>if(in_array($v['id'],I('get.sup')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </td>
+                        <th>商务人员：</th>
+                        <td>
+                            <select name='busman' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option value="" selected="selected">请选择</option>
+                                <foreach name='swlist' item='v' key='k'>
+                                    <option <php>if(in_array($v['id'],I('get.busman')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </td>
+                        <th>核减原因：</th>
+                        <td>
+                            <select name="rea_son">
+                                <option value="" selected="selected">请选择</option>
+                                <option value="测试核减">测试核减</option>
+                                <option value="质量核减">质量核减</option>
+                                <option value="战略核减">战略核减</option>
+                            </select>
+                        </td>
+                        <th >月份：</th>
+                        <td >
+                            <input name="mon" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$mon}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            <input id="search_btn" type="submit" value="查询" />
+                            &lt;!&ndash; <input type="hidden" name="mon" value="{$mon}"/> &ndash;&gt;
+                            <input type="hidden" name="pl_id" value="{$pl_id}"/>
+                            <input type="hidden" name="p" value="1"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>-->
+
+    <div class="screenBox">
+                <form action="{:U('index')}" id="search_form" method="get">
+                    <div class="t_left">
+                        <div class="ziduan">
+                            <label>广告主: </label>
+                                <select id="adIds" name='adIds' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                    <option value="" selected="selected">请选择</option>
+                                    <foreach name='adverlist' item='v' key='k'>
+                                        <option <php>if(in_array($v['id'],I('get.adIds')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                    </foreach>
+                                </select>
+                        </div>
+                        <div class="ziduan">
+                                <label>产品名称: </label>
+                                <select name='proid' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                    <option value="" selected="selected">请选择</option>
+                                    <foreach name='comlist' item='v' key='k'>
+                                        <option <php>if(in_array($v['id'],I('get.proid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                    </foreach>
+                                </select>
+                        </div>
+                        <div class="ziduan">
+                                <label>销售人员: </label>
+                                <select name='saler' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                    <option value="" selected="selected">请选择</option>
+                                    <foreach name='salelist' item='v' key='k'>
+                                        <option <php>if(in_array($v['id'],I('get.saler')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                    </foreach>
+                                </select>
+                        </div>
+                        <div class="ziduan">
+                                <label>业务线: </label>
+                                <select name='bl' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                    <option value="" selected="selected">请选择</option>
+                                    <foreach name='linelist' item='v' key='k'>
+                                        <option <php>if(in_array($v['id'],I('get.bl')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                    </foreach>
+                                </select>
+                        </div>
+                        <div class="ziduan">
+                                <label>供应商: </label>
+                                <select name='sup' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                    <option value="" selected="selected">请选择</option>
+                                    <foreach name='superlist' item='v' key='k'>
+                                        <option <php>if(in_array($v['id'],I('get.sup')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                    </foreach>
+                                </select>
+                        </div>
+                        <div class="ziduan">
+                                <label>商务人员: </label>
+                                <select name='busman' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                    <option value="" selected="selected">请选择</option>
+                                    <foreach name='swlist' item='v' key='k'>
+                                        <option <php>if(in_array($v['id'],I('get.busman')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                    </foreach>
+                                </select>
+                        </div>
+                        <div class="ziduan">
+                                <label>核减原因: </label>
+                                <select name="rea_son">
+                                    <option value="" selected="selected">请选择</option>
+                                    <option value="测试核减">测试核减</option>
+                                    <option value="质量核减">质量核减</option>
+                                    <option value="战略核减">战略核减</option>
+                                </select>
+                        </div>
+                        <div class="ziduan">
+                                <label>月份: </label>
+                                    <input name="mon" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$mon}"/>
+                        </div>
+                    </div>
+                    <div class="t_right"><input type="submit" value="查 询" /></div>
+                </form>
+    </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit">
+            <div class="advancedLeft">
+                <span class="export advBtn">
+                    <input id="doExport" type="button" value="下载报表" class="" />
+                </span>
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>广告主</th>
+                <th>供应商</th>
+                <th>业务线</th>
+                <th>产品</th>
+                <th>销售</th>
+                <th>商务</th>
+                <th>原始收入</th>
+                <th <php>echo getorderclass('in_money');</php>><a href="<php>echo getorderurl('in_money');</php>">收入核检额</a></th>
+                <th>收入核检率</th>
+                <th>原始成本</th>
+                <th <php>echo getorderclass('out_money');</php>><a href="<php>echo getorderurl('out_money');</php>">成本核检额</a></th>
+                <th>成本核检率</th>
+                <th>收入确认率</th>
+                <th>成本确认率</th>
+                <th>即时利润额</th>
+                <th>即时利润率</th>
+                <th>关账利润额</th>
+                <th>关账利润率</th>
+                <th>收入核检原因</th>
+                <th>成本核检原因</th>
+            </tr>
+            </thead>
+            <tbody>
+            <notempty name="ret">
+                    <volist name="ret" id="item">
+                        <tr data-ym="{$item.ym}">
+                            <td title="{$item.aci_name}">{$item.aci_name}</td>
+                            <td title="{$item.sup_name}">{$item.sup_name}</td>
+                            <td title="{$item.bus_name}">{$item.bus_name}</td>
+                            <td title="{$item.pro_name}">{$item.pro_name}</td>
+                            <td title="{$item.sale_name}">{$item.sale_name}</td>
+                            <td title="{$item.sw_name}">{$item.sw_name}</td>
+                            <td title="{$item.in_money}">{$item.in_money}</td>
+                            <td title="{$item.incheckmoney}">{$item.incheckmoney}</td>
+                            <td title="{$item.incheckratio}">{$item.incheckratio}</td>
+                            <td title="{$item.out_money}">{$item.out_money}</td>
+                            <td title="{$item.outcheckmoney}">{$item.outcheckmoney}</td>
+                            <td title="{$item.outcheckratio}">{$item.outcheckratio}</td>
+                            <td title="{$item.inquerenlv}">{$item.inquerenlv}</td>
+                            <td title="{$item.outquerenlv}">{$item.outquerenlv}</td>
+                            <td title="{$item.realmoney}">{$item.realmoney}</td>
+                            <td title="{$item.realratio}">{$item.realratio}</td>
+                            <td title="{$item.closemoney}">{$item.closemoney}</td>
+                            <td title="{$item.closeratio}">{$item.closeratio}</td>
+                            <td title="{$item.reason}">{$item.reason}</td>
+                            <td title="{$item.out_reason}">{$item.out_reason}</td>
+                        </tr>
+                    </volist>
+                <else />
+                    <tr>
+                        <td colspan="20">
+                            <div class="no-datas">暂无数据！</div>
+                        </td>
+                    </tr>
+            </notempty>
+            
+            </tbody>
+        </table>
+        {$_page}
+    </div>
+</div>
+</block>

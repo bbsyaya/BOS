@@ -1,0 +1,303 @@
+<extend name="Public/base"/>
+<block name="script">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/css/targetcheck.css">
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            $("#sub").click(function(){
+                var form   = $("#dataform");
+                var url    = form.attr('action');
+                $("#dataform").ajaxSubmit({
+                    type: 'post',
+                    url: url,
+                    timeout: 5000,
+                    success:function(ret){
+                        if(ret.status == 1){
+                            layer.alert(ret.msg);
+                            //location.reload();
+                            var goUrl = '/TargetCheck/index';
+                            window.location.href = goUrl;
+                        }else{
+                            layer.alert(ret.msg);
+                        }
+
+                    }
+
+                });
+            });
+
+            var id = "{$adInfo['id']}";
+            if(id==''){
+                goal_ini(0);
+            }
+            $("#goal_name").change(function(){
+                $(".add_step").remove();
+                goal_ini($(this).val());
+            });
+
+            $("#cycle").change(function(){
+
+                $("#start_time").val(getNowFormatDate(0));
+                $("#end_time").val(getNowFormatDate(Number($(this).val())));
+            });
+
+        });
+
+        //初始化控制目标步骤
+        function goal_ini(v){
+            if(v !=''){
+              var goal_id = v;
+            }else{
+                var goal_id = $("#goal_name").val();
+            }
+            if(goal_id){
+                $.get("{:U('step_sel')}",{goal_id:goal_id},function(data){
+                    if(data.step_list){
+
+                        //循环责任人
+                        var user = '';
+                        $.each(data.userdata,function(i,v){
+                            user+='<option value="'+ v.id+'">'+ v.real_name+'</option>';
+                        });
+
+                        $.each(data.step_list,function(i,v){
+                            var str = '';
+                            str+='<tr class="add_step">' +
+                                    '<th>步骤'+ v.sid+'：<span class="required">*</span></th>' +
+                                    '<td>'+ v.name +'</td>' +
+                                    '<input type="hidden" name="procontacts['+ v.sid+'][id]" value='+ v.id+'>'+
+                                    '<th>附件：<span class="required">*</span></th>' +
+                                    '<td><a href="'+ v.annex_path+'" target="_blank">'+ v.annex+'</a></td>' +
+                                    '<th>责任人：<span class="required">*</span></th>' +
+                                    '<td>' +
+                                    '<select id="user_'+v.sid+'" name="procontacts['+ v.sid+'][user]" class="sel-djs" data-actions-box="true" data-done-button="true" data-live-search="true">'+user+'</select>' +
+                                    '</td>' +
+                                  '</tr>';
+                            $("#desc").after(str).show();
+
+                            //select初始化
+                            $('#user_'+v.sid).selectpicker({
+                                selectAllText: '全选',
+                                deselectAllText: '全不选'
+                            });
+                        });
+
+                    }
+                });
+            }
+        }
+
+        //日期加天数 2017-11-22 + 1 = 2017-11-23
+        function getNowFormatDate(idv) {
+            var date = new Date();
+            if(idv !=''){
+                date.setDate(date.getDate()+idv);
+            }
+            var seperator1 = "-";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
+
+        function cha(){
+            var start_time = $("#start_time").val();
+            var end_time = $("#end_time").val();
+
+            if(start_time && end_time){
+                if(CompareDate(end_time,start_time)){
+
+                    $("#cycle").val(datedifference(start_time,end_time));
+                    //console.log(datedifference(start_time,end_time));
+                }else{
+                    layer.alert("开始时间不能大于结束时间");return;
+                }
+
+            }
+
+        }
+
+        //判断两个日期大小
+        function CompareDate(d1,d2)
+        {
+            return ((new Date(d1.replace(/-/g,"\/"))) > (new Date(d2.replace(/-/g,"\/"))));
+        }
+
+        //两个日期相差天数
+        function datedifference(sDate1, sDate2) {    //sDate1和sDate2是2006-12-18格式
+            var dateSpan,tempDate,iDays;
+            sDate1 = Date.parse(sDate1);
+            sDate2 = Date.parse(sDate2);
+            dateSpan = sDate2 - sDate1;
+            dateSpan = Math.abs(dateSpan);
+            iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
+            return iDays;
+        }
+    </script>
+</block>
+<block name="body">
+    <div class="subMainBox">
+        <style type="text/css">
+            #sub{
+                line-height: 30px;
+                color: #4776e6;
+                font-size: 14px;
+                font-family: 'Microsoft YaHei';
+                min-width: 75px;
+                padding: 0 5px;
+                cursor: pointer;
+                border-radius: 15px;
+                border: 1px solid #4776e6;
+                display: inline-block;
+                box-sizing: border-box;
+                margin-right: 20px;;
+            }
+            #fan{
+                line-height: 30px;
+                color: #4776e6;
+                font-size: 14px;
+                font-family: 'Microsoft YaHei';
+                min-width: 75px;
+                padding: 0 5px;
+                cursor: pointer;
+                border-radius: 15px;
+                border: 1px solid #4776e6;
+                display: inline-block;
+                box-sizing: border-box;
+            }
+            .xian{background: url("/Public/newUI/img/xian.png");height: 1px;margin-bottom: 15px;}
+            .sel-djs{
+                width:150px !important;
+            }
+            .dataFormTable tr th, .dataFormTable tr td{
+                height: auto !important;
+                line-height: auto !important;
+                padding:5px 5px !important;
+                overflow: auto !important;
+            }
+        </style>
+
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text"><a href="/TargetCheck/index">风控目标管理</a></span>&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size: 20px;">-></a>
+                <span><a href="/TargetCheck/index">控制目标管理</a></span>
+            </div>
+
+            <div class="dataTable_columnCa_b pa">
+                <div class="dataTable_columnCn_b"></div>
+                <div class="dataTableShow_close_b tc">关闭</div>
+            </div>
+        </div>
+        <div class="xian"></div>
+
+        <div class="dataFormTitle" style="background-color: #E6F1FF;color: #4776e6;">控制目标管理</div>
+        <form id="dataform"  action="{:U('update')}" method="post" enctype="multipart/form-data">
+            <div class="dataFormContent">
+                <table class="dataFormTables">
+                    <tr>
+                        <th>控制目标：<span class="required">*</span></th>
+                        <td colspan="2">
+                            <bselect id="goal_name" name="mid" options="goal_manage" class="ritem" selected="adInfo['mid']"/>
+                        </td>
+                        <th>总责任人：<span class="required">*</span></th>
+                        <td colspan="2">
+                            <!--<bselect name="responsible" options="user" class="ritem" selected="adInfo['responsible']"/>-->
+                            <select id="djr_name" name='responsible' class="sel-djs"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <volist name="user" id='v'>
+                                    <option value="{$v.id}" <php>if($v['id'] == $adInfo['responsible'])echo "selected='selected'";</php>>{$v.real_name}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>控制主体：<span class="required">*</span></th>
+                        <td colspan="5">
+                            <bselect name="bid" options="main_body" class="ritem" selected="adInfo['bid']"/>
+                        </td>
+                    </tr>
+                    <tr id="desc">
+                        <th>控制目标描述：</th>
+                        <td colspan="5"><textarea id="target_desc" name="target_desc" style="text-align: center;">{$adInfo.target_desc}</textarea></td>
+                    </tr>
+
+                    <volist name="stepData" id="s">
+                    <tr class="add_step">
+                        <th>步骤{$s.sid}：<span class="required">*</span></th>
+                        <td>{$s.name}</td>
+                        <input type="hidden" name="procontacts[{$s.sid}][id]" value={$s.id}'>
+                        <input type="hidden" name="procontacts[{$s.sid}][tid]" value='{$s.tid}'>
+                        <th>附件：<span class="required">*</span></th>
+                        <td><a href="{$s.annex_path}" target="_blank">{$s.annex}</a></td>
+                        <th>责任人：<span class="required">*</span></th>
+                        <td>
+                            <!--<bselect id="user" name="procontacts[{$s.sid}][user]" options="users" class="ritem" selected="s['user']"/>-->
+                            <select id="user_{$s.sid}" name='procontacts[{$s.sid}][user]' class="sel-djs"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <volist name="user" id='v'>
+                                    <option value="{$v.id}" <php>if($v['id'] == $s['user'])echo "selected='selected'";</php> >{$v.real_name}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    </volist>
+
+                    <tr>
+                        <th>完成周期：<span class="required">*</span></th>
+                        <td colspan="5">
+                            <input type="text" id="cycle" name="cycle" value="{$adInfo.cycle}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>开始时间：<span class="required">*</span></th>
+                        <td colspan="2">
+                            <input type="text" id="start_time" name="start_time" readonly value="{$adInfo.start_time}" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" onchange="cha()"/>
+                        </td>
+                        <th>结束时间：<span class="required">*</span></th>
+                        <td colspan="2">
+                            <input type="text" id="end_time" name="end_time" readonly value="{$adInfo.end_time}" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" onchange="cha()" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>附件：</th>
+                        <td colspan="5">
+                            <input type="file" name="tc_file">
+                            已上传文件：
+                            <volist name="check_file" id="v">
+                            <span><a href="/{$v.annex_path}" target="_blank">{$v.annex}</a></span>&nbsp;&nbsp;~
+                            </volist>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="dataFormOperate">
+                <input type="hidden" name="id" value="{$adInfo.id}" />
+                <input id="sub" type="button" value="确认" />
+                <a href="{:U('index')}" id="fan">取消</a>
+            </div>
+        </form>
+    </div>
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <script>
+        $(function(){
+
+            $('#djr_name').selectpicker({
+                selectAllText: '全选',
+                deselectAllText: '全不选'
+            });
+            var counts = "{$counts}";
+            for(var i=1;i<=counts;i++){
+                $('#user_'+i).selectpicker({
+                    selectAllText: '全选',
+                    deselectAllText: '全不选'
+                });
+            }
+        });
+    </script>
+</block>

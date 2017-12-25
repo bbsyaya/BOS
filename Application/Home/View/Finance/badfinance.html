@@ -1,0 +1,213 @@
+<extend name="Public/base"/>
+
+<block name="script">
+	<script type="text/javascript">
+
+			$(function() {
+				
+				//对话框选择广告主
+				$(".dataSelectDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "600",
+					height: "300",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$('#printiframe').attr('src','/finance/beforepayment?print=1');
+							//$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//选择广告主对话框
+				$(".J_dataSelect").click(function(){
+					$(".dataSelectDialog").dialog("open");
+				});
+				$(".dataSelectDialog2").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "600",
+					height: "300",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							bdhtml=window.document.body.innerHTML;
+							window.document.body.innerHTML='asdfasd;fm;asdhf;ajol';  
+							window.print();  
+							window.document.body.innerHTML=bdhtml;
+						},
+						"取消":function(){
+							$('#printiframe').printArea();
+							$(this).dialog("close");
+						}
+					},
+				});
+				//选择广告主对话框
+				$(".J_dataSelect2").click(function(){
+					$(".dataSelectDialog2").dialog("open");
+				});
+			
+			});
+		</script>
+</block>
+
+<block name="body">
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">坏账管理</span>
+				<span>财务管理</span>
+			</div>
+			<div class="ri_work">Bad debt management</div>
+		</div>
+		<!--<a class="J_dataSelect">方式一</a>
+		<a class="J_dataSelect2">方式二</a>
+		&lt;!&ndash;弹出框（认款） &ndash;&gt;
+		<div class="dataSelectDialog" title="选择广告主">
+			<iframe id="printiframe" src="/finance/beforepayment"></iframe>
+		</div>
+		<div class="dataSelectDialog2" title="选择广告主">
+			asdfasd;fm;asdhf;ajol
+		</div>-->
+	<!--筛选-->
+	<!--<div class="screenCn fl w ha">
+		<div class="screenOperate fl w">
+			<a href="http://oan.yandui.com/general/noa/web/ordinaryExpenses.php?FLOW_ID=423" target="_blank">申请坏账</a>
+			<input type="button" value="导出" class="" onclick="window.open('/Finance/badExport'+window.location.search)" />
+			<input type="button" value="高级筛选" class="J_openScreen" />
+			<div class="dataTableShow fr" goal="dataTable1">
+				<div class="dataTableShow_icon fr"></div>
+				<div class="dataTable_columnCa pa">
+					<div class="dataTable_columnCn"></div>
+					<div class="dataTableShow_close tc">关闭</div>
+				</div>
+			</div>
+		</div>
+		<div class="screenList fl w">
+			<form action="{:U('badfinance')}" method="get">
+				<table>
+					<tr>
+						<th>客户名称：</th>
+						<td><input type="text" name="name" /></td>
+						<th>业务线：</th>
+						<td><input type="text" name="pl_name" /></td>
+						<th>申请人：</th>
+						<td><input type="text" name="rec_p" /></td>
+						<th>到账日期：</th>
+						<td><input type="text" name="arrival_date" /></td>
+					</tr>
+					<tr>
+						<th class="expertScreen">审批状态：</th>
+						<td class="expertScreen">
+							<select name="status">
+								<option value="" selected="selected">全部</option>
+								<option value="已审核">已审核</option>
+								<option value="未审核">未审核</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="8">
+							<input type="submit" value="查询" />
+						</td>
+					</tr>
+				</table>
+				<input type="hidden" name="p" value="1">
+			</form>
+		</div>
+	</div>-->
+
+	<div class="screenBox swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide">
+				<form action="{:U('badfinance')}" method="get">
+
+					<div class="swiperRight">
+						<table class="tableBox">
+							<th>客户名称：</th>
+							<td><input type="text" name="name" /></td>
+							<th>业务线：</th>
+							<td><input type="text" name="pl_name" /></td>
+							<th>申请人：</th>
+							<td><input type="text" name="rec_p" /></td>
+							<td>
+								<input type="submit" value="查询" />
+							</td>
+							<tr>
+								<th>到账日期：</th>
+								<td><input type="text" name="arrival_date" /></td>
+								<th>审批状态：</th>
+								<td>
+									<select class="selectpicker" name="status">
+										<option value="" selected="selected">全部</option>
+										<option value="已审核">已审核</option>
+										<option value="未审核">未审核</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</form>
+				<!--end 基础查询-->
+			</div>
+		</div>
+	</div>
+	<!--数据表-->
+	<style type="text/css">
+		.te{padding: 0 30px;}
+	</style>
+	<div class="dataCn fl w ha" id="table_con">
+		<div class="advancedTit">
+		<div class="advancedLeft">
+			<span class="addAdv advBtn te">
+				<a href="/OA/Index/begin?id=71" target="_blank">申请坏账</a>
+			</span>
+			<span class="addAdv advBtn te"><a onclick="window.open('/Finance/badExport'+window.location.search)" >导出</a>
+			</span>
+		</div>
+		</div>
+		<table class="dataTable dataTable1">
+			<thead>
+			<tr>
+				<th>编号</th>
+				<th>客户名称</th>
+				<th>客户类型</th>
+				<th>坏账金额</th>
+				<th>申请人</th>
+				<th>所属销售/商务</th>
+				<th>申请时间</th>
+				<th>业务线</th>
+				<th>状态</th>
+			</tr>
+			</thead>
+			<tbody>
+			<volist name="data" id="item">
+				<tr>
+					<td>{$item.run_id}</td>
+					<td>{$item.data_6}</td>
+					<td>{$item.data_38}</td>
+					<td>{$item.data_40}</td>
+					<td>{$item.data_1}</td>
+					<td>{$item.data_151}</td>
+					<td>{$item.data_3}</td>
+					<td>{$item.data_21}</td>
+					<if condition = "($item['data_50'] neq '' ) ">
+					<td>已审核</td>
+					<else />
+					<td>未审核</td>
+					</if>
+				</tr>
+			</volist>
+			</tbody>
+		</table>
+		{$_page}
+	</div>
+	</div>
+	</div>
+</block>
+

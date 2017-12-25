@@ -1,0 +1,581 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="subMainBox">
+    <!--筛选-->
+    <style type="text/css">
+    .sc{
+        display: inline-block;
+        width: 100%;
+        line-height: 30px;
+        color: red;
+    }
+    .screenOperate{background: #fff;}
+    .screenList{background: #fff;}
+    </style>
+    <div  class="sc">
+       *导出功能：可以选择时间导出，解决一次性导出服务器内存溢出问题<br/>
+        计费标识查询分配状态时，可能与明细状态对不上，因为查询时是获取的计费标识明细里面的最新一条状态
+    </div>
+   <div class="screenCn fl w ha" style="margin-top:0px;"> 
+       <div class="screenOperate fl w">
+        <a class="" id="doStop" href="javascript:;">停止</a>
+      <!--   <a class="" id="doExport" href="javascript:;">导出</a> -->
+        <a class="J_openScreen" id="" href="javascript:;">分配</a>
+            <form id="dc_gongz" target="_blank" action="">
+            <span style="float:left;height:40px;"><input id="month"  name="month"  onclick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate"
+            value="<?php echo date("Y-m",time()); ?>" type="text" style="height:38px;width:181px !important;" ></span>
+            <a class="Js_addOffice" href="javascript:void(0);" onclick="exportGongz('/Home/ChargingLogo/export')">导出当月计费标识</a>
+            </form>
+            <script type="text/javascript">
+            function exportGongz(url){
+                var month =$("#month").val();
+                if(month){
+                    $("#dc_gongz").attr("action",url).submit();
+                }else{
+                    layer.msg("请选择导出月份");$("#month").focus();
+                }
+            }
+            </script>
+        <div class="dataTableShow fr" goal="dataTable1"> 
+         <div class="dataTableShow_icon fr"></div> 
+         <div class="dataTable_columnCa pa"> 
+          <div class="dataTable_columnCn">
+           <div class="dataTable_columnSingle dataTable_columnFocus" style="display:none;"></div>
+           <div class="dataTable_columnSingle dataTable_columnFocus">
+            序号
+           </div>
+           <div class="dataTable_columnSingle dataTable_columnFocus">
+            计费标识编码
+           </div>
+           <div class="dataTable_columnSingle dataTable_columnFocus">
+            计费标识名称
+           </div>
+           <div class="dataTable_columnSingle dataTable_columnFocus">
+            产品名称
+           </div>
+           <div class="dataTable_columnSingle dataTable_columnFocus">
+            广告主名称
+           </div>
+           <div class="dataTable_columnSingle dataTable_columnFocus">
+            接入单价
+           </div>
+           <div class="dataTable_columnSingle dataTable_columnFocus">
+            分配状态
+           </div>
+           <div class="dataTable_columnSingle dataTable_columnFocus">
+            是否检查
+           </div>
+           <div class="dataTable_columnSingle dataTable_columnFocus" style="display:none;"></div>
+          </div> 
+          <div class="dataTableShow_close tc">
+           关闭
+          </div> 
+         </div> 
+        </div> 
+        <div class="line fr h"></div>
+       </div> 
+       <form id="search_form" method="get" action="">
+        <div class="screenList fl w" style="display:block;">
+         <table>
+          <tbody>
+           <tr>
+            <th>广告主名称：</th>
+            <td><input name="ad_name" value="{$map['ad_name']}" type="text" /></td>
+            <th>产品名称：</th>
+            <td><input name="pro_name" value="{$map['pro_name']}" type="text" /></td>
+            <th>计费标识：</th>
+            <td><input name="jf_name" value="{$map['jf_name']}" type="text" /></td>
+            <th>供应商名称：</th>
+            <td><input name="sup_name" value="{$map['sup_name']}" type="text" /></td>
+           </tr>
+           <tr>
+            <th>分配业务线：</th>
+            <td>
+            <select id="out_bl_id" name="out_bl_id" >
+                <option value="">加载中...</option>
+            </select></td>
+            <th>分配状态：</th>
+            <td>
+            <select id="status" name="status">
+            <option value="">加载中...</option>
+            </select>
+            </td>
+            <th>推广时间：</th>
+            <td>
+            <style type="text/css">.Wdate{width:40% !important;}</style>
+                <input  name="sdate"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$map['sdate']}" type="text">
+                到
+                <input  name="edate"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$map['edate']}" type="text">
+            </td>
+              <th>产品合作状态：</th>
+            <td>
+            <select id="cooperate_state" name="cooperate_state" >
+                <option value="">全部</option>
+                <option value="1" <?php if($map['cooperate_state']==1){ ?> selected="selected" <?php } ?>>正式上量</option>
+                <option value="2" <?php if($map['cooperate_state']==2){ ?> selected="selected" <?php } ?>>测试</option>
+                <option value="3" <?php if($map['cooperate_state']==3){ ?> selected="selected" <?php } ?>>停推</option>
+            </select>
+            </td>
+           </tr>
+           <tr>
+            <td colspan="8"><input value="查询" type="submit" /><input value="取消" class="J_closeScreen" type="button" /></td>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+        <input name="p" value="1" type="hidden" />
+       </form> 
+       <script type="text/javascript">
+       var L = {
+        init:function(){
+            setTimeout(this.lazyOutId,1000);
+            setTimeout(this.lazyCharlogStatus,1000);
+        },
+        lazyOutId:function(){
+            $.get("/ChargingLogo/lazyOutId.html",function(data){
+                var ht='<option value="">全部</option>';
+                var ck="{$map['out_bl_id']}";
+                if(data){
+                    $.each(data,function(i,o){
+                        var ckd=ck==o.id?"selected='selected'":"";
+                        ht+='<option value="'+o.id+'" '+ckd+'>'+o.name+'</option>';
+                    });
+                }
+                $("#out_bl_id").html(ht);
+            });
+        },
+        lazyCharlogStatus:function(){
+            $.get("/ChargingLogo/lazyCharlogStatus.html",function(data){
+                var ht='<option value="">全部</option>';
+                var ck="{$map['status']}";
+                if(data){
+                    $.each(data,function(i,o){
+                        var ckd=ck==i?"selected='selected'":"";
+                        ht+='<option value="'+i+'" '+ckd+'>'+o+'</option>';
+                    });
+                }
+                $("#status").html(ht);
+            });
+        }
+       };
+       $(function(){L.init();});
+       </script>
+    </div>
+
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit" style="margin-top: 0px;">
+            <div class="advancedLeft">
+            </div>
+            <div class="advancedRight">
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th width="40"><input type="checkbox" /></th>
+                <th>序号</th>
+                <th>计费标识编码</th>
+                <th>计费标识名称</th>
+                <th>产品名称</th>
+                <th>广告主名称</th>
+                <th>接入单价</th>
+                <th>分配状态/产品合作状态</th>
+                <if condition="$has_check_auth">
+                    <th>是否检查</th>
+                </if>
+                <th width="150">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <notempty name="list">
+                    <form id="tabform" method="post" action="{:U('stop')}">
+                        <volist name="list" id="item" >
+                            <tr>
+                                <td><input type="checkbox" name="ids[]" value="{$item.id}" status="{$item.status}" bid="{$item.bid}" /></td>
+                                <td>{$item.id}</td>
+                                <td>{$item.code}</td>
+                                <td>{$item.name}</td>
+                                <td>{$item.prot_id}</td>
+                                <td>{$item.ad_id}</td>
+                                <td>{$item.price}</td>
+                                <?php if(!empty($op_chargingLogo_status[$item['status']])){ ?>
+                                <td>
+                                {$op_chargingLogo_status[$item['status']]}
+                                /
+                                {$item['cooperate_state_str']}
+                                </td>
+                                <?php }else{ ?>
+                                <td title="{$item['cooperate_state_str']}">暂无此状态</td>
+                                <?php }?>
+                                <if condition="$has_check_auth">
+                                    <td item-id="{$item.id}">
+                                        <bradio name="is_check[{$item.id}]" radios="op_is_check" checked="item['is_check']" separator="  "/>
+                                    </td>
+                                </if>
+                                <td>
+                                    <a href="{:U('detail?id='.$item['id'])}" target="_blank">明细</a>
+                                </td>
+                            </tr>
+                        </volist>
+                    </form>
+                <else />
+                <tr>
+                <td <if condition="$has_check_auth">colspan="10"<else />colspan="9"</if> >
+                    <div class="no-datas">暂无数据！！</div>
+                </td>
+                </tr>
+            </notempty>
+            
+            </tbody>
+        </table>
+    </div>
+
+    <div class="invoiceDialog" style="display:none;" title="分配计费标识">
+        <form id="dataform" action="{:U('update')}" method="post" enctype="multipart/form-data">
+        <table class="dialogTable_form2 w ha">
+            <input type="hidden" id="h_jfId" name="cl_id">
+            <input type="hidden" id="h_status" name="status">
+            <input type="hidden" id="h_bid" name="id">
+            <tr>
+                <th>广告主名称:</th>
+                <td id='advname'></td>
+                <th>产品名称:</th>
+                <td id='content'></td>
+                <th>内部结算利润率:</th>
+                <td><input type="text" name="in_settlement_prate"></td>
+            </tr>
+            <tr>
+                <th>核减比例:</th>
+                <td><input type="text" name="deduction_ratio"></td>
+                <th>商务人员:</th>
+                <td style="overflow: initial;">
+                    <select name='business_uid' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                        <!--<option value="0">全部</option>-->
+                        <volist name="userlist2" id='v'>
+                            <option <php>if(in_array($v['id'],I('get.uid')))echo "selected='selected'";</php>
+                            value="{$v.id}">{$v.real_name}</option>
+                        </volist>
+                    </select>
+                </td>
+                <th>供应商:</th>
+                <td style="overflow: initial;">
+                    <select name='sup_id' class="selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+                        <volist name="superlist" id='v'>
+                            <option value="{$v.id}">{$v.name}</option>
+                        </volist>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>结算周期:</th>
+                <td>
+                    <bselect name="settlement_cycle" options="settlement_cycle" />
+                </td>
+                <th>返量周期:</th>
+                <td><bselect name="return_cycle" options="return_cycle" /></td>
+                <th>结算主体:</th>
+                <td><bselect name="sb_id" options="SignBody" /></td>
+            </tr>
+            <tr>
+                <th>价格类型:</th>
+                <td><bselect name="promotion_price_type" options="op_price_type" selected="data['price_type']" change="chgPriType(this)"/></td>
+                <th>计费模式:</th>
+                <td><bselect name="charging_mode" options="charging_mode" /></td>
+                <th>业务线:</th>
+                <td>
+                    <select name="bl_id">
+                        <volist name="bl_id" id="v">
+                        <option value="{$v.id}">{$v.name}</option>
+                        </volist>
+                    </select>
+                </td>
+            </tr>
+            <tr class="jg">
+                <th>价格/比例:</th>
+                <td><input type="text" name="promotion_price"></td>
+                <!--<th>收件人电话:</th>
+                <td id='tel'>……</td>
+                <th>收件人地址:</th>
+                <td id='address' style="white-space: normal;">……</td>-->
+            </tr>
+        </table>
+        <!-- 阶梯价格-->
+        <table class="dynamicTable ladderPrice J_jtjg" style="margin-top: -1px; <if condition="$data['price_type'] neq 2">display: none;</if>">
+        <caption align="bottom">
+            <input id="addTieredPrice" class="addTR" type="button" value="" />
+        </caption>
+        <tr>
+            <th>量级</th>
+            <th>金额</th>
+            <th width="150">操作</th>
+        </tr>
+        <assign name="j" value="1" />
+            <tr>
+                <td><input type="text" name="tiered_price[{$j}][0]" /></td>
+                <td><input type="text" name="tiered_price[{$j}][1]" /></td>
+                <td>
+                    <span class="doDataDelete" idx="{$key}" item-id="{$data.id}" item-type="tieredPrice" style="cursor: pointer">删除</span>
+                </td>
+            </tr>
+            <assign name="j" value="$j+1" />
+        </table>
+        <!--<table class="dynamicTable ladderPrice J_jtjg" style="margin-top: -1px;">
+            <caption align="bottom">
+                <input id="addTieredPrice" class="addTR" type="button" value="" />
+            </caption>
+            <tr>
+                <th>量级</th>
+                <th>金额</th>
+                <th width="150">操作</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="num" value="" /></td>
+                <td><input type="text" name="t_price" value="" /></td>
+                <td>
+                    <span class="dataUpdate">编辑</span>
+                    <span class="dataSave">保存</span>
+                    <span class="dataDelete">删除</span>
+                </td>
+            </tr>
+        </table>-->
+        <br />
+        <table id="DaydataInfoTable" class="dialogTable_list w ha">
+            <tr>
+                <th>ID</th>
+                <th>计费标识编码</th>
+                <th>计费标识</th>
+                <th>开始推广日期(必填)</th>
+                <th style="color: #F00">结束日期(未确定结束日期请勿填写)</th>
+            </tr>
+            <tr>
+                <td id="fid"></td>
+                <td id="jf_code"></td>
+                <td id="jf_name"></td>
+                <td><input type="text" name="promotion_stime" onClick="WdatePicker();"></td>
+                <td><input type="text" name="promotion_etime" onClick="WdatePicker();"></td>
+            </tr>
+        </table>
+        </form>
+    </div>
+    <!--分页-->
+    {$_page}
+</div>
+</block>
+<block name="script">
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script>
+        jQuery(function($){
+            $("#doStop").click(function(){
+                var d=new Date();
+                var datestr = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+                if (confirm('确认结束计费标识且默认结束时间为:'+datestr)) {
+                    if($("input[name='ids[]']:checked").val()) {
+                        $("#tabform").submit();
+                    } else {
+                        alert('请选择计费标识');
+                    }
+                }
+            });
+
+            $("[name^='is_check']").click(function(){
+                var id = $(this).parent().attr('item-id');
+                var value = $(this).val();
+                var retstatus = false;
+
+                $.ajax({
+                    type : "get",
+                    url : "{:U('checkItem')}",
+                    data : {id:id,value:value},
+                    async : false,
+                    success : function(ret){
+                        if (ret != 'ok') {
+                            alert(ret);
+                        } else {
+                            retstatus = true;
+                        }
+                    }
+                });
+
+                /*$.get("{:U('checkItem')}", {id:id,value:value}, function(ret){
+                    if (ret != 'ok') {
+                        alert(ret);
+                    } else {
+                        retstatus = true;
+                    }
+                });*/
+                return retstatus;
+
+            });
+
+            $("#doExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export')}";
+                window.open(url+'?'+param); 
+                // window.location.href=url+'?'+param;
+            });
+
+            $(".J_openScreen").click(function(){
+                var jf_id = "";
+                $("input:checkbox[name='ids[]']:checked").each(function(i){
+
+                    if(0==i){
+                        var jfid = $(this).val();
+                        var status = $(this).attr('status');
+                        var bid = $(this).attr('bid');
+                        if(status == 1){
+                            alert("计费标识状态为使用中，请重新选择");return false;
+                        }else if(status == 0){
+                            alert("计费标识已停止，请重新选择");return false;
+                        }else if(status == 2 || status == 3){
+                            jf_id = jfid;
+                            $("#h_jfId").val(jf_id);
+                            $("#h_status").val(status);
+                            $("#h_bid").val(bid);
+                            var gg = $(this).parents('tr').find('td').eq(5).text();
+                            $("#advname").html(gg);
+                            var pro = $(this).parents('tr').find('td').eq(4).text();
+                            $("#content").html(pro);
+                            var fid = $(this).parents('tr').find('td').eq(1).text();
+                            $("#fid").html(fid);
+                            var jf_code = $(this).parents('tr').find('td').eq(2).text();
+                            $("#jf_code").html(jf_code);
+                            var jf_name = $(this).parents('tr').find('td').eq(3).text();
+                            $("#jf_name").html(jf_name);
+                        }
+                    }else if(i>=1){
+                        alert("计费标识只能分配一条");return false;
+                    }
+                });
+
+                if(jf_id){
+                    $(".invoiceDialog").attr('jfid',jf_id);
+                    $(".invoiceDialog").dialog("open");
+                }
+
+            });
+
+            $(".invoiceDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "1100",
+                height: "500",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        var form = $("#dataform");
+                        var url = form.attr('action');
+                        var btnObj = $(this);
+                        btnObj.val('保存中...');
+                        btnObj.attr('disabled',true);
+                        $("#dataform").ajaxSubmit({
+                            type: 'post',
+                            url: url,
+                            timeout: 5000,
+                            success:function(ret){
+                                alertnewpage2(ret.msg,ret.go);
+                                btnObj.val('保存');
+                                btnObj.attr('disabled',false);
+                            },
+                            error:function(xhr, status, error){
+                                if(status=='timeout'){
+                                    alertnewpage2('服务器繁忙，请稍后再试!');
+                                } else {
+                                    alertnewpage2('保存出错,请联系技术');
+                                }
+                                btnObj.val('保存');
+                                btnObj.attr('disabled',false);
+                            }
+
+                        });
+                        return false;
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+            $(".dynamicTable").on('click', '.doDataDelete', function(){
+                var id = $(this).attr('item-id');
+                var thisbtn = this;
+                if (confirm('确认删除此条信息?')) {
+                    if (!id) {
+                        $(thisbtn).parents('tr').remove();
+                    }
+                }
+            });
+
+            /*========================阶梯价格========================*/
+            //新增
+            $("#addTieredPrice").click(function() {
+                var tabObj = $(this).parents('table');
+                var idx = $(tabObj).find('tr').length;
+                $(tabObj).append("<tr>" +
+                        "<td><input type='text' name=\"tiered_price["+idx+"][0]\" value=\"\" /></td>" +
+                        "<td><input type='text' name=\"tiered_price["+idx+"][1]\" value=\"\" /></td>" +
+                        "<td><span class=\"doDataDelete\" style=\"cursor: pointer\">删除</span></td>" +
+                        "</tr>");
+            });
+            /*========================阶梯价格========================*/
+            //修改
+            /*$(".ladderPrice").on({
+                click: function() {
+                    $(this).hide();
+                    $(this).parents("td").find(".dataSave").show();
+                    for (i = 0; i < $(this).parents("tr").find("td").length - 1; i++) {
+                        var iptV = $(this).parents("tr").find("td").eq(i).text();
+                        $(this).parents("tr").find("td").eq(i).html("<input type=\"text\" value=\"" + iptV + "\" />");
+                    };
+
+                }
+            }, ".dataUpdate");
+            //保存
+            $(".ladderPrice").on({
+                click: function() {
+                    $(this).hide();
+                    $(this).parents("td").find(".dataUpdate").show();
+                    for (i = 0; i < $(this).parents("tr").find("td").length - 1; i++) {
+                        var tdValue = $(this).parents("tr").find("td").eq(i).children("input").val();
+                        $(this).parents("tr").find("td").eq(i).html(tdValue);
+                    };
+                }
+            }, ".dataSave");
+            //新增
+            $(".ladderPrice .addTR").click(function() {
+                $(".ladderPrice").append("<tr>" +
+                        "<td><input type=\"text\" /></td>" +
+                        "<td><input type=\"text\" /></td>" +
+                        "<td>" +
+                        "<span class=\"dataUpdate\" style=\"display:none;\">编辑</span>" +
+                        "<span class=\"dataSave\" style=\"display:inline-block;\">保存</span>" +
+                        "<span class=\"dataDelete\">删除</span>" +
+                        "</td>" +
+                        "</tr>");
+            });*/
+        });
+        function chgPriType(e){
+            if ($(e).val() == 2) { //阶梯价格
+                $("[name='price']").hide();
+                $(".jg").hide();
+                $(".J_jtjg").show();
+            } else if ($(e).val() == 3) { //自定义价格
+                $("[name='price']").show();
+                $(".jg").show();
+                $("[name='price']").val(0);
+                $(".J_jtjg").hide();
+            } else if ($(e).val() == 1) {
+                $("[name='price']").show();
+                $(".jg").show();
+                $(".J_jtjg").hide();
+            }
+        }
+
+    </script>
+</block>

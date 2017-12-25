@@ -1,0 +1,63 @@
+@charset "utf-8";
+/*css reset*/
+body,div,dl,dt,dd,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin: 0px;	padding: 0px;}
+table{border-collapse: collapse; border-spacing: 0px;}
+fieldset,img{border: 0px;}
+address,caption,cite,code,dfn,em,strong,th,var{font-style: normal; font-weight: normal;}
+ol,ul{list-style: none;}
+caption,th{text-align: left;}
+h1,h2,h3,h4,h5,h6{font-size: 100%; font-weight: normal;}
+q:before,q:after{content:''}
+abbr,acronym{border: 0px;}
+body{font: 12px/1.5 "微软雅黑";}
+select,
+input:focus{outline: none;}
+a{background:none;border:none;outline:none;}
+a:link{text-decoration: none;color:#000000;}
+a:visited{text-decoration: none;color:#000000;outline:none;}
+a:hover{text-decoration: none!important;}
+a:active{text-decoration: none;outline:none;}
+
+
+/*文字排版*/
+.f12{font-size: 12px;}
+.f13{font-size: 13px;}
+.f14{font-size: 14px;}
+.f15{font-size: 15px;}
+.f16{font-size: 16px;}
+.f17{font-size: 17px;}
+.f18{font-size: 18px;}
+.f19{font-size: 19px;}
+.f20{font-size: 20px;}
+.fb{font-weight: bold;}
+.fn{font-weight: normal;}
+.t2{text-indent: 2em;}
+.lh100{line-height: 100%;}
+.lh150{line-height: 150%;}
+.lh200{line-height: 200%;}
+.unl{text-decoration: underline;}
+.no_unl{text-decoration: none;}
+/*定位*/
+.tl{text-align: left;}
+.tc{text-align: center;}
+.tr{text-align: right;}
+.bc{margin-left: auto;margin-right: auto;}
+.fl{float: left;}
+.fr{float: right;}
+
+.cb{clear: both;}
+.cl{clear: left;}
+.cr{clear: right;}
+.clearfix:after{content: ".";display: block;height: 0px;clear: both;visibility: hidden;}.clearfix{display: inline-block;}*html .clearfix{height: 1%;} .clearfix{display: block;}
+.vm{vertical-align: middle;}
+.pr{position: relative;}
+.pa{position: absolute;}
+.pf{position: fixed;}
+.zoom{zoom: 1;}
+.hidden{visibility: hidden;}
+.none{display: none;}
+/*长度高度*/
+.wa{width: auto;}
+.w{width: 100%;}
+.ha{height: auto;}
+.h{height: 100%;}

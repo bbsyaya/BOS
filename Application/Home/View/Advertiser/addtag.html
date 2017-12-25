@@ -1,0 +1,37 @@
+<extend name="Public/base"/>
+<block name="body">
+    <!--数据表-->
+    <form id="dataform"  action="{:U('addtag_do')}" method="post" enctype="multipart/form-data">
+    <div class="dataCn fl w ha">
+        <div class="dataFormContainer">
+            <div class="dataFormTitle">基本信息</div>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>标签名：</th>
+                        <td><input id="tagname" type="text" name="tagname" /></td>
+                        <th>上级标签：<span class="required">*</span></th>
+                        <td><select name="pid">
+                    <option value="0">无</option>
+                    <volist name="data" id='v'>
+                    <option value="{$v.id}">{$v.tagname}</option>
+                    </volist>
+                    </select></td>
+                    </tr>
+                    
+                </table>
+            </div>
+
+   
+            <div class="dataFormOperate">
+                <input id="submitForm" type="submit" value="保存" />
+            </div>
+        </div>
+
+    </div>
+    </form>
+
+
+</block>
+
+

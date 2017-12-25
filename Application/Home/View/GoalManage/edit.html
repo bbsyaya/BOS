@@ -1,0 +1,275 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="subMainBox">
+        <style type="text/css">
+            #sub{
+                line-height: 30px;
+                color: #4776e6;
+                font-size: 14px;
+                font-family: 'Microsoft YaHei';
+                min-width: 75px;
+                padding: 0 5px;
+                cursor: pointer;
+                border-radius: 15px;
+                border: 1px solid #4776e6;
+                display: inline-block;
+                box-sizing: border-box;
+                margin-right: 20px;;
+            }
+            #fan{
+                line-height: 30px;
+                color: #4776e6;
+                font-size: 14px;
+                font-family: 'Microsoft YaHei';
+                min-width: 75px;
+                padding: 0 5px;
+                cursor: pointer;
+                border-radius: 15px;
+                border: 1px solid #4776e6;
+                display: inline-block;
+                box-sizing: border-box;
+            }
+            .xian{background: url("/Public/newUI/img/xian.png");height: 1px;margin-bottom: 15px;}
+            .ritem{word-break:break-all;}
+        </style>
+
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text"><a href="/TargetCheck/index">风控目标管理</a></span>&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size: 20px;">-></a>
+                <span><a href="/GoalManage/index">控制目标步骤管理</a></span>
+            </div>
+
+            <div class="dataTable_columnCa_b pa">
+                <div class="dataTable_columnCn_b"></div>
+                <div class="dataTableShow_close_b tc">关闭</div>
+            </div>
+        </div>
+        <div class="xian"></div>
+
+        <div class="dataFormTitle" style="background-color: #E6F1FF;color: #4776e6;">控制目标步骤管理</div>
+        <form id="dataform"  action="{:U('update')}" method="post" enctype="multipart/form-data">
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <caption align="bottom">
+                        <input id="addContacts" class="addTR" type="button" value="创建步骤" />
+                    </caption>
+                    <tr>
+                        <th>控制目标：<span class="required">*</span></th>
+                        <php>if(!empty($adInfo['annex'])){</php>
+                        <td><input type="text" class="ritem" name="name" value="{$adInfo.name}" /></td>
+                        <td><input type="file" name="aims_file"></td>
+                        <td>已上传文件：<a href="/{$adInfo['annex_path']}" target="_blank">{$adInfo['annex']}</a></td>
+                        <php>}else{</php>
+                        <td colspan="2"><input type="text" class="ritem" name="name" value="{$adInfo.name}" /></td>
+                        <td><input type="file" name="aims_file"></td>
+                        <php>}</php>
+                    </tr>
+                    <tr>
+                        <th>状态：<span class="required">*</span></th>
+                        <td colspan="3">
+                            <select id="status" name="status">
+
+                                <php>if($adInfo['status'] == 1){</php>
+                                <option value="">请选择</option>
+                                <option value="1" selected>正常</option>
+                                <option value="0">暂停</option>
+                                <php>}elseif($adInfo['status'] == 2){</php>
+                                <option value="">请选择</option>
+                                <option value="1">正常</option>
+                                <option value="0" selected>暂停</option>
+                                <php>}else{</php>
+                                <option value="">请选择</option>
+                                <option value="1" selected>正常</option>
+                                <option value="0">暂停</option>
+                                <php>}</php>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>备注说明：</th>
+                        <td colspan="3"><textarea id="remark" name="remark" style="text-align: center;">{$adInfo.remark}</textarea></td>
+                    </tr>
+                    <!--<assign name="j" value="1" />
+                    <volist name="stepData" id="v">
+                    <tr>
+                        <th>步骤{$v.sid}：<span class="required">*</span></th>
+                        <td>
+                            <input type="text" class="ritem" name="procontacts[{$j}][name]" value="{$v.name}" />
+                            <input type="hidden" name="procontacts[{$j}][sid]" value="{$v.sid}">
+                            <input type="hidden" name="procontacts[{$j}][annex_path]" id="step_url_{$v.id}" value="{$v.annex_path}">
+                            <input type="hidden" name="procontacts[{$j}][annex]" id="annex_url_{$v.id}" value="{$v.annex}">
+                        </td>
+                        <td>
+                            <input type="file" name="procontacts[{$j}][file_name]">
+                            <span class='ysc'>已上传文件：<a href='{$v.annex_path}' target=\"_blank\" class='a_ysc' id=\"a_ysc_"+idx+"\">{$v.annex}</a></span>
+                        </td>
+                        <td>
+                            <span item-id="{$v.id}" item-type="bz" class="doDataDelete">删除</span>
+                        </td>
+                        <input type="hidden" name="procontacts[{$j}][id]" value="{$v.id}"/>
+                    </tr>
+                        <assign name="j" value="$j+1" />
+                    </volist>-->
+                    <tr id="loaingtr">
+                        <td colspan="4">
+                            <div class="no-data" id="ltip">加载中....</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="dataFormOperate">
+                <input type="hidden" name="id" value="{$adInfo.id}" />
+                <input id="sub" type="button" value="保存" />
+                <a href="{:U('index')}" id="fan">返回</a>
+            </div>
+        </form>
+    </div>
+
+    <block name="script">
+        <script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+        <script type="text/javascript">
+
+            $(function(){
+
+                $("#sub").click(function(){
+                    var form   = $("#dataform");
+                    var url    = form.attr('action');
+                    $("#dataform").ajaxSubmit({
+                        type: 'post',
+                        url: url,
+                        timeout: 5000,
+                        success:function(ret){
+                            if(ret.status == 1){
+                                layer.alert(ret.msg);
+                                //location.reload();
+                                var goUrl = '/GoalManage/index';
+                                window.location.href = goUrl;
+                            }else{
+                                layer.alert(ret.msg);
+                            }
+
+                        }
+
+                    });
+                });
+
+                var id = "{$adInfo['id']}";
+                if(id){
+                    $.get("{:U('step_sel')}",{id:id},function(data){
+                        if(data.step_list){
+
+                            $.each(data.step_list,function(i,v){
+                                var del = '';
+                                if(v.annex){
+                                    del = '<span style="cursor: pointer;color:#23527c;" class="del" sid='+v.sid+'>删除</span>';
+                                }else{
+                                    del = '';
+                                }
+                                var str = '';
+                                str+='<tr>' +
+                                        '<th>步骤'+v.sid+'：<span class="required">*</span></th>' +
+                                        '<td><input type="text" class="ritem" name="procontacts['+ v.sid+'][name]" value='+ v.name+' />' +
+                                        '<input type="hidden" name="procontacts['+ v.sid+'][sid]" value='+ v.sid+'>' +
+                                        '<input type="hidden" name="procontacts['+ v.sid+'][annex_path]" id="step_url_'+v.sid+'" value="'+v.annex_path+'">' +
+                                        '<input type="hidden" name="procontacts['+ v.sid+'][annex]" id="annex_url_'+v.sid+'" value='+v.annex+'></td>' +
+                                        '<td><input type="file" id="upid_'+v.sid+'" >' +
+                                        '<span class="ysc_'+v.sid+'">已上传文件：<a href="'+v.annex_path+'" target="_blank" class="a_ysc" id="a_ysc_'+v.sid+'">'+v.annex+'</a>&nbsp;&nbsp;'+del+'</span></td>' +
+                                        '<td><input type="button" value="删除此步骤" item-id="'+v.id+'" item-type="bz" class="doDataDelete" />' +
+                                        '</td>' +
+                                        '<input type="hidden" name="procontacts['+ v.sid+'][id]" value="'+v.id+'"/>' +
+                                      '</tr>';
+                                $("#loaingtr").after(str).show();
+                                //name="procontacts['+ v.sid+'][file_name]"
+                                //<span item-id="'+v.id+'" item-type="bz" class="doDataDelete" style="color:red;">删除</span>
+                                step_upload(v.sid);
+                            });
+                            $("#loaingtr").hide();
+
+                            $(".del").click(function(){
+                                var sid = $(this).attr('sid');
+                                if(sid){
+                                    $("#a_ysc_"+sid).attr("href",'');
+                                    $("#a_ysc_"+sid).text('');
+                                }
+                            });
+                            //if(data.logo_list.length<10) $("#tbody").height("auto");
+                        }else{
+                            $("#ltip").html("暂无步骤数据");
+                        }
+                    });
+                }else{
+                    $("#loaingtr").remove();
+                }
+
+                $("#addContacts").click(function() {
+                    $("#loaingtr").remove();
+                    var tabObj = $(this).parents('table');
+                    var idx_x = $(tabObj).find('tr').length;
+                    var idx = idx_x-2;
+                    $(tabObj).append("<tr>" +
+                            "<th>步骤"+idx+"：</th>" +
+                            "<td><input type=\"text\" name=\"procontacts["+idx+"][name]\" value='' class='ritem' rtype='name'/></td>" +
+                            "<td><input type=\"file\" id=\"upid_"+idx+"\" ><input type=\"hidden\" id=\"sid\" name=\"procontacts["+idx+"][sid]\" value="+idx+"><input type='hidden' name='procontacts["+idx+"][annex_path]' id=\"step_url_"+idx+"\"><input type='hidden' name='procontacts["+idx+"][annex]' id=\"annex_url_"+idx+"\"><span class='ysc' style='display: none;'>已上传文件：<a href='' target=\"_blank\" class='a_ysc' id=\"a_ysc_"+idx+"\"></a></span></td>" +
+                            "<td><input type=\"button\" value=\"删除此步骤\" class=\"doDataDelete\" idx="+idx+" item-id='' item-type='' /></td>" +
+                            "</tr>");
+                    step_upload(idx);
+                });
+                //<span class=\"doDataDelete\" idx="+idx+" item-id='' item-type='' style='color:red;'>删除</span>
+                //删除按钮
+                $(".dataFormTable").on('click', '.doDataDelete', function(){
+                    var id = $(this).attr('item-id');
+                    var type = $(this).attr('item-type');
+                    var thisbtn = this;
+
+                    if (confirm('确认删除此条信息?')) {
+                        if (!id) {
+                            $(thisbtn).parents('tr').remove();
+                        }
+
+                        if (type=='bz') { //删除步骤
+                            $.post("{:U('deleteGoal')}",{id:id},function(ret){
+                                alertnewpage2(ret.msg);
+                                if(ret.error == 0) {
+                                    $(thisbtn).parents('tr').remove();
+                                }
+                            },'json');
+                        }
+
+                    }
+
+                });
+            })
+
+            function step_upload(file_id){
+
+                var button = $('#upid_'+file_id);
+                new AjaxUpload(button,{
+                    action: "{:U('step_upload')}",
+                    name: 'files',
+                    onChange:function(){
+                    },
+                    onSubmit : function(file, ext){
+                        layer.msg("上传中...",{time:99999999});
+                    },
+                    onComplete: function(file, response){
+                        var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+                        if(list.status==1){
+                            //button.next().val(list.data);
+                            $("#step_url_"+file_id).val(list.data);
+                            $("#annex_url_"+file_id).val(list.name);
+                            //$("#step_url_"+file_id).next().val(1);
+
+                            $("#a_ysc_"+file_id).text(list.name);
+                            $("#a_ysc_"+file_id).attr("href",list.data);
+                            $(".ysc_"+file_id).show();
+                        }
+                        //console.log(list);
+                        layer.alert(list.msg);
+                        layer.closeAll();
+                    }
+                });
+            }
+        </script>
+    </block>
+</block>

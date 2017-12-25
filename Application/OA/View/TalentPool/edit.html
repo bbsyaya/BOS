@@ -1,0 +1,338 @@
+<extend name="Public/base"/>
+<block name="body">
+    <include file="Public/commonoa" />
+    <style type="text/css">
+        label{font-weight:normal!important}.wd300{width:68% !important}.wd100{width:100% !important}.dayTwo-1{width:28%!important}.fd-k{margin-top:20px}.fs-color{color:#1269cc!important;border-bottom-color:#1269cc!important}.btnBox{padding-bottom:100px!important}.a-com{border:medium none;border-radius:3px;color:#fff;height:36px;margin:0 15px;background:#1269cc none repeat scroll 0 0;width:110px;line-height:36px;display:inline-block;color:#fff!important;font-size:14px;text-align:center}.submit{width: auto !important;padding: 0px 20px !important;height: 36px;line-height: 36px;}.btnBox input[type="button"]{ margin: 0px !important;}.glzw{color:#1269cc !important;font-size:12px;margin-left:8px;text-decoration: underline !important;}.dayTwo-a{width:48% !important;}.entryList li .entryCon label{width: 20% !important;height: 44px !important;overflow: hidden;line-height: 44px !important;display: inline-block !important; float: left;}.xt-sz{color:#1269cc !important;}.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){width: 60% !important;}.bootstrap-select.btn-group .dropdown-menu li{width: 100% !important; height: 32px !important; line-height: 32px  !important;}
+        #pic{
+            width:800px;
+            height:500px;
+        }
+        #shows{
+            width:100px;
+            height:100px;
+            border-radius:50% ;
+            margin:20px auto;
+            cursor: pointer;
+        }
+        .ba{padding:0 5px;display: inline-block;background-color: #1a72d6;font-size: 12px;width: 76px;height: 32px;line-height: 32px;text-align: center;color: white;vertical-align: top;border-radius: 5px;}
+        .dataFormOperates{float: left;width: 100%;height: 50px; text-align: center; line-height: 50px;}
+        #sub{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:5px!important;color:#fff!important;cursor:pointer!important;height:32px!important;line-height:32px !important;padding:0 5px !important;width: 76px;font-size: 12px;vertical-align: top;margin-right: 20px;}
+        .txi{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:5px!important;color:#fff!important;cursor:pointer!important;height:32px!important;line-height:32px !important;padding:0 5px !important;width: 76px;font-size: 12px !important;vertical-align: top;margin-right: 20px;}
+    </style>
+    <div class="subConten  fl w">
+        <!--内容-->
+        <div class="subCon  fl w">
+            <form action="/OA/TalentPool/update" method="get" id="dataform" enctype="multipart/form-data">
+
+                <fieldset class="fd-k fl w">
+                    <legend class="fs-color"><a href="/OA/HrManage/hrList" style="color: #1269cc">人事办公</a>-><a href="/OA/TalentPool/index" style="color: #1269cc">人才储备库</a>-><php>if(I('get.id')){</php>编辑人才储备<php>}else{</php>新增人才储备<php>}</php></legend>
+                    <ul class="entryList">
+                        <li>
+                            <p class="entryCon">
+                                <label class="entryThree"  style="width:30% !important;">人才编号</label>
+                                <php>if($data['numbering']){</php>
+                                {$data['numbering']}
+                                <php>}else{</php>
+                                系统自动生成
+                                <php>}</php>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>姓名</label>
+                                <input name="name"  placeholder="请输入姓名" id="rec_channel" type="text"  class="items" value="{$data['name']}">
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>头像</label>
+                                <php>if($data['avatar_path']){</php>
+                                <img id="shows" src="/{$data['avatar_path']}">
+                                <php>}</php>
+                                <input id="upload" name="avatar_file" accept="image/*" type="file" <?php if($data['avatar_path']){ ?> style="display: none" <?php } ?> />
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>性别</label>
+                                <select name="sex">
+                                    <php>if($data['sex'] == 1){</php>
+                                        <option value="1" selected="selected">女</option>
+                                        <option value="0">男</option>
+                                    <php>}else{</php>
+                                    <option value="1">女</option>
+                                    <option value="0" selected="selected">男</option>
+                                    <php>}</php>
+                                </select>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>人才层级</label>
+                                <select name="talent_level">
+                                    <php>if($data['talent_level'] == 2){</php>
+                                    <option value="1">一般员工</option>
+                                    <option value="2" selected>基层管理</option>
+                                    <option value="3">中层管理</option>
+                                    <option value="4">高层管理</option>
+                                    <option value="5">技术专家</option>
+                                    <php>}elseif($data['talent_level'] == 3){</php>
+                                    <option value="1">一般员工</option>
+                                    <option value="2">基层管理</option>
+                                    <option value="3" selected>中层管理</option>
+                                    <option value="4">高层管理</option>
+                                    <option value="5">技术专家</option>
+                                    <php>}elseif($data['talent_level'] == 4){</php>
+                                    <option value="1">一般员工</option>
+                                    <option value="2">基层管理</option>
+                                    <option value="3">中层管理</option>
+                                    <option value="4" selected>高层管理</option>
+                                    <option value="5">技术专家</option>
+                                    <php>}elseif($data['talent_level'] == 5){</php>
+                                    <option value="1">一般员工</option>
+                                    <option value="2">基层管理</option>
+                                    <option value="3">中层管理</option>
+                                    <option value="4">高层管理</option>
+                                    <option value="5" selected>技术专家</option>
+                                    <php>}else{</php>
+                                    <option value="1"  selected>一般员工</option>
+                                    <option value="2">基层管理</option>
+                                    <option value="3">中层管理</option>
+                                    <option value="4">高层管理</option>
+                                    <option value="5">技术专家</option>
+                                    <php>}</php>
+                                </select>
+                            </p>
+                        </li>
+                        <li></li>
+                        <li>
+                            <p class="entryCon">
+                                <label>可胜任岗位</label>
+                                <input name="competent_positions" placeholder="请输入可胜任岗位"  type="text"  class="items" value="{$data['competent_positions']}">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p class="entryCon">
+                                <label>学历</label>
+                                <select name="education">
+                                    <php>if($data['education'] == 2){</php>
+                                    <option value="1">高中及以下</option>
+                                    <option value="2" selected>大专</option>
+                                    <option value="3">本科</option>
+                                    <option value="4">研究生及以上</option>
+                                    <php>}elseif($data['education'] == 3){</php>
+                                    <option value="1">高中及以下</option>
+                                    <option value="2">大专</option>
+                                    <option value="3" selected>本科</option>
+                                    <option value="4">研究生及以上</option>
+                                    <php>}elseif($data['education'] == 4){</php>
+                                    <option value="1">高中及以下</option>
+                                    <option value="2">大专</option>
+                                    <option value="3">本科</option>
+                                    <option value="4" selected>研究生及以上</option>
+                                    <php>}else{</php>
+                                    <option value="1" selected>高中及以下</option>
+                                    <option value="2">大专</option>
+                                    <option value="3">本科</option>
+                                    <option value="4">研究生及以上</option>
+                                    <php>}</php>
+                                </select>
+                            </p>
+                        </li>
+                        <li></li>
+                        <li>
+                            <p class="entryCon">
+                                <label>工作开始时间</label>
+                                <input name="start_time" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$data.start_time}"/>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>联系电话</label>
+                                <input name="phone" placeholder="请输入联系电话"  type="text"  class="items" value="{$data['phone']}">
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>QQ</label>
+                                <input name="qq"   placeholder="请输入qq" type="text"  class="items" value="{$data['qq']}">
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>微信</label>
+                                <input name="wechat"   placeholder="请输入微信"  type="text"  class="items" value="{$data['wechat']}">
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>最近工作经历一</label>
+                                <input name="work_experience_one"   placeholder="请输入最近工作经历一"  type="text"  class="items" value="{$data['work_experience_one']}">
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>最近工作经历二</label>
+                                <input name="work_experience_two"   placeholder="请输入最近工作经历二" type="text"  class="items" value="{$data['work_experience_two']}">
+                            </p>
+                        </li>
+                        <li>
+                            <p class="entryCon">
+                                <label>人才情况说明</label>
+                                <input name="remark"   placeholder="请输入人才情况说明" type="text"  class="items" value="{$data['remark']}">
+                            </p>
+                        </li>
+                    </ul>
+                </fieldset>
+
+                <fieldset class="fd-k fl w">
+                <php>if($data['status'] == 1){</php>
+                <span>离职人员人才详情</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="txi" uid="{$data.userid}" value="点击详情">
+                <php>}</php>
+                </fieldset>
+
+                <fieldset class="fd-k fl w">
+                    <legend class="fs-color"></legend>
+                    <input type="file" id="annex_file">
+                    <span class="ysc_class" style="display: none;">已上传文件：<a href="" id="ysc" ></a></span>
+
+                    <input type="hidden" id="annex" name="annex">
+                    <input type="hidden" id="annex_path" name="annex_path">
+                </fieldset>
+
+                <div class="dataFormOperates">
+                    <input type="hidden" name="id" value="{$data.id}" />
+                    <input id="sub" type="button" value="保存" />
+                    <a href="{:U('index')}" id="fan"><span class="ba">返回</span></a>
+                </div>
+
+                <fieldset class="fd-k fl w">
+                    <php>if($data['annex_path'] && $data['id'] && $data['path']==1)$aa = 'style="display: block;"';else $aa = 'style="display: none;"';</php>
+                    <php>if($data['annex_path'] && $data['id'] && $data['path']==2)$bb = 'style="display: block;"';else $bb = 'style="display: none;"';</php>
+                    <a id="media" class="media" href="{$data['annex_path']}" {$aa}></a>
+                    <img id="pic" src="{$data['annex_path']}" {$bb}>
+
+                    <a href="{$data['annex_path']}" target="_blank">{$data['annex']}</a>
+
+                </fieldset>
+
+            </form>
+        </div>
+    </div>
+
+<script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/jquery.media.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var path_id = "{$data.path}";
+        if(path_id == 1){
+            $('a.media').media({width:800, height:600});
+        }
+
+        $("#sub").click(function () {
+            var form = $("#dataform");
+            var url = form.attr('action');
+            $("#dataform").ajaxSubmit({
+                type: 'post',
+                url: url,
+                timeout: 5000,
+                success: function (ret) {
+                    if (ret.status == 1) {
+                        layer.alert(ret.msg);
+                        //location.reload();
+                        var goUrl = '/OA/TalentPool/index';
+                        window.location.href = goUrl;
+                    } else {
+                        layer.alert(ret.msg);
+                    }
+                }
+            });
+        });
+
+        $("#shows").click(function(){
+            $("#upload").click();
+            $("#upload").on("change",function(){
+                var objUrl = getObjectURL(this.files[0]) ; //获取图片的路径，该路径不是图片在本地的路径
+                if (objUrl) {
+                    $("#shows").attr("src", objUrl) ;
+                }
+            });
+        });
+
+        $(".txi").click(function(){
+            var user_id  = $(this).attr('uid');
+            //跳转链接
+            //window.location.href='/OA/HrManage/detail?user_id='+user_id+'';
+            window.open('/OA/HrManage/detail?user_id='+user_id+'','_blank');
+        });
+
+        talent_upload();
+    });
+
+    function talent_upload(files){
+       /* var button = $('#annex_file');
+        new AjaxUpload(button,{
+            action: "/OA/TalentPool/talent_upload",
+            name: 'files',
+            onSubmit:function(){
+                layer.msg("上传中...",{time:99999999});
+            },
+            onComplete: function(file, response){
+                var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+               console.log(1);
+            }
+        });
+        */
+       console.log(11);
+        var button = $("#annex_file");
+        new AjaxUpload(button,{
+            action: "/OA/TalentPool/talent_upload",
+            name: 'files',
+            onChange:function(){
+                console.log(1);
+            },
+            onSubmit : function(file, ext){
+                layer.msg("上传中...",{time:99999999});
+            },
+            onComplete: function(file, response){
+                var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+                if(list.status==1){
+                    $("#annex_path").val(list.data);
+                    $("#annex").val(list.name);
+                    if(list.houzui == 'pdf'){
+
+                        $("#media").attr("href", list.data);
+                        $("#media").text(list.name);
+                        $('a.media').media({width:800, height:600});
+                        $("#media").show();
+                    }else if(list.houzui =='jpg' || list.houzui =='jpeg' || list.houzui =='png' || list.houzui =='bmp' ||list.houzui =='JPG' || list.houzui =='JPEG' || list.houzui =='PNG' || list.houzui =='BMP'){
+
+                        $("#pic").attr("src", list.data);
+                        $("#pic").show();
+                    }
+                    $("#ysc").attr("href", list.data);
+                    $("#ysc").text(list.name);
+                    $(".ysc_class").show();
+                }
+                layer.alert(list.msg);
+                layer.closeAll();
+            }
+        });
+    }
+
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url;
+    }
+
+</script>
+</block>

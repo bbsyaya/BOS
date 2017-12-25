@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>重庆话语智能办公平台   BOS系统</title>
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge"/>
+    <link rel="stylesheet" href="__PUBLIC__/newUIH/css/reset.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/newUIH/css/addmsg.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/newUIH/css/index.css?v={:getVersion()}"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+
+    <script type="text/javascript" src="__PUBLIC__/newUIH/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+    <script type="text/javascript">
+    var L={
+        init:function(){
+            this.importEntry();
+        },
+        importEntry:function(){
+            var button = $('#importPro');
+            new AjaxUpload(button,{
+                action: "/Home/Message/addmsg_do",
+                name: 'file',
+                onSubmit:function(){
+                    button.html("导入中...");
+                },
+                onComplete: function(file, response){
+                    var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+                    if(list.status==1){
+                        $('input[name="filename"]').val(list.filename);
+                        $('input[name="fileoldname"]').val(list.name);
+                        if(list.name)$('#importPro').text(list.name);
+                    }else{
+                        layer.alert(list.msg);
+                    }
+                    
+                }
+            });
+        }
+    };
+    function sub(){
+        var AjaxURL= "/Home/Message/addmsgfrom_do";       
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: AjaxURL,
+            data: $('#tableform').serialize(),
+            success: function (data) {
+                layer.msg(data.msg);
+            },
+            error: function(data) {
+                alert("error:"+data.responseText);
+             }
+        });
+    }
+    function change(){
+        //修改数据
+        var AjaxURL= "/Home/Message/changemsgfrom_do";       
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: AjaxURL,
+            data: $('#tableform').serialize(),
+            success: function (data) {
+                layer.msg(data.msg);
+            },
+            error: function(data) {
+                alert("error:"+data.responseText);
+             }
+        });
+    }
+    function huifu(){
+        //回复信息
+        var AjaxURL= "/Home/Message/hfmsg_do";       
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: AjaxURL,
+            data: $('#tableform').serialize(),
+            success: function (data) {
+                layer.msg(data.msg);
+                setTimeout('top.close()',1000);
+            },
+            error: function(data) {
+                alert("error:"+data.responseText);
+             }
+        });
+    }
+    function stop(){
+        //停止发送
+        var AjaxURL= "/Home/Message/stopmsg";       
+        $.post(AjaxURL,{"id":$('input[name="id"]').val()},function(data){
+            layer.msg(data.msg);
+            if(data.status==1){
+                setTimeout('top.close()',1000);
+            }
+        },'json')
+    }
+    $(function(){L.init();});
+    </script>
+</head>
+<body>
+<section>
+    <div class="section_box">
+       
+        <div class="section_willdo">
+            <div class="section_willdo_header">
+                <div class="section_willdo_daiban">
+                    <div><img src="__PUBLIC__/newUIH/images/daiban.png" alt=""></div>
+                    <div>
+                        <div class=" section_willdo_title">RECYCLE</div>
+                        <div><eq name="isshowmsg" value="1">查看</eq><eq name="ismy" value="1">发送</eq><eq name="ishf" value="1">回复</eq>通知</div>
+                    </div>
+                </div>
+            </div>
+            <!-- udpate 0921  -->
+
+            <div class="section_willdo_text">
+                <eq name="ismy" value="1">
+                <div id="table_content">
+                    <div class="content_addmsg">
+                    <form method="post" id="tableform">
+                        <div><span class="t_span">内容：</span><textarea name="content">{$data.content}</textarea></div>
+                        <div><span class="t_span">收件人：</span><select name="touser[]"  multiple class="selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+                        <volist name="user" id="v">
+                            <option <php>if(in_array($v['id'],$touser))echo "selected='selected'";</php> value="{$v.id}">{$v.real_name}</option>
+                        </volist>
+                        <select>
+                        </div>
+
+                        <div><span class="t_span">通知时间：</span><select name="msgtime" class="selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option <php>if($data['msgtime']==9)echo "selected='selected'";</php> value="9">09点</option>
+                                <option <php>if($data['msgtime']==10)echo "selected='selected'";</php> value="10">10点</option>
+                                <option <php>if($data['msgtime']==11)echo "selected='selected'";</php> value="11">11点</option>
+                                <option <php>if($data['msgtime']==12)echo "selected='selected'";</php> value="12">12点</option>
+                                <option <php>if($data['msgtime']==13)echo "selected='selected'";</php> value="13">13点</option>
+                                <option <php>if($data['msgtime']==14)echo "selected='selected'";</php> value="14">14点</option>
+                                <option <php>if($data['msgtime']==15)echo "selected='selected'";</php> value="15">15点</option>
+                                <option <php>if($data['msgtime']==16)echo "selected='selected'";</php> value="16">16点</option>
+                                <option <php>if($data['msgtime']==17)echo "selected='selected'";</php> value="17">17点</option>
+                                <option <php>if($data['msgtime']==18)echo "selected='selected'";</php> value="18">18点</option>
+                            </select></div>
+                        <div><span class="t_span">重复发送：</span>
+                            <select name="weekday[]" multiple class="selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <option <php>if(in_array(1,$autojb))echo "selected='selected'";</php> value="1">周一</option>
+                                <option <php>if(in_array(2,$autojb))echo "selected='selected'";</php> value="2">周二</option>
+                                <option <php>if(in_array(3,$autojb))echo "selected='selected'";</php> value="3">周三</option>
+                                <option <php>if(in_array(4,$autojb))echo "selected='selected'";</php> value="4">周四</option>
+                                <option <php>if(in_array(5,$autojb))echo "selected='selected'";</php> value="5">周五</option>
+                            </select>(可选)注意:如果不选择重复日期,通知将会在未来最近的所选时间发送一次
+                        </div>
+                        <div>
+                            <span class="t_span">附件：</span>
+                            <input type="hidden" name="filename" />
+                            <input type="hidden" name="fileoldname" />
+                            <a href="javascript:void(0);" id="importPro">点击上传附件</a>
+                        </div>
+                        <div><span class="t_span"></span>
+                        <neq name="_GET['id']" value=""><a onclick="change()" class='sub'>修改</a>&nbsp;&nbsp;<a onclick="stop()" class='sub'>不再发送</a><input type="hidden" name="id" value="{:I('get.id')}"/>
+                        <else/><a onclick="sub()" class='sub'>发送</a></neq>
+                    </form>
+                    </div>
+                </div>
+                </eq>
+                <eq name="isshowmsg" value="1">
+                <div id="table_content">
+                    <div class="content_addmsg">
+                        <div><span class="t_span">内容：</span>{$msg.content}</div>
+                        <div><span class="t_span">发件人：</span>{$msg.add_user}
+                        </div>
+                        <div><span class="t_span">收件人：</span>
+                        <volist name="msg.send_user" id='v'>
+                        {$v}&nbsp;&nbsp;
+                        </volist>
+                        </div>
+                        <div>
+                        <span class="t_span">附件：</span><a href="{$msg.file}" target="_blank">{$msg.fileoldname}</a>
+                        </div>
+                        <div><span class="t_span"></span>
+                        <neq name="msg.add_user" value="系统"><a href="/Home/Message/add?toid={:I('get.id')}" class='sub'>回复</a></neq>
+                    </div>
+                </div>
+                </eq>
+                <eq name="ishf" value="1">
+                <div id="table_content">
+                    <div class="content_addmsg">
+                        <form method="post" id="tableform">
+                            <input type="hidden" name="hfmsg_id" value="{:I('get.toid')}"/>
+                            <div><span class="t_span">内容：</span><textarea name="content">Re:<php>echo substr($msg['content'],0,15);if(strlen($msg['content'])>15)echo '...';</php>
+                            </textarea></div>
+                            <div><span class="t_span">收件人：</span>
+                            <select name="touser[]"  multiple class="selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+                            <volist name="user" id="v">
+                                <option <php>if($v['id']==$msg['add_user'])echo "selected='selected'";</php> value="{$v.id}">{$v.real_name}</option>
+                            </volist>
+                            <select>
+                            </div>
+                            <div>
+                                <span class="t_span">附件：</span>
+                                <input type="hidden" name="filename" />
+                                <input type="hidden" name="fileoldname" />
+                                <a href="javascript:void(0);" id="importPro">点击上传附件</a>
+                            </div>
+                            <div><span class="t_span"></span>
+                            <a onclick="huifu()" class='sub'>回复</a>
+                        </form>
+                        <hr/>
+                        <h3>原信息：</h3>
+                        <div><span class="t_span">内容：</span>{$msg.content}</div>
+                        <div><span class="t_span">发件人：</span>{$adduser}
+                        </div>
+                        <div>
+                        <span class="t_span">附件：</span><a href="{$msg.file}" target="_blank">{$msg.fileoldname}</a>
+                        </div>
+                    </div>
+                </div>
+                </eq>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

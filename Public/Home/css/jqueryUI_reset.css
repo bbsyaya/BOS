@@ -1,0 +1,26 @@
+@charset "utf-8";
+/*----------------------jquery-UI弹出框 样式重置----------------------*/
+/*边框*/
+.ui-dialog,
+.ui-widget,
+.ui-widget-content,
+.ui-corner-all,
+.ui-draggable,
+.ui-dialog .ui-dialog-buttonpane{padding: 0px;border: none;border-radius: 0px;}
+.ui-dialog{border: solid 1px #1a72d6;border-radius: 3px;}
+/*标题背景*/
+.ui-widget-header{color: #ffffff;background: none;background-color: #1a72d6;}
+/*关闭按钮背景*/
+.ui-widget-header .ui-icon{background: none;border: none;filter: alpha(opacity=50);-moz-opacity: 0.5;opacity: 0.5;background-image: url(../img/ui-widget-header.png);background-repeat: no-repeat;}
+.ui-widget-header .ui-icon:hover{filter: alpha(opacity=100);-moz-opacity: 1;opacity: 1;}
+.ui-dialog-titlebar-close:hover{background: none;border: solid 1px #1a72d6;}
+/*内容背景*/
+.ui-dialog .ui-dialog-content{background-color: #FFFFFF;}
+/*按钮容器背景*/
+.ui-dialog .ui-dialog-buttonpane{background-color: #FFFFFF;margin: 0px;padding-bottom: 10px;}
+/*按钮样式*/
+.ui-dialog-buttonset{width: 100%;text-align: center;}
+.ui-dialog .ui-dialog-buttonset button{border: none;outline: none;background: none;}
+.ui-dialog .ui-dialog-buttonset span{color: #ffffff;width: auto;height: 35px;line-height: 35px;padding: 0px;padding: 0px 30px;margin: 0px;outline: none;background: none;background-color: #1a72d6; border: none; border-radius: 4px;-moz-border-radius: 4px;font-size: 16px;font-family: "微软雅黑";overflow: hidden;}
+.ui-dialog .ui-dialog-buttonset button{margin-left: 10px;margin-right: 10px;}
+

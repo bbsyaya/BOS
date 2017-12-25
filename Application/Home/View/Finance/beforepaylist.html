@@ -1,0 +1,251 @@
+<extend name="Public/base"/>
+
+<block name="script">
+	<script type="text/javascript">
+			$(function() {
+				//对话框预收抵应收
+				$(".offsetDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "800",
+					height: "400",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$(this).dialog("close");
+							var issub=true;
+							var allsubmoney=0;
+							$('.offsetDialog').find('tbody').find('input[type="checkbox"]').each(function(){
+								var newnum=parseFloat($(this).parents('tr').find('input[type="text"]').val());
+								var oldnum=parseFloat($(this).parents('tr').find('td').eq(4).text());
+								allsubmoney+=newnum;
+								if($(this).is(':checked') && newnum>oldnum)issub=false;
+							})
+							if(allsubmoney>parseFloat($('#dhxmoney').text()))issub=false;
+							if(issub){
+								$('#torkmoneyokdoform').attr('target','newpage').submit();
+							}else alert('数据不合格');
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				//预收抵应收对话框
+				$(".dataTable").on({
+					click: function() {
+						var nowtr=$(this).parents('tr').find('td');
+						$('#adveridinput').val($(this).attr('data'));
+						var advername=nowtr.eq(1).text();
+						$('#advername').html(nowtr.eq(1).text());
+						$('#allmoney').html(nowtr.eq(2).text());
+						$('#yhxmoney').html(nowtr.eq(3).text());
+						$('#dhxmoney').html(nowtr.eq(4).text());
+						$.post('/Finance/beforepayApi',{'id':$(this).attr('data')},function(res){
+							var newhtml='';
+							for(o in res){
+								newhtml+='<tr><td><input type="checkbox" name="financeid[]" class="J_m" value="'+res[o].id+'"/></td><td>'+advername+'</td><td>'+res[o].comname+'</td><td>'+res[o].strdate+'-'+res[o].enddate+'</td><td>'+(res[o].settlementmoney-res[o].yskmoney)+'</td><td>'+res[o].salername+'</td><td><input name="Financemoney'+res[o].id+'" type="text" /></td></tr>';
+							}
+							$('.offsetDialog').find('.dynamicTable').find('tbody').html(newhtml);
+						},'json')
+						$(".offsetDialog").dialog("open");
+					}
+				}, ".J_offset");
+				function DX(n){
+					if(n=='' || isNaN(n) || n==0 || n=='0')return '零';
+					if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n))
+			        return "数据非法";
+			        var unit = "千百拾亿千百拾万千百拾元角分", str = "";
+			            n += "00";
+			        var p = n.indexOf('.');
+			        if (p >= 0)
+			            n = n.substring(0, p) + n.substr(p+1, 2);
+			            unit = unit.substr(unit.length - n.length);
+			        for (var i=0; i < n.length; i++)
+			            str += '零壹贰叁肆伍陆柒捌玖'.charAt(n.charAt(i)) + unit.charAt(i);
+			        return str.replace(/零(千|百|拾|角)/g, "零").replace(/(零)+/g, "零").replace(/零(万|亿|元)/g, "$1").replace(/(亿)万|壹(拾)/g, "$1$2").replace(/^元零?|零分/g, "").replace(/元$/g, "元整");
+				}
+				function moncom(){
+					var mona=0;
+					$('#torkmoneyokdoform').find('.J_m').each(function(){
+						if($(this).is(':checked'))mona+=parseFloat($(this).parents('tr').find('input[type="text"]').val());
+					})
+					$('.J_allmoney').html(mona);
+					$('.J_allmoney_DX').html(DX(mona));
+				}
+				$('#torkmoneyokdoform').on({
+					click:function(){
+						moncom();
+					}
+				},'.J_m')
+				$('#torkmoneyokdoform').on({
+					change:function(){
+						moncom();
+					}
+				},'input[type="text"]')
+			
+			});
+		</script>
+</block>
+
+<block name="body">
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">预收管理</span>
+				<span>财务管理</span>
+			</div>
+			<div class="ri_work">Advance management</div>
+		</div>
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<input type="button" value="导出" class=""  onclick="window.open('/Finance/downloadbeforepaylist'+window.location.search)"/>
+						&lt;!&ndash;<a href="/Finance/index" target="_blank">同步发票收入到财务系统</a>&ndash;&gt;
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					<div class="screenList fl w">
+						<form action="/Finance/beforepaylist" method="get">
+						<table>
+							<tr>
+								<th>广告主名称：</th>
+								<td><input type="text" name="advername"/></td>
+								<th>款项状态：</th>
+								<td><select name='status'><option value='0'>全部</option><option value="2">已核销</option><option value="1">未核销</option></select></td>
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+									<input type="button" value="取消" class="J_closeScreen" />
+								</td>
+							</tr>
+						</table>
+						</form>
+					</div>
+				</div>-->
+
+		<div class="screenBox swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide">
+				<form action="/Finance/beforepaylist" method="get">
+
+					<div class="swiperRight">
+						<table>
+							<tr>
+								<th>广告主名称：</th>
+								<td><input type="text" name="advername"/></td>
+
+								<th> 款项状态：</th>
+								<td><select class="selectpicker" name='status'><option value='0'>全部</option><option value="2">已核销</option><option value="1">未核销</option></select></td>
+								<td colspan="4">
+									<input type="submit" value="查询" />
+								</td>
+							</tr>
+						</table>
+					</div>
+				</form>
+				<!--end 基础查询-->
+			</div>
+		</div>
+	</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+					<div class="advancedLeft">
+						<span class="addAdv advBtn">
+							<input type="button" value="导出" class=""  onclick="window.open('/Finance/downloadbeforepaylist'+window.location.search)"/>
+						</span>
+					</div>
+					</div>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th>编号</th>
+							<th>广告主名称</th>
+							<th>预收金额</th>
+							<th>已核销金额</th>
+							<th>待核销金额</th>
+							<th>款项状态</th>
+							<th width="150">操作</th>
+						</tr>
+						<tr>
+							<td>汇总</td>
+							<td></td>
+							<td>{$a|twonum}</td>
+							<td>{$y|twonum}</td>
+							<td>{$d|twonum}</td>
+							<td></td>
+							<td></td>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name='data' id='v'>
+						<tr>
+							<td>{$v.id}</td>
+							<td>{$v.name}</td>
+							<td>{$v.allmoney|twonum}</td>
+							<td>{$v.yhxmoney|twonum}</td>
+							<td>{$v.dhxmoney|twonum}</td>
+							<td><eq name="v.dhxmoney" value="0">已核销<else/>未核销</eq></td>
+							<td>
+								<neq name="v.dhxmoney" value="0"><a target="_blank" href="/Finance/outpayfrombe?id={$v.id}">退款</a></neq>
+								<a class="J_offset" data="{$v.adverid}">预收抵应收</a>
+								<a href="{:U('/Finance/beforepaydetail')}?id={$v.id}" target="_blank">查看</a>
+							</td>
+						</tr>
+						</volist>
+						</tbody>
+					</table>
+					<!--分页-->
+					{$_page}
+				</div>
+	</div>
+
+	            <div class="offsetDialog" title="预收抵应收">
+	            <form action="/Finance/moneyOkDo" method='post' id="torkmoneyokdoform">
+	            <input type='hidden' name="adverid" id="adveridinput"/>
+			<table class="dialogTable_form2 w ha">
+				<tr>
+					<th>广告主名称:</th>
+					<td id="advername">……</td>
+					<th>预收金额:</th>
+					<td id="allmoney">……</td>
+					<th>已核销金额:</th>
+					<td id="yhxmoney"……</td>
+				</tr>
+				<tr>
+					<th>待核销金额:</th>
+					<td id="dhxmoney">……</td>
+					<th>核销金额合计:</th>
+					<td class="J_allmoney">……</td>
+					<th>认款金额大写:</th>
+					<td class="J_allmoney_DX">……</td>
+				</tr>
+			</table><br />
+			<table class="dynamicTable w ha">
+				<thead>
+				<tr>
+					<th width="40"><input type="checkbox" /></th>
+					<th>广告主名称</th>
+					<th>产品名称</th>
+					<th>起止日期</th>
+					<th>待回款金额</th>
+					<th>所属销售</th>
+					<th>核销金额</th>
+				</tr>
+				</thead>
+				<tbody>
+				
+				</tbody>
+			</table>
+			</form>
+		</div>
+</block>

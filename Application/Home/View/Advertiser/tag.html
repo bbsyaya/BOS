@@ -1,0 +1,131 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="subMainBox">
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text">标签管理</span>
+                <span>合作管理</span>
+            </div>
+            <div class="ri_work">Label management</div>
+        </div>
+    <!--筛选-->
+    <!--<div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <a href="{:U('addtag')}">新增</a>
+        </div>
+        <div class="screenList fl w">
+            <form action="{:U('tag')}" id="search_form">
+            <table>
+                <tr>
+                    <th>标签名称：</th>
+                    <td><input type="text" name="tagname" value="{$Think.get.name}"/></td>
+                    <th>类型：</th>
+                    <td><select name="tagtype">
+                    <option <eq name='_GET["tagtype"]' value="1">selected="selected"</eq> value="1">广告主标签</option>
+                    <option <eq name='_GET["tagtype"]' value="2">selected="selected"</eq> value="2">产品标签</option>
+                    <option <eq name='_GET["tagtype"]' value="3">selected="selected"</eq> value="3">供应商标签</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <input type="submit" value="查询" />
+                    </td>
+                </tr>
+            </table>
+                <input type="hidden" name="p" value="1"/>
+            </form>
+        </div>
+    </div>-->
+    <div class="screenBox swiper-container">
+    <div class="swiper-wrapper">
+    <div class="swiper-slide">
+        <form action="{:U('tag')}" id="search_form">
+            <!--基础查询-->
+            <h2>基础查询</h2>
+
+            <div class="swiperRight">
+                <table class="tableBox">
+                    <tr>
+                        <th>标签名称：</th>
+                        <td><input type="text" name="tagname" value="{$Think.get.name}"/></td>
+                        <th>类型：</th>
+                        <td><select name="tagtype">
+                            <option <eq name='_GET["tagtype"]' value="1">selected="selected"</eq> value="1">广告主标签</option>
+                            <option <eq name='_GET["tagtype"]' value="2">selected="selected"</eq> value="2">产品标签</option>
+                            <option <eq name='_GET["tagtype"]' value="3">selected="selected"</eq> value="3">供应商标签</option>
+                        </select></td>
+                        <td colspan="4">
+                            <input type="submit" value="查询" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+        <!--end 基础查询-->
+    </div>
+    </div>
+    </div>
+
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit"  goal="dataTable1">
+
+            <div class="dataTable_columnCa pa">
+                <div class="dataTable_columnCn"></div>
+                <div class="dataTableShow_close tc">关闭</div>
+            </div>
+            <div class="advancedLeft tt">
+                <span class="addAdv advBtn"><a href="{:U('addtag')}">新增</a></span>
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>标签名</th>
+                <th>标签分类</th>
+                <th width="150">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <notempty name="list">
+                       <volist name="list" id="item">
+                            <tr>
+                                <td>{$item.id}</td>
+                                <td><a href="/Home/Advertiser/tag?pid={$item.id}" target="_blank">{$item.tagname}</a></td>
+                                <td>{:C('option.tagtype')[$item['tagtype']]}</td>
+
+                                <td>
+                                    <a href="{:U('edittag?id='.$item['id'])}">修改</a>
+                                    <a href="{:U('deltag?id='.$item['id'])}">删除</a>
+                                </td>
+                            </tr>
+                        </volist>
+                <else />
+                <tr>
+                    <td colspan="10">
+                        <div class="no-datas">暂无数据！！</div>
+                    </td>
+                </tr>
+            </notempty>
+            </tbody>
+        </table>
+        <!--分页-->
+        <notempty name="list">
+            {$_page}
+        </notempty>
+    </div>
+</div>
+    <!--统计缩略图-->
+    <div class="statisticsThumbnail">
+        <img src="__IMG__/statisticsThumbnail_close.png" class="statisticsThumbnail_close" />
+
+        <div id="myChart1" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+        <div id="myChart2" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+        <div id="myChart3" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+
+        <div id="myChart4" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+        <div id="myChart5" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+        <div id="myChart6" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+    </div>
+</block>

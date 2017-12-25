@@ -1,0 +1,72 @@
+//背景颜色
+@blue-base:      #1269cc;
+@blue-base-bg:   lighten(@blue-base,15%);
+//边框颜色
+@border-base:    #d8d8d8;
+@border-samll:   #dadada;
+//标题字体颜色
+@title-color:    #fff;
+//input背景色
+@input-back:     #adcc2b;
+@input-back-h:   lighten(@input-back,15%);
+//table隔行颜色
+@tabel-bg:       #f9f9f9;
+@tabel-bg-h:      #fefcf4;
+//内容字体颜色
+@gray-base:         #000;
+@gray-darker:       lighten(@gray-base, 13.5%); // #222
+@gray-dark:         lighten(@gray-base, 20%);   // #333
+@gray:              lighten(@gray-base, 33.5%); // #555
+@gray-con:          lighten(@gray-base, 40%); // #666
+@gray-light:        lighten(@gray-base, 46.7%); // #777
+@gray-cont:         lighten(@gray-base, 60%); // #999
+@gray-lighter:      lighten(@gray-base, 93.5%); // #eee
+//圆角单位
+@border-radius-base:        4px;
+@border-radius-large:       6px;
+@border-radius-small:       3px;
+@border-radius-box:         10px;
+
+//== Typography
+//
+//## Font, line-height, and color for body text, headings, and more.
+
+@font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-serif:       Georgia, "Times New Roman", Times, serif;
+//** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
+@font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
+@font-family-base:        @font-family-sans-serif;
+
+@font-size-base:          14px;
+@font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
+@font-size-in:            floor((@font-size-base * 1.15)); // ~16px
+@font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
+
+@font-size-h1:            floor((@font-size-base * 2.6)); // ~36px
+@font-size-h2:            floor((@font-size-base * 2.15)); // ~30px
+@font-size-h3:            ceil((@font-size-base * 1.7)); // ~24px
+@font-size-h4:            ceil((@font-size-base * 1.25)); // ~18px
+@font-size-h5:            @font-size-base;
+@font-size-h6:            ceil((@font-size-base * 0.85)); // ~12px
+
+//-- Z-index master list
+
+@zindex-navbar:            1000;
+@zindex-dropdown:          1000;
+@zindex-popover:           1060;
+@zindex-tooltip:           1070;
+@zindex-navbar-fixed:      1030;
+@zindex-modal-background:  1040;
+@zindex-modal:             1050;
+
+//-- padding master list
+
+@padding-10:       10px;
+@padding-20:       20px;
+@padding-30:       30px;
+
+//-- margin master list
+
+@margin-10:       10px;
+@margin-20:       20px;
+@margin-30:       30px;

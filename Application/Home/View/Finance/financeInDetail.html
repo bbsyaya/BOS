@@ -1,0 +1,117 @@
+<extend name="Public/base"/>
+
+
+<block name="body">
+
+				<!--筛选-->
+				<script>
+				var setid={:I('get.id')};
+				var isopen=false;
+				var incid;
+				var thispar;
+				$(function(){
+					$('.change').click(function(){
+						if(isopen){
+							alert('你还有其它没有保存的发票信息');
+							return;
+						}
+						isopen=true;
+						thispar=$(this).parents('tr');
+						incid=thispar.attr('data');
+						var money=thispar.find('.money').html();
+						thispar.find('.money').html('<input type="text" name="money" value="'+money+'"/>');
+						var code=thispar.find('.code').html();
+						thispar.find('.code').html('<input type="text" name="code" value="'+code+'"/>');
+						thispar.find('.save').show();
+						thispar.find('.change').hide();
+					})
+					$('.save').click(function(){
+						$.get('/Ajax/changeinc',{"id":incid,"money":thispar.find('input[name="money"]').val(),"code":thispar.find('input[name="code"]').val()},function(data){
+							if(data==1){
+								isopen=false;
+								thispar.find('.money').html(thispar.find('input[name="money"]').val());
+								thispar.find('.code').html(thispar.find('input[name="code"]').val());
+								thispar.find('.save').hide();
+								thispar.find('.change').show();
+							}else{
+								alert('保存失败');
+							}
+						},'json')
+						
+					})
+				})
+				</script>
+				<!--数据表-->
+				<div class="dataCn fl w ha">
+					<div class="dataFormTitle">基础信息</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr>
+								<td>广告主名称</td><td>{$data.advername}</td><td>发票类型</td><td>{:C('option.invoice_type')[$data['invoice_type']]}</td><td>发票内容</td><td>{$data.invoice_remark}</td>
+							</tr>
+							<tr>
+								<td>纳税人识别号</td><td>{$data.taxpayer_num}</td><td>开户银行名称</td><td>{$data.opening_bank}</td><td>开户行账号</td><td>{$data.bank_no}</td>
+							</tr>
+							<tr>
+								<td>结算主体</td><td>{$data.jszt}</td><td>开票金额</td><td>{$data.settlementmoney|twonum}</td><td>起止时间</td><td>{$data.strdate}-{$data.enddate}</td>
+							</tr>
+							<tr>
+								<td>收件人姓名</td><td>{$data.username}</td><td>收件人电话</td><td>{$data.mobile}</td><td>收件人地址</td><td>{$data.address}</td>
+							</tr>
+							<tr>
+								<td>所属销售</td><td>{$data.salername}</td><td>审核人</td><td>{$data.auditer}</td><td>审核时间</td><td>{$data.audittime}</td>
+							</tr>
+							<tr>
+								<td>快递单号</td><td>{$data.expresscode}</td><td>开票人</td><td>{$data.invoiceer}</td><td>开票时间</td><td>{$data.invoicetime}</td>
+							</tr>
+							<tr>
+								<td>已回款金额</td><td>{$data.yskmoney|twonum}</td><td>待回款金额</td><td>{$data.dskmoney|twonum}</td>
+							</tr>
+						</tbody>
+					</table>
+					<br/><br/>
+					<div class="dataFormTitle">产品明细</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr><td>产品名称</td><td>计费标识名称</td><td>计费标识ID</td><td>起止日期</td><td>结算金额</td><td>业务线</td></tr>
+							<volist name='logodata' id='v'>
+								<tr><td>{$v.comname}</td><td>{$v.jfname}</td><td>{$v.jfid}</td><td>{$v.strtime} - {$v.endtime}</td><td>{$v.endmoney|twonum}</td><td>{$v.linename}</td></tr>
+							</volist>
+						</tbody>
+					</table>
+					<br/><br/>
+					<div class="dataFormTitle">发票明细</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr><td>序号</td><td>发票编号</td><td>票面金额</td><td>操作</td></tr>
+							<volist name='invoiceinfo' id='v' key="k">
+								<tr data="{$v.dataid}"><td>{$k}</td><td class="code">{$v.code}</td><td class="money">{$v.money|twonum}</td><td><a class="change">修改</a>&nbsp;&nbsp;<a href="javascript:;" style="display:none;" class="save">保存</a></td></tr>
+							</volist>
+						</tbody>
+					</table>
+					<br/><br/>
+					<div class="dataFormTitle">认款/核销明细</div>
+					<neq name="rkinfo" value="">
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr><td>序号</td><td>认款/核销人</td><td>认款/核销部门</td><td>认款/核销时间</td><td>到款日期</td><td>认款/核销金额</td></tr>
+							<volist name='rkinfo' id='v' key="k">
+								<tr><td>{$v.id}</td><td>{$v.real_name}</td><td>{$v.deptname}</td><td>{$v.time}</td><td>{$v.adddate}</td><td>{$v.money|twonum}</td></tr>
+							</volist>
+							<volist name='dkinfo' id='v' key="k">
+								<tr><td>{$v.id}</td><td>{$v.real_name}</td><td>{$v.deptname}</td><td>{$v.time}</td><td>{$v.adddate}</td><td>{$v.money|twonum}</td></tr>
+							</volist>
+						</tbody>
+					</table>
+					</neq>
+				</div>
+
+			</div>
+
+</block>
+
+

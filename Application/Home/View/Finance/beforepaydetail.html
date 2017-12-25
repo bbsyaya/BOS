@@ -1,0 +1,40 @@
+<extend name="Public/base"/>
+
+
+
+<block name="body">
+
+				<!--筛选-->
+				
+				<!--数据表-->
+				<div class="dataCn fl w ha">
+				付款方名称：    {$advinfo.name}          预收款金额：     {$data.allmoney}          已核销金额：     {$data.yhxmoney}         待核销金额：{$data.dhxmoney}                   状态：     <eq name="data.dhxmoney" value="0">已核销<else/>待核销</eq>
+					<div class="dataFormTitle">认款明细</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr><td>编号</td><td>认款人</td><td>认款时间</td><td>到款日期</td><td>认款金额</td></tr>
+							<volist name='rkinfo' id='v'>
+								<tr><td>{$v.id}</td><td>{$v.real_name}</td><td>{$v.time}</td><td>{$v.adddate}</td><td>{$v.money}</td></tr>
+							</volist>
+						</tbody>
+					</table>
+					<br/><br/>
+					<div class="dataFormTitle">核销明细</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr><td>编号</td><td>核销人</td><td>核销部门</td><td>核销时间</td><td>核销金额</td></tr>
+							<volist name='dkinfo' id='v'>
+								<tr><td>{$v.id}</td><td>{$v.real_name}</td><td>{$v.name}</td><td>{$v.time}</td><td>{$v.money}</td></tr>
+							</volist>
+						</tbody>
+					</table>
+					
+				</div>
+
+			</div>
+
+</block>
+
+

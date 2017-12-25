@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-stand" />
+    <title>{:getSiteTitle($webTitle)} </title>
+    <link href="__CSS__/base.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/common.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/page.css" rel="stylesheet" type="text/css" />
+    <!--jquery-->
+    <script src="__MODULE__/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <!--jquery UI-->
+    <link rel="stylesheet" href="__MODULE__/jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css" />
+    <link rel="stylesheet" href="__CSS__/jqueryUI_reset.css" />
+    <link rel="stylesheet" href="__CSS__/reset.css" />
+    <link rel="stylesheet" type="text/css" href="__MODULE__/bootstrapselect/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="__MODULE__/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js" ></script>
+    <script type="text/javascript" src="__MODULE__/highcharts/highcharts.js"></script>
+    <script type="text/javascript" src="__MODULE__/highcharts/exporting.js"></script>
+    <script src="__MODULE__/jquery.form.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+    <script src="__JS__/common.js" type="text/javascript"></script>
+    <script src="__JS__/common_xieqiang.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__STATIC__/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__MODULE__/bootstrapselect/bootstrap.min.js"></script>
+     <link rel="stylesheet" type="text/css" href="__new_boss__/js/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__new_boss__/js/bootstrapselect/css/bootstrap-select.css"/>
+    <link rel="stylesheet" href="__new_boss__/css/models.css">
+</head>
+<body>
+<!-- 跟进记录 -->
+<include file="Public/commonoa" />
+<style type="text/css">
+body{font-size: 12px !important;}
+	label{font-weight:normal!important}.wd300{width:68% !important}.wd100{width:100% !important}.dayTwo-1{width:28%!important}.fd-k{margin-top:20px}.fs-color{color:#1269cc!important;border-bottom-color:#1269cc!important}.btnBox{padding-bottom:100px!important}.a-com{border:medium none;border-radius:3px;color:#fff;height:36px;margin:0 15px;background:#1269cc none repeat scroll 0 0;width:110px;line-height:36px;display:inline-block;color:#fff!important;font-size:14px;text-align:center}.submit{width: auto !important;padding: 0px 20px !important;height: 36px;line-height: 36px;}.btnBox input[type="button"]{ margin: 0px !important;}.glzw{color:#1269cc !important;font-size:12px;margin-left:8px;text-decoration: underline !important;}.dayTwo-a{width:48% !important;}.entryList li .entryCon label{width: 22% !important;height: 44px !important;overflow: hidden;line-height: 44px !important;display: inline-block !important; float: left;}.bz-txt{height: 150px;border:1px solid #ddd;border-radius: 3px;padding: 5px;width: 92%;}.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){width: 75% !important;height: 40px !important;}.bootstrap-select > .dropdown-toggle{height: 40px !important;}.bootstrap-select.btn-group .dropdown-menu li{width: 100% !important; height: 24px !important;}.dropup .dropdown-menu, .navbar-fixed-bottom .dropdown .dropdown-menu{top:44px !important;}.bootstrap-select.btn-group .dropdown-menu{height: 200px !important;}.creatoa, .queryTable input[type="button"], .chos-btn{
+    background: #1269cc none repeat scroll 0 0;
+    min-width: 70px;
+    padding: 0 5px;border: medium none;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 12px;
+    height: 30px;
+}.pad-sec{padding:2% 2% 10% 2%;width: 96%;display: inline-block;}.entryList li .entryCon{width: 100% !important;}
+</style>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+<div class="pad-sec">
+	<fieldset class="fl w">
+		<div class="workListBox">
+        <form action="/Home/IntelligenceSystem/myItem.html">
+            <table cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>项目名称：</td>
+                    <td><input type="text" class="nam-pus" id="xm_name" name="xm_name" value="{$map['xm_name']}" /></td>
+                    <td><input value="查询" type="submit" style="margin-left:10px;"></td>
+                </tr>
+            </table>
+        </form>
+            <table class="listTable Js_tableCon" style="margin-top:20px;">
+                <thead>
+                    <tr>
+                    <th style="width:5%">id</th>
+                        <th>创建时间</th>
+                        <th>项目名称</th>
+                        <th>状态</th>
+                        <th>计划完成时间</th>
+                        <th title="">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                    <volist name="list" id="vo">
+                        <tr>
+                        <td title="{$vo['id']}"><span>{$vo['id']}</span></td>
+                            <td title="{$vo['ctime']}"><span>{$vo['ctime']}</span></td>
+                            <td title="{$vo["title"]}"><span>{$vo["title"]}</span></td>
+                            <td title="{$vo["status_str"]}"><span>{$vo["status_str"]}</span></td>
+                            <td title="{$vo["exp_end_time"]}"><span>{$vo["exp_end_time"]}</span></td>
+                            <td ><a href="javascript:void(0);" onclick="m.gourl({$vo['id']})">查看</a></td>
+                            
+                        </tr>
+                    </volist>
+                    <else />
+                    <tr>
+                        <td  colspan="6"><div class="no-datas">暂无数据！！</div></td>
+                    </tr> 
+                </notempty>
+                </tbody>
+            </table>
+            <notempty name="list">
+                <div class="no-datas">{$page}</div>
+            </notempty>
+            <div class="no-datas" style="color:red;font-size:12px;text-align:left;margin-top:40px;">*这里显示我负责的、创建的主情报</div>
+        </div>
+	</fieldset>
+</div>
+<script type="text/javascript">
+    var m={
+        gourl:function(id){
+            var url='/Home/IntelligenceSystem/gatherworkflow.html?qbid='+id;
+            window.parent.location.href=url;
+        }
+    };
+</script>
+</body>
+</html>

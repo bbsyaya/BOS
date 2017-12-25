@@ -1,0 +1,7 @@
+<form action="confirmSettlement" method="post" enctype="multipart/form-data">
+<select name='advcontactsid'><option value='1'>习近平</option></select>
+<input type='hidden' value="<{$data.id}>" name='id'/>
+<input type='file' name='file'/>
+<input type='submit' value="确认生成"/>
+<a href="<{:U('Makesettlement/delSettlement')}>?id=<{$data.id}>">取消</a>
+</form>

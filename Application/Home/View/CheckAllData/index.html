@@ -1,0 +1,22 @@
+<extend name="Public/base"/>
+<block name="body">
+    <form action="" method="post">
+    选择你需要维护的数据起止时间：
+    <input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type='text' name='strtime'/>-
+    <input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type='text' name="endtime"/>
+    选择你需要的维护项：
+    <select name='outzt[]' class="selectpicker" multiple>
+		<option value="checkadv">检查基础信息</option>
+		<option value="changesetstatus_in">检查收入数据状态</option>
+		<option value="changesetstatus_out">检查成本数据状态</option>
+		<option value="changesetmoney_out">查成本结算单数据与详细数据金额</option>
+		<option value="changesetmoney_in">查收入结算单数据与详细数据金额</option>
+		<option value="getfenfaoutdataandcheckmydata">对比分发平台的成本数据</option>
+        <option value="getfenfaindataandcheckmydata">对比分发平台的收入数据</option>
+		<option value="getsspoutdataandcheckmydata">对比SSP平台的成本数据</option>
+		<option value="getsspindataandcheckmydata">对比SSP平台的收入数据</option>
+    </select>
+    <input type='submit'/>
+    </form>
+
+</block>

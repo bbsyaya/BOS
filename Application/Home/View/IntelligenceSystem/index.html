@@ -1,0 +1,166 @@
+<extend name="Public/base"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<div class="d-f main-content">
+    <div class="subMainBox d-f">
+        <div class="ri_header" style="height:auto;">
+            <div class="ri_title_box">
+                <span class="clip-text">情报系统</span>
+                <span>系统首页</span>
+            </div>
+            <div class="ri_work">System home page</div>
+        </div>
+
+        <div class="rt-hsls d-f" style="width:96%;">
+            <input value="我的情报" type="button" onclick="In.showMy()">
+             <input value="添加主情报" type="button" onclick="In.showAddQb()" style="margin-left:20px;" >
+             <div class="bn-skxs">
+                <!-- <input value="数量统计" type="button" onclick="In.showNo()" class="com-btn btnon " id="showNo"> -->
+
+                <!-- <input value="状态统计" type="button" onclick="In.showStatus()"  class="com-btn  " id="showStatus" style="margin-left:20px;" > -->
+             </div> 
+        </div>
+
+       
+    
+        
+    </div>
+    <div class="d-f ">
+        <div class="qb-lit-left">
+            <div class="qb-tij">
+               
+               
+                <table style="width:100%;" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td> 
+                        <span class="fleft name-xa">情报名称：</span>
+                        <span class="fleft name-ijks" >
+                            <input type="text" class="nam-pus" id="qb_name" style="width:80px;" />
+                        </span>
+                        </td>
+                        <td> 
+                        <?php if($isHas_check==200){ ?> 
+                            <span class="fleft name-xa">部门名称：</span>
+                            <span class="fleft name-ijks" >
+                            <select class="sec-ims" id="qb_bmname"  data-actions-box="true" data-done-button="true" data-live-search="true" >
+                                <option>加载中...</option>
+                            </select>
+                            </span>
+                            <script type="text/javascript">
+                            var is_super = 200;
+                            </script>
+                        <?php }else{ ?>
+                            <span class="fleft name-xa">主负责人名称：</span>
+                            <span class="fleft name-ijks" >
+                                <select class="sec-ims" id="qb_fzrname"  data-actions-box="true" data-done-button="true" data-live-search="true" >
+                                    <option>加载中...</option>
+                                </select>
+                            </span>
+                            <script type="text/javascript">
+                            var is_super = 500;
+                            </script>
+                        <?php } ?>
+                        </td>
+                        <td> 
+                        <span class="fleft name-xa">情报状态：</span>
+                        <span class="fleft name-ijks" >
+                            <select class="sec-ims" id="qb_xmstatus">
+                                <option value="">--全部--</option>
+ 
+    <?php foreach ($QinBaoStatus_list as $k => $v) { ?>
+                <option value="{$k}"  >{$v}</option>
+                <?php } ?>
+                            </select>
+                        </span>
+                        </td>
+                        <td>
+                            <input value="查询" type="submit" id="querybtn" onclick="In.queryZuQinBao()">
+                        </td>
+                    </tr>
+                </table>
+                <table class="dataTable dataTable1"  style="width:100%;margin-top:8px;">
+                    <tr style="background:#e2e2e2;">
+                    <td>主情报名称</td>
+                    <td><?php if($isHas_check==200){ ?> 部门名称/ <?php } ?>主负责人</td>
+                    <td>状态</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="data-tk" style="margin-top:0px;">
+                <table class="dataTable dataTable1"  style="width:100%;">
+                <tbody id="qb_list">
+                <tr><td colspan="3" style="text-align:center;">加载中...</td></tr>
+
+                </tbody>
+                </table>
+                <div class="pagen" id="page_zqb" style="margin-top:12px;"></div>
+                <div class="no-datas" style="color:red;font-size:12px;">*这里显示我负责的、参与的主情报</div>
+            </div>
+           
+        </div>
+
+        <ul class="qb-rt">
+            <li style="width:100%;height:auto;border-bottom:1px solid #eee;">
+                <input value="待分解" type="button" onclick="In.initQinBao_jxz_1(1)" class="com-btn btnon  bqn-btn " id="show_btn_1">
+                <input value="采集中" type="button" onclick="In.initQinBao_jxz_2(2)" class="com-btn  bqn-btn" id="show_btn_2">
+               <!--  <input value="进行中" type="button" onclick="In.initQinBao_jxz_3(3)" class="com-btn  bqn-btn" id="show_btn_3"> -->
+                <input value="已完成" type="button" onclick="In.initQinBao_jxz_4(4)" class="com-btn  bqn-btn" id="show_btn_4">
+                <!-- <input value="状态统计" type="button" onclick="In.initQinBao_jxz_5(5)"  class="com-btn bqn-btn " id="show_btn_5" style="margin-left:20px;" > -->
+            </li>
+            <li class="datali">
+                <div class="" id="qb_tj_1" style="height:369px;width:99%;"></div>
+            </li>
+            <li  class="datali">
+                <div class="" id="qb_tj_2" style="height:369px;width:99%;"></div>
+            </li>
+            
+            <li  class="datali">
+                <div class="" id="qb_tj_3" style="height:369px;width:99%;"></div>
+            </li>
+            <li  class="datali">
+                <div class="" id="qb_tj_4" style="height:369px;width:99%;"></div>
+            </li>
+             <li  class="datali">
+                <div class="" id="qb_tj_5" style="height:369px;width:99%;"></div>
+            </li>
+        </ul>
+    </div>
+    <div class="d-f" style="margin-top:50px;background:#eee;padding:15px 0px;width:97%;border-radius:5px;">
+    <span class="f-slz">日期筛选：</span>
+        
+       <!--  <span class="ds dayHover" onclick="e.showTime('{$dates["pre_start_30"]}','{$dates["pre_end_30"]}',this)">当月</span>
+        <span class="ds" onclick="e.showTime('{$dates["pre_start"]}','{$dates["pre_end"]}',this)">上月</span> -->
+        <span class="fleft">
+            <span class="friq-a">
+                <input class="Wdate sx-ri" readonly="true"  onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="strtime" value="{$map['strtime_']}" id="strtime" type="text">
+            </span>
+           <!--  <span class="fir-az">至</span>
+            <span class="friq-a">
+               <input class="Wdate sx-ri" readonly="true"  onchange="e.clearBg()"  onclick="WdatePicker({dateFmt:'yyyy-MM'})" id="endtime" name="endtime" value="{$map['strtime_']}" type="text">
+            </span> -->
+        </span>
+        <input name="need_follow_adverids" value="" type="hidden">
+        <input type="hidden" value="{$adverid}" id="adverid" />
+        <span class="fleft"  style="margin-left:10px;"><input name="" value="查询" class="com-btn" id="query" type="button" onclick="In.initQinBao_all_qb()"></span>
+    </div>
+    <div class="d-f main-tjsec" style="padding:20px 0 100px 0;">
+        <div class="" style="width:100%;height:600px;" id="all_qb"></div>
+    </div>
+
+</div>
+<script type="text/javascript">
+var cs={
+    isNeedSure:"{$isNeedSure}",
+    zqb_id:"{$zqb_id}"
+};
+</script>
+
+<script src="__PUBLIC__/Home/module/ECharts/echarts-all.js" type="text/javascript"></script>
+<script type="text/javascript" src="/Public/static/layer/layer.js"></script>
+<script type="text/javascript" src="/Public/Home/js/qb.index.js?v={:getVersion()}"></script>
+</block>

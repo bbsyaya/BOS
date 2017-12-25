@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-stand" />
+    <title>{:getSiteTitle($webTitle)}  </title>
+    <!--<link href="__CSS__/base.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/common.css" rel="stylesheet" type="text/css" />
+    <link href="__CSS__/page.css" rel="stylesheet" type="text/css" />
+    <script src="__MODULE__/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="__MODULE__/jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css" />
+    <script type="text/javascript" src="__MODULE__/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js" ></script>
+    <script type="text/javascript" src="__MODULE__/highcharts/highcharts.js"></script>
+    <script type="text/javascript" src="__MODULE__/highcharts/exporting.js"></script>
+    <script src="__MODULE__/jquery.form.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+    <script src="__JS__/common.js" type="text/javascript"></script>
+    <script src="__JS__/common_xieqiang.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__STATIC__/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__MODULE__/bootstrapselect/bootstrap.min.js"></script>-->
+    <!--<link href="__STATIC__/magicsuggest/magicsuggest-min.css" rel="stylesheet">
+    <script src="__STATIC__/magicsuggest/magicsuggest-min.js"></script>-->
+
+    <link href="__new_boss__/css/models.css" rel="stylesheet">
+    <script type="text/javascript" src="__new_boss__/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="__new_boss__/js/index.js"></script>
+    <block name="style"></block>
+</head>
+
+<script type="text/javascript">
+
+    $(function(){
+        /*$.fn.magicSuggest.defaults = {
+         placeholder:''
+         };*/
+        //初始化查询通知数据
+        var inf_data ='';
+        //点击后读取信息
+        $.post("/Home/Contract/to_information",{
+        },function(data){
+            if(data != "false"){
+                for(var o in data) {
+                    inf_data +="<div class=\"messageName fl\" fid="+ data[o].id +">"+data[o].content+"</div>"+
+                            "<div class=\"messageLink fl\"><span class=\"a_link\" style=\"cursor:pointer;\" fid="+ data[o].id +" a_link="+data[o].a_link+">点击跳转</span></div>"+
+                            "<div class=\"messageTime fl\">"+data[o].date_time+"</div>";
+                }
+                // $(".messageDialog_middle").after(inf_data);
+            }else{
+                //无数据 修改喇叭的颜色
+                $(".message").removeClass("messageBlink");
+            }
+        });
+
+        //消息框
+        $(".messageIcon").click(function(){
+
+            //alert("正在加载数据");
+            $("body").append("<div id=\"conceal\"></div>");
+            $("body").append("<div class=\"messageDialog\">"+
+                    "<div class=\"messageDialog_top\">"+
+                    "<div class=\"messageDialog_topLinie\">"+
+                    "<div class=\"messageDialog_title\">系统消息</div>"+
+                    "<div class=\"messageDialog_close\"></div>"+
+                    "</div>"+
+                    "</div>"+
+                    "<div class=\"messageDialog_filtrate\">"+
+                    "<div class=\"filtrate fl filtrateFocus\" status='0'>未读消息</div>"+
+                    "<div class=\"filtrate fl \" status='1'>已读消息</div>"+
+                    "</div>"+
+                    "<div class=\"messageDialog_middle\">"+ inf_data +"</div>"+
+                    "<div class=\"messageDialog_bottom\">"+
+                    "<input type=\"button\" class='sub' value=\"全部已阅\" />"+
+                    "<input type=\"button\" class='clos' value=\"关闭\" />"+
+                    "</div>"+
+                    "</div>"
+            );
+            //动画显示
+            var w=$(".messageDialog").width();
+            var h=$(".messageDialog").height();
+            $(".messageDialog").width(1);
+            $(".messageDialog").height(1);
+            $(".messageDialog").show();
+            $(".messageDialog").animate({
+                width: w,
+                height: h,
+                marginLeft: -(w/2),
+                marginTop:-(h/2),
+            },400);
+        });
+
+        //单个修改状态 2016.12.20
+        $("body").on({click:function(){
+            var fid = $(this).attr('fid');//id
+            var a_link = $(this).attr('a_link');//链接地址
+            $.post("{:U('/Home/Contract/change_one')}", {
+                FID : fid,
+                A_LINK : a_link
+            },function(data){
+                //data = JSON.parse(data);
+                if(a_link != ""){
+                    location.href = a_link;
+                    //location.reload();
+                }else{
+                    alert(data);
+                }
+            });
+        }},".a_link");
+
+        //消息状态切换
+        //未读 已读切换
+        $("body").on({
+            click: function() {
+                var inf_data = "";
+                $.post("{:U('/Home/Contract/status_up')}",{
+                    status : $(this).attr('status')//状态传动态值(切换)
+                },function(data){
+                    if(data != ""){
+
+                        for(var o in data) {
+                            inf_data += "<div class=\"messageName fl\" fid="+ data[o].id +">"+data[o].content+"</div>"+
+                                    "<div class=\"messageLink fl\"><span class=\"a_link\" style=\"cursor:pointer;\" fid="+ data[o].id +" a_link="+data[o].a_link+">点击跳转</span></div>"+
+                                    "<div class=\"messageTime fl\">"+data[o].date_time+"</div>";
+                        }
+                        $(".messageDialog_middle").html(inf_data);
+                    }else{
+                        $(".messageDialog_middle").html("暂无数据");
+                    }
+
+                });
+                $(".filtrate").removeClass("filtrateFocus");
+                $(this).addClass("filtrateFocus");
+            }
+        }, ".filtrate");
+
+        //全部阅读
+        $("body").on({
+            click: function() {
+                var fid = "";
+                $(".messageDialog_middle").find(".messageName").each(function(i){
+
+                    fid+=$(this).attr('fid')+',';
+                });
+                //alert(fid);return;
+                $.post("{:U('/Home/Contract/change_status')}", {
+                    FID : fid
+                },function(data){
+                    if(data == "TRUE"){
+                        location.reload();
+                    }else{
+                        alert(data);
+                    }
+                });
+
+            }
+        }, ".sub");
+        //关闭消息框
+        $("body").on({
+            click: function() {
+                $(this).parents(".messageDialog").remove();
+                $("#conceal").remove();
+            }
+        }, ".clos");
+    })
+</script>
+<body>
+<div class="MainBox">
+    <div class="mainTop">
+        <div class="logo left" onclick="window.location='/Index/index.html'" style="cursor: pointer;">
+            <p class="subLogo"><img src="__new_boss__/images/til.png" alt=""></p>
+            <!--<p class="subLogo"><img src="__new_boss__/images/sub_logo.png" alt=""></p>
+            <p class="logoTit"><img src="__new_boss__/images/top_title.png" alt=""></p>-->
+        </div>
+        <div class="userBox right">
+            <a href="{:U('/Home/User/mycenter')}" class="top_list userIcon"><img src="__PUBLIC__/newUIH/images/<eq name="data_user.gender" value="1">g<else/>m</eq>.png"><span class="userTagg"></span></a>
+            <!--<a href="#" class="top_list messageIcon"><span class="userTagg"></span></a>-->
+            <a href="{:U('/Home/Public/logout')}" class="top_list outIcon"></a>
+        </div>
+    </div>
+
+    <div class="leftNavBox">
+        <div class="leftNav" id="accordion">
+            <div class="user_infoBox" onclick="window.location='/Home/Index/bos_index';" style="cursor: pointer;">
+                <p class="bosBox"><img src="__new_boss__/images/bos_icon.png" alt=""></p>
+                <p class="userImg"><img src="__PUBLIC__/newUIH/images/<eq name="data_user.gender" value="1">g<else/>m</eq>.png" alt=""></p>
+                <h2>hello,<span>{$_SESSION['userinfo']['realname']}</span></h2>
+                <p class="userHome">{$_SESSION['userinfo']['duty_name']}</p>
+            </div>
+            <ul class="navBox">
+                <volist name="__MENU__.main" id="menu">
+                    <php>
+                        $da = array();
+                        foreach($menu['child'] as $val){
+                        $da[] = $val['name'];
+                        }
+                        $a_c = '';$dis=''; if( in_array( $currentUrl,$da) ){ $a_c = 'open';$dis='bc'; }</php>
+                    <li class="{$a_c}">
+                        <php>
+                            switch($menu['title']){
+                            case '合作管理': $ty_class = 'nav_ware';break;
+                            case '商务管理': $ty_class = 'nav_commerce';break;
+                            case '数据管理': $ty_class = 'nav_data';break;
+                            case '战略分析': $ty_class = 'nav_strategy';break;
+                            case '财务管理': $ty_class = 'nav_finance';break;
+                            case '风控管理': $ty_class = 'nav_risk';break;
+                            case '系统管理': $ty_class = 'nav_system';break;
+                            }
+                        </php>
+                        <div class="link"><i class="navIcon {$ty_class}"></i>{$menu.title}</div>
+
+                        <php>if($dis == 'bc'){</php>
+                        <dl class="submenu" style="display: block;">
+                            <php>}else{</php>
+                            <dl class="submenu">
+                                <php>}</php>
+                                <volist name="menu['child']" id="cl">
+                                    <php> $aa = ''; if($cl['name'] == $currentUrl){ $aa = 'link_a';}</php>
+                                    <dd><a class="{$aa}" target="main_frame" href="{$cl['name']}">{$cl.title}</a></dd>
+                                </volist>
+                            </dl>
+                    </li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+
+    <div class="MainContentBox">
+        <iframe id="main_frame" width="100%" height="100%" frameborder="0" onload="" name="main_frame" src="{$mainurl}" style="overflow:hidden; position:absolute;"></iframe>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>流程管理</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+</head>
+<body>
+<!--主体-->
+<div class="subConten">
+    <!--面包屑-->
+    <div class="crumbs"><a href="">OA管理</a>&nbsp;&gt;&nbsp;<span>流程管理</span></div>
+    <!--end 面包屑-->
+    <!--内容-->
+    <div class="subCon">
+        <!--条件查询-->
+        <div class="query">
+        	<form action="" method='get'>
+            <table class="queryTable">
+                <tbody>
+                    <tr>
+                        <td width="140"><input type="button" class="flow_btn" onclick="window.location='/LCAdmin/add'" value="设计流程"/></td>
+                        <th>标题：</th>
+                        <td><input name="name" value="{:I('get.name')}" type="text"></td>
+                        <td colspan="2"><input name="" type="submit" value="查询"></td>
+                    </tr>
+                </tbody>
+            </table>
+            </form>
+        </div>
+        <!-- end 条件查询-->
+        <!--流程管理列表-->
+        <div class="workListBox">
+            <table class="listTable Js_tableCon">
+                <thead>
+                    <tr>
+                        <th>流程ID</th>
+                        <th>流程名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<volist name='data' id='v'>
+                		<tr>
+	                        <td>{$v.id}</td>
+	                        <td>{$v.name}</td>
+	                        <td><a class="rest" href="/LCAdmin/edit?id={$v.id}">修改</a><a class="edit" href="/LCAdmin/edittiaojian?id={$v.id}">条件编辑</a><a class="detail Js_details" href="javascript:void(0);">作废</a></td>
+	                    </tr>
+
+					</volist>
+
+                </tbody>
+            </table>
+        </div>
+        <!--end 流程管理列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var Popupe = new PopupBase();
+        Popupe.show('.title_btn', '.mask,.conDetails');
+        Popupe.hide('.colse','.mask,.conDetails');
+    });
+</script>
+</body>
+</html>

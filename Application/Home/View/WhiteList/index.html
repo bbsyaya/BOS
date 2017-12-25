@@ -1,0 +1,246 @@
+<extend name="Public/base"/>
+<block name="body">
+<div class="subMainBox">
+    <div class="ri_header">
+        <div class="ri_title_box">
+            <span class="clip-text">白名单</span>
+            <span>风控中心</span>
+        </div>
+        <div class="ri_work">White list</div>
+    </div>
+    <div class="screenBox swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <form action="{:U('index')}" id="search_form">
+                    <!--基础查询-->
+                    <h2>基础查询</h2>
+
+                    <div class="swiperRight">
+                        <table class="tableBox">
+                            <tr>
+                                <th>客户名称：</th>
+                                <td>
+                                    <input type="text" name="name" value="{$Think.get.name}">
+                                </td>
+                                <th>客户账户：</th>
+                                <td><input type="text" name="opening_bank" value="{$Think.get.opening_bank}">
+                                </td>
+                                <th>客户账号：</th>
+                                <td>
+                                    <input type="text" name="bank_no" value="{$Think.get.bank_no}">
+                                </td>
+                                <td>
+                                    <input id="search_btn" type="submit" value="查询" />
+                                    <input type="hidden" name="p" value="1"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>类别：</th>
+                                <td>
+                                    <select name="type" class="selectpicker">
+                                        <option value="" selected>请选择</option>
+                                        <option value="1">广告主</option>
+                                        <option value="2">供应商</option>
+                                        <option value="3">费用</option>
+                                    </select>
+                                </td>
+                                <th>日期：</th>
+                                <td>
+                                    <input name="sdate" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$Think.get.sdate}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+                <!--end 基础查询-->
+            </div>
+        </div>
+    </div>
+    <style type="text/css">
+        .ab{height: 140px;}
+    </style>
+    <div class="screenCn fl w ha">
+        <!--<div class="screenOperate fl w">
+            <input id="doExport" type="button" value="下载报表" class="" />
+            <input type="button" value="高级筛选" class="J_openScreen" />
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+            <div class="line fr h"></div>
+        </div>
+        <div class="screenList fl w">
+            <form action="{:U('index')}" id="search_form">
+                <table>
+                    <tr>
+                        <th>客户名称：</th>
+                        <td>
+                            <input type="text" name="name" value="{$Think.get.name}">
+                        </td>
+                        <th>客户账户：</th>
+                        <td><input type="text" name="opening_bank" value="{$Think.get.opening_bank}">
+                        </td>
+                        <th>客户账号：</th>
+                        <td>
+                            <input type="text" name="bank_no" value="{$Think.get.bank_no}">
+                        </td>
+                        <th>类别：</th>
+                        <td>
+                            <select name="type">
+                                <option value="" selected>请选择</option>
+                                <option value="1">广告主</option>
+                                <option value="2">供应商</option>
+                                <option value="3">费用</option>
+                            </select>
+                        </td>
+                    </tr>
+                        <tr>
+                            <th class="expertScreen">日期：</th>
+                            <td class="expertScreen">
+                                <input name="sdate" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$Think.get.sdate}"/>&lt;!&ndash;{$_GET['sdate']}&ndash;&gt;
+                            </td>
+                        </tr>
+                    <tr>
+                        <td colspan="8">
+                            <input id="search_btn" type="submit" value="查询" />
+                            <input type="hidden" name="p" value="1"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>-->
+        <table class="dataTable dataTable1 ab">
+            <thead>
+            <tr>
+                <th>收入账户数量</th>
+                <th>支出账户数量</th>
+                <th>当月异常收支账户数量</th>
+                <th>当月异常收支账户金额</th>
+                <th>当月相同支出金额笔数</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><a href="/WhiteListDetail/index?type=1" target="_blank">{$in_count}</a></td>
+                <td><a href="/WhiteListDetail/index?type=2" target="_blank">{$out_count}</a></td>
+                <td><a href="/WhiteListDetail/index?status=1&date={$Think.get.sdate}" target="_blank">{$ycData.count_id}</a></td>
+                <td>{$ycData.money}</td>
+                <td><a href="/WhiteListDetail/index?wid={$wid}" target="_blank">{$out_m}</a></td>
+            </tr>
+            <!--<volist name="list" id="item">
+                <tr>
+                    <td>{$item.name}</td>
+                    <td>{$item.opening_bank}</td>
+                    <td>{$item.bank_no}</td>
+                    <td>{$item.type}</td>
+                </tr>
+            </volist>-->
+            </tbody>
+        </table>
+    </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha">
+        <div class="advancedTit">
+            <div class="advancedLeft">
+                <span class="export advBtn"><input id="doExport" type="button" value="下载报表" class="" /></span>
+            </div>
+        </div>
+        <table id="sample2" class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>客户名称</th>
+                <th>客户账户</th>
+                <th>客户账号</th>
+                <th>类别</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="list" id="item">
+                <tr>
+                    <td>{$item.name}</td>
+                    <td>{$item.opening_bank}</td>
+                    <td>{$item.bank_no}</td>
+                    <td>{$item.type}</td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+        {$_page}
+    </div>
+</div>
+
+    <div class="sampleText">
+        <label id="sample2Txt">Drag the columns to start</label>
+    </div>
+    <!--弹出框-->
+    <div class="uploadingDialog" title="导入文件选择">
+        <form action='/WhiteList/export_a' target="newpage" id="uploadexcel" method='post' enctype="multipart/form-data">
+            <table class="dialogTable_form w ha">
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>导入数据<span class="must">*</span>:</th>
+                    <td><input type="file" name='file' multiple="multiple" /></td>
+                    <td><input type="hidden" id="year_ye" name="year_ye"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</block>
+<block name="script">
+    <!--列表拖动js-->
+    <script src="__MODULE__/colResizable-1.5.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $(".J_uploading").click(function(){
+                $(".uploadingDialog").dialog("open");
+            });
+
+            $(".uploadingDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "450",
+                height: "200",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        $(this).dialog("close");
+                        $('#uploadexcel').submit();
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+
+            $("#doExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export')}";
+                window.location.href=url+'?'+param;
+            });
+            //列表拖动 start
+            var onSampleResized = function(e){
+                var columns = $(e.currentTarget).find("th");
+                var msg = "columns widths: ";
+                columns.each(function(){ msg += $(this).width() + "px; "; })
+                $("#sample2Txt").html(msg);
+
+            };
+
+            $("#sample2").colResizable({
+                liveDrag:true,
+                gripInnerHtml:"<div class='grip'></div>",
+                draggingClass:"dragging",
+                onResize: onSampleResized
+            });
+            //end
+        });
+    </script>
+</block>

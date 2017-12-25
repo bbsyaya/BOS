@@ -1,0 +1,107 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+    <script type="text/javascript">
+    </script>
+</block>
+
+<block name="body">
+    <!--面包屑导航-->
+    <!--<div class="crumbsNavCn fl w">
+        <a class="crumbsNav fl h">财务管理</a>
+        <a href="beforepayment.html" class="crumbsNav fl h">预收管理</a>
+        <a class="crumbsNav fl h">查看</a>
+    </div>-->
+    <!--数据表-->
+    <div class="dataCn fl w ha">
+        <div class="dataFormContainer">
+            <div class="dataFormTitle">基本信息</div>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>供应商名称：</th>
+                        <td>{$name}</td>
+                        <th>预付款金额：</th>
+                        <td>{$yh}</td>
+                        <th>已核销金额：</th>
+                        <td>{$yy}</td>
+                    </tr>
+                    <tr>
+                        <th>待核销金额：</th>
+                        <td>{$dh}</td>
+                        <th>状态：</th>
+                        <td>
+                            <if condition="$zy eq 0 ">
+                                已核销
+                            <else />
+                                待核销
+                            </if>
+                        </td>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="dataFormTitle">支付明细</div>
+            <div class="dataFormContent">
+                <table class="dynamicTable">
+                    <tr>
+                        <th width="100">实付金额</th>
+                        <th>支付账号</th>
+                        <th>支付日期</th>
+                        <th>操作人</th>
+                        <th>操作时间</th>
+                    </tr>
+                    <volist name="payData" id="item">
+                        <tr>
+                            <td>{$item.pay_money}</td>
+                            <td>{$item.pay_num}</td>
+                            <td>{$item.pay_date}</td>
+                            <td>{$item.real_name}</td>
+                            <td>{$item.addtime}</td>
+                        </tr>
+                    </volist>
+                </table>
+            </div>
+
+            <div class="dataFormTitle">核销明细</div>
+            <div class="dataFormContent">
+                <table class="dynamicTable">
+                    <tr>
+                        <th width="100">应收编号</th>
+                        <th>供应商</th>
+                        <th>产品名称</th>
+                        <th>账单期间</th>
+                        <th>结算金额</th>
+                        <th>签订主体</th>
+                        <th>商务</th>
+                        <th>核销人</th>
+                        <th>核销时间</th>
+                        <th>核销金额</th>
+                    </tr>
+                    <volist name="hxData" id="item">
+                    <tr>
+                        <td>{$item.run_id}</td>
+                        <td>{$item.name}</td>
+                        <td>{$item.data_151}</td>
+                        <td>{$item.data_152}</td>
+                        <td>{$item.data_154}</td>
+                        <td>{$item.data_155}</td>
+                        <td>{$item.data_153}</td>
+                        <td>{$item.data_1}</td>
+                        <td>{$item.data_3}</td>
+                        <td>{$item.data_48}</td>
+                    </tr>
+                    </volist>
+                </table>
+            </div>
+
+            <div class="dataFormOperate">
+                <a href="beforepayment.html">返回</a>
+            </div>
+        </div>
+
+    </div>
+</block>

@@ -1,0 +1,131 @@
+<extend name="Public/base"/>
+<block name="body">
+<style type="text/css">
+    .fleft{float:left;height:32px;line-height:32px}.b-name{border:1px solid #c5c5c5;height:32px;line-height:32px;margin:0;padding:0 5px;width:200px}.com-btn{background:#1a72d6 none repeat scroll 0 0;border:medium none;border-radius:3px;color:#fff;cursor:pointer;margin-right:10px;padding:8px 30px;margin-left:10px}.screenOperate a{border-radius:0;float:left;height:100%;margin-right:1px;padding:0 30px;background:#1a72d6 none repeat scroll 0 0;border:medium none;color:#fff;cursor:pointer}.ui-resizable{width: 425px !important; height: 120px !important;}
+</style>
+
+<div class="subMainBox">
+
+<div class="screenOperate fl w">
+<a class="J_addData" id="">新增职位</a>
+</div>J_statisticsThumbnail
+    <!--筛选-->
+    <form method="post" action="/Home/Duty/index.html">
+            <table class="queryTable fl w" style="margin:10px 0 10px 0px;">
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="fleft">职位名称：</span>
+                            <span class="fleft"><input name="name" value="{$map["name"]}" class="b-name" type="text"></span>
+                            <span class="fleft"><input name="" value="查询" class="com-btn" type="submit"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>名称</th>
+                <th width="150">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="list" id="item">
+                <tr>
+                    <td>{$item.id}</td>
+                    <td>{$item.name}</td>
+                    <td>
+                        <a class="J_updateData" onclick="d.delete({$item['id']})" >删除</a>
+                        <a class="J_updateData" onclick="d.edit({$item['id']})" id="data_{$item['id']}" >编辑</a>
+                    </td>
+                </tr>
+            </volist>
+
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    {$_page}
+</div>
+    </block>
+
+<block name="script">
+<script type="text/javascript">
+jQuery.browser={};(function(){jQuery.browser.msie=false; jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
+var addDialogData = '';
+var d={
+    init:function(){
+        this.initDialog();
+    },
+    initDialog:function(){
+        $(".J_addData").click(function(){
+            //ajax加载表格数据
+            $(this).html("加载中...");
+            if (!addDialogData) {
+                $.get("{:U('/Home/Duty/add')}",function(dom){
+                    addDialogData = dom;
+                    $(".addDataDialog").html(addDialogData);
+                    $(".addDataDialog").dialog();
+                    $(".J_addData").html("新增职位");
+                });
+            } else {
+                $(".addDataDialog").html(addDialogData);
+                $(".addDataDialog").dialog();$(".J_addData").html("新增职位");
+            }
+        });
+        
+    },
+    edit:function(id){
+        $("#data_"+id).html("加载中...");
+        $.get("{:U('/Home/Duty/edit')}",{id:id},function(dom){
+            $(".addDataDialog").html(dom);
+            $(".addDataDialog").dialog();
+            $("#data_"+id).html("编辑");
+        });
+    },
+    delete:function(id){
+        var thisDialog = $('.opennewpage');
+        thisDialog.html("您确定删除吗？");
+        thisDialog.dialog({
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "确定":function() {
+                    $.post("/Home/Duty/delete",{id:id},function(data){
+                        alertnewpage2(data.msg);
+                        window.location.reload();
+                    });
+                },
+                "取消":function(){
+                    thisDialog.dialog("close");
+                }
+            },
+        });     
+        thisDialog.dialog("open");
+    },
+    saveData:function(){
+       var params = {};
+       params.name=$("#name").val();
+       params.id=$("#pid").val();
+       if(params.name==""){
+        $("#name").focus();
+        return false;
+       }else{
+        $.post("/Home/Duty/saveData",params,function(data){
+            $(".addDataDialog").dialog("close");
+            alertnewpage2(data.msg);
+            window.location.reload();
+        });
+       }
+    }
+};
+$(function(){d.init();});
+</script>
+<div class="addDataDialog" title="新增职位" style="display: none;"></div>
+</block>

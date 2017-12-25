@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>流程管理</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <script src="__PUBLIC__/OA/js/jquery-2.1.1.min.js" type="text/javascript"></script>
+	<script>
+	$(function(){
+		$('.setupRight').on({
+			click:function(){
+				var aid=$(this).attr('data');
+				var thisa=$(this);
+				$.get('/LCAdmin/deltiaojian',{"id":aid},function(res){
+					if(res.type==1)thisa.parents('p').remove();
+				},'json')
+			}
+		},'.setClose')
+		$('.submit_b').click(function(){
+			var key2=$(this).parents('.setupTerm').find('select[name="key2"]').val()!=undefined ? $(this).parents('.setupTerm').find('select[name="key2"]').val() : $(this).parents('.setupTerm').find('input[name="key2"]').val();
+			var key=$(this).parents('.setupTerm').find('select[name="key"]').val();
+			var key1=$(this).parents('.setupTerm').find('select[name="key1"]').val();
+			var key3;
+			$(this).parents('.setupTerm').find('select[name="key"]').find('option').each(function(){
+				if($(this).val()==key)key3=$(this).html();
+			})
+			$.post('/LCAdmin/addtiaojian',{"id":$(this).parents('.setupTerm').find('input[name="id"]').val(),"key":key,"key1":key1,"key2":key2},function(res){
+				alert(res.msg)
+				if(res.type==1){
+					$('.setupRight').append('<p>['+res.code+'] : '+key3+key1+key2+' <a href="javascript:void(0);" data="'+res.id+'" class="setClose"></a></p>');
+				}
+			},'json')
+		})
+	})
+	</script>
+</head>
+<body>
+<!--主体-->
+<div class="subConten">
+    <!--面包屑-->
+    <div class="crumbs"><a href="">OA管理</a>&nbsp;&gt;&nbsp;<a href="">流程管理</a>&nbsp;&gt;&nbsp;<span>条件设置</span></div>
+    <!--end 面包屑-->
+    <!--内容-->
+    <div class="subCon">
+        <!--条件查询-->
+        <div class="query">
+        	<form action="/LCAdmin/changetiaojian" method='get'>
+       		<input type="hidden" name="id" value="{:I('get.id')}"/>
+            <table class="queryTable">
+                <tbody>
+                    <tr>
+                        <th>条件判断公式：</th>
+                        <td><input name="tiaojian" value="{$data.tiaojian}" type="text"></td>
+                        <td colspan="2"><input name="" type="submit" value="提交"></td>
+                    </tr>
+                </tbody>
+            </table>
+            </form>
+        </div>
+        <!-- end 条件查询-->
+        <p class="design_tit">可添加条件</p>
+        <div class="setupBox clearfix">
+            <div class="setupLeft left">
+                <!--条件设置-->
+                <div class="setupTerm">
+                <input type="hidden" name="id" value="{:I('get.id')}"/>
+                    <h2>节点条件</h2>
+                    <p class="setupSelect">
+                        <select class="left" name="key" id="">
+                            <volist name='ortherdata' id='v'>
+								<option value="{$v.id}">
+									{$v.name}
+								</option>
+							</volist>
+                        </select>
+                        	<select style="display: none;" name='key1'>
+
+								<option value="=">
+									=
+								</option>
+
+							</select>
+                        <select class="right" name="key2" id="">
+                            <option value="同意">
+								同意
+							</option>
+							<option value="不同意">
+								不同意
+							</option>
+                        </select>
+                    </p>
+                    <div class="office_btnBox">
+                        <input name="" class="submit_b" value="添加条件" type="button">
+                    </div>
+                </div>
+                <!--end 条件设置-->
+                <!--条件设置-->
+                <div class="setupTerm">
+                <input type="hidden" name="id" value="{:I('get.id')}"/>
+                    <h2>表单条件</h2>
+                    <p class="setupSelect">
+                        <select class="setupSum left" name="key" id="">
+                            <volist name='inputlist' id='v'>
+								<option value="{$v.code}">
+									{$v.name}
+								</option>
+							</volist>
+                        </select>
+                        <select class="setTerm left" name="key1" id="">
+                            <option value=">">
+								>
+							</option>
+							<option value="<">
+								<
+							</option>
+							<option value=">=">
+								>=
+							</option>
+							<option value="<=">
+								<=
+							</option>
+							<option value="=">
+								=
+							</option>
+							<option value="!=">
+								!=
+							</option>
+                        </select>
+                        <input class="right" type='text' name="key2"/>
+                    </p>
+                    <div class="office_btnBox">
+                        <input name="" class="submit_b" value="添加条件" type="button">
+                    </div>
+                </div>
+                <!--end 条件设置-->
+            </div>
+            <div class="setupRight right">
+                <p>已添加条件：</p>
+                <volist name="tiaojian" id="v">
+                	<p>[{$v.code}] : {$v.key} {$v.type} {$v.val} <a href="javascript:void(0);" data="{$v.id}" class="setClose"></a></p>
+				</volist>
+            </div>
+        </div>
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+
+</body>
+</html>
+
+

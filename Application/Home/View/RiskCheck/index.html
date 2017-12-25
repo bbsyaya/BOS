@@ -1,0 +1,388 @@
+<extend name="Public/base"/>
+<block name="subnav">
+</block>
+
+<block name="script">
+    <script type="text/javascript" src="__MODULE__/bootstrapselect/bootstrap-select.js"></script>
+    <script src="__MODULE__/ECharts/echarts-all.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function pl_id(pl) {
+            $("#lineid").val(pl);
+            $('.classifyList').find('a').removeClass('ifyhover');
+            if (pl == 47) {
+                $('.classifyList').find('a').eq(3).addClass('ifyhover');
+            } else if (pl == 48) {
+                $('.classifyList').find('a').eq(4).addClass('ifyhover');
+            } else if (pl == 44) {
+                $('.classifyList').find('a').eq(5).addClass('ifyhover');
+            } else if (pl == 34) {
+                $('.classifyList').find('a').eq(6).addClass('ifyhover');
+            } else if (pl == 42) {
+                $('.classifyList').find('a').eq(7).addClass('ifyhover');
+            } else {
+                $('.classifyList').find('a').eq(pl).addClass('ifyhover');
+            }
+
+            //战略性数据
+            if(pl==100){
+                $('#link_'+pl).addClass('ifyhover');
+            }
+            if (pl == '' || pl < 0) {
+                pl = 0;
+            }
+            //$("#rc").submit();
+            chuShi(pl);
+        }
+        /*初始化查询*/
+        function chuShi(pl){
+            var ld='<tr><td colspan="12"><div class="no-datas">加载中...</div></td></tr>';
+            $(".ajax_c").html(ld);
+            $.get("{:U('AjaxRisk')}",{lineid:pl},function(ret){
+                var str = '';
+                for(var o in ret){
+                    str +='<tr>' +
+                            '<td>'+ret[o].ym+'</td>' +
+                            '<td>'+ret[o].in_money+'</td>' +
+                            '<td>'+ret[o].inCheckMoney+'</td>' +
+                            '<td>'+ret[o].in_newmoney+'</td>' +
+                            '<td>'+ret[o].inCheckRatio+'</td>' +
+                            '<td>'+ret[o].out_money+'</td>' +
+                            '<td>'+ret[o].outCheckMoney+'</td>' +
+                            '<td>'+ret[o].out_newmoney+'</td>' +
+                            '<td>'+ret[o].outCheckRatio+'</td>' +
+                            '<td>'+ret[o].inquerenlv+'</td>' +
+                            '<td>'+ret[o].outquerenlv+'</td>' +
+                            '<td><a target="_blank" href="/RiskCheckDetail/index?mon='+ret[o].ym+'&pl_id='+pl+'">明细</a></td>' +
+                        '</tr>';
+                }
+                $(".ajax_c").html(str);
+            });
+        }
+
+        /*
+         关账与实时利润分析 点击业务线
+         */
+        function plId(pl){
+            $('.classifyList').find('a').removeClass('ifyhover');
+            if (pl == 47) {
+                $('.classifyList').find('a').eq(3).addClass('ifyhover');
+            } else if (pl == 48) {
+                $('.classifyList').find('a').eq(4).addClass('ifyhover');
+            } else if (pl == 44) {
+                $('.classifyList').find('a').eq(5).addClass('ifyhover');
+            } else if (pl == 34) {
+                $('.classifyList').find('a').eq(6).addClass('ifyhover');
+            } else if (pl == 42) {
+                $('.classifyList').find('a').eq(7).addClass('ifyhover');
+            } else {
+                $('.classifyList').find('a').eq(pl).addClass('ifyhover');
+            }
+            if (pl == '' || pl < 0) {
+                pl = 0;
+            }
+            analysis(pl);
+        }
+
+        function analysis(pl){
+            $("#a_pl").val(pl);
+            $.get("{:U('AjaxAnalysis')}",{lineid_a:pl},function(ret){
+                var str = '';
+                for(var o in ret){
+                    str +='<tr>' +
+                            '<td>'+ret[o].ym+'</td>' +
+                            '<td>'+ret[o].closeMoney+'</td>' +
+                            '<td>'+ret[o].closeRatio+'</td>' +
+                            '<td>'+ret[o].realMoney+'</td>' +
+                            '<td>'+ret[o].realRatio+'</td>' +
+                            '<td>'+ret[o].inquerenlv+'</td>' +
+                            '<td>'+ret[o].outquerenlv+'</td>' +
+                            '<td><a target="_blank" href="/RiskCheckDetail/index?mon='+ret[o].ym+'&pl_id='+pl+'">明细</a></td>' +
+                            '</tr>';
+                }
+                $(".analysis").html(str);
+            });
+        }
+
+        $(function() {
+            plId(0);
+            $(".J_openScreen").click(function(){
+                $(".classifyBox").hide();
+            });
+
+            /*
+             关账与实时利润分析 查询
+             */
+            $(".chaXun").click(function(){
+                var time_s_a = $("#time_s_a").val();
+                var lineid_a = $("#lineid_a").val();
+                var rea_son_a = $("#rea_son_a").val();
+                var a_pl = $("#a_pl").val();
+                $.get("{:U('AjaxAnalysis')}",{lineid_a:a_pl,time_s_a:time_s_a,lineid_a:lineid_a,rea_son_a:rea_son_a},function(ret){
+                    var str = '';
+                    for(var o in ret){
+                        str +='<tr>' +
+                                '<td>'+ret[o].ym+'</td>' +
+                                '<td>'+ret[o].closeMoney+'</td>' +
+                                '<td>'+ret[o].closeRatio+'</td>' +
+                                '<td>'+ret[o].realMoney+'</td>' +
+                                '<td>'+ret[o].realRatio+'</td>' +
+                                '<td>'+ret[o].inquerenlv+'</td>' +
+                                '<td>'+ret[o].outquerenlv+'</td>' +
+                                '<td><a target="_blank" href="/RiskCheckDetail/index?mon='+ret[o].ym+'&pl_id='+a_pl+'">明细</a></td>' +
+                                '</tr>';
+                    }
+                    $(".analysis").html(str);
+                });
+            });
+
+            $("#doExport").click(function(){
+                var param = $("#rc").serialize();
+                var url = "{:U('export')}";
+                window.location.href=url+'?'+param;
+            });
+
+            $("#doExport_a").click(function(){
+                var param = $("#anal").serialize();
+                var url = "{:U('export_anal')}";
+                window.location.href=url+'?'+param;
+            });
+        });
+    </script>
+</block>
+<block name="body">
+    <div class="tabCa pa">
+        <div class="tab_menuWrapper pa">
+            <ul class="tab_menuList fl">
+                <li class="tab_menu fl h focus">核检概览</li>
+                <li class="tab_menu fl h">关账与实时利润分析</li>
+            </ul>
+        </div>
+        <div class="tab_contentWrapper pa">
+            <!--核检概览-->
+            <div class="tab_content pa " style="display: block;">
+                <!--筛选-->
+                <div class="screenCn fl w ha">
+                    <!--<div class="screenOperate fl w">
+                        <input type="button" value="高级筛选" class="J_openScreen" />
+                        <input id="doExport" type="button" value="下载报表" class="" />
+                    </div>-->
+                    <style type="text/css">
+                        .t_box{height: 100px;}
+                    </style>
+                    <div class="screenList fl w">
+                        <form action="/RiskCheck/index" method="get" id="rc">
+                            <input type='hidden' name='type' value="1"/>
+                            <table>
+                                <tr>
+                                    <div class="classifyBox t_box">
+                                        <ul class="classifyList clear">
+                                            <li><a class="ifyhover" href="javascript:pl_id(0)">全公司</a></li>
+                                            <li><a href="javascript:pl_id(1)">优效分发平台</a></li>
+                                            <li><a href="javascript:pl_id(2)">优效SSP平台</a></li>
+                                            <li><a href="javascript:pl_id(47)">优效营销平台</a></li>
+                                            <li><a href="javascript:pl_id(48)">优效商家平台</a></li>
+                                            <li><a href="javascript:pl_id(46)">优效发行平台</a></li>
+                                             <li><a href="javascript:pl_id(100)" id="link_100">战略性数据</a></li>
+                                           <!--  <li><a href="javascript:pl_id(34)">分发(一)</a></li>
+                                            <li><a href="javascript:pl_id(42)">分发(二)</a></li> -->
+                                        </ul>
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <th class="expertScreen">时间：</th>
+                                    <td class="expertScreen"><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="time_s" value="{:I('get.time_s')}"/></td>
+                                    <th class="expertScreen">业务线：</th>
+                                    <td class="expertScreen">
+                                        <select id="lineid" name='lineid' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <option value="" selected="selected">请选择</option>
+                                            <foreach name='linelist' item='v' key='k'>
+                                                <option <php>if(in_array($v['id'],I('get.lineid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </foreach>
+                                        </select>
+                                    </td>
+                                    <!--<th class="expertScreen">核减原因：</th>
+                                    <td class="expertScreen">
+                                        <select name="rea_son">
+                                            <option value="" selected="selected">请选择</option>
+                                            <option value="测试核减">测试核减</option>
+                                            <option value="质量核减">质量核减</option>
+                                            <option value="战略核减">战略核减</option>
+                                        </select>
+                                    </td>-->
+                                </tr>
+                                <tr>
+                                    <td class="expertScreen" colspan="8">
+                                        <input type="submit" value="查询" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!--数据表-->
+                <div class="dataCn fl w ha" id="table_con">
+                    <div class="advancedTit">
+                        <div class="advancedLeft">
+                            <span class="export advBtn">
+                                <input id="doExport" type="button" value="下载报表" class="" />
+                            </span>
+                        </div>
+                        <div class="advancedRight">
+                        </div>
+                    </div>
+                    <table class="dataTable dataTable1" id="alldatatable">
+                        <thead>
+                        <tr>
+                            <th>月份</th>
+                            <th>原始收入</th>
+                            <th>收入核检</th>
+                            <th>确认收入</th>
+                            <th>收入核减率</th>
+                            <th>原始成本</th>
+                            <th>成本核检</th>
+                            <th>确认成本</th>
+                            <th>成本核减率</th>
+                            <th>收入确认率</th>
+                            <th>成本确认率</th>
+                            <!--<th>核检原因</th>-->
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="ajax_c">
+                        <volist name="list" id="v">
+                        <tr>
+                            <td>{$v.ym}</td>
+                            <td>{$v.in_money}</td>
+                            <td>{$v.inCheckMoney}</td>
+                            <td>{$v.in_newmoney}</td>
+                            <td>{$v.inCheckRatio}</td>
+                            <td>{$v.out_money}</td>
+                            <td>{$v.outCheckMoney}</td>
+                            <td>{$v.out_newmoney}</td>
+                            <td>{$v.outCheckRatio}</td>
+                            <td>{$v.inquerenlv}</td>
+                            <td>{$v.outquerenlv}</td>
+                            <!--<td></td>-->
+                            <td><a href="/RiskCheckDetail/index?mon={$v.ym}&pl_id={$lineid}" target="_blank">明细</a></td>
+                        </tr>
+                        
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                <!--分页-->
+                {$_page}
+            </div>
+            <!--关账与实时利润分析-->
+            <div class="tab_content pa ">
+                <!--筛选-->
+                <div class="screenCn fl w ha">
+                    <!--<div class="screenOperate fl w">
+                        <input type="button" value="高级筛选" class="J_openScreen" />
+                        <input id="doExport_a" type="button" value="下载报表" class="" />
+                    </div>-->
+                    <div class="screenList fl w">
+                        <form action="/RiskCheck/analysis" method="get" id="anal">
+                            <table>
+                                <tr>
+                                    <div class="classifyBox t_box">
+                                        <ul class="classifyList clear">
+                                            <li><a class="ifyhover" href="javascript:plId(0)">全公司</a></li>
+                                            <li><a href="javascript:plId(1)">优效分发平台</a></li>
+                                            <li><a href="javascript:plId(2)">优效SSP平台</a></li>
+                                            <li><a href="javascript:plId(47)">优效营销平台</a></li>
+                                            <li><a href="javascript:plId(48)">优效商家平台</a></li>
+                                            <li><a href="javascript:plId(46)">优效发行平台</a></li>
+                                            <li><a href="javascript:plId(34)">分发(一)</a></li>
+                                            <li><a href="javascript:plId(42)">分发(二)</a></li>
+                                        </ul>
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <th class="expertScreen">时间：</th>
+                                    <td class="expertScreen"><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" id="time_s_a" name="time_s_a" value="{:I('get.time_s')}"/></td>
+                                    <th class="expertScreen">业务线：</th>
+                                    <td class="expertScreen">
+                                        <select id="lineid_a" name='lineid_a' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <option value="" selected="selected">请选择</option>
+                                            <foreach name='linelist' item='v' key='k'>
+                                                <option <php>if(in_array($v['id'],I('get.lineid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </foreach>
+                                        </select>
+                                    </td>
+                                    <!--<th class="expertScreen">核减原因：</th>
+                                    <td class="expertScreen">
+                                        <select id="rea_son_a" name="rea_son_a">
+                                            <option value="" selected="selected">请选择</option>
+                                            <option value="测试核减">测试核减</option>
+                                            <option value="质量核减">质量核减</option>
+                                            <option value="战略核减">战略核减</option>
+                                        </select>
+                                    </td>-->
+                                </tr>
+                                <tr>
+                                    <td class="expertScreen" colspan="8">
+                                        <input type="hidden" id="a_pl" name="a_pl">
+                                        <input type="button" class="chaXun" value="查询" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!--数据表-->
+                <div class="dataCn fl w ha">
+                    <div class="advancedTit">
+                        <div class="advancedLeft">
+                            <span class="export advBtn">
+                            <input id="doExport_a" type="button" value="下载报表" class="" />
+                            </span>
+                        </div>
+                        <div class="advancedRight">
+                        </div>
+                    </div>
+                    <table class="dataTable dataTable1">
+                        <thead>
+                        <tr>
+                            <th>月份</th>
+                            <th>关账利润额</th>
+                            <th>关账利润率</th>
+                            <th>即时利润额</th>
+                            <th>即时利润率</th>
+                            <th>收入确认率</th>
+                            <th>成本确认率</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="analysis">
+                        <volist  name="data" id="v">
+                            <tr>
+                                <td>{$v.sup_js_name}</td>
+                                <td>{$v.out_bl_name}</td>
+                                <td>{$v.pro_name}</td>
+                                <td>{$v.jf_name}</td>
+                                <td>{$v.jf_code}</td>
+                                <td>{$v.date}</td>
+                                <td>{$v.sup_name}</td>
+                                <td>明细</td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                <!--分页-->
+                {$_page}
+            </div>
+        </div>
+    </div>
+
+<link rel="stylesheet" type="text/css" href="__MODULE__/bootstrapselect/css/bootstrap-select.css"/>
+</block>
+
+<block name="style">
+    <style>
+        .ms-ctn{width: 90%; padding: 2px; padding-left: 12px; box-shadow: none; border-color: #c5c5c5;}
+        .ms-ctn .ms-trigger .ms-trigger-ico{margin-top: 13px;}
+        .ms-sel-ctn input[type="text"]{border: none;}
+    </style>
+</block>

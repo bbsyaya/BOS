@@ -1,0 +1,80 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public:commonoa" />
+<style type="text/css">
+body{font-size:12px!important}.btnBox input.close[type="button"]{float:none!important}.close{opacity:1!important;font-size:14px!important;font-weight:normal!important;margin-left:10px!important}.listTable tr th,.listTable tr td{border:1px solid #eee;color:#333;height:40px;line-height:40px;overflow:hidden;text-align:center;text-overflow:ellipsis;white-space:nowrap;padding:0 5px!important}.listTable tr th{color:#fff}.b-name{width:300px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.com-btn{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:3px!important;color:#fff!important;cursor:pointer!important;margin-left:10px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.color1a72d6{color:#1a72d6!important}.ui-dialog-buttons{z-index:2000!important}.Wdate{width:185px!important;padding:0 2px!important}.edit-b{border:1px solid #dadada;border-radius:3px;height:30px;margin-left:20px;width:50px;line-height:30px}.edit-b:hover{background:#1269cc;color:#fff}.btnBox input[type="button"]{margin:0!important;float:left!important;margin-left:145px!important}.btnBox input.close[type="button"]{margin-left:10px!important;float:left!important}.listTable tr th,.listTable tr td{font-size:12px!important}.screenOperate{height:auto!important}.screenCn .screenOperate a{border-top:1px solid #fff}.screenCn .screenOperate a{padding:0 10px}.fleft{float:left;height:30px;line-height:30px}.bootstrap-select>.dropdown-toggle{height:30px!important}.selectpicker1{height:30px}.listTable tr td a{margin:0!important;padding:0!important;color:#1a72d6;margin-right:5px!important}.dataTable tr td{padding:5px 5px}.dataTbodyTr_odd{background-color:#f6f6f6}.wd100{width:99%!important}.queryTable input[type="text"],.queryTable select,.modifyCon .modify input[type="text"],.modifyCon .modify input[type="password"],.modifyCon .modify select,.companyBox .companyCon .companyList li select,.designListBox .design_node .design_txt input[type="text"],.setupBox .setupLeft .setupTerm .setupSelect select,.voteBox .voteConBox p input[type="text"],.entryList li .entryCon select,.entryList li .entryCon input[type="text"]{height:30px!important;line-height:30px!important}.dropdown-menu{width:50%}.dayHover{background:#658dbb none repeat scroll 0 0;border:1px solid #658dbb;color:#fff!important}.ds{border:1px solid #999;border-radius:2px;color:#999;cursor:pointer;display:block;float:left;font-size:12px;height:32px;line-height:32px;margin-right:8px;text-align:center;width:74px}.no-data{height:50px;line-height:50px;text-align:center;width:100%;display:inline-block}.doDataDelete{cursor:pointer}.pagen{text-align:center;display:inline-block;display:none}.listtb{width:100%;display:inline-block}.listtb tr td{width:8%;display:inline-block;padding:5px 1px}.listtb tbody{width:100%;display:inline}.listtb tbody tr{width:100%;display:inline;float:left}.pagen{line-height:28px}.pagen a{background-color:#f0f0f0;border-radius:3px;color:#808080!important;cursor:pointer;display:inline-block;font-size:12px;height:28px;line-height:28px;margin-left:3px;margin-right:3px;overflow:hidden;padding-left:9px;padding-right:9px;white-space:nowrap;width:auto}.pagen span{border-radius:3px;cursor:pointer;display:inline-block;font-size:12px;height:28px;line-height:28px;margin-left:3px;margin-right:3px;overflow:hidden;padding-left:9px;padding-right:9px;white-space:nowrap;width:auto;background-color:#1a72d6;color:#fff!important}
+</style>
+
+	<div class="MainContent fl w">
+	   <div class="fl w">
+		   <div class="fl w">
+		   	<p style="color:red;padding-left:3%;">*默认显示供应商最近7天数据</p>
+		   </div>
+		   	 <form method="get" action="/Home/InteSystem/adverIncome.html">
+	        <table class="queryTable fl w" style="margin:10px 0 10px 0px;">
+	        <tbody>
+	        <tr>
+	        <td>
+	            <span class="fleft" style="width:20% !important;text-align:right;">供应商：</span>
+	            <span class="fleft"  style="width:65% !important;">
+	            	<select name="ggs_name" id="ggs_name" class="selectpicker1" style="height:30px !important;width:100%;" data-live-search="true"  >
+	            		<option>加载中...</option>
+	            	</select>
+	            </span>
+
+	        </td>
+	          <td style="width:65%">
+	            <span class="ds" onclick="e.showTime('{$dates["pre_start"]}','{$dates["pre_end"]}',this)">上月</span>
+				<span class="ds" onclick="e.showTime('{$dates["pre_start_30"]}','{$dates["pre_end_30"]}',this)">近30天</span>
+				<span class="ds dayHover"  onclick="e.showTime('{$dates["pre_start_7"]}','{$dates["pre_end_7"]}',this)">近7天</span>
+
+	            <span class="fleft"   style="width:65% !important;">
+		            <input class="Wdate" readonly="true" style="width:45%!important;" onchange="e.clearBg()" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="strtime" value="{$map['strtime']}" id="strtime" type="text">至
+					<input class="Wdate" readonly="true" style="width:45%!important;" onchange="e.clearBg()" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" id="endtime" name="endtime" value="{$map['endtime']}" type="text">
+				</span>
+
+
+				<input name="need_follow_adverids" value="" type="hidden">
+	            <input type="hidden" value="{$gys_id}" id="gys_id" />
+                <span class="fleft" style="margin-left:-50px;"><input name="" value="查询" class="com-btn" id="query" type="button" onclick="e.query()"></span>
+	            
+	        </td>
+	         
+	        </tr>
+	        </tbody>
+	        </table>
+	        </form>
+	   </div>
+	   <div class="fl w" style="margin-top:20px;">
+	   		<div id="container" style="height:400px;text-align:center;">加载中...</div>
+	   </div>
+	   <div class="fl w" style="margin-top:20px;">
+			   <table class="dataTable dataTable1">
+                <thead>
+                    <tr>
+                    	<th>日期</th>
+                        <th>量级</th>
+                        <th title="收入">收入</th>
+                        <th title="成本">成本</th>
+                        <th title="利润">利润</th>
+                    </tr>
+                </thead>
+                <tbody id="proData" style="height:451px;">
+                	<tr id="loading">
+                		<td colspan="5">
+                			<div class="no-datas" id="nodatas">加载中...</div>
+                		</td>
+                	</tr>
+                </tbody>
+            </table>
+             <div class="fl w" style="margin-top:10px;">
+             	<div class="pagen" id="pagen" style="float:right;"></div>
+             </div>
+		</div>
+	</div>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<script src="__PUBLIC__/Home/module/ECharts/echarts-all.js" type="text/javascript"></script>
+<script type="text/javascript" src="/Public/Home/js/gysout.js"></script>
+</block>
+

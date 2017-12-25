@@ -1,0 +1,182 @@
+<extend name="Public/base"/>
+<block name="body">
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<div class="subMainBox">
+	<div class="screenCn fl w ha">
+        <style type="text/css">
+			.f{float:left}.Wdate{width:150px!important;height:28px!important;line-height:28px!important;padding-left:5px}.wda{width:30%!important;display:inline-block}.cx{background:#dcdcdc;color:#333;margin-left:10px}.chsec{height:28px!important;line-height:28px!important;float:left!important;width:200px!important;margin-top:5px!important;padding-left:5px!important}.mgl{margin-left:20px}.dataTable_ tr th, .dataTable_ tr td{padding:0 2px !important;}.zk-cek a{color: #1a72d6 !important;}
+        </style>
+        <div class="screenOperate fl w">
+            <div class="line fr h"></div>
+        </div>
+        <div class="screenList fl w">
+            <form action="/RiskCheckStatistics/invoiceCheck.html" id="search_form" method="get">
+            <table>
+                <tbody>
+                <tr>
+                <td colspan="">
+                	<span class="f">归属月份：</span>
+                	<span class="f">
+                		<input  name="boss_sdate"  onclick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$map['boss_sdate']}" type="text">
+                        到
+                        <input  name="boss_edate"  onclick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$map['boss_edate']}" type="text">
+                	</span>
+					<span class="f mgl">业务线：</span>
+                	<span class="f">
+                		<select style="width:100px;" class="chsec" name="lineid" id="lineid"><option>加载中...</option></select>
+                		<script type="text/javascript">
+                		var ck="{$map['lineid']}";
+                		</script>
+                	</span>
+                	<span class="f mgl" >广告主：</span>
+                	<span class="f ">
+                		<input name="advername" value="{$map['advername']}" type="text" class="chsec">
+                	</span>
+                	<span class="f mgl">产品名称：</span>
+                	<span class="f">
+                		<input name="pname" value="{$map['pname']}" type="text" class="chsec">
+                	</span>
+                </td>
+                </tr>
+                <tr>
+                    <td >
+                    <input id="search_btn" value="查询" type="submit">
+                         <!-- <input  value="显示全部数据" type="button" onclick="showall()"> -->
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+            </form>
+        </div>
+        <div class="dataCn fl w ha">
+	        <table class="dataTable_ dataTable1">
+	            <thead>
+	            <tr>
+	                <th>Boss（总结算单金额 	：{$total_boss_jiesuan_money}）</th>
+	                <th>用友（总金额：{$total_yongyou}）</th>
+	            </tr>
+	            <tr>
+	                <td>
+		                <table class="dataTable_ dataTable1">
+			            	<tbody>
+			            		<tr>
+			            			<th>结算单</th>
+			            			<th>业务线</th>
+			            			<th>广告主名称</th>
+			            			<th>产品名称</th>
+			            			<th>结算单金额</th>
+			            			<th>结算主体</th>
+			            			<th>发票类型</th>
+			            			<th>开票时间</th>
+			            			<th>归属时间</th>
+			            		</tr>
+			            	</tbody>
+			            </table>
+	                </td>
+	                <td>
+	                <table class="dataTable_ dataTable1">
+		                	<tbody>
+		                		<tr>
+		                			<th>凭证号</th>
+		                			<th>业务线</th>
+		                			<th>广告主</th>
+		                			<th>金额</th>
+		                			<th>记账时间</th>
+		                		</tr>
+		                	</tbody>
+		                </table>
+	                </td>
+	            </tr>
+	            <!-- data list -->
+	            <notempty name="pzlist">
+	            	<volist name="pzlist" id="vo" key="k">
+	            		<if condition="$k%2==0"><tr class="tr-a" k="{$k}" invoice_no="{$vo["invoice_no"]}"><else /><tr  invoice_no="{$vo["invoice_no"]}" class="tr-b"></if>
+			                <td>
+				                <table class="dataTable_ dataTable1 htable">
+					            	<tbody>
+					            	<?php if($vo['fp_list']){
+					            		foreach ($vo['fp_list'] as $kfp => $vfp) {
+					            			?>
+					            			<tr class="<?php if($kfp%2==0){ ?> zk-pfls_js <?php }else{ ?> zk-pfls_os <?php } ?>" >
+						            			<td>{$vfp["id"]}</td>
+						            			<td title="{$vfp["lineid"]}">{$vfp["lineid"]}</td>
+						            			<td title="{$vfp["advername"]}">{$vfp["advername"]}</td>
+						            			<td title="{$vfp["pname"]}">{$vfp["pname"]}</td>
+						            			<td title="{$vfp["settlementmoney"]}">{$vfp["settlementmoney"]}</td>
+						            			<td title="{$vfp["jsztid"]}">{$vfp["jsztid"]}</td>
+						            			<td title="{$invoice_type_list[$vfp["dic_type"]]}">{$invoice_type_list[$vfp["dic_type"]]}</td>
+						            			<td>
+						            			{$vfp["invoicetime"]|strtotime|date="m.d",###}</td>
+						            			<td>{$vfp["strdate"]|strtotime|date="m.d",###}~
+						            			{$vfp["enddate"]|strtotime|date="m.d",###}</td>
+						            		</tr>
+					            			<?php }
+					            		}else{
+					            			?>
+					            			<tr class="zk-pfls">
+					            				<td colspan="9">
+					            					<div class="no-datas">无发票数据！</div>
+					            				</td>
+					            			</tr>
+			            			<?php } ?>
+					            	</tbody>
+					            </table>
+			                </td>
+			                <td>
+			                <table class="dataTable_ dataTable1">
+				                	<tbody id="table_pz_{$vo["invoice_no"]}">
+				                	<?php if($vo['pz_list']){ 
+				                		foreach ($vo['pz_list'] as $kpz => $vpz) {
+				                			if($kpz>2){ break; }
+				                			?>
+				                			<tr class="<?php if($kpz%2==0){ ?> zk-pfls_js <?php }else{ ?> zk-pfls_os <?php } ?>">
+				                			<td>{$vpz["ino_id"]}</td>
+				                			<td title="{$vpz["itemName"]}">{$vpz["itemName"]}</td>
+				                			<td title="{$vpz["CusName"]}">{$vpz["CusName"]}</td>
+				                			<td>{$vpz["money"]}</td>
+				                			<td>{$vpz["dDate"]|strtotime|date="m.d",###}</td>
+				                		</tr>
+				                		
+			                		<?php } ?>
+		                			<?php if(count($vo['pz_list'])>4){ ?>  
+				                		<tr class="zk-pfls">
+				                			<td colspan="5" class="zk-cek">
+				                				<a href="javascript:void(0);" onclick="In.loadMoreInvince({$vo["invoice_no"]},this)">点击加载更多...</a>
+				                			</td>
+				                		</tr> 
+			                		<?php } ?>
+		                			<?php }else{ ?>
+			                			<tr class="zk-pfls">
+					            				<td colspan="6">
+					            					<div class="no-datas">无凭证数据！</div>
+					            				</td>
+					            			</tr>
+		                			<?php } ?>
+				                	</tbody>
+				                </table>
+			                </td>
+			            </tr>
+	            	</volist>
+
+	            	<else />
+	            	<tr>
+	            		<td colspan="2">
+	            			<div class="no-datas"><notempty name="error">{$error}<else />暂无数据！</notempty></div>
+	            		</td>
+	            	</tr>
+	            </notempty>
+				<!-- end data list -->
+	            </thead>
+	            <tbody>  
+	            </tbody>
+	        </table>
+			<notempty name="pzlist">
+				<div class="no-datas">{$page}</div>
+			</notempty>
+    	</div>
+
+    </div>
+</div>
+<script type="text/javascript">var pType="invoiceCheck";</script>
+<script type="text/javascript" src="/Public/OA/js/inmoney.js"></script>
+</block>

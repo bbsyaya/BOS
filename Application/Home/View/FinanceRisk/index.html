@@ -1,0 +1,326 @@
+<extend name="Public/base"/>
+<block name="subnav">
+</block>
+<block name="body">
+    <div class="tabCa pa">
+        <div class="tab_menuWrapper pa">
+            <ul class="tab_menuList fl">
+                <li class="tab_menu fl h focus">收入关帐月报</li>
+                <li class="tab_menu fl h">成本关帐月报</li>
+            </ul>
+        </div>
+        <div class="tab_contentWrapper pa">
+            <!--收入关帐月报-->
+            <div class="tab_content pa " style="display: block;">
+                <!--筛选-->
+                <div class="screenCn fl w ha">
+                    <!--<div class="screenOperate fl w">
+                        <input type="button" value="导出" class="J_addData" onclick="window.open('/FinanceRisk/export'+window.location.search)" />
+                        <input type="button" value="高级筛选" class="J_openScreen" />
+                    </div>-->
+                    <div class="screenList fl w">
+                        <form action="/FinanceRisk/index" method="get">
+                            <input type='hidden' name='type' value="1"/>
+                            <table>
+                                <tr>
+                                    <th>时间：</th>
+                                    <td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="time_s" value="{:I('get.time_s')}"/>-<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="time_e" value="{:I('get.time_e')}"/></td>
+                                    <th>业务线：</th>
+                                    <td>
+                                        <select name='lineid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <foreach name='linelist' item='v' key='k'>
+                                                <option <php>if(in_array($v['id'],I('get.lineid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </foreach>
+                                        </select>
+                                    </td>
+                                    <th>产品名称：</th>
+                                    <td>
+                                        <select name="comid[]" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <volist name='comlist' id='v'>
+                                                <option <php>if(in_array($v['id'],I('get.comid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </volist>
+                                        </select>
+                                    </td>
+                                    <th>计费标识：</th>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="J_dataSelect" />
+                                        <select name='jfid[]'  multiple id="jfidselect" style="display:none">
+                                            <volist name="jflist" id='v'>
+                                                <option <php>if(in_array($v['id'],I('get.jfid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </volist>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="expertScreen">广告主：</th>
+                                    <td class="expertScreen">
+                                        <select name="advid[]" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <volist name='advlist' id='v'>
+                                                <option <php>if(in_array($v['id'],I('get.advid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </volist>
+                                        </select>
+                                    </td>
+                                    <th class="expertScreen">来源类型：</th>
+                                    <td class="expertScreen">
+                                        <select name='sourcetype[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <option <php>if(in_array(1,I('get.sourcetype')))echo "selected='selected'";</php> value="1">官方</option>
+                                            <option <php>if(in_array(2,I('get.sourcetype')))echo "selected='selected'";</php> value="2">代理</option>
+                                        </select>
+                                    </td>
+                                    <th class="expertScreen">计费模式：</th>
+                                    <td class="expertScreen">
+                                        <select name='module[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+
+                                            <option <php>if(in_array(1,I('get.module')))echo "selected='selected'";</php> value="1">CPA</option>
+                                            <option <php>if(in_array(2,I('get.module')))echo "selected='selected'";</php> value="2">CPC</option>
+                                            <option <php>if(in_array(3,I('get.module')))echo "selected='selected'";</php> value="3">CPM</option>
+                                            <option <php>if(in_array(4,I('get.module')))echo "selected='selected'";</php> value="4">CPS</option>
+                                            <option <php>if(in_array(5,I('get.module')))echo "selected='selected'";</php> value="5">CPT</option>
+                                            <option <php>if(in_array(6,I('get.module')))echo "selected='selected'";</php> value="6">CPD</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" style="text-align:left;padding:5px 0px;">
+                                        <input type="submit" value="查询" style="padding:0px !important;margin-left:63px;" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!--<div class="cartogramCn w fl" id="myChart1">
+                </div>-->
+                <!--数据表-->
+                <div class="dataCn fl w ha" id="table_con">
+                    <div class="advancedTit" style="margin-top:0px !important;">
+                        <div class="advancedLeft">
+                            <span class="export advBtn">
+                                <input type="button" value="导出" class="J_addData" onclick="window.open('/FinanceRisk/export'+window.location.search)" />
+                            </span>
+                        </div>
+                        <div class="advancedRight">
+                        </div>
+                    </div>
+                    <table class="dataTable dataTable1">
+                        <thead>
+                        <tr>
+                            <th>公司主体</th>
+                            <th>业务线</th>
+                            <th>产品名称</th>
+                            <th>计费标识</th>
+                            <th>计费标识编码</th>
+                            <th>账单期间</th>
+                            <th>广告主名称</th>
+                            <th>销售人员</th>
+                            <th>关帐时间</th>
+                            <th>关帐金额</th>
+                            <th>收入状态</th>
+                            <!--<th>确认金额</th>
+                            <th>开票金额</th>
+                            <th>未开票额</th>
+                            <th>回款金额</th>
+                            <th>应收帐款</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="data" id="v" key="k">
+                            <tr>
+                                <td>{$v.js_name}</td>
+                                <td>{$v.bl_name}</td>
+                                <td>{$v.pro_name}</td>
+                                <td>{$v.jf_name}</td>
+                                <td>{$v.jf_code}</td>
+                                <td>{$v.date}</td>
+                                <td>{$v.adv_name}</td>
+                                <td>{$v.real_name}</td>
+                                <td>{$v.addtime}</td>
+                                <td>{$v.inmoney}</td>
+                                <td>{$v.in_status}</td>
+                                <!--<td>{$v.qr_money}</td>
+                                <td>{$v.kp_money}</td>
+                                <td>{$v.wkp_money}</td>
+                                <td>{$v.hk_money}</td>
+                                <td>{$v.ys_money}</td>-->
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                <!--分页-->
+                {$_page}
+            </div>
+            <!--成本关帐月报-->
+            <div class="tab_content pa ">
+                <!--筛选-->
+                <div class="screenCn fl w ha">
+                    <!--<div class="screenOperate fl w">
+                        <input type="button" value="导出" class="J_addData" onclick="window.open('/FinanceRisk/outExport'+window.location.search)" />
+                        <input type="button" value="高级筛选" class="J_openScreen" />
+                    </div>-->
+                    <div class="screenList fl w">
+                        <form action="/FinanceRisk/index" method="get">
+                            <table>
+                                <tr>
+                                    <th>时间：</th>
+                                    <td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="time_s" value="{:I('get.time_s')}"/>-<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="time_e" value="{:I('get.time_e')}"/></td>
+                                    <th>业务线：</th>
+                                    <td>
+                                        <select name='lineid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <foreach name='linelist' item='v' key='k'>
+                                                <option <php>if(in_array($v['id'],I('get.lineid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </foreach>
+                                        </select>
+                                    </td>
+                                    <th>产品名称：</th>
+                                    <td>
+                                        <select name="comid[]" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <volist name='comlist' id='v'>
+                                                <option <php>if(in_array($v['id'],I('get.comid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </volist>
+                                        </select>
+                                    </td>
+                                    <th>计费标识：</th>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="J_dataSelect" />
+                                        <select name='jfid[]'  multiple id="jfidselect" style="display:none">
+                                            <volist name="jflist" id='v'>
+                                                <option <php>if(in_array($v['id'],I('get.jfid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </volist>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="expertScreen">供应商：</th>
+                                    <td class="expertScreen">
+                                        <select name='supid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <volist name='suplist' id='v'>
+                                                <option <php>if(in_array($v['id'],I('get.supid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </volist>
+                                        </select>
+                                    </td>
+                                    <th class="expertScreen">来源类型：</th>
+                                    <td class="expertScreen">
+                                        <select name='sourcetype[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <option <php>if(in_array(1,I('get.sourcetype')))echo "selected='selected'";</php> value="1">官方</option>
+                                            <option <php>if(in_array(2,I('get.sourcetype')))echo "selected='selected'";</php> value="2">代理</option>
+                                        </select>
+                                    </td>
+                                    <th class="expertScreen">计费模式：</th>
+                                    <td class="expertScreen">
+                                        <select name='module[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+
+                                            <option <php>if(in_array(1,I('get.module')))echo "selected='selected'";</php> value="1">CPA</option>
+                                            <option <php>if(in_array(2,I('get.module')))echo "selected='selected'";</php> value="2">CPC</option>
+                                            <option <php>if(in_array(3,I('get.module')))echo "selected='selected'";</php> value="3">CPM</option>
+                                            <option <php>if(in_array(4,I('get.module')))echo "selected='selected'";</php> value="4">CPS</option>
+                                            <option <php>if(in_array(5,I('get.module')))echo "selected='selected'";</php> value="5">CPT</option>
+                                            <option <php>if(in_array(6,I('get.module')))echo "selected='selected'";</php> value="6">CPD</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8"  style="text-align:left;padding:5px 0px;">
+                                        <input type="submit" value="查询" style="padding:0px !important;margin-left:63px;"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!--<div class="cartogramCn w fl" id="myChart2">
+                </div>-->
+                <!--数据表-->
+                <div class="dataCn fl w ha">
+                    <div class="advancedTit" style="margin-top:0px !important;">
+                        <div class="advancedLeft">
+                            <span class="export advBtn">
+                                <input type="button" value="导出" class="J_addData" onclick="window.open('/FinanceRisk/outExport'+window.location.search)" />
+                            </span>
+                        </div>
+                        <div class="advancedRight">
+                        </div>
+                    </div>
+                    <table class="dataTable dataTable1">
+                        <thead>
+                        <tr>
+                            <th>公司主体</th>
+                            <th>业务线</th>
+                            <th>产品名称</th>
+                            <th>计费标识</th>
+                            <th>计费标识编码</th>
+                            <th>账单期间</th>
+                            <th>供应商名称</th>
+                            <th>商务人员</th>
+                            <th>关帐时间</th>
+                            <th>关帐金额</th>
+                            <th>成本状态</th>
+                            <th>收款方名称</th>
+                            <th>发票类型</th>
+                            <!--<th>确认金额</th>
+                            <th>付款金额</th>
+                            <th>应付帐款</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <volist  name="data" id="v">
+                            <tr>
+                                <td>{$v.sup_js_name}</td>
+                                <td>{$v.out_bl_name}</td>
+                                <td>{$v.pro_name}</td>
+                                <td>{$v.jf_name}</td>
+                                <td>{$v.jf_code}</td>
+                                <td>{$v.date}</td>
+                                <td>{$v.sup_name}</td>
+                                <td>{$v.sw_name}</td>
+                                <td>{$v.addtime}</td>
+                                <td>{$v.outmoney}</td>
+                                <td>{$v.out_status}</td>
+                                <td>{$v.payee_name}</td>
+                                <td>{$v.invoice_type}</td>
+                                <!--<td>{$v.out_qr_money}</td>
+                                <td>{$v.out_fk_money}</td>
+                                <td>{$v.out_yf_money}</td>-->
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                <!--分页-->
+                {$_page}
+                <!--<div class="dataPage_cn fl w tc">
+                    <a class="dataPage_last" direction="last">上一页</a>
+                    <a class="dataPage_number dataPage_numberFocus">1</a>
+                    <a class="dataPage_number">2</a>
+                    <a class="dataPage_number">3</a>
+                    <a class="dataPage_number">4</a>
+                    <a class="dataPage_number">5</a>
+                    <a class="dataPage_number">6</a>
+                    <a class="dataPage_number">7</a>
+                    <a class="dataPage_number">8</a>
+                    <a class="dataPage_number">9</a>
+                    <a class="dataPage_number">10</a>
+                    <a class="dataPage_next" direction="next">下一页</a>
+                </div>-->
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" type="text/css" href="__MODULE__/bootstrapselect/css/bootstrap-select.css"/>
+</block>
+<block name="style">
+    <style>
+        .ms-ctn{width: 90%; padding: 2px; padding-left: 12px; box-shadow: none; border-color: #c5c5c5;}
+        .ms-ctn .ms-trigger .ms-trigger-ico{margin-top: 13px;}
+        .ms-sel-ctn input[type="text"]{border: none;}
+    </style>
+</block>
+<block name="script">
+    <script type="text/javascript" src="__MODULE__/bootstrapselect/bootstrap-select.js"></script>
+    <script src="__MODULE__/ECharts/echarts-all.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function() {
+
+        });
+    </script>
+</block>

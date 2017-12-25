@@ -1,0 +1,28 @@
+<table class="dialogTable_list w ha" >
+    <caption>
+        查询字段：
+        <input type="text" name="kw" value="{$op_kw}"/>
+        <input id="searchBtn" type="button" value="查询" />
+    </caption>
+    <thead>
+    <tr>
+        <foreach name="title" item="vo" >
+            <th>{$vo}</th>
+        </foreach>
+    </tr>
+    </thead>
+    <tbody>
+    <foreach name="list" item="vo" >
+        <tr op-id="{$vo[$show_field[0]]}" op-name="{$vo[$show_field[1]]}"
+            op-extra="<foreach name='extraField' item='v'>
+                <if condition='$vo[$v]'>{$vo[$v]}|</if>
+            </foreach>">
+
+            <foreach name="show_field" item="vo1" >
+                <td>{$vo[$vo1]}</td>
+            </foreach>
+        </tr>
+    </foreach>
+    </tbody>
+</table>
+{$_page}

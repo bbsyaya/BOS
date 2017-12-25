@@ -1,0 +1,52 @@
+<extend name="Public/base"/>
+<block name="style">
+    <meta charset="UTF-8">
+    <title>流程监控</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/daterangepicker.css">
+</block>
+
+<block name="script">
+    <script type="text/javascript" src="__PUBLIC__/OA/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+</block>
+
+<block name="body">
+    <style type="text/css">
+        .Js_tableCon tr td a {color: #1a72d6}
+    </style>
+    <div class="subConten">
+
+        <div class="subCon">
+            <!--发起流程列表-->
+            <div class="workListBox">
+                <table class="listTable Js_tableCon">
+                    <thead>
+                    <tr>
+                        <th>流程名称</th>
+                        <th>本月流程数量</th>
+                        <th>流程平均用时(h)</th>
+                        <th>平均耗时TOP1部门</th>
+                        <th>部门平均耗时TOP1(h)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name='list' id='v'>
+                        <tr>
+                            <td>{$v.name}</td>
+                            <td><a href="/OA/OaMonitor/count_detail?liuchenid={$v.liuchenid}" target="_blank">{$v.sum_count}</a></td>
+                            <td><a href="/OA/OaMonitor/avg_detail?liuchenid={$v.liuchenid}&count_id={$v.sum_count}&aid={$v.aid}" target="_blank">{$v.avg_count}</a></td>
+                            <td><a href="/OA/OaMonitor/top_detail?liuchenid={$v.liuchenid}&count_id={$v.sum_count}" target="_blank">{$v.depart}</a></td>
+                            <td><a href="/OA/OaMonitor/top_detail?liuchenid={$v.liuchenid}&count_id={$v.sum_count}" target="_blank">{$v.avg_time}</a></td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </div>
+            <!--end 发起流程列表-->
+        </div>
+        <!--end 内容-->
+    </div>
+</block>

@@ -1,0 +1,281 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public:commonoa" />
+<style type="text/css">
+body{font-size:12px!important}.btnBox input.close[type="button"]{float:none!important}.close{opacity:1!important;font-size:14px!important;font-weight:normal!important;margin-left:10px!important}.listTable tr th,.listTable tr td{border:1px solid #eee;color:#333;height:40px;line-height:40px;overflow:hidden;text-align:center;text-overflow:ellipsis;white-space:nowrap;padding:0 5px!important}.listTable tr th{color:#fff}.b-name{width:300px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.com-btn{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:3px!important;color:#fff!important;cursor:pointer!important;margin-left:10px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.color1a72d6{color:#1a72d6!important}.ui-dialog-buttons{z-index:2000!important}.Wdate{width:185px!important;padding:0 2px!important}.edit-b{border:1px solid #dadada;border-radius:3px;height:30px;margin-left:20px;width:50px;line-height:30px}.edit-b:hover{background:#1269cc;color:#fff}.btnBox input[type="button"]{margin:0!important;float:left!important;margin-left:145px!important}.btnBox input.close[type="button"]{margin-left:10px!important;float:left!important}.listTable tr th,.listTable tr td{font-size:12px!important}.screenOperate{height:auto!important}.screenCn .screenOperate a{border-top:1px solid #fff}.screenCn .screenOperate a{padding:0 10px}.fleft{float: left;height: 30px;line-height: 30px;}
+.bootstrap-select > .dropdown-toggle{height: 30px !important;}.selectpicker1{height: 30px;}.dataTable1 tr td a{margin: 0px !important;padding:0 !important;color: #1a72d6;margin-right: 5px !important;}.dataTable tr td{padding: 0px 5px !important;}.wd100{width: 100% !important;}
+</style>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<div class="subConten  fl w" style="padding:5px !important;">
+    <!--内容-->
+    <div class="subCon fl w" style="margin-top:0px;">
+    <div class="screenCn fl w ha" style="margin-top:0px;">
+    
+        <div class="screenOperate fl w">
+            <?php if($isHas_auth==200){ ?>
+                <a class="Js_addOffice addPro" href="/Home/InteSystem/addExtendCustomer.html">添加</a>
+                <a class="" href="javascript:void(0);"  id="drAderInfo">导入模板</a>
+                
+                <script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+
+                <script type="text/javascript">
+                var d={
+                    init:function(){
+                        var button = $('#drAderInfo');
+                        new AjaxUpload(button,{
+                            action: "/Home/InteSystem/importAdverInfo.html",
+                            name: 'files',
+                            onSubmit:function(file, ext){
+                                button.html("导入中...");
+                            },
+                            onComplete: function(file, response){
+                                var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+                                if(list.logdata){
+                                    d.createForm(list.logdata);
+                                    window.location.reload();
+                                }else{
+                                    layer.alert(list.msg);
+                                }
+                            }
+                        });
+                    },
+                    createForm:function(logdata){
+                        var html_="<form id=\"logForm\" method='post' target=\"_blank\" action=\"/Home/Public/showLog.html\"><input type=\"hidden\" name=\"datalog\" value=\""+logdata+"\"/></form>";
+                        $("body").append(html_);
+                        $("#logForm").submit().remove();
+                    }
+                };
+                $(function(){d.init();});
+                </script>
+            <?php } ?>
+
+            <a class="" href="javascript:void(0);" onclick="e.explortAd()">导出</a>
+            <?php if($isHas_auth==200){ ?>
+             <a class="" href="/Public/excel/出差情报收集模板.xlsx" target="_blank">下载待拓展广告主Excel</a>
+             <?php } ?>
+            <script type="text/javascript">
+            var e={
+                explortAd:function(){
+                    var adform = $('#adform');
+                    adform.attr("action","/Home/InteSystem/exportExtendAdverList.html");
+                    adform.attr("target","_blank");
+                    adform.submit();
+                    adform.attr("action","/Home/InteSystem/extendCustomer.html");
+                    adform.attr("target","");
+                }
+            };
+            </script>
+
+             <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+        </div>
+       
+      
+        <form method="get" action="/Home/InteSystem/extendCustomer.html" id="adform">
+        <table class="queryTable fl w" style="margin:10px 0 10px 0px;">
+        <tbody>
+        <tr>
+        <td>
+
+            <span class="fleft" style="width:32% !important;text-align:right;">公司名称：</span>
+            <span class="fleft" style="width:55% !important;"><input  name="company_name" value="{$map['company_name']}" type="text"  class="b-name wd100"></span>
+            
+        </td>
+       
+         <td>
+
+            <span class="fleft" style="width:32% !important;text-align:right;">产品：</span>
+            <span class="fleft" style="width:55% !important;"><input placeholder="合作方（产品）" name="partner" value="{$map['partner']}" type="text"  class="b-name wd100"></span>
+            
+        </td>
+         
+          <td>
+
+            <span class="fleft">目前状态：</span>
+            <span class="fleft" style="width:55% !important;">
+               <select name="status" id="status" style="width:100%;height:30px !important;" class="wd100">
+               <option value=""  >全部</option>
+                    <?php foreach ($extendOptions as $k => $v) {
+                        if($k==3){ continue; }
+                     ?>
+                    <option value="{$k}" <?php if($k==$map['status']){ echo "selected='selected'";} ?> >{$v}</option>
+                    <?php } ?>
+                </select>
+            </span>
+            
+        </td>
+        <td>
+                <span class="fleft" style="width:32% !important;text-align:right;">收集者姓名：</span>
+                <span class="fleft" style="width:55% !important;"><input name="sjz_name" value="{$map['sjz_name']}" type="text"   style="width:100% !important;" class="b-name wd100" ></span>
+            </td>
+              <td>
+                <span class="fleft" style="width:32% !important;text-align:right;">需求类型：</span>
+                <span class="fleft" style="width:55% !important;">
+                    <select name="xq_type" id="xq_type" style="width:100%;height:30px !important;">
+                       <option value=""  >全部</option>
+                            <?php foreach ($demand_type_options as $k => $v) { ?>
+                            <option value="{$k}" <?php if($k==$map['xq_type']){ echo "selected='selected'";} ?> >{$v}</option>
+                            <?php } ?>
+                    </select>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            
+        </tr>
+        <tr>
+            <td colspan="3">
+                 <span class="fleft"><input name="" value="查询" class="com-btn" type="submit"></span>
+            </td>
+
+        </tr>
+        </tbody>
+        </table>
+        </form>
+    </div>
+        <!--ned 功能区-->
+        <!--制度列表-->
+        <div class="workListBox">
+            <table class="dataTable dataTable1">
+                <thead>
+                    <tr>
+                        <th style="width:4%">序号</th>
+                        <th>公司名称</th>
+                        <th title="合作方（产品）">产品名称</th>
+                        <th>计费方式</th>
+                        <th>地域</th>
+                        <th >标签</th>
+                        <th title="产品优势（价格、时间、预算）">产品优势</th>
+                        <th>体量化</th>
+                        <th title="关联度（与我司业务）"  >关联度</th>
+                        <th>历史合作案例</th>
+                        <th>信息收集者</th>
+                        <th>指派部门跟进</th>
+                        <th>需求人</th>
+                        <th>需求类型</th>
+                        <th title="最新跟进记录的状态">目前状态</th>
+                        <th>跟进时间</th>
+                        <th>跟进结果</th>
+                        <th>联系人</th>
+                        <th>联系方式</th>
+                        <th>备注</th> 
+                        <th style="width:9%;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>
+                            {$vo["id"]}
+                            </td>
+                            <td title="{$vo['company_name']}"><span>{$vo['company_name']}</span></td>
+                            <td title="{$vo["partner"]}"><span>{$vo["partner"]}</span></td>
+                            <?php $bil_method  = $charging_mode_options[$vo["bil_method"]]; ?>
+                            <td title="{$bil_method}"><span>{$bil_method}</span></td>
+                            <td title="{$vo["area"]}"><span>{$vo["area"]}</span></td>
+
+                            <td title="{$vo['target']}"><span>{$vo['target']}</span></td>
+                            <td title="{$vo['adver_advan']}" style="cursor: pointer;">
+                            <span onclick="E.showAllInfo({$vo["id"]},'#ad_{$vo["id"]}')" data-msg="{$vo['adver_advan']}" data-title="产品优势" id="ad_{$vo["id"]}"  data-url="/Home/InteSystem/updateAdver.html" <?php if($cur_uid==$vo["create_uid"]){ ?> data-status="200" <?php }else{ ?> data-status="500" <?php } ?> style="color:#1a72d6;position:relative;">{$vo['adver_advan']}</span>
+                            </td>
+                            <td title="{$vo["volume"]}"><span>{$vo["volume"]}</span></td>
+                            <td title="{$vo["relevance"]}"><span>{$vo["relevance"]}</span></td>
+                            <td title="{$vo["history_case"]}"><span>{$vo["history_case"]}</span></td>
+
+                            <td title="{$vo["real_name"]}"><span>{$vo["real_name"]}</span></td>
+                           
+
+                            <td title="{$vo["depart_names"]}"><span>{$vo["depart_names"]}</span></td>
+                            <td title="{$vo['need_user']}"><span>{$vo['need_user']}</span></td>
+
+                            <?php $bil_method  = $demand_type_options[$vo["demand_type"]]; ?>
+                            <td title="{$bil_method }"><span><?php if($bil_method){ ?> {$bil_method } <?php }else{ ?> -- <?php } ?></span></td>
+
+
+                            <?php $status_str = $extendOptions[$vo["f_status"]] ?>
+                            <td title="{$status_str}" data-efid="{$vo['ef_id']}"><span>
+                            <?php if($status_str){ ?> {$status_str } <?php }else{ ?> -- <?php } ?></span>
+                            </td>
+                            <td title="{$vo['visit_time']|strtotime|date='Y-m-d',###}"><span><?php if($vo['visit_time']){ ?> {$vo['visit_time']|strtotime|date='Y-m-d',###} <?php }else{ ?> -- <?php } ?></span></td>
+                             <td title="{$vo['ef_result']}" >
+                            
+                              
+                                
+                                <?php if($vo['ef_result']){ ?>
+                                    <?php  if($vo['can_follow']){ ?>
+                                        <a href="javascript:void(0);" onclick="E.expand({$vo['id']},1)" title="{$vo['ef_result']}">{$vo['ef_result']}</a>
+                                    <?php }else{ ?>
+                                        <!-- {$vo['ef_result']} -->
+                                        <a href="javascript:void(0);" onclick="E.expand({$vo['id']},1)" title="{$vo['ef_result']}">{$vo['ef_result']}</a>
+                                    <?php }?>
+                                <?php }else{?> 
+                                    <?php  if($vo['can_follow']){ ?>
+                                    <a href="javascript:void(0);" onclick="E.expand({$vo['id']},1)" title="我来跟进">我来跟进</a>
+                                    <?php }else{ ?>
+                                    <!-- -- -->
+                                       <a href="javascript:void(0);" onclick="E.expand({$vo['id']},1)" title="我来跟进">我来跟进</a>
+                                    <?php }?>
+                                <?php } ?>
+                             
+                             </td>
+                            <td title="{$vo["contact_user"]}"><span>{$vo["contact_user"]}</span></td>
+                            <td title="{$vo["contact_way"]}"><span>{$vo["contact_way"]}</span></td>
+                            <td title="{$vo["remark"]}" style="cursor: pointer;">
+                            
+
+                            <span onclick="E.showAllInfo({$vo["id"]},'#re_{$vo["id"]}')" data-msg="{$vo['remark']}" data-title="备注" id="re_{$vo["id"]}"  data-url="/Home/InteSystem/updateRemark.html" <?php if($cur_uid==$vo["create_uid"]){ ?> data-status="200" <?php }else{ ?> data-status="500" <?php } ?> style="color:#1a72d6;position:relative;">
+                            <?php if($vo["remark"]){ ?> {$vo["remark"]} <?php }else{ ?> -- <?php } ?>
+                            </span>
+                            </td>
+
+                            <td>
+                               
+
+                                
+                                
+                               
+                                <?php if($cur_uid==$vo["create_uid"]){ ?>
+                                    <a href="/Home/InteSystem/addExtendCustomer.html?id={$vo['id']}"  title="编辑">编辑</a>
+                                  <!--   <a href="javascript:void(0);"  onclick="E.delExpand({$vo['id']})" title="删除">删除</a> -->
+                                <?php }else{ ?>
+                                    <a href="/Home/InteSystem/addExtendCustomer.html?id={$vo['id']}&auth=query"  title="查看">查看</a>
+                                <?php } ?>
+                                
+                            </td>
+                        </tr>
+                    </volist>
+                    <else />
+                    <tr>
+                        <td  colspan="21"><div class="no-datas">暂无数据！！</div></td>
+                    </tr> 
+                </notempty>
+                </tbody>
+            </table>
+            <notempty name="list">
+                <div class="no-datas">{$page}</div>
+            </notempty>
+            <notempty name="list">
+             <div class="office_btnBox" style="margin-bottom:50px;">
+                <!-- <input name="" type="button" value="批量删除员工信息" class="delAll" onclick="r.deleteAll(this)"> -->
+            </div>
+           
+            </notempty>
+        </div>
+        <!--end 制度列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<script type="text/javascript">
+    $(function(){ setCookie('boss30_on_'+getHref()+'_dataTable1',"{$showtablestr}",30); });
+</script>
+<script type="text/javascript" src="/Public/Home/js/explist.js"></script>
+</block>

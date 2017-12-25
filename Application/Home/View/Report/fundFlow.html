@@ -1,0 +1,189 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+	<script type="text/javascript">
+	$(function(){
+		$('.dataTable').each(function(){
+		        	var Tindex;
+		        	
+		        	var Ttb=$(this);
+		        	$(this).find('thead').find('tr').eq(1).find('td').each(function(){
+		        		if($(this).hasClass('J_sum')){
+		        			var Tsumnum=0;
+		        			Tindex=$(this).index();
+							Ttb.find('tbody').find('tr').each(function(){
+		        				Tsumnum+=($(this).find('td').eq(Tindex).text()*1);
+		        			})
+		        			$(this).html(Math.round(Tsumnum*100)/100);
+		        		}
+		        	})
+		        	
+		        	
+		        })
+	})
+	</script>
+</block>
+<block name="body">
+<div class="subMainBox">
+	<div class="ri_header">
+		<div class="ri_title_box">
+			<span class="clip-text"></span>
+			<span>报表中心</span>
+		</div>
+		<div class="ri_work"></div>
+	</div>
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+					<input type="button" value="导出" class=""  onclick="window.open('/Report/downloadfundflowlist'+window.location.search)"/>
+					</div>
+					<div class="screenList fl w">
+						<form action="/Report/fundFlow" method='get'>
+						<table>
+							<tr>
+								<th>账单期间：</th>
+								<td>
+									<select name='year' style="width: 48%!important;">
+										<php>for($i=2016;$i<=date('Y');$i++){</php>
+											<option value="{$i}">{$i}年</option>
+										<php>}</php>
+									</select>
+									<select name='month' style="width: 48%!important;">
+										<option value="01">一月</option>
+										<option value="02">二月</option>
+										<option value="03">三月</option>
+										<option value="04">四月</option>
+										<option value="05">五月</option>
+										<option value="06">六月</option>
+										<option value="07">七月</option>
+										<option value="08">八月</option>
+										<option value="09">九月</option>
+										<option value="10">十月</option>
+										<option value="11">十一月</option>
+										<option value="12">十二月</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+								</td>
+							</tr>
+						</table>
+						</form>
+					</div>
+				</div>-->
+
+				<div class="screenBox swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<form action="/Report/fundFlow" method='get'>
+								<!--基础查询-->
+								<h2>基础查询</h2>
+
+								<div class="swiperRight">
+									<table class="tableBox">
+										<tr>
+											<th>账单期间：</th>
+											<td>
+												<select name='year' style="width: 48%!important;">
+													<php>for($i=2016;$i<=date('Y');$i++){</php>
+													<option value="{$i}">{$i}年</option>
+													<php>}</php>
+												</select>
+												<select name='month' style="width: 48%!important;">
+													<option value="01">一月</option>
+													<option value="02">二月</option>
+													<option value="03">三月</option>
+													<option value="04">四月</option>
+													<option value="05">五月</option>
+													<option value="06">六月</option>
+													<option value="07">七月</option>
+													<option value="08">八月</option>
+													<option value="09">九月</option>
+													<option value="10">十月</option>
+													<option value="11">十一月</option>
+													<option value="12">十二月</option>
+												</select>
+											</td>
+											<td>
+												<input type="submit" value="查询" />
+											</td>
+										</tr>
+									</table>
+								</div>
+							</form>
+							<!--end 基础查询-->
+						</div>
+					</div>
+				</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<span class="export advBtn"><input type="button" value="导出" class=""  onclick="window.open('/Report/downloadfundflowlist'+window.location.search)"/></span>
+						</div>
+					</div>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th>广告主名称</th>
+							<th>应收款</th>
+							<th>1月收款</th>
+							<th>2月收款</th>
+							<th>3月收款</th>
+							<th>4月收款</th>
+							<th>5月收款</th>
+							<th>6月收款</th>
+							<th>7月收款</th>
+							<th>8月收款</th>
+							<th>9月收款</th>
+							<th>10月收款</th>
+							<th>11月收款</th>
+							<th>12月收款</th>
+							<th>合计</th>
+						</tr>
+						<tr>
+							<td>汇总</td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+							<td class="J_sum"></td>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name='showdata' id='v'>
+							<tr>
+								<td>{$v.info.name}</td>
+								<td>{$v.info.money}</td>
+								<php>
+									$thismonthmoney=0;
+									for($i=1;$i<=12;$i++){
+										if(strlen($i)==1)$i='0'.$i;
+										$thisdata=$v[$i];
+										$thismoney=$thisdata['rk']['money']+$thisdata['dk']['money'];
+										echo "<td>$thismoney</td>";
+										$thismonthmoney+=$thismoney;
+									}
+								</php>
+								<td>{$thismonthmoney}</td>
+							</tr>
+						</volist>
+						</tbody>
+					</table>
+				</div>
+				<!--分页-->
+</div>
+</block>
+
+

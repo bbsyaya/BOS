@@ -1,0 +1,171 @@
+<extend name="Public/base"/>
+<block name="body">
+    <include file="Public:commonoa" />
+    <style type="text/css">
+        body{font-size: 12px !important;}
+        .btnBox input.close[type="button"]{float:none !important}.close{opacity:1!important;font-size:14px!important;font-weight:normal!important;margin-left: 10px !important;}.listTable tr th,.listTable tr td{border:1px solid #eee;color:#333;height:40px;line-height:40px;overflow:hidden;text-align:center;text-overflow:ellipsis;white-space:nowrap;padding:0px 5px !important;}.listTable tr th{color: #fff;}.b-name{width:300px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.com-btn{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:3px!important;color:#fff!important;cursor:pointer!important;margin-left:10px!important;height:32px!important;line-height:32px !important;padding:0 5px !important}.color1a72d6{color: #1a72d6 !important; }.ui-dialog-buttons{z-index: 2000 !important;}.Wdate{width:185px !important;padding: 0 2px !important;}.edit-b{ border: 1px solid #dadada;border-radius: 3px;height: 30px;width: 50px;line-height: 30px;}
+        .edit-b:hover{background: #1269CC;color: #fff;}.btnBox input[type="button"]{ margin: 0px !important;float: left !important;margin-left: 145px !important;}.btnBox input.close[type="button"]{margin-left: 10px  !important;float: left !important;}.listTable tr th, .listTable tr td{font-size: 12px !important;}.screenOperate{height: auto !important;}.screenCn .screenOperate a{border-top:1px solid #fff;}.screenCn .screenOperate a{padding:0 10px;}
+        .ba{padding:0 5px;display: inline-block;background-color: #1a72d6;font-size: 12px;width: 76px;height: 32px;line-height: 32px;text-align: center;color: white;vertical-align: top;border-radius: 5px;margin-bottom: 10px;}
+        .ri_header{
+            height: 45px;
+            width: 450px;
+            margin: 15px 0;font-size: 18px;
+            font-weight: bold;line-height: 1;
+            text-align: left;
+        }
+    </style>
+    <!--swiper  css文件-->
+    <link rel="stylesheet" href="__PUBLIC__/newUI/js/swiper/swiper.min.css">
+    <!--bootstrap-select  css文件-->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/js/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/js/bootstrapselect/css/bootstrap-select.css"/>
+    <div class="subConten  fl w" style="padding:5px !important;">
+        <script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+        <!--内容-->
+        <div class="subCon fl w" style="margin-top:0px;">
+            <div class="screenCn fl w ha" style="margin-top:0px;">
+
+                <div class="ri_header">
+                    <div class="ri_title_box">
+                        <span class="clip-text"><a href="/OA/HrManage/hrList" style="color: #1a72d6;">人事办公</a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #1a72d6;">-></span>
+                        <span><a href="/OA/TalentPool/index" style="color: #1a72d6;">人才储备库</a></span>
+                    </div>
+                </div>
+                <div class="xian"></div>
+
+                <form method="get" action="/OA/TalentPool/index">
+                    <table class="queryTable fl w" style="margin:10px 0 10px 0px;">
+                        <tbody>
+                        <tr>
+                            <td>
+                                <span class="fleft">姓名：</span>
+                                <span class="fleft"><input name="name" value="{$Think.get.name}" type="text" class="b-name"></span>
+                                <span class="fleft">性别：</span>
+                                <span class="fleft">
+                                    <select name="sex" style="width:100px !important;">
+                                        <php>if(I('get.sex') == 1){</php>
+                                        <option value="">请选择</option>
+                                        <option value="1" selected>女</option>
+                                        <option value="2">男</option>
+                                        <php>}elseif(I('get.sex') == 2){</php>
+                                        <option value="">请选择</option>
+                                        <option value="1">女</option>
+                                        <option value="2" selected>男</option>
+                                        <php>}else{</php>
+                                        <option value="" selected>请选择</option>
+                                        <option value="1">女</option>
+                                        <option value="2">男</option>
+                                        <php>}</php>
+                                    </select>
+                                </span>
+
+                                <span class="fleft">层级：</span>
+                                <span class="fleft">
+                                    <select name="talent_level" style="width:100px !important;">
+                                        <option value="">请选择</option>
+                                        <option value="1" <?php if(I('get.talent_level') ==1){ ?> selected="selected" <?php } ?>>一般员工</option>
+                                        <option value="2" <?php if(I('get.talent_level') ==2){ ?> selected="selected" <?php } ?>>基层管理</option>
+                                        <option value="3" <?php if(I('get.talent_level') ==3){ ?> selected="selected" <?php } ?>>中层管理</option>
+                                        <option value="4" <?php if(I('get.talent_level') ==4){ ?> selected="selected" <?php } ?>>高层管理</option>
+                                        <option value="5" <?php if(I('get.talent_level') ==5){ ?> selected="selected" <?php } ?>>技术专家</option>
+                                    </select>
+                                </span>
+                                <span class="fleft">工作年限：</span>
+                                <span class="fleft">
+                                    <select name="start_time" style="width:100px !important;">
+                                        <option value="">请选择</option>
+                                        <option value="1" <?php if(I('get.start_time') ==1){ ?> selected="selected" <?php } ?>>1年以下</option>
+                                        <option value="2" <?php if(I('get.start_time') ==2){ ?> selected="selected" <?php } ?>>1-3年</option>
+                                        <option value="3" <?php if(I('get.start_time') ==3){ ?> selected="selected" <?php } ?>>3-5年</option>
+                                        <option value="4" <?php if(I('get.start_time') ==4){ ?> selected="selected" <?php } ?>>5-10年</option>
+                                        <option value="5" <?php if(I('get.start_time') ==5){ ?> selected="selected" <?php } ?>>10年以上</option>
+                                    </select>
+                                </span>
+                                <span class="fleft">学历：</span>
+                                <span class="fleft">
+                                    <select name="education" style="width:100px !important;">
+                                        <option value="">请选择</option>
+                                        <option value="1" <?php if(I('get.education') ==1){ ?> selected="selected" <?php } ?>>高中及以下</option>
+                                        <option value="2" <?php if(I('get.education') ==2){ ?> selected="selected" <?php } ?>>大专</option>
+                                        <option value="3" <?php if(I('get.education') ==3){ ?> selected="selected" <?php } ?>>本科</option>
+                                        <option value="4" <?php if(I('get.education') ==4){ ?> selected="selected" <?php } ?>>研究生及以上</option>
+                                    </select>
+                                </span>
+
+                                <span class="fleft"><input name="" value="查询" class="com-btn" type="submit"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </form>
+                <!-- 12121 -->
+            </div>
+            <!--ned 功能区-->
+            <!--制度列表-->
+            <tab class="workListBox">
+                <a href="{:U('edit')}" ><span class="ba">新增</span></a>
+                <table class="listTable Js_tableCon">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th <php>echo getorderclass('talent_level');</php>><a href="<php>echo getorderurl('talent_level');</php>" >人才层级</a></th>
+                        <th <php>echo getorderclass('years');</php>><a href="<php>echo getorderurl('years');</php>" >工作年限</a></th>
+                        <th <php>echo getorderclass('education');</php>><a href="<php>echo getorderurl('education');</php>" >学历</a></th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <notempty name="list">
+                        <volist name="list" id="vo">
+                            <tr>
+                                <td>{$vo.numbering}</td>
+                                <td>{$vo.name}</td>
+                                <td>{$vo.sex}</td>
+                                <td>{$vo.talent_level}</td>
+                                <td>{$vo.years}</td>
+                                <td>{$vo.education}</td>
+                                <td>
+                                    <a href="{:U('edit?id='.$vo['id'])}" style="color: #1269cc">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href="{:U('detail?id='.$vo['id'])}" style="color: #1269cc">查看</a>
+                                </td>
+                            </tr>
+                        </volist>
+                        <else />
+                        <tr>
+                            <td colspan="7"><div class="no-datas">暂无数据！！</div></td>
+                        </tr>
+                    </notempty>
+
+                    </tbody>
+                </table>
+                <notempty name="list">
+                    <div class="no-datas">{$page}</div>
+                </notempty>
+                <notempty name="list">
+                    <div class="office_btnBox" style="margin-bottom:50px;">
+                    </div>
+                </notempty>
+            </div>
+            <!--end 制度列表-->
+        </div>
+        <!--end 内容-->
+    </div>
+
+    <script type="text/javascript" src="/Public/OA/js/globle.js"></script>
+    <!--双日期插件-->
+    <script type="text/javascript" src="/Public/OA/js/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="/Public/OA/js/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script type="text/javascript">var pType="entry";</script>
+    <script type="text/javascript" src="/Public/Home/js/fun.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/newUI/js/index.js"></script>
+    <!--swiper插件-->
+    <script type="text/javascript" src="__PUBLIC__/newUI/js/swiper/swiper.min.js"></script>
+    <!--bootstrap-select-->
+    <script type="text/javascript" src="__PUBLIC__/newUI/js/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/newUI/js/bootstrapselect/bootstrap-select.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/newUI/js/bootstrapselect/select.js"></script>
+</block>

@@ -1,0 +1,974 @@
+<extend name="Public/base"/>
+<block name="body">
+<style type="text/css">.dataFormTable input[type="text"], .dataFormTable input[type="password"], .dataFormTable select{width: 99% ;}</style>
+    <!--数据表-->
+    <form id="dataform" action="{:U('update')}" method="post" enctype="multipart/form-data">
+        <div class="dataCn fl w ha">
+        <div class="dataFormContainer">
+            <div class="dataFormTitle">基础信息（产品=推广活动）</div>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>产品编码：</th>
+                        <td>{$data.code|default="自动生成"}</td>
+                        <th>产品名称：<span class="required">*</span></th>
+                        <td><input type="text" name="name" value="{$data.name}" class="ritem" /></td>
+                        <th>产品类型：<span class="required">*</span></th>
+                        <td><bselect name="type" options="op_product_type" selected="data['type']"  /></td>
+                    </tr>
+                    <tr>
+                        <th>广告主名称：<span class="required">*</span></th>
+                        <td>
+                            <input type="text" item-type="ad" class="J_dataSelect ritem" readonly="true" id="show_ad_id" name="show_ad_id" value="{$data_adname}" dialog-title="广告主名称/接入业务线/所属销售/结算主题"/>
+                            <input type="hidden" name="ad_id" value="{$data.ad_id}" />
+                        </td>
+                        <th>接入业务线(收入)：<span class="required">*</span></th>
+                        <td>
+                            <input type="text" item-type="bl" class="J_dataSelect ritem" readonly="true" name="show_bl_id" id="show_bl_id" value="{$data_blname}" dialog-title="ID+业务线名称"/>
+                            <input type="hidden" name="bl_id" value="{$data.bl_id}" />
+                        </td>
+                        <th>签订主体：<span class="required">*</span></th>
+                        <td>
+                            <input type="text" item-type="sb" class="J_dataSelect ritem" readonly="true" name="show_sb_id" id="show_sb_id" value="{$data_sign_body}"/>
+                            <input type="hidden" name="sb_id" value="{$data.sb_id}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>产品大类：<span class="required">*</span></th>
+                        <td>
+                            <select name="category" class=""></select>
+                        </td>
+                        <th>分类明细：<span class="required">*</span></th>
+                        <td>
+                            <select name="category2" class=""></select>
+                        </td>
+                        <th>来源类型：<span class="required">*</span></th>
+                        <td><bselect name="source_type" options="op_order_source_type" selected="data['source_type']" /></td>
+                        
+                    </tr>
+                    <tr>
+                        <th>责任销售：<span class="required">*</span></th>
+                        <td>
+                            <input type="text" item-type="user" class="J_dataSelect ritem" readonly="readonly" name="show_saler_id" id="show_saler_id" value="{$data_saler}"/>
+                            <input type="hidden" name="saler_id" value="{$data.saler_id}" />
+                        </td>
+                          
+                    </tr>
+                    <?php if($has_export_record_auth==200 && $data["id"]>0){  ?>
+                        <tr>
+                            <td colspan="6">
+                                  <style type="text/css">
+                                    .eix-s{
+                                        width: 150px;
+                                        height: 30px;
+                                        line-height: 30px;
+                                        display: inline-block;
+                                        background: #4094f5;text-align: center;color: #fff !important;border-radius: 2px;
+                                    }
+                                    .sksi-sw{color: red;font-size:12px;margin-left: 8px;}
+                                  </style>
+                                   <a href="/Home/Product/exportUpdateProductRec.html?proid={$data['id']}" target="_blank" class="eix-s" title="">导出该产品修改日志记录</a>
+                                   <font class="sksi-sw">*查看产品名称，价格，返量方式，广告主名称，签订主体修改记录</font>
+                                </td>
+                            </tr>
+                    <?php } ?>
+                    
+                </table>
+            </div>
+
+            <div class="dataFormTitle">订单信息</div>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>合作状态：<span class="required">*</span></th>
+                        <td><bselect class="J_hzzt" name="cooperate_state" options="op_order_cooperate_state" selected="data['cooperate_state']"/></td>
+                        <th class="J_zs">合同OA流水号：<span class="required">*</span></th>
+                        <td class="J_zs" style="text-align: left;">
+                            <input style="width:80%;" type="text" item-type="c_num" class="J_dataSelect2 ritem J_zs_ritem" id="contract_num" name="contract_num" value="{$data.contract_num}" dialog-title="OA流水号/广告主名称/签订主体"/>
+                            <if condition="!empty($data['contract_num'])">
+                                <a id="clearcm" href="javascript:;">清空</a>
+                            </if>
+                        </td>
+                        <th class="J_zs">网签：</th>
+                        <td class="J_zs"><input type="text" item-type="c_num" class="" name="contract_webinfo" value="{$data.contract_webinfo}"/></td>
+                        <th class="J_cs" style="display: none;">测试类型：<span class="required">*</span></th>
+                        <td class="J_cs" style="display: none;"><bselect class="J_cslx J_cs_ritem" name="order_test_type" options="op_order_test_type" selected="data['order_test_type']"/></td>
+                        <th class="J_cs" style="display: none;">测试指标：<span class="required">*</span></th>
+                        <td class="J_cs" style="display: none;">
+                            <input type="text" name="order_test_quota" class="ritem J_cs_ritem" value="{$data.order_test_quota}" placeholder="天"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="j_cd">合同有效期：<span class="required">*</span></th>
+                        <td class="j_cd">起<input readonly="true" style="width:50%;" class="Wdate ritem j_cd_ritem" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="contract_s_duration" value="<empty name='data.contract_s_duration'>{:date('Y-m-d')}<else/>{$data.contract_s_duration}</empty>"/>
+                            止<input readonly="true" style="width:50%;" class="Wdate ritem j_cd_ritem" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="contract_e_duration" value="<empty name='data.contract_e_duration'>{:date('Y-m-d')}<else/>{$data.contract_e_duration}</empty>"/>
+                        </td>
+                        <th>订单类型：<span class="required">*</span></th>
+                        <td><bselect name="order_type" class="" options="op_order_type" selected="data['order_type']"/></td>
+                        <th>发票类型：<span class="required">*</span></th>
+                        <td><bselect name="invoice_type" class="" options="op_invoice_type" selected="data['invoice_type']"/></td>
+                    </tr>
+                    <tr>
+                        <th>返量周期：<span class="required">*</span></th>
+                        <td><bselect name="return_cycle" class="" options="op_return_cycle" selected="data['return_cycle']"/></td>
+                        <th>结算周期：<span class="required">*</span></th>
+                        <td><bselect name="settle_cycle" class="" options="op_settlement_cycle" selected="data['settle_cycle']"/></td>
+                        <th>对账时间(天)：<span class="required">*</span></th>
+                        <td><input type="text" name="reconciliation_day" class="ritem" value="{$data.reconciliation_day}"/></td>
+                    </tr>
+                    <tr>
+                        <th>开票时间(天)：<span class="required">*</span></th>
+                        <td><input type="text" name="bill_day" class="ritem" value="{$data.bill_day}"/></td>
+                        <th>收款时间(天)：<span class="required">*</span></th>
+                        <td><input type="text" name="receivables_day"  class="ritem" value="{$data.receivables_day}"/></td>
+                        <th>计费模式：<span class="required">*</span></th>
+                        <td><bselect name="charging_mode" class="ritem" options="op_charging_mode" selected="data['charging_mode']" first="请选择"/></td>
+                    </tr>
+                    <tr>
+                        <th>价格类型：<span class="required">*</span></th>
+                        <td>
+                            <bselect name="price_type" class="" options="op_price_type" selected="data['price_type']" change="chgPriType(this)"/>
+                        </td>
+                        <th>价格：<span class="required">*</span></th>
+                        <td data-price="{$data['price']}"><input type="text" name="price" class="ritem" value="{$data['price']}"/>
+                               
+                        </td>
+                        <th></th>
+
+                        <td>
+                        </td>
+                    </tr>
+                </table>
+                <!-- 阶梯价格-->
+                <table class="dynamicTable ladderPrice J_jtjg" style="margin-top: -1px; <if condition="$data['price_type'] neq 2">display: none;</if>">
+                    <caption align="bottom">
+                        <input id="addTieredPrice" class="addTR" type="button" value="" />
+                    </caption>
+                    <tr>
+                        <th>量级</th>
+                        <th>金额</th>
+                        <th width="150">操作</th>
+                    </tr>
+                    <assign name="j" value="1" />
+                    <volist name="data.tiered_price" id="item" >
+                        <tr>
+                            <td><input type="text" name="tiered_price[{$j}][0]" value="{$item[0]}" /></td>
+                            <td><input type="text" name="tiered_price[{$j}][1]" value="{$item[1]}" /></td>
+                            <td>
+                                <span class="doDataDelete" idx="{$key}" item-id="{$data.id}" item-type="tieredPrice">删除</span>
+                            </td>
+                        </tr>
+                        <assign name="j" value="$j+1" />
+                    </volist>
+                </table>
+            </div>
+
+            <div class="dataFormTitle">安装包信息</div>
+            <style type="text/css">.znbx tr td{width: 20% !important;}</style>
+            <div class="dataFormContent">
+                <table class="dataFormTable znbx">
+                    <tr>
+                        <td>返量方式：<span class="required">*</span></td>
+                        <td><bselect class="J_flfs" id="package_return_type" name="package_return_type" options="op_return_type" selected="data['package_return_type']"/></td>
+                        <th class="J_yj">邮件地址：</th>
+                        <td class="J_yj"><input name="package_return_email" class="" id="package_return_email" value="{$data['package_return_email']}" type="text"/></td>
+                        <td>安装包大小<span class="required">*</span></td>
+                        <td><bselect name="package_size" class="" options="op_package_size" selected="data['package_size']"/></td>
+                        <td>质量要求：<span class="required">*</span></td>
+                        <td><input type="text" class="ritem" name="quality_requirements" value="{$data.quality_requirements}"/></td>
+                        <td>核检规则：<span class="required">*</span></td>
+                        <td><input type="text" class="ritem" name="qr_check_rule" value="{$data.qr_check_rule}"/></td>
+                    </tr>
+                    <tr class="ba">
+                     <td class="J_gfht" style="display: none;">后台账号：</td>
+                        <td class="J_gfht" style="display: none;"><input name="package_return_account" class="" value="{$data['package_return_account']}" type="text" /></td>
+                        <td class="J_gfht" style="display: none;">密码：</td>
+                        <td class="J_gfht" style="display: none;"><input name="package_return_passwd" class="" value="{$data['package_return_passwd']}" type="text" /></td>
+                        <td>后台地址：</td>
+                        <td><input type="text" class="" name="backstage_adress" value="{$data.backstage_adress}"/></td>
+
+                    </tr>
+                </table>
+            </div>
+
+            <div class="dataFormTitle">对接人信息</div>
+            <div class="dataFormContent">
+                <table id="fin_receiver_tab" class="dynamicTable oppositeJoint">
+                    <caption align="bottom">
+                        <input id="addContacts" class="addTR" type="button" value="" />
+                        <input id="pastContacts" class="copyTR" type="button" value="" />
+                    </caption>
+                    <tr>
+                        <th>姓名<span class="required">*</span></th>
+                        <th>电话<span class="required">*</span></th>
+                        <th>QQ</th>
+                        <th>邮箱</th>
+                        <th width="150">操作</th>
+                    </tr>
+                    <assign name="j" value="1" />
+                    <foreach name="data_contacts" item="item" >
+                        <tr>
+                            <td><input type="text" class="ritem" name="procontacts[{$j}][name]" value="{$item.name}" /></td>
+                            <td><input type="text" class="ritem" name="procontacts[{$j}][mobile]" value="{$item.mobile}" rtype="phone"/></td>
+                            <td><input type="text" class="" name="procontacts[{$j}][qq]" value="{$item.qq}"/></td>
+                            <td><input type="text" class=""  name="procontacts[{$j}][email]" value="{$item.email}"  rtype="email"/></td>
+                            <td>
+                                <span item-id="{$item.id}" item-type="contact" class="doDataDelete">删除</span>
+                            </td>
+                            <input type="hidden" name="procontacts[{$j}][id]" value="{$item.id}"/>
+                        </tr>
+                        <assign name="j" value="$j+1" />
+                    </foreach>
+
+                </table>
+            </div>
+
+            <div class="dataFormTitle">规划业务线</div>
+            <div class="dataFormContent">
+                <table class="dynamicTable oppositeJoint">
+                    <caption align="bottom">
+                        <input id="add_blplanning" class="addTR" type="button" value="" />
+                    </caption>
+                    <tr>
+                        <th>业务线分类</th>
+                        <th>业务线</th>
+                        <th>操作</th>
+                    </tr>
+
+                    <assign name="j" value="1" />
+                    <volist name="data_plane_bl" id="item" >
+                        <tr>
+                            <td>
+                                <bselect name="plane_bl[{$j}][bl_type]" options="data_bl_type" selected="item['bl_type']" class="sel-bl-type"/>
+                            </td>
+                            <td class="td_data_bl">
+                                <select class="sel_data_bl" style="display:none;"></select>
+                                <span class="origindata">{$item.name}</span>
+                                <input class="real_data_bl" type="hidden" name="plane_bl[{$j}][bl_id]" value="{$item['bl_id']}" origin_id="{$item['bl_id']}"/>;
+                            </td>
+                            <td>
+                                <span item-id="{$item.id}" item-type="planeBl" class="doDataDelete">删除</span>
+                                <a href="javascript:;" class="cancelUpdate">取消</a>
+                            </td>
+                                <input type="hidden" name="plane_bl[{$j}][id]" value="{$item['id']}" />
+                        </tr>
+                        <assign name="j" value="$j+1" />
+                    </volist>
+
+                </table>
+            </div>
+
+            <div class="dataFormTitle">计费标识信息&nbsp;&nbsp;<a target="_blank" href="{:U('ChargingLogo/index?prot_id='.$data['id'])}">查看更多</a></div>
+            <div class="dataFormContent">
+            <style type="text/css">
+            .no-data{height:50px;line-height:50px;text-align:center;width:100%;display:inline-block}.doDataDelete{cursor:pointer}.pagen{text-align:center;display:inline-block;display:none}.listtb{width:100%;display:inline-block}.listtb tr td{width:8%;display:inline-block;padding:5px 1px}.listtb tbody{width:100%;display:inline}.listtb tbody tr{width:100%;display:inline;float: left;}.pagen{line-height:28px}.pagen a{background-color:#f0f0f0;border-radius:3px;color:#808080!important;cursor:pointer;display:inline-block;font-size:12px;height:28px;line-height:28px;margin-left:3px;margin-right:3px;overflow:hidden;padding-left:9px;padding-right:9px;white-space:nowrap;width:auto}.pagen span{border-radius:3px;cursor:pointer;display:inline-block;font-size:12px;height:28px;line-height:28px;margin-left:3px;margin-right:3px;overflow:hidden;padding-left:9px;padding-right:9px;white-space:nowrap;width:auto;background-color:#1a72d6;color:#fff!important}
+            </style>
+            <script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+                <table class="dynamicTable oppositeJoint" id="chtb">
+                    <caption align="bottom">
+                        <input id="addCharingLogo" class="addTR" type="button" value="" />
+                        <div class="pagen" id="pagen" style="float:right;"></div>
+                    </caption>
+                    <tbody id="tbody">
+                        <tr style="height:41px;">
+                            <th>计费标识编码<span class="required">*</span></th>
+                            <th>计费标识名称（广告）<span class="required">*</span></th>
+                            <th>链接地址<span class="required">*</span></th>
+                            <th>上传</th>
+                            <th>下载连接</th>
+                            <th>价格类型<span class="required">*</span></th>
+                            <th>价格<span class="required">*</span></th>
+                            <th>计费模式<span class="required">*</span></th>
+                            <th>后台地址<span class="required">*</span></th>
+                            <th>账号<span class="required">*</span></th>
+                            <th>密码<span class="required">*</span></th>
+                            <th width="150">操作</th>
+                        </tr>
+                        <tr id="loaingtr" style="height:451px;">
+                            <td colspan="12">
+                                <div class="no-data" id="ltip">加载中....</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+                <script type="text/javascript">
+                    var J = {
+                        init:function(){
+                            setTimeout(this.lazyCharLog(1),1000);
+                        },
+                        lazyCharLog:function(nowPage){
+                            var id = "{$proid}";
+                            if(id){
+                                $("#loaingtr").nextAll().remove();
+                                $("#loaingtr").show();
+                                $("#tbody").height(456);
+                                $.get("/Product/lazyChargLog.html",{id:id,p:nowPage},function(data){
+                                    if(data.logo_list){
+                                        if(data.logo_list.length<10) $("#tbody").height("auto");
+                                        J.makeHtml(data);
+                                    }else{
+                                        $("#ltip").html("暂无数据");
+                                    }
+                                });
+                            }else{
+                                $("#loaingtr").remove();
+                            }
+                        },
+                        checkType:function(i){
+                            var type_one = $("#charginglogo_uptype_"+i),clog_one = $("#charginglogo_url_"+i);
+                            clog_one.css({"border":"1px solid red"});
+                            layer.confirm("您确定当前计费标识链接地址是连接地址，不是安装包吗？",function(){
+                                //是
+                                type_one.val(2);
+                                clog_one.css({"border":"1px solid #cccccc"});
+                                layer.closeAll();
+                            },function(){
+                                //不是
+                                type_one.val(1);clog_one.css({"border":"1px solid #cccccc"});
+                            });
+                        },
+                        makeHtml:function(data){
+                            var http_url = "{$Think.server.HTTP_HOST}";
+                            var page = data.page;
+                            var back_way="{$data['package_return_type']}";
+                            $.each(data.logo_list,function(i,o){
+                                var ritem_ = back_way=="1"?"ritem":"";
+                                var ht="";
+                                ht+='<tr>';
+                                ht+='<td><input readonly=\'true\' type="text" name="charginglogo['+i+'][code]" value="'+o.code+'" placeholder="自动生成"/></td>';
+                                ht+='<td><input type="text" name="charginglogo['+i+'][name]" value="'+o.name+'" class="ritem"/></td>';
+                                var promotion_url_type="";
+                                if(o.promotion_url_type==2){
+                                    promotion_url_type = '<input type="text" name="charginglogo['+i+'][url]" value="'+o.promotion_url+'" placeholder="填写后链接类型为普通链接" id="charginglogo_url_'+i+'" onblur="J.checkType('+i+')"/><input type="hidden" value="2" id="charginglogo_uptype_'+i+'"  name="charginglogo['+i+'][up_type]" /><br/>';
+                                }else{
+                                    promotion_url_type = '<input type="text" name="charginglogo['+i+'][url]" placeholder="填写后链接类型为普通链接"  id="charginglogo_url_'+i+'"  onblur="J.checkType('+i+')" value="'+o.promotion_url+'" /><input type="hidden" value="1"  name="charginglogo['+i+'][up_type]"  id="charginglogo_uptype_'+i+'"/><br/>';
+                                }
+                                ht+='<td style="line-height: 20px">'+promotion_url_type+'</td>';
+                                ht+='<td><input type="file" class="upfile" id="upid_'+i+'"/><input type="hidden" name="charginglogo['+i+'][clpk_url]" value="'+o.promotion_url+'"/></td>';
+                                var promotion_url_ = "/";
+                                if(o.promotion_url && (o.promotion_url_type==1)){
+                                    promotion_url_='<a target="_blank" href="http://'+http_url+o.promotion_url+'">下载</a>';
+                                }
+                                ht+='<td>'+promotion_url_+'</td>';
+                                //price_type
+                                var price_type_select_="";
+                                var opt_1="";
+                                $.each(data.price_type_list,function(si,so){
+                                    var selected_1 = '';
+                                    if(si==o.price_type)selected_1 = 'selected="selected"';
+                                    opt_1+='<option '+selected_1+' value="'+si+'">'+so+'</option>';
+                                });
+                                if(opt_1){
+                                   price_type_select_ = '<select id="" name="charginglogo['+i+'][price_type]" onchange="" ondblclick="" class="" style="">'+opt_1+'</select>'; 
+                                }
+                                ht+='<td>'+price_type_select_+'</td>';
+                                ht+='<td><input type="text" name="charginglogo['+i+'][price]" value="'+o.price+'"  class="ritem"/></td>';
+                                //charging_mode
+                                var price_type_select_q="";
+                                var opt_1_q="";
+                                $.each(data.op_charging_mode,function(oi,oo){
+                                    var selected_1_q = '';
+                                    if(oi==o.charging_mode)selected_1_q = 'selected="selected"';
+                                    opt_1_q+='<option '+selected_1_q+' value="'+oi+'">'+oo+'</option>';
+                                });
+                                if(opt_1_q){
+                                   price_type_select_q = '<select id="" name="charginglogo['+i+'][charging_mode]" onchange="" ondblclick="" class="" style="">'+opt_1_q+'</select>'; 
+                                }
+                                ht+='<td>'+price_type_select_q+'</td>';
+                                ht+='<td><input type="text" name="charginglogo['+i+'][back_url]" value="'+o.back_url+'"  class="ritem"/></td>';
+                                ht+='<td><input type="text" name="charginglogo['+i+'][account]" value="'+o.account+'"  class="'+ritem_+'"/></td>';
+                                ht+='<td><input type="text" name="charginglogo['+i+'][password]" value="'+o.password+'"  class="'+ritem_+'"/></td>';
+                                ht+='<td><span item-id="'+o.id+'" item-type="charginglogo" class="doDataDelete">删除</span></td>';
+                                ht+='<input type="hidden" name="charginglogo['+i+'][id]" value="'+o.id+'"/>';
+                                ht+='<input type="hidden" name="charginglogo['+i+'][prot_id]" value="'+o.prot_id+'"/>';
+                                ht+='<input type="hidden" name="charginglogo['+i+'][ad_id]" value="'+o.ad_id+'"/>';
+                                ht+='</tr>'
+                                $("#loaingtr").after(ht).show();
+                                J.upload_(i);
+                            });
+                            $("#pagen").html("");
+                            $("#pagen").html(page).show();
+                            $("#loaingtr").hide();
+                        },
+                        upload_:function(file_id){
+                            var button = $('#upid_'+file_id);
+                            new AjaxUpload(button,{
+                                action: "/Public/uploadss.html",
+                                name: 'files',
+                                onChange:function(){
+                                },
+                                onSubmit : function(file, ext){
+                                    layer.msg("上传中...",{time:99999999});
+                                },
+                                onComplete: function(file, response){
+                                    var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+                                    if(list.status==1){
+                                        button.next().val(list.data);
+                                        $("#charginglogo_url_"+file_id).val(list.data);
+                                        $("#charginglogo_url_"+file_id).next().val(1);
+                                    }
+                                    alertnewpage3(list.msg);
+                                    layer.closeAll();
+                                }
+                            });
+                        }
+                    };
+                    $(function(){J.init();});
+                </script>
+            </div>
+            <if condition="$has_check_auth AND ($_GET['id'] gt 0)">
+                <div class="dataFormTitle">是否检查 <bradio name="is_check" radios="op_is_check" checked="data['is_check']" /></div>
+            </if>
+            <div class="dataFormOperate">
+                <input id="submitForm" type="button" value="保存" onclick="ck.submit('#sub_1')" id="sub_1"/>
+                <a href="{:U('index')}">返回</a>
+                <if condition="$data.id GT 0 ">
+                <input type="hidden" name="id" value="{$data.id}" />
+                <else />
+                <input type="hidden" name="id" value="0" />
+                </if>
+            </div>
+        </div>
+
+        </div>
+    </form>
+
+    <!--————————————————————————————————————————————————————————————————————————————————————————————————————-->
+    <div id="bl_type_dom" style="display: none;">
+        <bselect class="sel-bl-type" name='plane_bl[%s][bl_type]' options='data_bl_type' selected="data['data_bl_type']"/>
+    </div>
+    <div id="price_type_dom" style="display: none;">
+        <bselect name="charginglogo[%s][price_type]" options="op_price_type" selected="data['price_type']"/>
+    </div>
+    <div id="charge_model_dom" style="display: none;">
+        <bselect name="charginglogo[%s][charging_mode]" options="op_charging_mode" selected="data['charging_mode']"/>
+    </div>
+    <!--弹出框（广告主联系人） -->
+    <div class="dataSelectDialog" title="">
+    </div>
+</block>
+
+<block name="script">
+    <script src="__MODULE__/jquery.form.js"></script>
+    <script type="text/javascript">
+    var alltag={$alltag};
+    var cat2=alltag[0].lists;
+    function changecats(){
+        $('select[name="category2"]').html('');
+        for(var tag_i in cat2){
+            var optionstr="<option>"+cat2[tag_i]+"</option>";
+            if(cat2[tag_i]=="{$data.category2}"){
+                optionstr="<option selected='selected'>"+cat2[tag_i]+"</option>";
+            }
+            $('select[name="category2"]').append(optionstr);
+        }
+    }
+    
+        $(function() {
+            for(var tag_i in alltag){
+                var optionstr="<option>"+alltag[tag_i].name+"</option>";
+                if(alltag[tag_i].name=="{$data.category}"){
+                    cat2=alltag[tag_i].lists;
+                    optionstr="<option selected='selected'>"+alltag[tag_i].name+"</option>";
+                }
+                $('select[name="category"]').append(optionstr);
+            }
+            changecats();
+            $('select[name="category"]').change(function(){
+                for(var tag_i in alltag){
+                    if(alltag[tag_i].name==$('select[name="category"]').val()){
+                        cat2=alltag[tag_i].lists;
+                        changecats();
+                        break;
+                    }
+                }
+            })
+            //新增计费标识
+           
+            $("#addCharingLogo").click(function() {
+
+                var tabObj = $(this).parents('table');
+                var idx = $(tabObj).find('tr').length;
+                var price_type_dom = sprintf($("#price_type_dom").html(), idx);
+
+                var charge_model_dom = sprintf($("#charge_model_dom").html(), idx);
+                
+                var back_way1=$("#package_return_type option:selected").val();
+                var ritem_1=back_way1=="1"?"ritem":"";
+                // console.log(back_way1);
+                var ba = $("input[name='backstage_adress']").val();
+                $(tabObj).append("<tr>" +
+                    "<td><input readonly='true' type=\"text\" name='charginglogo["+idx+"][code]' placeholder='自动生成'/></td>" +
+                    "<td><input type=\"text\" name='charginglogo["+idx+"][name]'   class=\"ritem\"/></td>" +
+                    "<td><input type=\"text\" name='charginglogo["+idx+"][url]'  onblur=\"J.checkType("+idx+")\" placeholder=\"填写后链接类型为普通链接\" id=\"charginglogo_url_"+idx+"\"/><input type=\"hidden\" value=\"1\"  name=\"charginglogo["+idx+"][up_type]\"  id=\"charginglogo_uptype_"+idx+"\"/>" +
+                        "<input type='hidden' name='charginglogo["+idx+"][clpk_url]'/></td>" +
+                    "<td><input type=\"file\" class='upfile' id=\"upid_"+idx+"\" ></td>"+
+                    "<td></td>"+
+                    "<td>"+price_type_dom+"</td>" +
+                    "<td><input type=\"text\" name='charginglogo["+idx+"][price]'   class=\"ritem\"/></td>" +
+                    "<td>"+charge_model_dom+"</td>" +
+                    "<td><input type=\"text\" value=\""+ba+"\" name='charginglogo["+idx+"][back_url]'   class=\"ritem\"/></td>" +
+                    "<td><input type=\"text\" name='charginglogo["+idx+"][account]'  class='"+ritem_1+"'/></td>" +
+                    "<td><input type=\"text\" name='charginglogo["+idx+"][password]'   class='"+ritem_1+"'/></td>" +
+                    "<td>" +
+                    "<span class=\"doDataDelete\">删除</span>" +
+                    "</td>" +
+                    "<input type=\"hidden\" name='charginglogo["+idx+"][id]' />" +
+                    "<input type=\"hidden\" name='charginglogo["+idx+"][prot_id]' />" +
+                    "<input type=\"hidden\" name='charginglogo["+idx+"][ad_id]' />" +
+                    "</tr>");
+    // }
+// console.log(idx);
+                J.upload_(idx);
+                //初始化值
+                $("[name='charginglogo["+idx+"][price_type]']").val( $("[name='price_type']").val() );
+                if ($("[name='price_type']").val() == 2) {
+                    var tp = $("input[name^='tiered_price']").serialize();
+                    $.post("{:U('convertTPrice')}",tp,function(ret) {
+                        $("[name='charginglogo["+idx+"][price]']").val( ret );
+                    });
+                } else {
+                    $("[name='charginglogo["+idx+"][price]']").val( $("[name='price']").val() );
+                }
+                $("[name='charginglogo["+idx+"][charging_mode]']").val( $("[name='charging_mode']").val() );
+                $("[name='charginglogo["+idx+"][account]']").val( $("[name='package_return_account']").val() );
+                $("[name='charginglogo["+idx+"][password]']").val( $("[name='package_return_passwd']").val() );
+                // bindUpLoad();
+            });
+
+            //增加对接人
+            $("#addContacts").click(function() {
+                var tabObj = $(this).parents('table');
+                var idx = $(tabObj).find('tr').length;
+                $(tabObj).append("<tr>" +
+                        "<td><input type=\"text\" name=\"procontacts["+idx+"][name]\" value='' class='ritem'/></td>" +
+                        "<td><input type=\"text\" name=\"procontacts["+idx+"][mobile]\" value='' class='ritem' rtype='phone'/></td>" +
+                        "<td><input type=\"text\" name=\"procontacts["+idx+"][qq]\" value=''  class=''/></td>" +
+                        "<td><input type=\"text\" name=\"procontacts["+idx+"][email]\" value=''  class='' /></td>" +
+                        "<td><span class=\"doDataDelete\" idx="+idx+" item-id='' item-type=''>删除</span></td>" +
+                        "</tr>");
+            });
+
+            //粘贴对接人信息
+            $("#fin_receiver_tab").on('click','#pastContacts',function(){
+                var chk_adid = $("[name='ad_id']").val();
+                $.get("{:U('Advertiser/getAdContacts')}",{'adid':chk_adid}, function(cooContacts){
+                    if (cooContacts) {
+                        for (var idx in cooContacts) {
+                            var info = cooContacts[idx];
+                            $("#addContacts").trigger("click"); //添加一条
+                            var idx = $("#fin_receiver_tab").find('tr').length;
+                            idx = idx-1;
+                            $("[name='procontacts["+idx+"][name]'").val(info.name);
+                            $("[name='procontacts["+idx+"][mobile]'").val(info.mobile);
+                            $("[name='procontacts["+idx+"][qq]'").val(info.qq);
+                            $("[name='procontacts["+idx+"][email]'").val(info.email);
+                        }
+                    }
+
+                });
+
+            });
+
+            //新增业务线规划
+            $("#add_blplanning").click(function() {
+                var tabObj = $(this).parents('table');
+                var idx = $(tabObj).find('tr').length;
+                var typeDom = sprintf($("#bl_type_dom").html(), idx);
+                $(tabObj).append("<tr>" +
+                    "<td>" + typeDom + "</td>" +
+                    "<td><select name=\"plane_bl["+idx+"][bl_id]\"><option>请选择</option></select></td>" +
+                    "<td><span class=\"doDataDelete\">删除</span></td>" +
+                    "</tr>");
+            });
+
+            //对话框（广告主名称、接入业务线、责任销售、合同编号）
+            $(".dataSelectDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "600",
+                height: "500",
+                modal: true,
+                show: "scale",
+                buttons: {
+                },
+            });
+
+            //删除按钮
+            $(".dynamicTable").on('click', '.doDataDelete', function(){
+                var id = $(this).attr('item-id');
+                var type = $(this).attr('item-type');
+                var thisbtn = this;
+
+                if (confirm('确认删除此条信息?')) {
+                    if (!id) {
+                        $(thisbtn).parents('tr').remove();
+                    }
+                    //
+                    if (type=='contact') { //删除产品联系人
+                        $.post("{:U('deleteContact')}",{id:id},function(ret){
+                            alertnewpage2(ret.msg);
+                            if(ret.error == 0) {
+                                $(thisbtn).parents('tr').remove();
+                            }
+                        },'json');
+                    } else if (type=='tieredPrice') { //删除阶梯价格
+                        var idx = $(this).attr('idx'); //数据库存的数组，idx用于区别数组下表
+                        $.post("{:U('deleteTieredPrice')}",{id:id,idx:idx},function(ret){
+                            alertnewpage2(ret.msg);
+                            if(ret.error == 0) {
+                                $(thisbtn).parents('tr').remove();
+                            }
+                        },'json');
+                    } else if (type=='planeBl') { //删除规划业务线
+                        $.post("{:U('deletePBl')}",{id:id},function(ret){
+                            alertnewpage2(ret.msg);
+                            if(ret.error == 0) {
+                                $(thisbtn).parents('tr').remove();
+                            }
+                        },'json');
+                    } else if (type=='charginglogo') { //删除计费标识
+                        $.post("{:U('ChargingLogo/delete')}",{id:id},function(ret){
+                            alertnewpage2(ret.msg);
+                            if(ret.error == 0) {
+                                $(thisbtn).parents('tr').remove();
+                            }
+                        },'json');
+                    }
+
+                }
+
+            });
+
+            var tableObj,tableType;
+            //对话框（广告主名称、接入业务线、责任销售、合同编号）
+            $(".J_dataSelect").click(function(){
+                tableType = $(this).attr('item-type');
+                tableObj = this;
+                getTable();
+            });
+            $(".J_dataSelect2").click(function(){
+                tableType = $(this).attr('item-type');
+                tableObj = this;
+                getTable();
+            });
+
+            //缓存点击的值
+            $(".dataSelectDialog").on('click','.dialogTable_list > tbody >tr',function(){
+                $(".dataSelectDialog").data('cho_id', $(this).attr('op-id'));
+                $(".dataSelectDialog").data('cho_name', $(this).attr('op-name'));
+                $(".dataSelectDialog").data('op_extra', $(this).attr('op-extra'));
+                $(this).css('background-color','#4094f5').siblings().css('background-color',''); //切换颜色
+
+                //直接选中
+                var thisDialog = $(".dataSelectDialog");
+                var field = thisDialog.data('fieldname');
+                var id = thisDialog.data('cho_id');
+                var name = thisDialog.data('cho_name');
+                if(field.indexOf('show')>=0) {
+                    var realfield = field.substr(5);
+                    $("[name='"+realfield+"']").val(id);
+                }
+                //设置弹出框选中的值
+                $("[name='"+field+"']").val(name);
+                //合同oa填充有效期
+                if (field == 'contract_num') {
+                    var extData = $.trim(thisDialog.data('op_extra'));
+                    var extArr = extData.split('|');
+                    if (extArr) {
+                        $("[name='contract_s_duration']").val(extArr[0]);
+                        $("[name='contract_e_duration']").val(extArr[1]);
+                    }
+                }
+
+
+                //
+                var oname = $(this).attr('op-name');
+                if(tableType=="ad"){
+                    $("#show_ad_id").val(oname);
+                }  
+                if(tableType=="bl"){
+                    $("#show_bl_id").val(oname);
+                }  
+                if(tableType=="sb"){
+                    $("#show_sb_id").val(oname);
+                }  
+
+                if(tableType=="user"){
+                    $("#show_saler_id").val(oname);
+                } 
+                if(tableType=="c_num"){
+                    $("#contract_num").val(oname);
+                }
+
+
+                $(".dataSelectDialog").dialog("close");
+
+            });
+
+
+            function getTable() {
+                var extparam = '';
+                if (tableType == 'c_num') {
+                    var adname=$("[name='show_ad_id']").val();
+                    extparam = '&kw='+adname;
+                }
+                var href = "{:U('Product/optionTable')}" + "?type="+tableType+extparam;
+                $.get(href, {}, function(dom){
+                    var dataDialog = $(".dataSelectDialog");
+                    dataDialog.html(dom);
+                    dataDialog.dialog("option","title", $(tableObj).attr('dialog-title'));
+                    dataDialog.dialog("open");
+                    dataDialog.data('fieldname', $(tableObj).attr('name'));
+                    dataDialog.data('href',href);
+
+
+                });
+            }
+
+            //弹出框分页
+            $(".dataSelectDialog").on('click','.dataPage_cn a, #searchBtn',function(){
+                var pageObj = this;
+                var url = pageObj.href ? pageObj.href : $(".dataSelectDialog").data('href');
+                var idx = url.indexOf('&kw=');
+                if (idx > -1) {
+                    url = url.substring(0, idx);
+                }
+                var kw = $("input[name='kw']").val();
+                $.get(url,{kw:kw},function(dom){
+                    $(".dataSelectDialog").html(dom);
+                },'json');
+                return false;
+            });
+
+
+            //返量方式切换
+            $(".J_flfs").change(function() {
+                if($(this).val()==2){
+                    $(".J_gfht").hide();
+                    $(".J_yj").show();
+                    $(".ba").hide();
+                    //添加邮件必填项
+                    $("#package_return_email").addClass("ritem");
+                }else if($(this).val()==1) {
+                    $(".J_yj").hide();
+                    $(".J_gfht").show();
+                    $(".ba").show();
+                    $("#package_return_email").removeClass("ritem");
+                }
+            });
+            $(".J_flfs").trigger("change");
+
+            //合作状态切换
+            $(".J_hzzt").change(function(){
+                if($(this).val()==1){ //正式
+                    $(".J_zs").show();
+                    $(".J_zs_ritem").addClass("ritem");
+
+                    $(".J_cs").hide();
+                    $(".J_cs_ritem").removeClass("ritem");
+
+                    $(".j_cd").show();
+                    $(".j_cd_ritem").addClass("ritem");
+                }else {
+                    $(".J_zs").hide();
+                    $(".J_zs_ritem").removeClass("ritem");
+
+                    $(".J_cs").show();
+                    $(".J_cs_ritem").addClass("ritem");
+
+                    $(".j_cd").hide();
+                    $(".j_cd_ritem").removeClass("ritem");
+                }
+            });
+            $(".J_hzzt").trigger("change");
+
+            //测试类型切换
+            /*$(".J_cslx").change(function(){
+                if($(this).val()=="时间"){
+                    $(".J_lj,.J_je").hide();
+                    $(".J_sj").show();
+                }else if($(this).val()=="量级"){
+                    $(".J_sj,.J_je").hide();
+                    $(".J_lj").show();
+                }else if($(this).val()=="金额"){
+                    $(".J_lj,.J_sj").hide();
+                    $(".J_je").show();
+                }
+            });*/
+
+            // $("#submitForm").click(function() {
+                
+
+               
+            //     // return false;
+            // });
+
+
+            $("#clearcm").click(function(){
+                $("[name='contract_num']").val('');
+            });
+
+        });
+
+//------------业务线类型选择
+        $(".dynamicTable").on('change','.sel-bl-type',function() {
+            var id = $(this).val();//[name^='plane_bl']
+            var targetobj = $(this).parents('td').siblings().find('select');//业务线select
+            var origindata = $(this).parents('td').siblings().find('.origindata');
+            targetobj.show();
+            origindata.hide();
+            $.get("{:U('getbl')}",{pid:id},function(data){
+                var str = "<option >请选择</option>";
+                if(data){
+                    $.each(data,function(idx,item){
+                        str += "<option value="+idx+">"+item.name+"</option>";
+                    });
+                }
+                $(targetobj).html(str);
+            });
+
+        });
+
+        //业务线取消按钮
+        $(".cancelUpdate").click(function(){
+            var selObj = $(this).parent().siblings('.td_data_bl').find('select');
+            var oriTxt = $(this).parent().siblings('.td_data_bl').find('.origindata');
+            var oriInput= $(this).parent().siblings('.td_data_bl').find('.real_data_bl');
+            //将业务线的值恢复
+            oriInput.val(oriInput.attr('origin_id'));
+            selObj.hide();
+            oriTxt.show();
+
+        });
+
+        //业务线选择事件
+        $(".sel_data_bl").change(function(){
+            var selected = $(this).val();
+            if (parseInt(selected) > 0) {
+                $(this).siblings('.real_data_bl').val(selected);
+            }
+        });
+
+
+        function sprintf() {
+            var arg = arguments,
+                    str = arg[0] || '',
+                    i, n;
+            for (i = 1, n = arg.length; i < n; i++) {
+                str = str.replace(/%s/, arg[i]);
+            }
+            return str;
+        }
+
+        /*========================阶梯价格========================*/
+        //新增
+        $("#addTieredPrice").click(function() {
+            var tabObj = $(this).parents('table');
+            var idx = $(tabObj).find('tr').length;
+            $(tabObj).append("<tr>" +
+                    "<td><input type='text' name=\"tiered_price["+idx+"][0]\" value=\"\" /></td>" +
+                    "<td><input type='text' name=\"tiered_price["+idx+"][1]\" value=\"\" /></td>" +
+                    "<td><span class=\"doDataDelete\">删除</span></td>" +
+                    "</tr>");
+        });
+
+        function chgPriType(e){
+            if ($(e).val() == 2) { //阶梯价格
+                $("[name='price']").hide();
+                $(".J_jtjg").show();
+            } else if ($(e).val() == 3) { //自定义价格
+                $("[name='price']").show();
+                $("[name='price']").val(0);
+                $(".J_jtjg").hide();
+            } else if ($(e).val() == 1) {
+                $("[name='price']").show();
+                $(".J_jtjg").hide();
+            }
+        }
+
+        $("[name='order_test_type']").change(function(){
+            var type = $(this).val();
+            if (type == 1) {
+                $("[name='order_test_quota']").attr('placeholder', '天数');
+            } else {
+                $("[name='order_test_quota']").attr('placeholder', '小数');
+            }
+
+        });
+        var ck={
+            checkFill:function(){
+                var list = {
+                    ncount:0,
+                    valmsg:""
+                };
+                $(".ritem").each(function(){
+                    var t=$(this),v=t.val();vtype=t.attr("rtype");
+                    if(vtype!=undefined && vtype!=""){
+                        //phone
+                        if(vtype=="phone"){
+                             if(!(/^\d{11}$/.test(v))){ 
+                                t.css({"border":"1px solid red"});
+                                list.valmsg="手机号码格式不对";
+                                t.focus();  list.ncount++;
+                            } 
+                        }
+                    }else{
+                        if(v==""){
+                            t.css({"border":"1px solid red"});
+                            list.ncount++;
+                            t.focus();
+                        }
+                    }
+                    
+                });
+                return list;
+            },
+            submit:function(sub_id){
+                var form   = $("#dataform");
+                var url    = form.attr('action');
+                var btnObj = $(sub_id);
+                btnObj.val('保存中...');
+                btnObj.attr('disabled',true);
+                var list = ck.checkFill();
+                if(list.ncount==0){
+                    $(".ritem").css({"border":"0px"});
+                    // layer.msg("ok");
+                    $("#dataform").ajaxSubmit({
+                        type: 'post',
+                        url: url,
+                        timeout: 5000,
+                        success:function(ret){
+                            alertnewpage2(ret.msg,ret.go);
+                            btnObj.val('保存');
+                            btnObj.attr('disabled',false);
+                        },
+                        error:function(xhr, status, error){
+                            alertnewpage2("保存成功");
+                            window.location.reload();
+                        }
+                    });
+                }else{
+                    var msg="您还有"+list.ncount+"个必填项没填写或者格式不对";
+                    if(list.valmsg){
+                        msg=list.valmsg;
+                    }
+                    layer.msg(msg);
+                }
+            },
+            init:function(){
+                this.initFill();
+            },
+            initFill:function(){
+                $(".ritem").each(function(){
+                    var t=$(this);
+                    t.focusout(function(){
+                        if($(this).val()!="") $(this).css({"border":"0px"});
+                    });
+                });
+            }
+        };
+        $(function(){ck.init();});
+    </script>
+</block>

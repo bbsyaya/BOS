@@ -1,0 +1,862 @@
+<extend name="Public/base"/>
+<block name="script">
+<style type="text/css">
+	.fuk-naks{padding: 0px 5px !important;}
+</style>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<script src="__PUBLIC__/Home/module/ECharts/echarts-all.js" type="text/javascript"></script>
+	<script>
+
+	if(getCookie('boss30_on_'+getHref()+'_dataTable1_state')!='activate' || getCookie('boss30_on_'+getHref()+'_dataTable1_state')=='' || getCookie('boss30_on_'+getHref()+'_dataTable1_state')==null || getCookie('boss30_on_'+getHref()+'_dataTable1_state')==undefined) {
+		setCookie('boss30_on_' + getHref() + '_dataTable1', "{$showtablestr}", 30);
+	}
+
+	function getjflist(){
+			$.post('/Report/getjflist',{'name':$('#getadverlistp').find('input[name="name"]').val(),'code':$('#getadverlistp').find('input[name="jf_code"]').val()},function(res){
+				var newhtml='';
+				for(o in res){
+					newhtml+='<tr><td><input type="checkbox" name="advinfo[]" data="'+res[o].name+'" data_id="'+res[o].id+'" /></td><td>'+res[o].name+'</td><td>'+res[o].code+'</td><td>'+res[o].comname+'</td></tr>';
+				}
+			$('.dataSelectDialog').find('tbody').html(newhtml);
+		},'json')
+	}
+	$(function() {
+
+		//对话框选择广告主
+				$(".dataSelectDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "600",
+					height: "300",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							var alljfidandname='';
+							$('.dataSelectDialog').find('input').each(function(){
+								if($(this).is(":checked")){
+									alljfidandname+="<option selected='selected' value='"+$(this).attr('data_id')+"'>"+$(this).attr('data')+"</option>";
+								}
+							})
+							$('#jfidselect').html(alljfidandname);
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//选择计费标识
+				$(".J_dataSelect").click(function(){
+					$(".dataSelectDialog").dialog("open");
+				});
+				var dh=parent.document.getElementById('dh');
+				if(dh)parent.document.getElementById('dh').parentNode.removeChild(dh);
+				//=============================统计图=============================
+				 // 基于准备好的dom，初始化echarts图表
+				 /*
+				var myChart1 = echarts.init(document.getElementById('myChart1'));
+				var myChart2 = echarts.init(document.getElementById('myChart2'));
+				var myChart3 = echarts.init(document.getElementById('myChart3'));
+				var myChart4 = echarts.init(document.getElementById('myChart4'));
+				var myChart5 = echarts.init(document.getElementById('myChart5'));
+				var myChart6 = echarts.init(document.getElementById('myChart6'));
+		        
+		        //数据确认率
+				var option = {
+					backgroundColor: 'rgba(255,255,255,0.9)',
+					color : ['#5ACD14','#FF8080'],
+				    title : {
+				        text: '全公司数据确认率',
+				         x: 'center', 
+				         textStyle: {
+				            fontSize: 16,
+				            color: '#1a72d6'
+				        },
+				        padding: 15, 
+				    },
+					tooltip: {
+						trigger: 'axis',
+						title: 'sdlf ',
+					},
+					calculable: true,
+					xAxis: [{
+						type: 'category',
+						boundaryGap: false,
+						data: ['<php>echo implode("','",$alllinedataarr['time']);</php>']
+					}],
+					yAxis: [{
+						type: 'value'
+					}],
+					series: [{
+						name: '收入确认率',
+						type: 'line',
+						stack: '总量',
+						data: [<php>echo implode(",",$alllinedataarr['inquerenlv']);</php>]
+					},{
+						name: '成本确认率',
+						type: 'line',
+						stack: '总量',
+						data: [<php>echo implode(",",$alllinedataarr['outquerenlv']);</php>]
+					}]
+				};
+				
+				//全公司流水
+				option2 = {
+				    title : {
+				        text: '全公司流水(单位：万元)',
+				    },
+				    tooltip : {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        data:[
+				            'ECharts1 - 2k数据','ECharts1 - 2w数据','ECharts1 - 20w数据','',
+				            'ECharts2 - 2k数据','ECharts2 - 2w数据','ECharts2 - 20w数据'
+				        ]
+				    },
+				    calculable : true,
+				    grid: {y: 70, y2:30, x2:20},
+				    xAxis: [{
+						type: 'category',
+						boundaryGap: false,
+						data: ['<php>echo implode("','",$alllinedataarr['time']);</php>']
+					}],
+				    yAxis : [
+				        {
+				            type : 'value',
+				            axisLabel:{formatter:'{value}'}
+				        }
+				    ],
+				    color : ['#FF8080','#05EBF0','#5ACD14','#FF8080','#05EBF0','#5ACD14'],
+				    series : [
+				        {
+				            name:'关账成本',
+				            type:'line',
+				            data:[<php>echo implode(",",$alllinedataarr['oldout']);</php>]
+				        },
+				        {
+				            name:'关账利润',
+				            type:'line',
+				            data:[<php>echo implode(",",$alllinedataarr['oldlirun']);</php>]
+				        },
+				        {
+				            name:'关账收入',
+				            type:'line',
+				            data:[<php>echo implode(",",$alllinedataarr['oldin']);</php>]
+				        },
+				        {
+				            name:'即时成本',
+				            type:'line',
+				            data:[<php>echo implode(",",$alllinedataarr['newout']);</php>]
+				        },
+				        {
+				            name:'即时利润',
+				            type:'line',
+				            data:[<php>echo implode(",",$alllinedataarr['newlirun']);</php>]
+				        },
+				        {
+				            name:'即时收入',
+				            type:'line',
+				            data:[<php>echo implode(",",$alllinedataarr['newin']);</php>]
+				        }
+
+				    ]
+				};
+                  
+				//收入
+				var pie = {
+					backgroundColor: 'rgba(255,255,255,0.9)',
+					
+				    title : {
+				        text: '各业务线收入流水占比',
+				         x: 'center', 
+				         textStyle: {
+				            fontSize: 16,
+				            color: '#1a72d6'
+				        },
+				        padding: 15, 
+				    },
+				    tooltip : {
+				        trigger: 'item',
+				        formatter: "{a} <br/>{b} : {c} ({d}%)"
+				    },
+				    calculable : true,
+				    series : [
+				        {
+				            name:'访问来源',
+				            type:'pie',
+				            radius : '55%',
+				            center: ['50%', '60%'],
+				            data:[
+				            	<php>
+				            	$inarr=array();
+				            	foreach($inmoneyforline as $v){
+				            		$inarr[]="{'value':".$v['value'].",'name':'".$v['name']."'}";
+				            	}
+				            	echo implode(',',$inarr);
+				            	</php>
+				            ],
+				        }
+				    ]
+				};
+				//利润
+				var pie2 = {
+					backgroundColor: 'rgba(255,255,255,0.9)',
+					
+				    title : {
+				        text: '各业务线毛利润占比',
+				         x: 'center', 
+				         textStyle: {
+				            fontSize: 16,
+				            color: '#1a72d6'
+				        },
+				        padding: 15, 
+				    },
+				    tooltip : {
+				        trigger: 'item',
+				        formatter: "{a} <br/>{b} : {c} ({d}%)"
+				    },
+				    calculable : true,
+				    series : [
+				        {
+				            name:'访问来源',
+				            type:'pie',
+				            radius : '55%',
+				            center: ['50%', '60%'],
+				            data:[
+				            	<php>
+				            	$inarr=array();
+				            	foreach($lirunforline as $v){
+				            		$inarr[]="{'value':".$v['value'].",'name':'".$v['name']."'}";
+				            	}
+				            	echo implode(',',$inarr);
+				            	</php>
+				            ],
+				        }
+				    ]
+				};
+				//广告主流水
+				var histogram = {
+					color : ['#5ACD14'],
+				    title : {
+				        text: '广告主收入流水TOP10(单位：万元)',
+				    },
+				    tooltip : {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        data:['蒸发量','降水量']
+				    },
+
+				    calculable : true,
+				    xAxis : [
+				        {
+				        	
+				            type : 'category',
+				            data : ['<php>
+				            		foreach($res_adver as $k=>$v){
+				            			$advnamearr[]=$v['name'];
+				            			$advmoneyarr[]=$v['money'];
+				            		}
+				            		echo implode("','",$advnamearr);
+				            	</php>']
+				        }
+				    ],
+				    yAxis : [
+				        {
+				            type : 'value'
+				        }
+				    ],
+				    series : [
+				        {
+				            name:'收入金额',
+				            type:'bar',
+				            data:[<php>echo implode(',',$advmoneyarr);</php>]
+				        }
+				    ]
+				};
+				var histogram2 = {
+					color : ['#FF8080'],
+				    title : {
+				        text: '供应商成本流水TOP10(单位：万元)',
+				    },
+				    tooltip : {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        data:['蒸发量','降水量']
+				    },
+
+				    calculable : true,
+				    xAxis : [
+				        {
+				            type : 'category',
+				            data : ['<php>
+				            		foreach($res_super as $k=>$v){
+				            			$supnamearr[]=$v['name'];
+				            			$supmoneyarr[]=$v['money'];
+				            		}
+				            		echo implode("','",$supnamearr);
+				            	</php>']
+				        }
+				    ],
+				    yAxis : [
+				        {
+				            type : 'value'
+				        }
+				    ],
+				    series : [
+				        {
+				            name:'收入金额',
+				            type:'bar',
+				            data:[<php>echo implode(',',$supmoneyarr);</php>]
+				        }
+				    ]
+				};
+		        // 为echarts对象加载数据 
+		        myChart1.setOption(pie);
+				myChart2.setOption(pie2);
+				myChart3.setOption(option2);
+				myChart4.setOption(option);
+				myChart5.setOption(histogram);
+		        myChart6.setOption(histogram2);
+				
+				//页面跳转
+				myChart1.on('click', function (param){ window.open('/UseImgShowData/lineinzb') });
+				myChart2.on('click', function (param){ window.open('/UseImgShowData/linelrzb') });
+				myChart3.on('click', function (param){ window.open('/UseImgShowData/allmoney') });
+				myChart5.on('click', function (param){ window.open('/UseImgShowData/month_adver') });
+				myChart6.on('click', function (param){ window.open('/UseImgShowData/month_super') });
+				*/
+				$('.J_closing').click(function(){
+					$('#newpageiframe').attr('src','/Report/closing?time={:I("get.time_s")}');
+				})
+					//多选框文字替换
+					$('.selectpicker').selectpicker({
+				        selectAllText: '全选',
+				        deselectAllText: '全不选'
+				    });
+				$(".j_export").click(function(){
+					var param = $("#dataform").serialize();
+					var url = "{:U('downloadmonthreportlist')}";
+					// console.log(url+'?'+param);
+					window.location.href=url+'?'+param;
+					//onclick="window.open('/Report/downloadmonthreportlist'+window.location.search)"
+				});
+			});
+	</script>
+</block>
+<block name="body">
+<div class="subMainBox" goal="t_left">
+	<div class="ri_header">
+		<div class="ri_title_box">
+			<span class="clip-text">月报</span>
+			<span>报表中心</span>
+		</div>
+		<div class="ri_work">Monthly report</div>
+
+		<div class="dataTable_columnCa_b pa">
+			<div class="dataTable_columnCn_b"></div>
+			<div class="dataTableShow_close_b tc">关闭</div>
+		</div>
+	</div>
+	<div><span class="field_customize">查询自定义</span></div>
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+					
+						<?php if($isHas_check==200){ ?> <input type="button" value="关账" class="J_closing" /> <?php } ?>
+
+						<input type="button" value="下载报表" class="" onclick="window.open('/Report/downloadmonthreportlist'+window.location.search)" />
+						<input type="button" value="高级筛选" class="J_openScreen" />
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					<div class="screenList fl w">
+						<form action="/Report/monthReport" method='get' id="dataform">
+						<table>
+							<tr>
+								<th>时间：</th>
+								<td>
+								<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="time_s" value="{$map['time_s']}"/>-<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="time_e" value="{$map['time_e']}"/>
+								</td>
+								<th>业务线：</th>
+								<td>
+									<select name='lineid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+				                        <foreach name='linelist' item='v' key='k'>
+										<option <php>if(in_array($v['id'],I('get.lineid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+										</foreach>
+				                    </select>
+								</td>
+								<th>产品名称：</th>
+								<td>
+									<select name="comid[]" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+				                        <volist name='comlist' id='v'>
+				                        <option <php>if(in_array($v['id'],I('get.comid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+				                        </volist>
+				                    </select>
+								</td>
+								<th>计费标识：</th>
+								<td>
+									<input type="text" readonly="readonly" class="J_dataSelect" value="{$jf_str}" />
+									<select name='jfid[]'  id="jfidselect" style="display:none;">
+										<volist name="nowjflist" id='v'>
+				                        <option <php>if(in_array($v['id'],I('get.jfid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+				                        </volist>
+				                    </select>
+									<volist name="nowjflist" id='v'>
+				                       <input type="hidden" name="jfid[]" value="{$v.id}"/>
+			                        </volist>
+				                    
+								</td>
+							</tr>
+							<tr>
+								<th class="expertScreen">广告主：</th>
+								<td class="expertScreen">
+									<select name="advid[]" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+				                        <volist name='advlist' id='v'>
+				                        <option <php>if(in_array($v['id'],I('get.advid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+				                        </volist>
+				                    </select>
+								</td>
+								<th class="expertScreen">供应商：</th>
+								<td class="expertScreen">
+									<select name='superid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+				                        <volist name='suplist' id='v'>
+				                        <option <php>if(in_array($v['id'],I('get.superid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+				                        </volist>
+				                    </select>
+								</td>
+								<th class="expertScreen">来源类型：</th>
+								<td class="expertScreen">
+									<select name='sourcetype[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+				                        <option <php>if(in_array(1,I('get.sourcetype')))echo "selected='selected'";</php> value="1">官方</option>
+				                        <option <php>if(in_array(2,I('get.sourcetype')))echo "selected='selected'";</php> value="2">代理</option>
+				                    </select>
+								</td>
+								<th class="expertScreen">计费模式：</th>
+								<td class="expertScreen">
+									<select name='module[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+
+				                        <option <php>if(in_array(1,I('get.module')))echo "selected='selected'";</php> value="1">CPA</option>
+				                        <option <php>if(in_array(2,I('get.module')))echo "selected='selected'";</php> value="2">CPC</option>
+				                        <option <php>if(in_array(3,I('get.module')))echo "selected='selected'";</php> value="3">CPM</option>
+				                        <option <php>if(in_array(4,I('get.module')))echo "selected='selected'";</php> value="4">CPS</option>
+				                        <option <php>if(in_array(5,I('get.module')))echo "selected='selected'";</php> value="5">CPT</option>
+				                        <option <php>if(in_array(6,I('get.module')))echo "selected='selected'";</php> value="6">CPD</option>
+				                    </select>
+								</td>
+							</tr>
+							<tr>
+								<th class="expertScreen">收入状态：</th>
+								<td class="expertScreen">
+									<select name='instatus[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+										<option <php>if(in_array(1,I('get.instatus')))echo "selected='selected'";</php> value="1">待审核</option>
+										<option <php>if(in_array(2,I('get.instatus')))echo "selected='selected'";</php> value="2">已确认</option>
+										<option <php>if(in_array(3,I('get.instatus')))echo "selected='selected'";</php> value="3">待开票</option>
+										<option <php>if(in_array(4,I('get.instatus')))echo "selected='selected'";</php> value="4">已开票</option>
+										<option <php>if(in_array(5,I('get.instatus')))echo "selected='selected'";</php> value="5">已结清</option>
+										<option <php>if(in_array(8,I('get.instatus')))echo "selected='selected'";</php> value="8">已回款未开票</option>
+										<option <php>if(in_array(9,I('get.instatus')))echo "selected='selected'";</php> value="9">已封禁</option>
+									</select>
+								</td>
+								<th class="expertScreen">成本状态：</th>
+								<td class="expertScreen">
+									<select name='outstatus[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+										<option <php>if(in_array(1,I('get.outstatus')))echo "selected='selected'";</php> value="1">待审核</option>
+										<option <php>if(in_array(2,I('get.outstatus')))echo "selected='selected'";</php> value="2">已确认</option>
+										<option <php>if(in_array(3,I('get.outstatus')))echo "selected='selected'";</php> value="3">待结算</option>
+										<option <php>if(in_array(4,I('get.outstatus')))echo "selected='selected'";</php> value="4">已结算</option>
+										<option <php>if(in_array(9,I('get.outstatus')))echo "selected='selected'";</php> value="9">已封禁</option>
+									</select>
+								</td>
+								<th class="expertScreen">销售人员：</th>
+								<td class="expertScreen">
+									<select name='salerid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+				                        <option value="0">全部</option>
+										<volist name="userlist" id='v'>
+				                        <option <php>if(in_array($v['id'],I('get.salerid')))echo "selected='selected'";</php> value="{$v.id}">{$v.real_name}</option>
+				                        </volist>
+				                    </select>
+								</td>
+								<th class="expertScreen">商务人员：</th>
+								<td class="expertScreen">
+									<select name='supid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+				                        <option value="0">全部</option>
+										<volist name="userlist" id='v'>
+				                        <option <php>if(in_array($v['id'],I('get.supid')))echo "selected='selected'";</php> value="{$v.id}">{$v.real_name}</option>
+				                        </volist>
+				                    </select>
+								</td>
+							</tr>
+
+							<tr>
+								<th class="expertScreen">分组依据：</th>
+								<td class="expertScreen">
+									<select name='group_arr[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+										<option <php>if(in_array('left(b.adddate,7)',I('get.group_arr')))echo "selected='selected'";</php> value="left(b.adddate,7)">时间</option>
+										<option <php>if(in_array('ifnull(in_lineid,out_lineid)',I('get.group_arr')))echo "selected='selected'";</php> value="ifnull(in_lineid,out_lineid)">业务线</option>
+										<option <php>if(in_array('b.in_comid',I('get.group_arr')))echo "selected='selected'";</php> value="b.in_comid">产品名称</option>
+										<option <php>if(in_array('b.jfid',I('get.group_arr')))echo "selected='selected'";</php> value="b.jfid">计费标识</option>
+										<option <php>if(in_array('b.in_adverid',I('get.group_arr')))echo "selected='selected'";</php> value="b.in_adverid">广告主</option>
+										<option <php>if(in_array('b.out_superid',I('get.group_arr')))echo "selected='selected'";</php> value="b.out_superid">供应商</option>
+										<option <php>if(in_array('c.source_type',I('get.group_arr')))echo "selected='selected'";</php> value="c.source_type">来源类型</option>
+										<option <php>if(in_array('a.charging_mode',I('get.group_arr')))echo "selected='selected'";</php> value="a.charging_mode">计费模式</option>
+										<option <php>if(in_array('b.in_status',I('get.group_arr')))echo "selected='selected'";</php> value="b.in_status">收入状态</option>
+										<option <php>if(in_array('b.out_status',I('get.group_arr')))echo "selected='selected'";</php> value="b.out_status">成本状态</option>
+										<option <php>if(in_array('b.in_salerid',I('get.group_arr')))echo "selected='selected'";</php> value="b.in_salerid">销售人员</option>
+										<option <php>if(in_array('b.out_businessid',I('get.group_arr')))echo "selected='selected'";</php> value="b.out_businessid">商务人员</option>
+
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+								</td>
+							</tr>
+						</table>
+						</form>
+					</div>
+				</div>-->
+				<div class="screenBox">
+							<form action="/Report/monthReport" method='get' id="dataform">
+								<div class="t_left">
+									<div class="ziduan">
+											<label>开始时间: </label>
+											<input readonly="true"  class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="time_s" value="{$map['time_s']}"/>
+									</div>
+									<div class="ziduan">
+										<label>结束时间: </label>
+										<input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="time_e" value="{$map['time_e']}"/>
+									</div>
+									<div class="ziduan">
+										<label>分组依据: </label>
+										<select name='group_arr[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+											<option <php>if(in_array('left(b.adddate,7)',I('get.group_arr')))echo "selected='selected'";</php> value="left(b.adddate,7)">时间</option>
+											<option <php>if(in_array('ifnull(in_lineid,out_lineid)',I('get.group_arr')))echo "selected='selected'";</php> value="ifnull(in_lineid,out_lineid)">业务线</option>
+											<option <php>if(in_array('b.in_comid',I('get.group_arr')))echo "selected='selected'";</php> value="b.in_comid">产品名称</option>
+											<option <php>if(in_array('b.jfid',I('get.group_arr')))echo "selected='selected'";</php> value="b.jfid">计费标识</option>
+											<option <php>if(in_array('b.in_adverid',I('get.group_arr')))echo "selected='selected'";</php> value="b.in_adverid">广告主</option>
+											<option <php>if(in_array('b.out_superid',I('get.group_arr')))echo "selected='selected'";</php> value="b.out_superid">供应商</option>
+											<option <php>if(in_array('c.source_type',I('get.group_arr')))echo "selected='selected'";</php> value="c.source_type">来源类型</option>
+											<option <php>if(in_array('a.charging_mode',I('get.group_arr')))echo "selected='selected'";</php> value="a.charging_mode">计费模式</option>
+											<option <php>if(in_array('b.in_status',I('get.group_arr')))echo "selected='selected'";</php> value="b.in_status">收入状态</option>
+											<option <php>if(in_array('b.out_status',I('get.group_arr')))echo "selected='selected'";</php> value="b.out_status">成本状态</option>
+											<option <php>if(in_array('b.in_salerid',I('get.group_arr')))echo "selected='selected'";</php> value="b.in_salerid">销售人员</option>
+											<option <php>if(in_array('b.out_businessid',I('get.group_arr')))echo "selected='selected'";</php> value="b.out_businessid">商务人员</option>
+
+										</select>
+									</div>
+									<div class="ziduan">
+											<label>业务线: </label>
+												<select name='lineid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+													<foreach name='linelist' item='v' key='k'>
+														<option <php>if(in_array($v['id'],I('get.lineid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+													</foreach>
+												</select>
+									</div>
+									<div class="ziduan">
+											<label>产品: </label>
+												<select name="comid[]" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+													<volist name='comlist' id='v'>
+														<option <php>if(in_array($v['id'],I('get.comid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+													</volist>
+												</select>
+									</div>
+
+									<div class="ziduan">
+											<label>计费标识: </label>
+												<input type="text" readonly="readonly" class="J_dataSelect" value="{$jf_str}" />
+												<select name='jfid[]'  id="jfidselect" style="display:none;">
+													<volist name="nowjflist" id='v'>
+														<option <php>if(in_array($v['id'],I('get.jfid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+													</volist>
+												</select>
+												<volist name="nowjflist" id='v'>
+													<input type="hidden" name="jfid[]" value="{$v.id}"/>
+												</volist>
+									</div>
+									<div class="ziduan">
+											<label>广告主: </label>
+												<select name="advid[]" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+													<volist name='advlist' id='v'>
+														<option <php>if(in_array($v['id'],I('get.advid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+													</volist>
+												</select>
+									</div>
+									<div class="ziduan">
+											<label>供应商: </label>
+												<select name='superid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+													<volist name='suplist' id='v'>
+														<option <php>if(in_array($v['id'],I('get.superid')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+													</volist>
+												</select>
+									</div>
+									<div class="ziduan">
+											<label>来源类型: </label>
+												<select name='sourcetype[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+													<option <php>if(in_array(1,I('get.sourcetype')))echo "selected='selected'";</php> value="1">官方</option>
+													<option <php>if(in_array(2,I('get.sourcetype')))echo "selected='selected'";</php> value="2">代理</option>
+												</select>
+									</div>
+									<div class="ziduan">
+											<label>计费模式: </label>
+												<select name='module[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+
+													<option <php>if(in_array(1,I('get.module')))echo "selected='selected'";</php> value="1">CPA</option>
+													<option <php>if(in_array(2,I('get.module')))echo "selected='selected'";</php> value="2">CPC</option>
+													<option <php>if(in_array(3,I('get.module')))echo "selected='selected'";</php> value="3">CPM</option>
+													<option <php>if(in_array(4,I('get.module')))echo "selected='selected'";</php> value="4">CPS</option>
+													<option <php>if(in_array(5,I('get.module')))echo "selected='selected'";</php> value="5">CPT</option>
+													<option <php>if(in_array(6,I('get.module')))echo "selected='selected'";</php> value="6">CPD</option>
+												</select>
+									</div>
+									<div class="ziduan">
+											<label>收入状态: </label>
+												<select name='instatus[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+													<option <php>if(in_array(1,I('get.instatus')))echo "selected='selected'";</php> value="1">待审核</option>
+													<option <php>if(in_array(2,I('get.instatus')))echo "selected='selected'";</php> value="2">已确认</option>
+													<option <php>if(in_array(3,I('get.instatus')))echo "selected='selected'";</php> value="3">待开票</option>
+													<option <php>if(in_array(4,I('get.instatus')))echo "selected='selected'";</php> value="4">已开票</option>
+													<option <php>if(in_array(5,I('get.instatus')))echo "selected='selected'";</php> value="5">已结清</option>
+													<option <php>if(in_array(8,I('get.instatus')))echo "selected='selected'";</php> value="8">已回款未开票</option>
+													<option <php>if(in_array(9,I('get.instatus')))echo "selected='selected'";</php> value="9">已封禁</option>
+												</select>
+									</div>
+									<div class="ziduan">
+											<label>成本状态: </label>
+												<select name='outstatus[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+													<option <php>if(in_array(1,I('get.outstatus')))echo "selected='selected'";</php> value="1">待审核</option>
+													<option <php>if(in_array(2,I('get.outstatus')))echo "selected='selected'";</php> value="2">已确认</option>
+													<option <php>if(in_array(3,I('get.outstatus')))echo "selected='selected'";</php> value="3">待结算</option>
+													<option <php>if(in_array(4,I('get.outstatus')))echo "selected='selected'";</php> value="4">已结算</option>
+													<option <php>if(in_array(9,I('get.outstatus')))echo "selected='selected'";</php> value="9">已封禁</option>
+												</select>
+									</div>
+									<div class="ziduan">
+											<label>销售人员: </label>
+												<select name='salerid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+													<option value="0">全部</option>
+													<volist name="userlist" id='v'>
+														<option <php>if(in_array($v['id'],I('get.salerid')))echo "selected='selected'";</php> value="{$v.id}">{$v.real_name}</option>
+													</volist>
+												</select>
+									</div>
+									<div class="ziduan">
+											<label>商务人员: </label>
+											<select name='supid[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+												<option value="0">全部</option>
+												<volist name="userlist" id='v'>
+													<option <php>if(in_array($v['id'],I('get.supid')))echo "selected='selected'";</php> value="{$v.id}">{$v.real_name}</option>
+												</volist>
+											</select>
+									</div>
+								</div>
+								<div class="t_right"><input type="submit" value="查询" /></div>
+							</form>
+				</div>
+
+				<!--数据表-->
+				<div class="dataCn fl w ha">
+					<div class="advancedTit" goal="dataTable1">
+
+						<div class="dataTable_columnCa pa">
+							<div class="dataTable_columnCn"></div>
+							<div class="dataTableShow_close tc">关闭</div>
+						</div>
+
+						<div class="advancedLeft">
+							<?php if($isHas_check==200){ ?>
+							<span class="export advBtn">
+								 <input type="button" value="关账" class="J_closing" />
+							</span>
+							<?php } ?>
+							<span class="export advBtn">
+								<input type="button" value="下载报表" class="j_export"  />
+							</span>
+						</div>
+						<div class="advancedRight">
+							<div class="advIcon statisticsThumbnail_icon J_statisticsThumbnail fr">可视化报表</div>
+							<div class="dataTableShow fr" goal="dataTable1">
+								<div class="advIcon dataTableShow_icon fr del">字段筛选</div>
+								<!--<div class="dataTable_columnCa pa">
+									<div class="dataTable_columnCn"></div>
+									<div class="dataTableShow_close tc">关闭</div>
+								</div>-->
+							</div>
+						</div>
+					</div>
+
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr class="thead">
+							<th <php>echo getorderclass('date');</php>><a href="<php>echo getorderurl('date');</php>">年月</a></th>
+							<th>业务线</th>
+							<th>产品名称</th>
+							<th>计费标识</th>
+							<th>计费模式</th>
+							<th>来源类型</th>
+							<th <php>echo getorderclass('indata');</php>><a href="<php>echo getorderurl('indata');</php>">收入金额</a></th>
+							<th <php>echo getorderclass('outdata');</php>><a href="<php>echo getorderurl('outdata');</php>">成本金额</a></th>
+							<th <php>echo getorderclass('lirun');</php>><a href="<php>echo getorderurl('lirun');</php>">毛利润</a></th>
+							<th>收入状态</th>
+							<th>成本状态</th>
+							<th>内部结算金额</th>
+							<th <php>echo getorderclass('inquerenlv');</php>><a href="<php>echo getorderurl('inquerenlv');</php>">收入确认率</a></th>
+							<th>收入确认金额</th>
+							<th <php>echo getorderclass('outquerenlv');</php>><a href="<php>echo getorderurl('outquerenlv');</php>">成本确认率</a></th>
+							<th>成本确认金额</th>
+							<th <php>echo getorderclass('kaipiaolv');</php>><a href="<php>echo getorderurl('kaipiaolv');</php>">开票率</a></th>
+							<th>开票金额</th>
+							<th <php>echo getorderclass('huikuanlv');</php>><a href="<php>echo getorderurl('huikuanlv');</php>">回款率</a></th>
+							<th>回款金额</th>
+							<th <php>echo getorderclass('fukuanlv');</php>><a href="<php>echo getorderurl('fukuanlv');</php>">付款率</a></th>
+							<th>广告主</th>
+							<th>供应商</th>
+							<th>供应商收款方</th>
+							<th>销售</th>
+							<th>商务</th>
+							<th>成本收款方</th>
+							<th>收入核减金额</th>
+							<th>成本核减金额</th>
+						</tr>
+						<tr>
+							<td>汇总</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>{$alldatalist.indata|twonum}</td>
+							<td>{$alldatalist.outdata|twonum}</td>
+							<td>{$alldatalist.lirun|twonum}</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>{$alldatalist.inquerendata|twonum}</td>
+							<td></td>
+							<td>{$alldatalist.outquerendata|twonum}</td>
+							<td></td>
+							<td>{$alldatalist.kaipiaomoney|twonum}</td>
+							<td></td>
+							<td>{$alldatalist.huikuanmoney|twonum}</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						</thead>
+						<tbody>
+						<notempty name="data">
+							<volist name='data' id='v'>
+									<tr>
+										<td>{$v.date}</td>
+										<td><a title="点击查看此业务线所有广告主" href="/Report/monthReport?time_s={:I('get.time_s')}&time_e={:I('get.time_e')}&lineid%5B%5D={$v.lineid2}&group_arr%5B%5D=ifnull%28in_lineid%2Cout_lineid%29&group_arr%5B%5D=b.in_adverid">{$v.lineid}</a></td>
+										<td><a title="点击查看此产品所有计费标识" href="/Report/monthReport?time_s={:I('get.time_s')}&time_e={:I('get.time_e')}&comid%5B%5D={$v.cid}&group_arr%5B%5D=b.in_comid&group_arr%5B%5D=b.jfid&lineid%5B%5D={$v.lineid2}&group_arr%5B%5D=ifnull%28in_lineid%2Cout_lineid%29">{$v.comname}</a></td>
+										<td>{$v.jfname}</td>
+										<td>{:C('option.charging_mode')[$v['charging_mode']]}</td>
+										<td>{:C('option.order_source_type')[$v['source_type']]}</td>
+										<td>{$v.indata|twonum}</td>
+										<td>{$v.outdata|twonum}</td>
+										<td>{$v.lirun|twonum}</td>
+										<td>{$v.instatus}</td>
+										<td>{$v.outstatus}</td>
+										<td>{$v.neibujiesuan}</td>
+										<td>{$v.inquerenlv}%</td>
+		                                <td>{$v.inqurenmoney}</td>
+		                                <td>{$v.outquerenlv}%</td>
+		                                <td>{$v.outquerenmoney}</td>
+		                                <td>{$v.kaipiaolv}%</td>
+		                                <td>{$v.kaipiaomoney}</td>
+		                                <td>{$v.huikuanlv}%</td>
+		                                <td>{$v.huikuanmoney}</td>
+										<td>{$v.fukuanlv}</td>
+										<td><a title="点击查看此广告主所有产品" href="/Report/monthReport?time_s={:I('get.time_s')}&time_e={:I('get.time_e')}&advid%5B%5D={$v.adverid2}&group_arr%5B%5D=b.in_comid&group_arr%5B%5D=b.in_adverid&lineid%5B%5D={$v.lineid2}&group_arr%5B%5D=ifnull%28in_lineid%2Cout_lineid%29">{$v.adverid}</a></td>
+										<td>{$v.superid}</td>
+										<td title="{$v.fukuanname}" class="fuk-naks">{$v.fukuanname}</td>
+										<td>{$v.salerid}</td>
+										<td>{$v.businessid}</td>
+										<td>{$v.skname}</td>
+										<td>{$v.inhejianmoney}</td>
+										<td>{$v.outhejianmoney}</td>
+									</tr>
+								</volist>
+							<else />
+							<tr>
+								<td colspan="10" id="nodatas">
+									<div class="no-datas">暂无数据！！</div>
+									<script type="text/javascript">
+									$(function(){
+										var crow = 0;
+										$(".thead th").each(function(i,o){
+											if($(this).width()>0){
+												crow++;
+											}
+										});
+										$("#nodatas").attr("colspan",crow);
+									});
+									</script>
+								</td>
+							</tr>
+						</notempty>
+						
+						</tbody>
+					</table>
+					<!--分页-->
+					{$_page}
+				</div>
+</div>
+		<!--统计缩略图-->
+			<div class="statisticsThumbnail">
+				<img src="/Public/Home/img/statisticsThumbnail_close.png" class="statisticsThumbnail_close" />
+				
+				<div id="myChart1" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+				<div id="myChart2" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+				<div id="myChart3" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+				
+				<div id="myChart4" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+				<div id="myChart5" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+				<div id="myChart6" class="fl" style=" margin: 2%; width: 29%; height: 38%; "></div>
+			</div>
+			<!--弹出框（选择广告主） -->
+		<div class="dataSelectDialog" title="选择计费标识">
+			<table class="dialogTable_list w ha" >
+				<caption id="getadverlistp">
+					名称：
+					<input name="name" type="text" />
+					编码：
+					<input name="jf_code" type="text" />
+					<input type="button" onclick="getjflist()" value="查询" />
+				</caption>
+				<thead>
+				<tr>
+					<th width="30"></th>
+					<th>名称</th>
+					<th>编码</th>
+					<th>产品名称</th>
+				</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+		
+</block>
+
+

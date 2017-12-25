@@ -1,0 +1,560 @@
+<extend name="Public/base"/>
+<block name="body">
+<style type="text/css">.dataFormTable input[type="text"], .dataFormTable input[type="password"], .dataFormTable select{width: 99% !important;}</style>
+    <!--数据表-->
+    <form id="dataform"  action="{:U('update')}" method="post" enctype="multipart/form-data">
+    <div class="dataCn fl w ha">
+        <div class="dataFormContainer">
+            <div class="dataFormTitle">基本信息</div>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>广告主编码：</th>
+                        <td>{$adInfo.ad_code|default="自动生成"}</td>
+                        <th>广告主名称：<span class="required">*</span></th>
+                        <td><input id="adname" type="text" class="ritem" name="name" value="{$adInfo.name}" <if condition="$hasauth_edit_ne NEQ 1">readonly="readonly"</if> /></td>
+                        <th>广告主属性：<span class="required">*</span></th>
+                        <td><bselect name="ad_type" options="op_adtype" class="ritem" selected="adInfo['ad_type']"/></td>
+                    </tr>
+                    <tr>
+                        <th>地址：<span class="required">*</span></th>
+                        <td><input type="text" name="address"  class="ritem"value="{$adInfo.address}"/></td>
+                        <th>合同oa流水号：</th>
+                        <td>
+                            <input type="text" item-type="c_num" class="J_dataSelect2" onchange="$(this).next().val($(this).val())" name="show_contract_num" value="{$adInfo.contract_num}" dialog-title="合同oa流水号"/>
+                            <input type="hidden" name="contract_num" value="{$adInfo.contract_num}" />
+                        </td>
+                        <th>办公地区：<span class="required">*</span></th>
+                        <td>
+                            <bselect id="province" name="province_id" options="op_region['province']" selected="adInfo['province_id']" style="width: 32%  !important;" class="getregion ritem" first="请选择"/>
+                            <bselect id="city" name="city_id" options="op_region['city']" selected="adInfo['city_id']" style="width: 32%  !important;" class="getregion ritem" first="请选择"/>
+                            <bselect id="district" name="district_id" options="op_region['district']" selected="adInfo['district_id']" style="width: 32%  !important;" class="getregion ritem" first="请选择"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>广告主类型:</th>
+                        <td><select name="tag"><option <eq name="adInfo.tag" value="平台">selected="selected"</eq>>平台</option><option <eq name="adInfo.tag" value="直客">selected="selected"</eq>>直客</option></select></td>
+                        <th>合作金额:</th>
+                        <td><input type="text" title="不清楚金额或预算的写成“未知”" style="width:90% !important" name="hezuomoney" value="{$adInfo.hezuomoney}"/>万</td>
+                        <th>预算:</th>
+                        <td><input type="text" title="不清楚金额或预算的写成“未知”" style="width:90% !important" name="yushuan" value="{$adInfo.yushuan}"/>万</td>
+                    </tr>
+                    <tr>
+                        <th>资质文件：</th>
+                        <td>
+                            <input id="upfile" type="file" class="uploading"/>
+                            <input type="hidden" name="qualif_img" value="{$adInfo['qualif_img']}"/>
+                        </td>
+                        <if condition="!empty($adInfo['qualif_img'])">
+                            <th>下载资质文件</th>
+                            <td><a target="_blank" href="http://{$Think.server.HTTP_HOST}{$adInfo['qualif_img']}">下载</a></td>
+                        <else />
+                            <th></th>
+                            <td></td>
+                        </if>
+                        <!--<th></th>
+                        <td></td>-->
+                        <th title="一级：百度、腾讯、阿里巴巴、360等市值在100亿以上的大型网络公司规模一类；
+                        二级：酷狗等市值在1—100亿以内公司规模一类；
+                        三级：话语等注册资本在500万以上公司规模一类；
+                        四级：行业影响力较弱，创建1年左右，注册资本500万以下公司一类。">实力评级：<span class="required">*</span></th>
+                        <td><bselect name="rating_level" options="op_ad_rating" selected="adInfo['rating_level']" first="请选择"/></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="dataFormTitle">对接人信息<span class="required">*</span></div>
+            <div class="dataFormContent">
+                <table id="fin_contact_tab" class="dynamicTable oppositeJoint">
+                    <caption align="bottom">
+                        <input id="addFinContact" class="addTR" type="button" value="" />
+                    </caption>
+                    <tr>
+                        <th>姓名<span class="required">*</span></th>
+                        <th>手机号码<span class="required">*</span></th>
+                        <th>QQ<span class="required">*</span></th>
+                        <th>邮箱<span class="required">*</span></th>
+                        <th>我方对接人<span class="required">*</span></th>
+                        <th width="150">操作</th>
+                    </tr>
+                    <volist name="adContactInfo" id="item">
+                        <tr>
+                            <td><input type="text" name="contacts[{$i}][name]" value="{$item.name}" class="ritem" /></td>
+                            <td><input type="text" name="contacts[{$i}][mobile]" value="{$item.mobile}"  class="ritem"   rtype="phone"/></td>
+                            <td><input type="text" name="contacts[{$i}][qq]" value="{$item.qq}"/></td>
+                            <td><input type="text" name="contacts[{$i}][email]" value="{$item.email}"/></td>
+                            <td><input readonly="readonly" class="J_dataSelect ritem" item-type="user" type="text"   name="contacts[{$i}][user]" value="{$item.user}" dialog-title="我方对接人"/></td>
+                            <td>
+                                <span item-id="{$item.id}" item-type="contact" class="doDataDelete">删除</span>
+                            </td>
+                            <input type="hidden" name="contacts[{$i}][id]" value="{$item.id}"/>
+                            <input type="hidden" name="contacts[{$i}][ad_id]" value="{$item.ad_id}"/>
+                        </tr>
+                    </volist>
+                </table>
+            </div>
+
+            <div class="dataFormTitle">财务信息</div>
+            <div class="dataFormContent">
+                <table class="dataFormTable">
+                    <tr>
+                        <th>账户类型：<span class="required">*</span></th>
+                        <td><bselect name="object_type" options="op_finance_object" selected="adInfo['object_type']"/></td>
+                        <th>账户名称：<span class="required">*</span></th>
+                        <td><input type="text" name="account_name" value="{$adInfo.account_name}"/></td>
+                        <th>开户行名称：<span class="required">*</span></th>
+                        <td><input type="text" name="opening_bank" value="{$adInfo.opening_bank}"/></td>
+                    </tr>
+                    <tr>
+                        <th>开户行账号：</th>
+                        <td><input type="text" name="bank_no" value="{$adInfo.bank_no}"/></td>
+                        <th>发票类型：</th>
+                        <td><bselect name="invoice_type" options="op_invoice_type" selected="adInfo['invoice_type']"/></td>
+                        <th>开票内容：</th>
+                        <td>
+                            <bselect name="invoice_remark" options="op_invoice_remark" selected="adInfo['invoice_remark']"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>纳税人识别号：</th>
+                        <td><input type="text" name="taxpayer_num" value="{$adInfo.taxpayer_num}"/></td>
+                        <th>注册地址：</th>
+                        <td><input type="text" name="reg_address" value="{$adInfo.reg_address}"/></td>
+                        <th>注册电话：</th>
+                        <td><input type="text" name="reg_mobile" value="{$adInfo.reg_mobile}"/></td>
+                    </tr>
+                </table>
+            </div>
+            <!-- 财务收件人 -->
+            <div class="dataFormTitle">财务收件人信息</div>
+            <div class="dataFormContent">
+                <table id="fin_receiver_tab" class="dynamicTable oppositeJoint">
+                    <caption align="bottom">
+                        <input id="addFinReceiver" class="addTR" type="button" value="" />
+                        <input id="copyFromContact" class="copyTR" type="button" value="" />
+                    </caption>
+                    <tr>
+                        <th>收件姓名</th>
+                        <th>收件人电话</th>
+                        <th>收件人地址</th>
+                        <th width="150">操作</th>
+                    </tr>
+                    <assign name="j" value="1" />
+                    <volist name="adFinReceiver" id="item" >
+                        <tr>
+                            <td><input type="text" name="finance_receiver[{$j}][name]" value="{$item.name}"/></td>
+                            <td><input type="text" name="finance_receiver[{$j}][mobile]" value="{$item.mobile}"/></td>
+                            <td><input type="text" name="finance_receiver[{$j}][address]" value="{$item.address}"/></td>
+                            <td>
+                                <span class="doDataDelete" item-id="{$item.id}" item-type="receiver">删除</span>
+                            </td>
+                            <input type="hidden" name="finance_receiver[{$j}][id]" value="{$item.id}" />
+                        </tr>
+                        <assign name="j" value="$j+1" />
+                    </volist>
+
+                </table>
+            </div>
+
+            <if condition="$Think.GET.id GT 0">
+                <div class="dataFormTitle">广告主评级（特殊编辑权限）</div>
+                <div class="dataFormContent">
+                    <table class="dataFormTable">
+                        <tr>
+                            <th>注册资本：</th>
+                            <td><bselect name="register_capital" options="op_ad_capital" selected="adInfo['register_capital']" first="请选择"/></td>
+                            <th>成立时间：</th>
+                            <td><input readonly="true" class="Wdate" onClick="WdatePicker()" type="text" name="established_time" value="{$adInfo.established_time}"/></td>
+                            <th>开始合作时间：</th>
+                            <td><input readonly="true" class="Wdate" onClick="WdatePicker()" type="text" name="cooperation_time" value="{$adInfo.cooperation_time}"/></td>
+                        </tr>
+                        <if condition="$has_check_auth">
+                            <tr>
+                                <th>是否检查：</th>
+                                <td><bradio name="is_check" radios="op_is_check" checked="adInfo['is_check']" separator="  "/></td>
+                                <th></th>
+                                <td></td>
+                                <th></th>
+                                <td></td>
+                                <th></th>
+                                <td></td>
+                            </tr>
+                        </if>
+                    </table>
+                </div>
+            </if>
+
+            <div class="dataFormOperate">
+                <input type="hidden" name="id" value="{$adInfo.id}" />
+                <input id="submitForm" type="button" value="保存"  onclick="ck.submit('#sub_1')" id="sub_1"/>
+                <a href="{:U('index')}">返回</a>
+            </div>
+        </div>
+
+    </div>
+    </form>
+
+    <!--弹出框（广告主名称、接入业务线、责任销售、合同编号） -->
+    <div class="dataSelectDialog" title="我方责任人"></div>
+    <div id="bl_dom" style="display: none;">
+        <bselect name="contacts[%s][bl]" options="op_bl" first="请选择"/>
+    </div>
+
+</block>
+
+<block name="script">
+    <script src="__MODULE__/jquery.form.js"></script>
+    <script src="__STATIC__/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/uploadify/uploadify.css?v=2">
+
+    <script type="text/javascript">
+        $(function() {
+            //新增广告主联系人
+            $("#addFinContact").click(function() {
+                var idx = $("#fin_contact_tab").find('tr').length;
+                $("#fin_contact_tab").append("<tr>" +
+                        "<td><input type=\"text\" name='contacts["+idx+"][name]' class=\"ritem\"/></td>" +
+                        "<td><input type=\"text\" name='contacts["+idx+"][mobile]' class=\"ritem\" rtype='phone'/></td>" +
+                        "<td><input type=\"text\" name='contacts["+idx+"][qq]' /></td>" +
+                        "<td><input type=\"text\" name='contacts["+idx+"][email]'/></td>" +
+                        "<td><input readonly=\"readonly\" class=\"J_dataSelect\" item-type=\"user\" type=\"text\" name='contacts["+idx+"][user]' dialog-title='我方对接人'/></td>" +
+                        "<td>" +
+                        "<span class=\"doDataDelete\" item-id='' item-type=\"contact\">删除</span>" +
+                        "</td>" +
+                        "</tr>");
+
+            });
+
+            //新增财务收件人
+            $("#addFinReceiver").click(function() {
+                var idx = $("#fin_receiver_tab").find('tr').length;
+                $("#fin_receiver_tab").append("<tr>" +
+                        "<td><input type=\"text\" name='finance_receiver["+idx+"][name]'  /></td>" +
+                        "<td><input type=\"text\" name='finance_receiver["+idx+"][mobile]' /></td>" +
+                        "<td><input type=\"text\" name='finance_receiver["+idx+"][address]'/></td>" +
+                        "<td>" +
+                        "<span class=\"doDataDelete\" item-id='' item-type=\"receiver\">删除</span>" +
+                        "</td>" +
+                        "</tr>");
+
+            });
+
+            //复制
+            $("#fin_receiver_tab").on('click','#copyFromContact',function(){
+                $("#fin_contact_tab").find("tr:gt(0)").each(function() {
+                    var nameVal = $(this).find("td:eq(0)").find('input').val();
+                    var mobileVal = $(this).find("td:eq(1)").find('input').val();
+                    $("#addFinReceiver").trigger("click"); //添加一条
+                    var idx = $("#fin_receiver_tab").find('tr').length;
+                    idx = idx-1;
+                    $("[name='finance_receiver["+idx+"][name]'").val(nameVal);
+                    $("[name='finance_receiver["+idx+"][mobile]'").val(mobileVal);
+                });
+            });
+
+            //对话框（广告主名称、接入业务线、责任销售、合同编号）
+            $(".dataSelectDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "600",
+                height: "450",
+                modal: true,
+                show: "scale",
+                buttons: {
+
+                },
+            });
+
+            //对话框（广告主名称、接入业务线、责任销售、合同编号）
+            var tableObj,itemType;
+            $(".dataFormTable,#fin_contact_tab").on('click', '.J_dataSelect', function(){
+                tableObj = this;
+                itemType = $(this).attr('item-type');
+                getTable();
+            });
+            $(".dataFormTable,#fin_contact_tab").on('click', '.J_dataSelect2', function(){
+                tableObj = this;
+                itemType = $(this).attr('item-type');
+                getTable();
+            });
+
+            //缓存点击的值
+            $(".dataSelectDialog").on('click','.dialogTable_list > tbody >tr',function(){
+                $(".dataSelectDialog").data('cho_id', $(this).attr('op-id'));
+                $(".dataSelectDialog").data('cho_name', $(this).attr('op-name'));
+                $(this).css('background-color','#4094f5').siblings().css('background-color',''); //切换颜色
+
+                //点击直接保存
+                var field = $(".dataSelectDialog").data('fieldname');
+                var id = $(".dataSelectDialog").data('cho_id');
+                var name = $(".dataSelectDialog").data('cho_name');
+                var realfield = field.indexOf('show')>=0 ? field.substr(5) : field;
+                //设置弹出框选中的值
+                $("[name='"+field+"']").val(name);
+                //真实数据name
+                $("[name='"+realfield+"']").val(name);
+                $(".dataSelectDialog").dialog("close");
+
+            });
+
+            //获取弹出框信息
+            function getTable() {
+                var href = "{:U('Product/optionTable')}" + "?type="+itemType;
+                $.get(href, {}, function(dom){
+                    var dataDialog = $(".dataSelectDialog");
+                    dataDialog.html(dom);
+                    dataDialog.dialog("open");
+                    dataDialog.dialog("option","title", $(tableObj).attr('dialog-title'));
+                    dataDialog.data('fieldname', $(tableObj).attr('name'));
+                    dataDialog.data('href',href);
+                });
+            }
+
+            //弹出框分页
+            $(".dataSelectDialog").on('click','.dataPage_cn a, #searchBtn',function(){
+                var pageObj = this;
+                var url = pageObj.href ? pageObj.href : $(".dataSelectDialog").data('href');
+                var kw = $("input[name='kw']").val();
+                $.get(url,{kw:kw},function(dom){
+                    $(".dataSelectDialog").html(dom);
+                },'json');
+                return false;
+            });
+
+
+            //删除按钮
+            $(".dynamicTable").on('click', '.doDataDelete', function(){
+                var id = $(this).attr('item-id');
+                var type = $(this).attr('item-type');
+                var thisbtn = this;
+
+                if (confirm('确认删除此条信息?')) {
+                    if (!id) {
+                        $(thisbtn).parents('tr').remove();
+                    } else{
+                        if (type=='contact') { //删除广告主联系人
+                            $.post("{:U('deleteContact')}",{id:id},function(ret){
+                                alertnewpage2(ret.msg);
+                                if(ret.error == 0) {
+                                    $(thisbtn).parents('tr').remove();
+                                }
+                            },'json');
+                        } else if (type=='receiver') { //删除财务收件人
+                            //var idx = $(this).attr('idx'); //数据库存的数组，idx用于区别数组下表
+                            $.post("{:U('deleteReceiver')}",{id:id},function(ret){
+                                alertnewpage2(ret.msg);
+                                if(ret.error == 0) {
+                                    $(thisbtn).parents('tr').remove();
+                                }
+                            },'json');
+                        }
+                    }
+
+                }
+
+            });
+
+            //地区选项切换
+            $('.getregion').change(function(){
+                var level = $(this).attr("id");
+                var id = $(this).val();
+                var _target = '';
+                 if (level == 'province') {
+                    _target = '#city';
+                    $('#district').html("<option value=''>请选择</option>");
+                 } else if (level == 'city') {
+                    _target = '#district';
+                 } else {
+                    return;
+                 }
+
+                 $.get("{:U('Advertiser/region')}", {pid:id}, function(data) {
+                     if(data){
+                        $(_target).html('');
+                         $("<option value=''>请选择</option>").appendTo($(_target));
+                        $.each(data,function(idx,item){
+                            $("<option value="+idx+">"+item+"</option>").appendTo($(_target));
+                        }
+                     );
+                     }else{
+                        $("<option value='0'>请选择</option>").appendTo($(_target));
+                     }
+                 });
+
+            });
+
+            //回填广告主名称
+            $("#adname").blur(function() {
+                $("[name='account_name']").val($(this).val());
+            });
+
+            //提交表单
+            // $("#submitForm").click(function() {
+            //     var form = $("#dataform");
+            //     var url = form.attr('action');
+            //     var btnObj = $(this);
+            //     btnObj.val('保存中...');
+            //     btnObj.attr('disabled',true);
+            //     $("#dataform").ajaxSubmit({
+            //         type: 'post',
+            //         url: url,
+            //         timeout: 5000,
+            //         success:function(ret){
+            //             alertnewpage2(ret.msg, ret.go);
+            //             btnObj.val('保存');
+            //             btnObj.attr('disabled',false);
+            //         },
+            //         error:function(xhr, status, error){
+            //             if(status=='timeout'){
+            //                 alertnewpage2('服务器繁忙，请稍后再试!');
+            //             } else {
+            //                 alertnewpage2('保存出错,请联系技术');
+            //             }
+            //             btnObj.val('保存');
+            //             btnObj.attr('disabled',false);
+            //         }
+
+            //     });
+            //     return false;
+            // });
+
+            //上传插件
+            $('#upfile').uploadify({
+                'formData'     : {
+                    'name' : 'adv',
+                },
+                'swf'      : '__STATIC__/uploadify/uploadify.swf',
+                'uploader' : "{:U('doUpload')}",
+                onUploadSuccess: function (file, data, response){
+                    data = eval("("+data+")");
+                    if (data.code == 0) {
+                        $("[name='qualif_img']").val(data.info);
+                    } else {
+                        alertnewpage2(data.info);
+                    }
+                },
+                buttonText:'上传',
+                buttonImage:"__STATIC__/uploadify/uploading.png",
+                height: '28',
+                width:'80',
+            });
+
+
+        });
+
+
+        function showProgress(percentComplete, position, total) {
+
+        }
+
+        /*$('body').append('<div class="bosalertdialog" title="提示框"><p class="bosdiacontent" style="height:100%;vertical-align:middle;margin:0px auto;text-align:center;"></p></div>');
+        //弹出消息层
+        function bosAlert(msg, go) {
+            $('.bosdiacontent').html(msg);
+            $(".bosalertdialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        $(this).dialog("close");
+                        if (go) {
+                            window.location.href= go;
+                        }
+                    }
+                },
+            });
+            $(".bosalertdialog").dialog("open");
+        }*/
+
+        function sprintf() {
+            var arg = arguments,
+                    str = arg[0] || '',
+                    i, n;
+            for (i = 1, n = arg.length; i < n; i++) {
+                str = str.replace(/%s/, arg[i]);
+            }
+            return str;
+        }
+var ck={
+    checkFill:function(){
+         var list = {
+                    ncount:0,
+                    valmsg:""
+                };
+        $(".ritem").each(function(){
+            var t=$(this),v=t.val();vtype=t.attr("rtype");
+            if(vtype!=undefined && vtype!=""){
+                //phone
+                if(vtype=="phone"){
+                     if(!(/^\d{11}$/.test(v))){ 
+                        t.css({"border":"1px solid red"});
+                        list.valmsg="手机号码格式不对";
+                        t.focus();  list.ncount++;
+                    } 
+                }
+            }else{
+                if(v==""){
+                    t.css({"border":"1px solid red"});
+                    list.ncount++;
+                    t.focus();
+                }
+            }
+        });
+        return list;
+    },
+    submit:function(sub_id){
+        var form   = $("#dataform");
+        var url    = form.attr('action');
+        var btnObj = $(sub_id);
+        btnObj.val('保存中...');
+        btnObj.attr('disabled',true);
+         var list = ck.checkFill();
+        if(list.ncount==0){
+             // layer.msg("ok");
+             $(".ritem").css({"border":"0px"});
+            $("#dataform").ajaxSubmit({
+                type: 'post',
+                url: url,
+                timeout: 5000,
+                success:function(ret){
+                    alertnewpage2(ret.msg, ret.go);
+                    btnObj.val('保存');
+                    btnObj.attr('disabled',false);
+                },
+                error:function(xhr, status, error){
+                    if(status=='timeout'){
+                        alertnewpage2('服务器繁忙，请稍后再试!');
+                    } else {
+                        alertnewpage2('保存出错,请联系技术');
+                    }
+                    btnObj.val('保存');
+                    btnObj.attr('disabled',false);
+                }
+
+            });
+        }else{
+            var msg="您还有"+list.ncount+"个必填项没填写或者格式不对";
+            if(list.valmsg){
+                msg=list.valmsg;
+            }
+            layer.msg(msg);
+        }
+    },
+    init:function(){
+        this.initFill();
+    },
+    initFill:function(){
+        $(".ritem").each(function(){
+            var t=$(this);
+            t.focusout(function(){
+                if($(this).val()!="") $(this).css({"border":"0px"});
+            });
+        });
+    }
+};
+$(function(){ck.init();});
+    </script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+</block>

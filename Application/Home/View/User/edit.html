@@ -1,0 +1,60 @@
+<form id="userform">
+<table class="dialogTable_form2 w ha">
+    <tr>
+        <th>OA账号：</th>
+        <td><input type="text" name="username" value="{$data.username}"/></td>
+        <th>真实姓名：</th>
+        <td><input type="text" name="real_name" value="{$data.real_name}"/></td>
+        <th>工号：</th>
+        <td>{$data.employee_number|default='auto'}</td>
+    </tr>
+    <tr>
+        <th>所属部门：</th>
+        <td>
+            <select name="dept_id">
+                <volist name="op_dept" id="dept">
+                    <option value="{$dept.id}" <IF condition="$dept['id'] eq $data['dept_id']">selected='true'</IF> >{$dept.title_show}</option>
+                </volist>
+            </select>
+        </td>
+        <th>职位：</th>
+        <td><bselect name="position_id" options="op_position" selected="data['position_id']"/></td>
+        <th>角色：</th>
+        <td><bselect name="group_id" options="op_groups" selected="usergroup"/></td>
+    </tr>
+    <tr>
+        <th>性别：</th>
+        <td><bselect name="gender" options="op_user_gender" selected="data['gender']"/></td>
+        <th>在职状态：</th>
+        <td><bselect name="status" options="op_user_status" selected="data['status']"/></td>
+        <th>联系电话：</th>
+        <td><input type="text" name="mobile" value="{$data.mobile}"/></td>
+    </tr>
+    <tr>
+        <th>QQ：</th>
+        <td><input type="text" name="qq" value="{$data.qq}"/></td>
+        <th>邮箱：</th>
+        <td><input type="text" name="email" value="{$data.email}"/></td>
+        <th>微信：</th>
+        <td><input type="text" name="wechat" value="{$data.wechat}"/></td>
+    </tr>
+    <tr>
+        <th>学历：</th>
+        <td><input type="text" name="education" value="{$data.education}"/></td>
+        <th>学位：</th>
+        <td><input type="text" name="degree" value="{$data.degree}"/></td>
+        <th>专业：</th>
+        <td><input type="text" name="major" value="{$data.major}"/></td>
+    </tr>
+    <tr>
+        <th>民族：</th>
+        <td><input type="text" name="ethnic_group" value="{$data.ethnic_group}"/></td>
+        <th>籍贯：</th>
+        <td><input type="text" name="address" value="{$data.address}"/></td>
+        <th>婚姻状况：</th>
+        <td><input type="text" name="ismarried" value="{$data.ismarried}"/></td>
+        <input type="hidden" name="id" value="{$data.id}" />
+        <input type="hidden" name="uid" value="{$data.uid}" />
+    </tr>
+</table>
+</form>

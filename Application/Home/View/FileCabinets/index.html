@@ -1,0 +1,433 @@
+<extend name="Public/base"/>
+
+<block name="script">
+    <script type="text/javascript" src="__JS__/bootbox.min.js"></script>
+
+    <link rel="stylesheet" href="__MODULE__/jqueryztree3.5/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.excheck.js"></script>
+
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+
+    <!--编辑器 start-->
+    <link rel="stylesheet" href="__PUBLIC__/OA/js/kindeditor-4.1.10/themes/default/default.css" />
+    <script charset="utf-8" src="__PUBLIC__/OA/js/kindeditor-4.1.10/kindeditor-all-min.js"></script>
+    <script charset="utf-8" src="__PUBLIC__/OA/js/kindeditor-4.1.10/lang/zh_CN.js"></script>
+    <!--编辑器end-->
+    <script>
+        var editor;
+        KindEditor.ready(function(K) {
+            editor = K.create('textarea[name="nerong"]', {
+                allowFileManager : true
+            });
+            K('input[name=getHtml]').click(function(e) {
+                alert(editor.html());
+            });
+            K('input[name=isEmpty]').click(function(e) {
+                alert(editor.isEmpty());
+            });
+            K('input[name=getText]').click(function(e) {
+                alert(editor.text());
+            });
+            K('input[name=selectedHtml]').click(function(e) {
+                alert(editor.selectedHtml());
+            });
+            K('input[name=setHtml]').click(function(e) {
+                editor.html('<h3>Hello KindEditor</h3>');
+            });
+            K('input[name=setText]').click(function(e) {
+                editor.text('<h3>Hello KindEditor</h3>');
+            });
+            K('input[name=insertHtml]').click(function(e) {
+                editor.insertHtml('<strong>插入HTML</strong>');
+            });
+            K('input[name=appendHtml]').click(function(e) {
+                editor.appendHtml('<strong>添加HTML</strong>');
+            });
+            K('input[name=clear]').click(function(e) {
+                editor.html('');
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        jQuery.browser={};(function(){jQuery.browser.msie=false; jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
+
+        $(function() {
+            $("#ids").val('');
+            /*---------------------------------树----------------------*/
+            var setting = {
+                check: {
+                    enable: true,chkStyle: "radio",radioType: "level"
+                },
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "pid",
+                        rootPId: 0
+                    }
+                },
+                callback: {onCheck: zTreeOnCheck}
+            };
+            var treeObj;
+
+            function zTreeOnCheck(event, treeId, treeNode) {
+                $("#ids").val('');
+                var chkIds = chc();
+                if(chkIds !=''){
+                    $("#ids").val(chkIds);
+                    $("#search_form").submit();
+
+                }
+            };
+            /*显示层级*/
+            var sid ="<php>echo $s_id</php>";
+            $.get("{:U('getGroupRuleTree')}",{},function(zNodes){
+                treeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                treeObj.expandAll(true);
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                if(sid !=''){
+                    arr=sid.split(',');
+                    for(var i=0;i<arr.length;i++){
+                        var node = zTree.getNodeByParam("id",arr[i]);
+                        zTree.checkNode(node, true, true);
+                        zTree.updateNode(node);
+                    }
+
+                }
+            });
+
+            $(".addDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "850",
+                height: "450",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        var ids = $(this).attr('ids');
+                        var cid = $(this).attr('cid');
+                        var f_name = $("#f_name").val();
+                        var nerong = $("#nerong").val();
+                        $.post("{:U('create_txt')}",{
+                            name:f_name,info:nerong,sort_id:ids,cid:cid
+                        },function(data){
+                            if(data=="TRUE"){
+                                alert("操作成功");
+                                location.reload();
+                            }else{
+                                alert(data);
+                            }
+                        });
+                        $(this).dialog("close");
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+
+            $(".authorizationDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "500",
+                height: "200",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        var thisDialog = this;
+                        var chkIds = chc();
+                        if(chkIds == ""){
+                            alert("请选择目录");return;
+                        }
+                        var f_name = $("#file_name").val();
+                        $.post("{:U('udpateRule')}",{name:f_name,ids:chkIds},function(ret){
+                            //alert(ret);return;
+                            $(thisDialog).dialog("close");
+                            alertnewpage2(ret);
+                        });
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+
+            $("#newAdd").click(function(){
+                $(".authorizationDialog").dialog("open");//data("item-id",itemid).
+            });
+
+            //上传文件
+            $("#upload").click(function(){
+                var ids =  chc();
+                if(ids == ""){
+                    alert("请选择目录");return;
+                }
+                $("#cid").val(ids);
+                $(".uploadingDialog").dialog("open");
+            });
+
+            $(".uploadingDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "450",
+                height: "250",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        //获取合同id
+                        var imgPath = $("#notifyFile").val();
+                        if (imgPath == "") {
+                            alert("请选择上传图片！");
+                            return;
+                        }
+                        var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
+                        if (strExtension != 'jpg' && strExtension != 'gif'
+                                && strExtension != 'png' && strExtension != 'bmp' && strExtension != 'pdf' && strExtension != 'txt') {
+                            alert("请选择图片文件或者PDF文件");
+                            return;
+                        }
+
+                        $('#ciForm').ajaxSubmit({
+                            beforeSend: function() { //开始上传
+                                $("#progress").show();
+                                $("#bar").width('0%');
+                                $("#message").html("");
+                                $("#percent").html("0%");
+                            },
+                            uploadProgress: function(event, position, total, percentComplete) {
+
+                                $("#bar").width(percentComplete+'%');
+                                $("#percent").html(percentComplete+'%');
+                            },
+                            success: function (html, status) {
+                                $("#bar").width('100%');
+                                $("#percent").html('100%');
+
+                                var result = html.replace("<pre>", "");
+                                result = result.replace("</pre>", "");
+                                alert(result);
+                                location.reload();
+                            },
+                            error: function(html,status){
+                                var result = html.replace("<pre>", "");
+                                result = result.replace("</pre>", "");
+                                alert(result);
+                                $(this).dialog("close");
+                            }
+                        });
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+
+            //新建
+            $("#create").click(function(){
+                var ids =  chc();
+                if(ids == ""){
+                    alert("请选择目录");return;
+                }
+                var url = "{:U('edit')}";
+                window.location.href=url+'?sort_id='+ids;
+                //$(".addDialog").attr('ids',ids);
+                //$(".addDialog").dialog("open");
+            });
+
+            function chc(){
+                var chkNodes = treeObj.getCheckedNodes(true);
+                var chkIds = [];
+                if (chkNodes) {
+                    for(var obj in chkNodes) {
+                        chkIds.push(chkNodes[obj].id);
+                    }
+                }
+                return chkIds;
+            }
+
+            $(".del").click(function(){
+                if (confirm('确认删除吗')) {
+                    $.get("{:U('delete')}", {cid: $(this).attr('cid')}, function (data) {
+                        if (data == "TRUE") {
+                            alert("操作成功");
+                            location.reload();
+                        } else {
+                            alert(data);
+                        }
+                    });
+                }
+            });
+
+            $(".up").click(function(){
+                var ids =  chc();
+                if(ids == ""){
+                    alert("请选择目录");return;
+                }
+                $(".addDialog").attr('ids',ids);
+
+                $.get("{:U('up_sel')}",{cid:$(this).attr('cid')},function(data){
+                    //alert(data.subject);
+                    $("#f_name").val(data.subject);
+                    $("#nerong").val(data.nr);
+                    $(".addDialog").attr('cid',data.cid);
+                    $(".addDialog").dialog("open");
+                });
+            });
+        });
+        </script>
+</block>
+
+<block name="body">
+
+    <div style="width: 200px; float: left;">
+        <ul id="treeDemo" class="ztree"></ul>
+    </div>
+
+    <div style="width: 900px;float: left;">
+
+    <!--<div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <a id="newAdd">新建子文件夹</a>
+            <a id="upload">上传文件</a>
+            <a id="create" >创建文档</a>&lt;!&ndash;href="{:U('edit')}"&ndash;&gt;
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+            <div class="line fr h"></div>
+            <div class="statisticsThumbnail_icon J_statisticsThumbnail fr"  ></div>
+        </div>
+        <div class="screenList fl w">
+            <form action="{:U('index')}" id="search_form" method="get">
+                <input type="hidden" name="ids" id="ids">
+                <table>
+                    <tr>
+                        <th >文件名：</th>
+                        <td ><input type="text" name="name" value="{$Think.get.name}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            <input id="search_btn" type="submit" value="查询" />
+                            <input type="hidden" name="p" value="1"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>-->
+
+    <div class="screenBox swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <form action="{:U('index')}" id="search_form" method="get">
+                    <!--基础查询-->
+                    <h2>基础查询</h2>
+
+                    <div class="swiperRight">
+                        <table class="tableBox">
+                            <tr>
+                                <th >文件名：</th>
+                                <td ><input type="text" name="name" value="{$Think.get.name}"></td>
+                                <td colspan="6">
+                                    <input type="submit" value="查询" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+                <!--end 基础查询-->
+            </div>
+        </div>
+    </div>
+
+    <div class="dataCn fl w ha">
+        <div class="advancedTit">
+        <div class="advancedLeft">
+            <span class="addAdv advBtn">
+                <a id="newAdd">新建子文件夹</a>
+                <a id="upload">上传文件</a>
+                <a id="create" >创建文档</a>
+            </span>
+        </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+                <tr>
+                    <th width="100"><input class="check-all" type="checkbox">选择</th>
+                    <th>文件名称</th>
+                    <th>创建时间</th>
+                    <th width="150">操作</th>
+                </tr>
+                <volist name="list" id="v">
+                <tr>
+                    <td width="100"><input type="checkbox" class="ids" value="{$v['content_id']}"></td>
+                    <td><a target="_blank" href="/{$v['attachment_name']}">{$v.subject}</a></td>
+                    <td>{$v.send_time}</td>
+                    <td><a class="up" cid="{$v['content_id']}" href="{:U('edit?cid='.$v['content_id'].'&sort_id='.$v['sort_id'])}">编辑</a>&nbsp;&nbsp;
+                        <a class="del" cid="{$v['content_id']}">删除</a></td>
+                </tr>
+                </volist>
+            </thead>
+        </table>
+    </div>
+    {$_page}
+    </div>
+
+    <div class="authorizationDialog" title="新建子文件夹">
+        <table class="dialogTable_form w ha">
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>文件夹名称:</th>
+                <td><input type="text" id="file_name" name="file_name"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="uploadingDialog" title="上传附件">
+        <div class="btn">
+            <form id="ciForm" enctype="multipart/form-data" action="{:U('uploadImg')}" method="post">
+                <table class="dialogTable_form w ha">
+                    <tr>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>选择合同<span class="must">*</span>:</th>
+                        <td><input type="file" id="notifyFile"  name="notifyFile" multiple="multiple" />
+                            <input type="hidden" id="cid" name="cid">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div id="progress">
+            <div id="bar"></div>
+            <div id="percent"></div >
+        </div>
+        <div id="message"></div>
+    </div>
+
+    <div class="addDialog" title="创建文档">
+        <table class="dialogTable_form w ha">
+            <tr>
+                <th>文件名：</th>
+                <td><input type="text" id="f_name" name="f_name"></td>
+            </tr>
+            <tr>
+                <th>文件内容:</th>
+                <td><textarea name="nerong" id="nerong" style="width: 500px;"></textarea></td>
+            </tr>
+        </table>
+    </div>
+</block>

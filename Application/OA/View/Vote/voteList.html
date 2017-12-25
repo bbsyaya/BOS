@@ -1,0 +1,176 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<div class="subConten fl w" style="padding-top:5px;">
+    <!--内容-->
+    <div class="subCon">
+        <!--条件查询-->
+        <div class="query">
+            <form method="get" action="/OA/Vote/voteList">
+            	<table class="queryTable">
+	                <tbody>
+	                    <tr>
+							<th><input class="vote_btn" name="" type="button" value="发起投票"></th>
+	                        <th>投票名称：</th>
+	                        <td><input name="vname" value="{$map['vname']}" type="text"></td>
+	                        <th>发起时间：</th>
+	                        <td>
+	                           <span class="dayTime"><input class="start_rise" type="text" id="start_one" name="time_diff"  value=""><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+	                        </td>
+							<th>发布人：</th>
+							<td><input name="user_name" value="{$Think.get.user_name}" type="text"></td>
+	                        <td><input name="" type="submit" value="查询"></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+            </form>
+        </div>
+        <!-- end 条件查询-->
+        <!--发起投票列表-->
+        <div class="workListBox">
+            <table class="listTable Js_tableCon">
+                <thead>
+                    <tr>
+                    	<th>投票名称</th>
+                    	<th>发布人</th>
+						<th>发起时间</th>
+						<th>开始时间</th>
+						<th>结束时间</th>
+						<th>状态</th>
+						<th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                	<volist name="list" id="vo">
+                		<tr> 
+                			<td>{$vo['vname']}</td>
+                			<td>{$vo['real_name']}</td>
+	                        <td>{$vo['dateline']}</td>
+	                        <td>{$vo['start_time']}</td>
+	                        <td>{$vo['end_time']}</td>
+	                       	<td><?php if($vo["status"]==1){ echo "<font color=\"green\">已发布</font>";}else if($vo["status"]==0){ echo "<font color=\"red\">待发布</font>";}else if($vo["status"]==10){ echo "<font color=\"#ADCC2B\">已过期</font>";} ?></td>
+	                        <td>
+	                        	<!-- 如果是自己发布的，才能删除， 编辑，发布投票 -->
+								<?php if($cur_uid==$vo["uid"]){ ?>
+									<?php  if($vo["status"]==0){ ?>
+										<a class="detail"  href="editVote.html?vid={$vo['id']}" style="color:green;">编辑</a>
+										<a class="rest sendvote" href="javascript:void(0);" data-id="{$vo['id']}">发布投票</a>
+										<a class="detail delitem" data-id="{$vo['id']}" href="javascript:void(0);">删除</a> 
+									<?php } ?>
+								<?php } ?>
+		                        <?php  if($vo["status"]==1 || $vo["status"]==10){ ?> <a class="rest" href="voteResult.html?vid={$vo['id']}">统计结果</a> <?php } ?>
+	                        </td>
+	                    </tr>
+                	</volist>
+                	<else />
+                	<tr>
+                        <td colspan="7">
+                        	<div class="no-datas">暂无数据！</div>
+                        </td>
+                    </tr>
+                </notempty>
+                </tbody>
+            </table>
+        </div>
+        <!--end 发起投票列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<!--遮罩层-->
+<div class="mask"></div>
+<!--end 遮罩层-->
+<!--发起流程弹出层-->
+<style type="text/css">
+	.fq-res{position:relative;width:100%}.c-fq{position:absolute;z-index:222;top:-35px;right:10px;color:#fff!important}.ui-dialog-buttons{z-index:2000!important}.wd100{width:175px!important}.fleft{float:left}.xx-pt{height:44px;padding:0 10px;width:410px!important;border:1px solid #d8d8d8;border-radius:3px;color:#666;font-size:14px}.wd90{width:90px}.disnone{display:none}.com-btn{background:#1269cc none repeat scroll 0 0;min-width:70px;padding:0 5px;border:medium none;border-radius:3px;color:#fff;font-size:14px;height:30px;cursor:pointer}.addItems{margin-left:90px;margin-top:8px;}.problems_item{margin-top: 10px !important;}.voteBox .voteConBox .voteQuestion{height: auto !important;}.xx-wz{margin-top: 8px;}.sc-went{cursor:pointer;}.imgxz{width: 30px;height: 15px;margin-left:8px;}.btnBox input[type="button"]{margin:0px 10px 0 200px !important;height: 36px !important; line-height: 36px !important;}.btnBox input[type="button"].right{margin:0px !important;float: left !important;}.ui-dialog{z-index: 2000 !important;}.votetxt[disabled]{background: #eee;}.voteBox{overflow-y: auto !important;}
+</style>
+<script type="text/javascript" src="__PUBLIC__/Home/js/ajaxupload.js"></script>
+<div class="popupPublic voteBox Js_vote">
+	<form action="" id="voteForm" >
+	    <h2>发起投票</h2>
+	    <div class="fq-res"><a href="javascript:void(0);" class="colse c-fq">关闭</a></div>
+	    <div class="voteConBox">
+	        <p><label for="">投票名称</label><input class="required" name="vname" id="vname" placeholder="请输入投票名称" type="text"></p>
+	        <p>
+		        <label for="">开始时间</label><input  placeholder="请选择投票开始时间" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:m:s'})" class="wd100 fleft required" name="start_time" id="start_time" type="text">
+		        <label for="" style="margin-left:20px;">结束时间</label><input  placeholder="请选择投票结束时间" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:m:s'})" class="wd100 fleft required"  name="end_time" id="end_time"type="text">
+	        </p>
+	        <p><label for="">投票须知</label><textarea name="instruct" id="instruct" class="required">所有人只能投一次，如果发现拉票现象，下次不能再参与投票。</textarea></p>
+	        <p><label for="">注意事项</label><textarea name="attention" id="attention" class="required">所有人只能投一次，如果发现拉票现象，下次不能再参与投票。</textarea></p>
+	        <p><label for="">投票部门</label>
+		        <input class="votetxt" name="departs"   placeholder="请选择允许投票的部门" readonly="readonly"  id="departs" style="width:360px;" type="text">
+		        <input name="" id="choseDepart" type="button" value="选择部门">
+		        <input type="hidden" id="departs_ids" name="departs_ids" />
+	        </p>
+	        <div class="problems_list">
+		        <div class="voteQuestion problems_item" data-index="1" id="problems_item_1">
+		        	<p class="voteQuesCon"><font class="p_title">【问题1】</font></p>
+		            <p class="voteQuesCon"><label for="">投票问题</label><input id="problems_title_1"  placeholder="请输入投票问题"  name="problems_title[1][titlename]" type="text"></p>
+		            <p class="voteQuesCon voteRadio">
+			            <label class="voteLabel" style="width:90px;"  for="">问题类型</label>
+			            <span><input id="problems_type_1" name="problems_type_1[]" value="0" onclick="Box.pTypeChose(0,1)" checked="checked"  type="radio" >&nbsp;&nbsp;单选</span>
+			            <span><input id="0problems_type_1" name="problems_type_1[]" value="1" onclick="Box.pTypeChose(1,1)"  type="radio">&nbsp;&nbsp;多选</span>
+			            <span><input id="1problems_type_1" name="problems_type_1[]" value="2"  onclick="Box.pTypeChose(2,1)" type="radio">&nbsp;&nbsp;文本输入框</span>
+		            </p>
+		            <p class="voteQuesCon voteRadio" id="a_item_type_1">
+			            <label for="">选项类型</label>
+			            <span>
+			            <input id="item_type_1" name="item_type_1" data-pid="1" value="0" class="item_type" checked="checked" type="radio" >&nbsp;&nbsp;文字
+			            </span>
+			            <span>
+			            <input data-pid="1" type="radio" id="0item_type_1" name="item_type_1" class="item_type" value="1" >&nbsp;&nbsp;图片
+			            </span>
+			            
+		            </p>
+		            <div class="voteQuesCon" id="b_item_type_1">
+			            <div class="probles_items" id="wz_items_1">
+			            	<div class="xx-wz" data-i="1"><label for="" class="wd90">选项标题</label><input type="text" id="item_title_1_1"  placeholder="请输入投票选项标题"  name="item_title_1[]" class="xx-pt items " data-pid="1"/></div>
+			            </div>
+			            <div id="img_items_1" class="disnone probles_items">
+							<div class="xx-wz" data-i="1">
+							<label for="" class="wd90">选择图片</label><input type="button" data-pid="1" id="item_img_url_1_1" name="item_img_url_1[]"  class="com-btn items" value="选择图片" />
+							<img src="" class="disnone imgxz">
+							<input type="hidden" id="hidden_item_img_url_1_1" name="hidden_item_img_url_1[]" class="wd100" data-pid="1"/>
+							</div>
+						</div>
+						<input type="button" class="addItems com-btn " data-pid="1" onclick="Box.addItems(this)" value="增加选项" />
+		            </div>
+		            <p class="voteQuesCon voteRadio" id="c_item_type_1">
+			            <label class="voteLabel"   style="width:120px;"  for="">是否可自定义选项</label>
+			            <span>
+			            <input type="radio" id="problems_is_custom_1" name="problems_is_custom_1[]" value="0" checked="checked">&nbsp;&nbsp;可以
+			            </span>
+			            <span>
+			            <input type="radio" id="0problems_is_custom_1" name="problems_is_custom_1[]" value="1">&nbsp;&nbsp;不可以
+			            </span>
+		            </p>
+		        </div>
+	        </div>
+	    </div>
+		   
+	    <!--按钮-->
+	    <div class="btnBox">
+	        <input class="question_btn left" name="" id="addProblems" type="button" value="加一个问题"><input class="submit right" name="" type="button" value="发起投票" id="sendVote" onclick="Box.sendVote()">
+	    </div>
+	    <!--end 按钮-->
+	</form>
+</div>
+<!--end 发起流程弹出层-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+<!--双日期插件-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" href="__MODULE__/jqueryztree3.5/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript">
+	var time={startDate: "{$map["start_time"]}",endDate: "{$map["end_time"]}"};
+</script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/volist.js?v={:GetVersion()}"></script>
+ <!--弹出框（部门） -->
+<div class="authorizationDialog" title="选择部门">
+    <!--结构树-->
+    <ul id="treeDepart" class="ztree"></ul>
+</div>
+</block>

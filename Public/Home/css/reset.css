@@ -1,0 +1,90 @@
+@charset "utf-8";
+/* CSS Document */
+html {
+	margin:0px;
+	padding:0px;
+	border:0px;
+}
+
+body{
+	font: 12px/1.5 'Microsoft YaHei';
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+	border:0px;
+	overflow:auto;
+}
+a{background:none;border:none;outline:none;}
+
+a:link   {text-decoration: none;color:#333;}
+a:visited{text-decoration: none;color:#333;outline:none;}
+a:hover  {text-decoration: none;}
+a:active {text-decoration: none;outline:none;}
+
+a,
+body,
+div,
+em,
+font,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+html,
+iframe,
+img,
+li,
+menu,
+object,
+ol,
+p,
+pre,
+span,
+strong,
+thead,
+u,
+ul{border:0px;margin:0px;padding:0px;}
+
+b,
+strong{font-weight: bold;}
+
+img{border:none;outline:none;}
+
+ol,ul,li{list-style:none;}
+
+table{border-collapse:collapse;word-wrap:break-word;}
+
+tr,
+th,
+td,
+caption{font-weight:normal;text-align:left;border-spacing:0;padding:0px;margin:0px;}
+
+input{outline:none;padding:0px;margin:0px;}
+
+/*去除IE10的清空文本框按钮“X”*/
+input::-ms-clear{display:none;}
+
+.left{ float: left;display:inline;}
+.right{ float: right;display:inline;}
+.clear:after,.warp_area:after{content:" ";display:block;visibility:hidden;height:0;clear:both;}
+.clear{zoom:1;}
+.warp_area{width:1000px;margin:0 auto;}
+h1,h2,h3,h4,h5,h6{font-family:'Microsoft YaHei';}
+/*@font-face{font-family:'FontAwesome';src:url('../font/fontawesome-webfont.eot?v=3.2.1');src:url('../font/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'),url('../font/fontawesome-webfont.woff?v=3.2.1') format('woff'),url('../font/fontawesome-webfont.ttf?v=3.2.1') format('truetype'),url('../font/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');font-weight:normal;font-style:normal;}*/
+[class^="icon_"],
+[class*="icon_"],
+[class^="icon-"],
+[class*=" icon-"]{font-weight:normal;font-style:normal;text-decoration:inherit;display:inline-block;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing: grayscale;*margin-right:.3em;}
+[class="icon_"]:before{text-decoration:inherit;display:inline-block;speak:none;}
+.menu_container .menu [class*="icon_"]{display:inline-block;font-size:18px;font-weight:normal;margin-right:5px;min-width:30px;text-align:center;vertical-align:middle;}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  text-decoration: inherit;
+  display: inline-block;
+  speak: none;
+}

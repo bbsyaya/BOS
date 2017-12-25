@@ -1,0 +1,253 @@
+<extend name="Public/base"/>
+<block name="body">
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <div class="subMainBox">
+
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text">角色管理</span>
+                <span>系统管理</span>
+            </div>
+            <div class="ri_work">Role management</div>
+        </div>
+    <!--筛选-->
+    <div class="screenBox swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <form action="{:U('index')}" id="search_form">
+                    <!--基础查询-->
+                    <h2>基础查询</h2>
+                    <!--<div class="swiperLeft">
+                        <p class="swiperTit"><img src="__new_boss__/images/screen_jc.png" alt=""></p>
+                    </div>-->
+                    <div class="swiperRight">
+                        <table class="tableBox">
+                            <tr>
+                                <th>角色名称：</th>
+                                <td><input type="text" name="title" value="{$Think.get.title}"/></td>
+                                <th>&nbsp;</th>
+                                <td colspan="6">
+                                    <input type="submit" value="查询" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+                <!--end 基础查询-->
+            </div>
+        </div>
+    </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit"  goal="dataTable1">
+
+            <div class="dataTable_columnCa pa">
+                <div class="dataTable_columnCn"></div>
+                <div class="dataTableShow_close tc">关闭</div>
+            </div>
+            <div class="advancedLeft">
+                <span class="addAdv advBtn"><input type="button" class="J_addData" value="新增"></span>
+                <a class="" id="" href="/OA/OrganizSetting/settingList.html">设置部门权限</a>
+                <a class="" id="" href="/Home/User/index">设置用户权限</a>
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>角色ID</th>
+                <th>角色名称</th>
+                <th>人数</th>
+                <th>角色说明</th>
+                <th>数据范围</th>
+                <th>状态</th>
+                <th width="350">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="list" id="item">
+                <tr>
+                    <td>{$item.id}</td>
+                    <td>{$item.id}</td>
+                    <td>{$item.title}</td>
+                    <td>{$item.num|default="0"}</td>
+                    <td>{$item.desc}</td>
+                    <td>{$op_data_range[$item['data_range']]}</td>
+                    <td>{$op_status[$item['status']]}</td>
+                    <td>
+                        <a class="cur-link" onclick="auth.setAuth({$item.id},2,1,'角色')">功能权限</a>
+                        <a  class="cur-link" onclick="auth.setDataAuth({$item.id},2,2,'角色')">数据权限</a>
+
+                        <a item-id="{$item['id']}" class="J_updateData"><span style="cursor:pointer;">修改</span></a>
+                        
+                        <a class="doBan" item-id="{$item.id}"><span style="cursor:pointer;"><if condition="$item['status'] gt 0">禁用<else/>启用</if></span></a>
+                       
+                    </td>
+                </tr>
+            </volist>
+
+            </tbody>
+        </table>
+        <!--分页-->
+        {$_page}
+    </div>
+</div>
+
+    <!--————————————————————————————————————————————————————————————————————————————————————————————————————-->
+    <!--弹出框（新增角色） -->
+    <div class="addDataDialog" title="新增角色" style="display: none;">
+
+    </div>
+    <!--弹出框（权限） -->
+    <div class="authorizationDialog" title="访问权限">
+        <!--结构树-->
+        <ul id="treeDemo" class="ztree"></ul>
+    </div>
+    <script type="text/javascript">var pType="RoleIndex";</script>
+    <script type="text/javascript" src="/Public/Home/js/auth.js?v={:getVersion()}"></script>
+</block>
+
+<block name="script">
+    <!--JQuery zTree-->
+    <link rel="stylesheet" href="__MODULE__/jqueryztree3.5/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.excheck.js"></script>
+    <script type="text/javascript">
+    jQuery.browser={};(function(){jQuery.browser.msie=false; jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
+        $(function() {
+            //对话框（新增、修改）
+            $(".addDataDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "500",
+                height: "300",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "保存":function() {
+                        var thisdialog = this;
+                        var tableform = $("#tableForm");
+                        $.post("{:U('update')}",tableform.serialize(),function(ret){
+                            if (ret == 'ok') {
+                                $(thisdialog).dialog("close");
+                                alertnewpage2('保存成功',window.location.href);
+                            } else {
+                                alertnewpage2(ret);
+                            }
+                        });
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+            //新增对话框
+            var addDialogData = '';
+            $(".J_addData").click(function(){
+                //ajax加载表格数据
+                if (!addDialogData) {
+                    $.get("{:U('add')}",{},function(dom){
+                        addDialogData = dom;
+                        $(".addDataDialog").html(addDialogData);
+                        $(".addDataDialog").dialog("open");
+                    });
+                } else {
+                    $(".addDataDialog").html(addDialogData);
+                    $(".addDataDialog").dialog("open");
+                }
+
+            });
+            //修改对话框
+            $(".dataTable").on({
+                click: function() {
+                    var id = $(this).attr('item-id');
+                    if (!id) {
+                        $("<div>参数错误</div>").dialog();
+                    }
+                    $.get("{:U('edit')}",{id:id},function (dom) {
+                        $(".addDataDialog").html(dom);
+                        $(".addDataDialog").dialog("open");
+                    })
+                }
+            }, ".J_updateData");
+
+
+            //对话框授权
+            $(".authorizationDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "500",
+                height: "600",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        var thisDialog = this;
+                        var chkNodes = treeObj.getCheckedNodes(true);
+                        var itemId = $(this).data('item-id');
+                        var chkIds = [];
+                        if (chkNodes) {
+                            for(var obj in chkNodes) {
+                                chkIds.push(chkNodes[obj].id);
+                            }
+                        }
+                        $.post("{:U('udpateRule')}",{id:itemId,rules:chkIds},function(ret){
+                            $(thisDialog).dialog("close");
+                            alertnewpage2(ret);
+                        });
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+            //授权对话框
+            $(".dataTable").on({
+                click: function() {
+                    var itemid = $(this).attr('item-id');
+                    if (!itemid) {$("<div>参数错误</div>").dialog(); }
+                    $.get("{:U('getGroupRuleTree')}",{id:itemid},function(zNodes){
+                        treeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                        treeObj.expandAll(true);
+                        $(".authorizationDialog").data("item-id",itemid).dialog("open");
+                    });
+                }
+            }, ".J_authorization");
+
+            /*---------------------------------树----------------------*/
+            var setting = {
+                check: {
+                    enable: true
+                },
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "pid",
+                        rootPId: 0
+                    }
+                }
+            };
+            var treeObj;
+
+            $(".doBan").click(function(){
+                var id = $(this).attr('item-id');
+                var href="{:U('delete')}";
+                var thisdom = $(this);
+                $.get(href, {id:id}, function (ret) {
+                    alertnewpage2(ret.msg);
+                    if(ret.status == 1) {
+                        thisdom.text('禁用');
+                        thisdom.parent().siblings().eq(-1).html('正常');
+                    } else if (ret.status == 0) {
+                        thisdom.text('启用');
+                        thisdom.parent().siblings().eq(-1).html('禁用');
+                    }
+
+                });
+            });
+
+        });
+    </script>
+
+</block>

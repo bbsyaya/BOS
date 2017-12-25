@@ -1,0 +1,125 @@
+<extend name="Public/base"/>
+<block name="style">
+<link rel="stylesheet" href="__PUBLIC__/Home/css/mycss.css">
+</block>
+<block name="body">
+    <div class="content">
+        <div class="label_has clearfix">
+            <div class="label_has_left">
+                <if condition="$_GET['type'] eq 1">广告主<elseif condition="$_GET['type'] eq 2"/>产品<else/>供应商</if> {$aps.name} 已有标签
+            </div>
+            <div class="label_has_right">
+                <volist name="oldtag" id='v'>
+                    <div class="label_added_item" data="{$v.id}">
+                        <span>
+                            <i class="title">{$v.tagname}</i>
+                            <i class="label_close">x</i>
+                        </span>
+
+                    </div>
+                </volist>
+            </div>
+        </div>
+        
+        <div class="canAdd clearfix">
+            <div class="canAddLeft">你还可以为他们添加以下标签</div>
+            <div class="canAddRight">
+                <input id="searchBox" type="text" style="height:48px;width: 300px;margin-right:100px">
+                <button id="subbut" style="color:#fff;padding:0 15px;line-height: 48px;background-color: #1a72d6;border: none;outline: none">提交</button>
+            </div>
+        </div>
+        <div class="label_select">
+            <volist name="data" id='v'>
+                <div class="select_item" data="{$v.id}">
+                    <i class="select_item_icon"></i>
+                    <span style="color:#1a72d6"> + </span><span class="select_item_name">{$v.tagname}</span>
+                </div>
+            </volist>
+        </div>
+    </div>
+    
+    <script>
+    $(function () {
+        /*$(".select_item").click(function () {
+            var name=$(this).find(".select_item_name").text();
+            console.log(name);
+            var str="";
+            str='<div class="label_added_item">'+
+                '<span>'+
+                '<i class="title">'+name+'</i>'+
+                '<i class="label_close">x</i>'+
+                '</span>'+
+                '</div>';
+            $(".label_has_right").append(str);
+            $(this).remove();
+        })*/
+        $(".label_select").delegate(".select_item","click",function () {
+            var name=$(this).find(".select_item_name").text();
+            console.log(name);
+            var str="";
+            str='<div class="label_added_item" data="'+$(this).attr('data')+'">'+
+                '<span>'+
+                '<i class="title">'+name+'</i>'+
+                '<i class="label_close">x</i>'+
+                '</span>'+
+                '</div>';
+            $(".label_has_right").append(str);
+            $(this).remove();
+        })
+        $(".label_has_right").delegate(".label_added_item","click",function () {
+            var name=$(this).find(".title").text();
+            var str="";
+            str='<div class="select_item" data="'+$(this).attr('data')+'">'+
+                '<i class="select_item_icon"></i>'+
+                '<span style="color:#1a72d6"> + </span><span class="select_item_name">'+name+'</span>'+
+                '</div>'
+            $(".label_select").append(str);
+            $(this).remove();
+        })
+        $('#searchBox').keyup(function () {
+            var defaultVal="";
+            var curVal=$(this).val();
+            $(".select_item_name").each(function () {
+                defaultVal+=$(this).text();
+            })
+            console.log(defaultVal)
+            if(defaultVal.indexOf(curVal)==-1){
+                $(".select_item").show();
+                return;
+            }else{
+                $(".select_item_name").each(function () {
+                    var itemVal=$(this).text()
+                    if(itemVal.indexOf(curVal)!=-1){
+                        $(this).parent().show();
+                    }else{
+                        $(this).parent().hide();
+                    }
+                })
+            };
+            /*var val=$(this).val();
+            console.log(val);
+            if(!val){
+                console.log("aa")
+                $(".select_item_name").show();
+                return;
+            }
+            $(".select_item_name").each(function () {
+                if($(this).text().indexOf(val)>-1){
+                    $(this).parent().show();
+                }else{
+                    $(this).parent().hide();
+                }
+            })*/
+        })
+        $('#subbut').click(function(){
+            var datastr='';
+            $('.label_has_right').find('.label_added_item').each(function(){
+                datastr+=$(this).attr('data')+',';
+            })
+            window.location="/Advertiser/changetag_do?id={:I('get.id')}&type={:I('get.type')}&data="+datastr;
+        })
+    })
+    </script>
+</block>
+
+

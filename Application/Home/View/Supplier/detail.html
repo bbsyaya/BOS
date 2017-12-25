@@ -1,0 +1,117 @@
+<extend name="Public/base"/>
+<block name="body">
+
+    <div class="dataCn fl w ha">
+    <div class="dataFormContainer">
+        <div class="dataFormTitle">基本信息</div>
+        <div class="dataFormContent">
+            <table class="dataFormTable">
+                <tr>
+                    <th>供应商ID：</th>
+                    <td>{$supdata.id}</td>
+                    <th>账号/邮箱：</th>
+                    <td>{$supdata.email}</td>
+                    <th>供应商名称：</th>
+                    <td>{$supdata.name}</td>
+                </tr>
+                <tr>
+                    <th>类型：</th>
+                    <td>{$op_supplier_type[$supdata['type']]}</td>
+                    <th>联系电话：</th>
+                    <td>{$supdata.mobile}</td>
+                    <th>地区：</th>
+                    <td>{$op_region[$supdata['region']]}</td>
+                </tr>
+                <tr>
+                    <th>详细地址：</th>
+                    <td>{$supdata.address}</td>
+                    <th>合同OA流水号：</th>
+                    <td>{$supdata.contract_num}</td>
+                    <if condition="$has_check_auth AND ($_GET['id'] gt 0)">
+                        <th>是否检查：</th>
+                        <td>{$op_is_check[$supdata['is_check']]}</td>
+                        <else/>
+                        <th></th>
+                        <td></td>
+                    </if>
+                </tr>
+            </table>
+        </div>
+
+        <div class="dataFormTitle">对接人信息</div>
+        <div class="dataFormContent">
+            <table class="dynamicTable">
+                <tr>
+                    <th>联系人姓名</th>
+                    <th>电话</th>
+                    <th>QQ</th>
+                    <th>邮箱</th>
+                    <th>联系地址</th>
+                    <th>责任商务</th>
+                </tr>
+                <volist name="contactData" id="item">
+                    <tr>
+                        <td>{$item.name}</td>
+                        <td>{$item.mobile}</td>
+                        <td>{$item.qq}</td>
+                        <td>{$item.email}</td>
+                        <td>{$item.address}</td>
+                        <td>{$item.business_uid}</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+
+        <div class="dataFormTitle">财务信息</div>
+        <div class="dataFormContent">
+            <table class="dynamicTable">
+                <tr>
+                    <th>财务对象</th>
+                    <th>收款方名称</th>
+                    <th>开户行名称</th>
+                    <th>银行账号</th>
+                    <th>发票类型</th>
+                    <th>业务线</th>
+                    <th>税点</th>
+                </tr>
+                <volist name="financeData" id="item">
+                    <tr>
+                        <td>{$op_finance_object[$item['object_type']]}</td>
+                        <td>{$item.payee_name}</td>
+                        <td>{$item.opening_bank}</td>
+                        <td>{$item.bank_no}</td>
+                        <td>{$op_invoice_type[$item['invoice_type']]}</td>
+                        <td>{$op_bl[$item['bl_id']]}</td>
+                        <td>{$item.financial_tax}</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+        <div class="dataFormTitle">资源类型</div>
+        <div class="dataFormContent">
+            <table class="dynamicTable">
+                <tr>
+                    <th>资源类型</th>
+                    <th>关键指标</th>
+                    <th>量级</th>
+                </tr>
+                <volist name="taglist" id="v">
+                    <tr>
+                        <td>{$v.name}</td>
+                        <td>{$v.key}</td>
+                        <td>{$v.value}</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+
+        <div class="dataFormOperate">
+            <a href="javascript:history.go(-1);">返回</a>
+        </div>
+    </div>
+
+    </div>
+</block>
+<block name="script">
+
+</block>

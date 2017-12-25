@@ -1,0 +1,124 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<div class="subConten fl w" style="padding:5px !important;">
+    <!--内容-->
+
+        <div class="screenCn fl w ha" style="margin-top:0px;"> 
+            <style type="text/css">
+            .b-name{width:300px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.com-btn{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:3px!important;color:#fff!important;cursor:pointer!important;margin-left:10px!important;height:32px!important;line-height:32px !important;padding:0 5px !important}.color1a72d6{color: #1a72d6 !important; }body{font-size: 12px !important;}
+            </style>
+            <link id="tree_table_default" href="/Public/static/tabletree/css/jquery.treetable.css" rel="stylesheet" type="text/css">
+    <div class="screenOperate fl w">
+        <a class="Js_addOffice addPro" href="/OA/OrganizSetting/crateImg.html">生成组织架构图</a>
+        <a class="" id="" href="/Home/AuthManager/index">设置角色权限</a>
+        <a class="" id="" href="/Home/User/index">设置用户权限</a>
+       </div>
+            <form method="get" action="/OA/OrganizSetting/settingList">
+            <table class="queryTable fl w" style="margin:10px 0 10px 0px;">
+            <tbody>
+            <tr>
+            <td>
+            <span class="fleft">名称：</span>
+            <span class="fleft"><input name="name" value="{$map['name']}" type="text"  class="b-name"></span>
+            <span class="fleft"><input name="" value="查询" class="com-btn" type="submit"></span>
+            </td>
+            </tr>
+            </tbody>
+            </table>
+            </form>
+        </div>
+        <style type="text/css">
+    .td-l{
+        text-align:left !important;padding-left:20px !important;
+    }
+    .color1a72d6{cursor: pointer;}
+        </style>
+        <!--办公用品申请列表-->
+        <div class="workListBox">
+            <table class="listTable office_btn Js_tableCon" id="treeTable">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>公司名称</th>
+                        <th>部门名称</th>
+                        <th>部门主管</th>
+                        <th>操作</th>
+                        <th>授权</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                    <volist name="list" id="vo">
+                        <tr id="{$vo['id']}" pid="{$vo['pid']}">
+                            <td  class="td-l"><span>{$vo["id"]}</span></td>
+
+                            <td><span><?php if($vo["company_name"]){ ?> {$vo["company_name"]} <?php }else{ echo "--";} ?></span></td>
+
+                            <td  class="td-l"><span>{$vo["name"]}</span></td>
+                            <td><span><?php if($vo["heads"]){ ?> {$vo["heads"]} <?php }else{ echo "--";} ?></span></td>
+                            <td>
+                                <a href="/OA/OrganizSetting/setting.html?pid={$vo["id"]}" class="color1a72d6">添加子节点</a>
+                                <a href="/OA/OrganizSetting/setting.html?pid={$vo["id"]}&id={$vo["id"]}">编辑</a>
+                                <a href="javascript:void(0);" onclick="s.del({$vo["id"]})" id="del_{$vo["id"]}">删除</a>
+                            </td>
+                            <td>
+                            <?php if($vo['type']==0){ ?>
+                                <a class="cur-link color1a72d6" onclick="auth.setAuth({$vo.id},3,1,'部门')">功能权限</a>
+                                <a  class="cur-link color1a72d6" onclick="auth.setDataAuth({$vo.id},3,2,'部门')">数据权限</a>
+                                <?php }else{ ?>
+                                --
+                                <?php   } ?>
+                                
+                            </td>
+                        </tr>
+                    </volist>
+                    <else />
+                    <tr>
+                     <td colspan="4" style="height:auto !important;"><div class="no-datas">暂无数据！！</div></td>
+                    </tr>
+                </notempty>
+                </tbody>
+            </table>
+            <notempty name="list">
+            <div class="no-datas">{$page}</div>
+            </notempty>
+        </div>
+        <!--end 办公用品申请列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<script src="/Public/static/tabletree/js/jquery.treetable.js" type="text/javascript"> </script>
+<script type="text/javascript">
+    $(function(){ $('#treeTable').treeTable(); });
+</script> 
+<script type="text/javascript">
+    
+    var s={
+        del:function(id){
+            var url='/OA/OrganizSetting/delsetting.html',params={};
+            params.id=id;
+            layer.confirm("您确定要删除？",function(){
+                $("#del_"+id).html("删除中.");
+                $.get(url,params,function(data){
+                    if(data.code=="501"){
+                        layer.confirm(data.msg,function(){
+                            $("#del_"+id).html("删除中.");
+                            $.get("/OA/OrganizSetting/delsettingsur.html",params,function(data){
+                                layer.alert(data.msg);
+                                window.location.reload();
+                            });
+                        });
+                    }else{
+                        layer.alert(data.msg);
+                        window.location.reload();
+                    }
+                });
+            });
+        }
+    };
+</script>
+<script type="text/javascript">var pType="departIndex";</script>
+<script type="text/javascript" src="/Public/Home/js/auth.js?v={:getVersion()}"></script>
+</block>

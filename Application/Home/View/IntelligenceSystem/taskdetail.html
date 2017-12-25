@@ -1,0 +1,229 @@
+<extend name="Public/basehtml"/>
+<block name="body">
+
+<div class="m-tlist" <?php if($print=="yes"){ ?> style="width:800px !important;margin:0px auto !important;" <?php }else{ ?> style="width:98%;float:left;" <?php } ?> >
+    <?php if($print!="yes"){ ?>
+    <div class="subMainBox d-f titz">
+        <div class="ri_header" style="height:auto;width:100%;">
+            <div class="ri_title_box">
+                <span class="clip-text" href="" style="cursor:pointer;" onclick="window.location.href='/Home/IntelligenceSystem/intelLibrary';">情报库</span>
+            </div>
+            <div class="ri_work">Intelligence Library</div>
+        </div>
+    </div>
+    <?php } ?> 
+
+    <div class="d-f mg-slt PrintArea" id="myPrintArea" style="width:96%;margin-left:3%;">
+        <style type="text/css">
+        .A4 {        
+        page-break-before: auto;        
+        page-break-after: always;
+        }
+        body{
+        overflow-y:scroll !important;
+        }
+        .qr-btn{
+        width:120px;margin-left:39%;
+        height: 35px;
+        line-height: 35px;
+        }
+        #show_txt{
+        font-size: 14px;
+        line-height: 24px;
+        }
+
+        </style>
+        <link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+        <div class="d-f d-tisl">
+            <span class="qib-skshjks">情报编号：{$zqbOne["qb_no"]}</span>
+            <input type="button" class="tx-zi zzdy" value="打印" style="float:right;margin-top:14px;margin-right:20px;" <?php if($print=="yes"){ ?>  onclick="window.print();"<?php }else{ ?>  onclick="z.zprint()" <?php } ?>  />
+             <?php if($canSum){ ?>
+             <?php if(empty($zqbOne['sum_status']) || $zqbOne['sum_status']==0){ ?>
+            <select class="is-tongjs-se" id="sum_status" onchange="z.saveSumStatus()">
+                <option value="">--请选择情报结果状态--</option>
+                <option value="1">成功案例</option>
+                <option value="2">失败案例</option>
+            </select>
+            <?php } } ?>
+        </div>
+        <div class="d-f qb-tislis">{$zqbOne["title"]}</div>
+        <div class="d-f qbv-kisjiks">
+            <span class="qb-fwwez">主负责人：{$zqbOne["pri_user"]}</span>
+                <?php if($zqbOne['sum_status']==1){ ?> 
+                <img src="/Public/Home/img/cg-on.png" class="tsk-img"> <?php }?>  
+                <?php if($zqbOne['sum_status']==2){ ?>
+                <img src="/Public/Home/img/shib.png" class="tsk-img"> <?php } ?>
+           <!-- 
+             -->
+        </div>
+        <div class="d-f qib-tisl"> 
+            <div class="d-f qb-tiaddsl">一、原始情报</div>
+            <div class="d-f qb-misk">
+                <div class="qb-tisl-a">描述：</div>
+                <div class="qb-tis-b">{$zqbOne["remark"]}</div>
+            </div>
+            <div class="d-f qb-timsis">
+                <span class="qb-nski-ms">
+                    <span class="ts-left"> 发起人：</span>
+                    <span class="f-xtnsk">{$zqbOne["ct_user"]}</span>
+               </span>
+                <span class="qb-nski-ms">
+                    <span class="ts-left"> 开始时间：</span>
+                    <span class="f-xtnsk"> {$zqbOne["ctime"]|strtotime|date='Y-m-d',###}</span>
+               
+                </span>
+                <span class="qb-nski-ms">
+                    <span class="ts-left"> 计划完成时间：</span>
+                    <span class="f-xtnsk"> {$zqbOne["exp_end_time"]|strtotime|date='Y-m-d',###}</span>
+
+               </span>
+                <span class="qb-nski-ms" style="margin-right:0px;">
+                    <span class="ts-left"> 实际完成时间：</span>
+                    <span class="f-xtnsk"><?php if($zqbOne["fact_end_time"]){ ?> {$zqbOne["fact_end_time"]|strtotime|date='Y-m-d',###}<?php }else{ ?>-- <?php } ?></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="d-f qb-renwuer A4">
+            <div class="d-f qb-tiaddsl">二、情报详情</div>
+            <div class="d-f qb-xins-se" id="zqb_taskList">
+
+                <notempty name="rwList">
+                    <?php foreach ($rwList as $k => $v) {
+                        ?>
+                        <div class="d-f qb-xxins-item">
+                            <div class="d-f qb-titls-linea">
+                            <span class="qb-kitks qb-item-inde " style="margin-right:0px;">{$k+1}、情报任务：{$v['head_title']}</span>
+                           
+                            <span class="qb-kitks" style="margin-left:17.5%;">任务负责人：{$v['real_name']}</span>
+                            </div>
+                            <div class="d-f qb-titls-linea">
+                                <?php if($v['zd_list']){
+                                    foreach ($v['zd_list'] as $ka => $va) {
+                                        $mg = $ka==0?'style="margin-left:20px;"':"";
+                                        ?>
+                                        <span class="qb-kitks" {$mg}>{$va['name']}：{$va['demand_val']}</span>
+                                        <?php
+                                    }
+                                } ?>
+
+                                <?php if($v["zrw_list"]){
+                                    foreach ($v["zrw_list"] as $kb => $vb) {
+                                        ?>
+                                            <div style="" class="zrw-secls d-f">
+                                                <div class="zwr-list d-f">
+                                                    <div class="d-f qb-titls-linea ">
+                                                    <span class="qb-kitks qb-item-inde zwr-cl" style="margin-right:0px;">({$kb+1})、</span>
+                                                    <span class="qb-kitks zwr-cl">子情报任务：<?php if($vb['head_title']){ ?> {$vb['head_title']} <?php }else{ ?> -- <?php } ?></span>
+                                                    <span class="qb-kitks zwr-cl">任务负责人：{$vb['real_name']}</span>
+                                                    </div>
+                                                    <div class="qb-titls-linea d-f" style="padding-bottom:10px;">
+                                                        <?php if($vb['zd_list']){
+                                                            foreach ($vb['zd_list'] as $kc => $vc) {
+                                                                $mg1 = $kb==0?'style="margin-left:20px;"':"";
+                                                                ?>
+                                                                <span class="qb-kitks" >{$vc['name']}：{$vc['demand_val']}</span>
+                                                                <?php
+                                                            }
+                                                        } ?>
+
+
+                                                
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                           
+
+
+
+                                    <?php }
+                                    } ?>
+                            </div>
+                        </div>
+                    <?php  } ?>
+                      
+                       
+                        
+                    <else />
+                     <div class="d-f qb-aldks" id="loadTask">无数据！</div>
+                </notempty>
+                <!-- <div class="d-f qb-aldks" id="loadTask">加载中....</div> -->
+            </div>
+        </div>
+
+        <div class="d-f qb-renwuer A4">
+            <div class="d-f qb-tiaddsl">三、待合作情报跟进</div>
+            <div class="d-f qb-gjjlk" id="zqb_gj">
+            <notempty name="genjinList">    
+                <?php foreach ($genjinList as $k => $v) {  
+                    $remark = "";
+                    if($v['remark']){
+                        $remark = ' <font style="color:#999;">(备注：'.$v['remark'].')</font>';
+                    }
+                    ?>
+                   <div class="d-f qblijls"><span class="qb-listjsl">{$v['visit_time']}    {$v['real_name']}跟进   情况：{$v['result']}{$remark}  </span></div>
+                    <?php } ?>
+                <else />
+                <div class="d-f qb-aldks" id="loadjd">暂无数据</div>
+            </notempty>
+               <!--  <div class="d-f qb-aldks" id="loadjd">加载中....</div> -->
+            </div>
+        </div>  
+
+
+        <div class="d-f qb-renwuer A4">
+            <div class="d-f qb-tiaddsl">四、情报总结</div>
+            <div class="d-f qb-gjjlk">
+                <div class="qb-telzongje">
+                 <?php if($canSum){ ?>
+                    <?php if($zqbOne['int_sum']){ ?>
+                        <div class="d-f" id="bj_body">
+                            <div class="d-f" style="width:85%;" id="show_txt">{$zqbOne['int_sum']}</div> 
+                            <?php if($print!="yes"){ ?>
+                            <div style="float:left;width:10%;margin-left:2%;" class="titz">
+                                <a href="javascript:void(0);" class="titz" style="color:#508dee;" onclick="z.showEdit();">编辑</a>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    <?php }else{ ?>
+                        
+                    <?php } ?>
+                    <textarea class="txt-jkszong" id="int_sum" <?php if($zqbOne['int_sum']){ ?> style="display:none;"<?php } ?> >{$zqbOne['int_sum']}</textarea>
+                <?php }else{ ?>
+                     <div class="d-f"><?php if($zqbOne['int_sum']){ ?> {$zqbOne['int_sum']} <?php }else{ ?> -- <?php } ?></div>   
+                <?php } ?>
+                </div>
+            </div>
+        </div> 
+        
+        <?php if($print!="yes"){ ?>
+            <div class="d-f qb-renwuer qb-qjers titz">
+            <?php if($canSum){ ?> 
+           
+            <input type="button" value="确认" class="quer-bntks qr-btn" onclick="z.saveSum()" id="qr_sum" style="<?php if($zqbOne['int_sum']){ ?> display:none;<?php } ?>" /> 
+
+             <input type="button" value="取消" class="quer-bntks qr-btn" onclick="z.cancleSum()" id="cancle_sum" style="display:none;margin-left:5%;" /> 
+
+
+            <?php  } else{ ?> <input type="button" value="返回" class="quer-bntks qr-btn"  onclick="window.location.href='/Home/IntelligenceSystem/intelLibrary.html';" /> <?php } ?>
+                
+            </div>
+        <?php } ?>
+        <script type="text/javascript">
+            var _de={
+                zqb_id:"{$zqbOne["id"]}"
+            };
+        </script>
+        <script src="/Public/Home/js/js.printarea.js" type="text/JavaScript" language="javascript"></script>
+        <script type="text/javascript" src="/Public/static/layer/layer.js"></script>
+        <script type="text/javascript" src="/Public/Home/js/qb.zqbdetail.js?v={:getVersion()}"></script>
+
+    </div> 
+
+</div>
+
+
+</block>

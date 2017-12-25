@@ -1,0 +1,147 @@
+<extend name="Public/base"/>
+<block name="body">
+    <!--数据表-->
+    <form id="dataform"  action="{:U('update')}" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="NOTIFY_ID" name="NOTIFY_ID" value="{$upInfo['notify_id']}">
+        <input type="hidden" id="FROM_ID" name="FROM_ID" value="<?php echo UID ?>">
+        <!--<table class="dialogTable_form w ha">
+            <tr>
+                <th>标题：</th>
+                <td><input type="text" name="SUBJECT"></td>
+            </tr>
+            <tr>
+                <th>类型：</th>
+                <td><bselect name="TYPE_ID" options="notify_type" selected="_GET['notify_type']" first="请选择"/></td>
+            </tr>
+            <tr>
+                <th>阅读权限：</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>有效期：</th>
+                <td><input name="BEGIN_DATE" readonly="readonly" style="width: 103px;" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate"/>至<input style="width: 103px;" name="END_DATE" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate"/>(无终止时间将一直生效)</td>
+            </tr>
+            <tr>
+                <th>置顶：</th>
+                <td><input type="radio" name="TOP" value="1" checked>是&nbsp;&nbsp;<input type="radio" name="TOP" value="0">否</td>
+            </tr>
+            <tr>
+                <th>附件：</th>
+                <td><input type="file" class="fileBtn" id="notifyFile"  name="notifyFile" multiple="multiple" /><span class="nr"></span></td>
+            </tr>
+        </table>-->
+        <div class="subCon">
+            <!--新增、修改表单-->
+            <div class="modifyCon">
+                <p class="modify">
+                    <lable>标题</lable>
+                    <input type="text" name="SUBJECT" value="{$upInfo['subject']}">
+                </p>
+                <p class="modify">
+                    <lable>类型</lable>
+                    <bselect name="TYPE_ID" options="notify_type" selected="upInfo['type_id']" first="请选择"/>
+                </p>
+                <div class="modify">
+                    <lable>阅读权限</lable>
+                    <span class="power">添加部门</span>
+                    <!--文件树-->
+                    <div class="fileTree">
+                        <h2>选择部门</h2>
+                        <div class="fileList">
+                            123123
+                        </div>
+                        <input class="fileClose" name="" type="button" value="确定">
+                    </div>
+                    <!--end 文件树-->
+                </div>
+                <p class="modify">
+                    <lable>有效期</lable>
+                    <input name="BEGIN_DATE" readonly="readonly" style="width: 180px;" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$upInfo['begin_date']}" />&nbsp;&nbsp;至&nbsp;&nbsp;<input style="width: 180px;" name="END_DATE" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$upInfo['end_date']}" />(无终止时间将一直生效)
+                </p>
+                <p class="modify">
+                    <lable>是否置顶</lable>
+                    <if condition="($upInfo['top'] eq 1)">
+                        <input type="radio" name="TOP" value="1" checked>是&nbsp;&nbsp;
+                        <input type="radio" name="TOP" value="0">否
+                    <else />
+                        <input type="radio" name="TOP" value="1">是&nbsp;&nbsp;
+                        <input type="radio" name="TOP" value="0" checked>否
+                    </if>
+
+                </p>
+                <div class="modify">
+                    <lable>附件</lable>
+                    <div class="alloFile">
+                        <input type="file"  id="notifyFile"  name="notifyFile" multiple="multiple" /><span class="nr"></span>
+                    </div>
+                </div>
+                <p class="modify">
+                    <lable>描述</lable>
+                    <textarea id="CONTENT" name="CONTENT" style="width: 550px;">{$upInfo.content}</textarea>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="dataFormOperate" style="line-height: 500px;width: 30%;">
+            <input id="" type="submit" value="保存" />
+            <a href="{:U('index')}">返回</a>
+        </div>
+    </form>
+
+</block>
+
+<block name="script">
+    <script src="__MODULE__/jquery.form.js"></script>
+
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+    <!--编辑器 start-->
+    <link rel="stylesheet" href="__PUBLIC__/OA/js/kindeditor-4.1.10/themes/default/default.css" />
+    <script charset="utf-8" src="__PUBLIC__/OA/js/kindeditor-4.1.10/kindeditor-all-min.js"></script>
+    <script charset="utf-8" src="__PUBLIC__/OA/js/kindeditor-4.1.10/lang/zh_CN.js"></script>
+    <script>
+        var editor;
+        KindEditor.ready(function(K) {
+            editor = K.create('textarea[name="CONTENT"]', {
+            allowFileManager : true
+            });
+
+            K('input[name=getHtml]').click(function(e) {
+            alert(editor.html());
+            });
+            K('input[name=isEmpty]').click(function(e) {
+            alert(editor.isEmpty());
+            });
+            K('input[name=getText]').click(function(e) {
+            alert(editor.text());
+            });
+            K('input[name=selectedHtml]').click(function(e) {
+            alert(editor.selectedHtml());
+            });
+            K('input[name=setHtml]').click(function(e) {
+            editor.html('<h3>Hello KindEditor</h3>');
+            });
+            K('input[name=setText]').click(function(e) {
+            editor.text('<h3>Hello KindEditor</h3>');
+            });
+            K('input[name=insertHtml]').click(function(e) {
+            editor.insertHtml('<strong>插入HTML</strong>');
+            });
+            K('input[name=appendHtml]').click(function(e) {
+            editor.appendHtml('<strong>添加HTML</strong>');
+            });
+            K('input[name=clear]').click(function(e) {
+            editor.html('');
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            var Popupe = new PopupBase();
+            Popupe.show('.power', '.fileTree');
+            Popupe.hide('.fileClose','.fileTree');
+        });
+    </script>
+</block>

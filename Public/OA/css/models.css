@@ -1,0 +1,1326 @@
+select::-ms-expand {
+  display: none;
+}
+select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+}
+i,
+em {
+  font-style: normal;
+}
+input[type="submit"],
+input[type="button"] {
+  cursor: pointer;
+}
+.clearfix,
+.btnBox,
+.modifyCon .previewBox,
+.modifyCon .special,
+.officeBox .officeCon .officeList,
+.companyBox .companyCon .companyList,
+.designListBox,
+.setupBox .setupLeft .setupTerm .setupSelect,
+.voteBox .voteConBox p,
+.resultList .reportList,
+.entryList {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after,
+.btnBox:before,
+.btnBox:after,
+.modifyCon .previewBox:before,
+.modifyCon .previewBox:after,
+.modifyCon .special:before,
+.modifyCon .special:after,
+.officeBox .officeCon .officeList:before,
+.officeBox .officeCon .officeList:after,
+.companyBox .companyCon .companyList:before,
+.companyBox .companyCon .companyList:after,
+.designListBox:before,
+.designListBox:after,
+.setupBox .setupLeft .setupTerm .setupSelect:before,
+.setupBox .setupLeft .setupTerm .setupSelect:after,
+.voteBox .voteConBox p:before,
+.voteBox .voteConBox p:after,
+.resultList .reportList:before,
+.resultList .reportList:after,
+.entryList:before,
+.entryList:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after,
+.btnBox:after,
+.modifyCon .previewBox:after,
+.modifyCon .special:after,
+.officeBox .officeCon .officeList:after,
+.companyBox .companyCon .companyList:after,
+.designListBox:after,
+.setupBox .setupLeft .setupTerm .setupSelect:after,
+.voteBox .voteConBox p:after,
+.resultList .reportList:after,
+.entryList:after {
+  clear: both;
+  visibility: hidden;
+  height: 0;
+}
+.relative {
+  position: relative;
+}
+.absolute {
+  position: absolute;
+}
+.display {
+  display: none;
+}
+/*内容主体框架*/
+.subConten {
+  padding: 20px;
+}
+/*面包屑样式*/
+.crumbs {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  color: #999999;
+}
+.crumbs a {
+  color: #999999;
+}
+.crumbs a:hover {
+  color: #1269cc;
+  text-decoration: underline;
+}
+.crumbs span {
+  color: #1269cc;
+}
+/*条件查询&筛选*/
+.subCon {
+  margin-top: 20px;
+}
+.queryTable {
+  width: 100%;
+  height: auto;
+  table-layout: fixed;
+}
+.queryTable tr th,
+.queryTable tr td {
+  height: 50px;
+  line-height: 50px;
+  font-size: 12px;
+  color: #666666;
+}
+.queryTable tr th {
+  width: 100px;
+  text-align: right;
+}
+.queryTable .dayTimeBox .start_rise {
+  min-width: 100px !important;
+  width: 40% !important;
+}
+.queryTable input[type="text"],
+.queryTable select,
+.modifyCon .modify input[type="text"],
+.modifyCon .modify input[type="password"],
+.modifyCon .modify select,
+.companyBox .companyCon .companyList li select,
+.designListBox .design_node .design_txt input[type="text"],
+.setupBox .setupLeft .setupTerm .setupSelect select,
+.voteBox .voteConBox p input[type="text"],
+.entryList li .entryCon select,
+.entryList li .entryCon input[type="text"] {
+  height: 40px;
+  line-height: 40px;
+  font-size: 12px;
+  color: #666666;
+  border: 1px solid #d8d8d8;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.queryTable input[type="text"],
+.modifyCon .modify input[type="text"],
+.modifyCon .modify input[type="password"],
+.designListBox .design_node .design_txt input[type="text"],
+.voteBox .voteConBox p input[type="text"],
+.entryList li .entryCon input[type="text"] {
+  width: 85%;
+  padding: 0 2%;
+}
+.queryTable input[type="text"]:focus,
+.modifyCon .modify input[type="text"]:focus,
+.modifyCon .modify input[type="password"]:focus,
+.designListBox .design_node .design_txt input[type="text"]:focus,
+.voteBox .voteConBox p input[type="text"]:focus,
+.entryList li .entryCon input[type="text"]:focus {
+  border: 1px solid #1269cc;
+}
+.queryTable select,
+.modifyCon .modify select,
+.companyBox .companyCon .companyList li select,
+.setupBox .setupLeft .setupTerm .setupSelect select,
+.entryList li .entryCon select {
+  width: 89%;
+  background: url("../images/select_up.png") 96.8% center no-repeat #fff;
+}
+.queryTable select:focus,
+.modifyCon .modify select:focus,
+.companyBox .companyCon .companyList li select:focus,
+.setupBox .setupLeft .setupTerm .setupSelect select:focus,
+.entryList li .entryCon select:focus {
+  border: 1px solid #1269cc;
+}
+.creatoa,
+.queryTable input[type="button"],
+.queryTable input[type="submit"],
+.office_btn tr td input[type="button"].chase_plete,
+.voteBox .voteConBox p input[type="button"] {
+  height: 30px;
+  color: #fff;
+  border: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-size: 12px;
+  margin-right: 20px;
+}
+.creatoa,
+.queryTable input[type="button"],
+.office_btn tr td input[type="button"].chase_plete,
+.voteBox .voteConBox p input[type="button"] {
+  min-width: 70px;
+  padding: 0 5px;
+  background: #1269cc;
+}
+.queryTable input[type="button"]:hover,
+.office_btn tr td input[type="button"].chase_plete:hover,
+.voteBox .voteConBox p input[type="button"]:hover {
+  background: #3d90ee;
+}
+.queryTable input[type="submit"] {
+  width: 76px;
+  background: #adcc2b;
+}
+.queryTable input[type="submit"]:hover {
+  background: #c7df65;
+}
+.queryTable .dayTime {
+  width: 88% !important;
+}
+.queryTable .dayTime input[type="text"] {
+  width: 100% !important;
+}
+.queryTable .dayTime i {
+  top: 18px !important;
+}
+.queryTable .query_time {
+  display: block;
+  position: relative;
+}
+.queryTable .query_time i {
+  position: absolute;
+  top: 5px;
+  right: 11%;
+  width: 30px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background: #fff;
+}
+/*考勤列表*/
+.workListBox {
+  margin-top: 20px;
+}
+.workListBox .workTitle {
+  height: 42px;
+  line-height: 42px;
+  font-size: 12px;
+  color: #fff;
+  background: #1269cc;
+  text-indent: 40px;
+}
+.workListBox .workTitle span {
+  margin-right: 40px;
+}
+.workListBox .workTitle span i {
+  color: #fff100;
+}
+.listTable {
+  width: 100%;
+  height: auto;
+  table-layout: fixed;
+}
+.listTable tr {
+  background: #f9f9f9;
+}
+.listTable tr:nth-child(2n) {
+  background: #fff;
+}
+.listTable tr:hover {
+  background: #fefcf4;
+}
+.listTable tr th,
+.listTable tr td {
+  height: 42px;
+  vertical-align: middle;
+  border: 1px solid #d8d8d8;
+  text-align: center;
+  font-size: 12px;
+  color: #333333;
+}
+.listTable tr th {
+  color: #fff;
+  background: #1269cc;
+}
+.listTable tr th input[type="checkbox"] {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.listTable tr td .rest,
+.listTable tr td .listTable tr td a.rest {
+  color: #1269cc;
+}
+.listTable tr td .rest_red {
+  color: #e60012;
+}
+.listTable tr td .rest_green {
+  color: #228b22;
+}
+.listTable tr td span em {
+  color: #e60012;
+  margin-left: 10px;
+}
+.listTable tr td .title_btn {
+  display: block;
+  cursor: pointer;
+}
+.listTable tr td .title_btn:hover {
+  color: #1269cc;
+}
+.listTable tr td a {
+  display: inline-block;
+  padding: 0 10px;
+  margin: 0 5px;
+}
+.listTable tr td a:hover {
+  text-decoration: underline;
+}
+.listTable tr td a.edit {
+  color: #228b22;
+}
+.listTable tr td a.detail {
+  color: #f33;
+}
+.listTable tr td input[type="button"] {
+  width: 50px;
+  height: 30px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #dadada;
+  margin-left: 20px;
+}
+.listTable tr td input[type="button"]:hover {
+  color: #1269cc;
+  border: 1px solid #1269cc;
+}
+.listTable tr td input[type="button"].look_btn {
+  margin-left: 0;
+}
+.listTable tr td input[type="button"].look_btn:hover {
+  background: #1269cc;
+  color: #fff;
+}
+.tabThBg tr th {
+  background: #fff;
+  color: #333333;
+}
+/*公用按钮*/
+.btnBox {
+  margin-top: 20px;
+  height: 36px;
+  text-align: center;
+}
+.btnBox input[type="button"] {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  height: 36px;
+  color: #fff;
+  border: none;
+  margin: 0 380px;
+}
+.btnBox input[type="button"].close {
+  width: 76px;
+  background: #adcc2b;
+}
+.btnBox input[type="button"].close:hover {
+  background: #c7df65;
+}
+.btnBox input[type="button"].submit {
+  width: 110px;
+  background: #1269cc;
+}
+.btnBox input[type="button"].submit:hover {
+  background: #3d90ee;
+}
+.btnBox input[type="button"].question_btn {
+  color: #666666;
+}
+/*公用遮罩层*/
+.mask {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+/*弹出层公共样式*/
+.popupPublic {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background: #f9f9f9;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  padding-bottom: 20px;
+  overflow: hidden;
+  z-index: 1030;
+}
+/*考勤说明详情弹出层*/
+.popup {
+  width: 860px;
+  height: 450px;
+  margin-left: -430px;
+  margin-top: -230px;
+}
+.popup .tableList {
+  width: 100%;
+  height: 394px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.popup .tableList tr th {
+  border-top: none;
+}
+.popup .radiusTab {
+  background: #fff;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+}
+/*考勤说明弹出层*/
+.explain {
+  width: 650px;
+  height: 430px;
+  margin-left: -325px;
+  margin-top: -220px;
+}
+.explain h2,
+.officeBox h2,
+.companyBox h2,
+.voteBox h2 {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: normal;
+  color: #fff;
+  background: #1269cc;
+  margin: 0;
+}
+.explain .explainCon {
+  width: 100%;
+  height: 324px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.explain .explainCon .explainList li {
+  width: 92%;
+  height: 56px;
+  border-bottom: 1px solid #ddd;
+  line-height: 56px;
+  padding: 0 4%;
+  color: #666666;
+  font-size: 12px;
+  overflow: hidden;
+}
+.explain .explainCon .explainList li input[type="radio"] {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+.explain .explainCon .explainList li input[type="text"] {
+  margin-left: 30px;
+  width: 110px;
+  height: 30px;
+  padding: 0 10px;
+  text-align: center;
+  border: 1px solid #d8d8d8;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+/*制度管理功能按钮区*/
+.shopBtn {
+  margin-top: 20px;
+}
+.shopBtn span {
+  display: inline-block;
+  min-width: 90px;
+  height: 30px;
+  background: #f9f9f9;
+  line-height: 30px;
+  text-align: center;
+  border: 1px solid #dadada;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin-right: 20px;
+  padding: 0 10px;
+  cursor: pointer;
+  position: relative;
+  font-size: 14px;
+  vertical-align: middle;
+}
+.shopBtn span:hover {
+  color: #1269cc;
+}
+.shopBtn span a {
+  display: block;
+}
+.shopBtn span a:hover {
+  color: #1269cc;
+}
+.shopBtn span:before,
+.modifyCon .modify .power:before {
+  display: inline-block;
+  text-indent: -9999px;
+  vertical-align: middle;
+  margin-right: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.shopBtn .add_icon:before,
+.modifyCon .modify .power:before {
+  content: "";
+  background: url("../images/add_icon.png") 0 center no-repeat;
+  width: 13px;
+  height: 30px;
+}
+.shopBtn .up_icon:before {
+  content: "~\"url(../images/up_icon.png)\"";
+  background: url("../images/up_icon.png") 0 center no-repeat;
+  width: 14px;
+  height: 30px;
+}
+.shopBtn .down_icon:before {
+  content: "~\"url(../images/down_icon.png)\"";
+  background: url("../images/down_icon.png") 0 center no-repeat;
+  width: 14px;
+  height: 30px;
+}
+.shopBtn .delete_icon:before {
+  content: "~\"url(../images/delete_icon.png)\"";
+  background: url("../images/delete_icon.png") 0 center no-repeat;
+  width: 13px;
+  height: 30px;
+}
+.shopBtn .import_icon:before {
+  content: "~\"url(../images/import_icon.png)\"";
+  background: url("../images/import_icon.png") 0 center no-repeat;
+  width: 15px;
+  height: 30px;
+}
+.shopBtn .export_icon:before {
+  content: "~\"url(../images/export_icon.png)\"";
+  background: url("../images/export_icon.png") 0 center no-repeat;
+  width: 15px;
+  height: 30px;
+}
+/*管理制度详情弹出层*/
+.conDetails {
+  position: relative;
+  width: 600px;
+  height: 500px;
+  top: 50%;
+  left: 50%;
+  margin-left: -300px;
+  margin-top: -250px;
+  overflow: hidden;
+}
+.conDetails .colse {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 21px;
+  height: 21px;
+  background: url("../images/close_icon.png") 0 0 no-repeat;
+}
+.conDetails h2 {
+  width: 90%;
+  height: 40px;
+  margin: 20px auto 0 auto;
+  font-size: 14px;
+  color: #666666;
+  text-align: center;
+  font-weight: normal;
+  border-bottom: 1px solid #d8d8d8;
+}
+.conDetails .detailsCon {
+  width: 90%;
+  height: auto;
+  margin: 0 auto;
+  color: #666666;
+  font-size: 14px;
+}
+.conDetails .detailsCon p.detailsCrumbs {
+  text-align: right;
+  color: #999999;
+  line-height: 40px;
+}
+.conDetails .detailsCon .detailsTxt {
+  width: 100%;
+  height: 370px;
+  line-height: 30px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.conDetails .detailsCon a {
+  color: #1269cc;
+}
+.conDetails .detailsCon a:hover {
+  text-decoration: underline;
+}
+/*管理制度 > 新增、修改表单*/
+.modifyCon .modify {
+  position: relative;
+  height: 44px;
+  margin-bottom: 26px;
+}
+.modifyCon .modify lable {
+  display: inline-block;
+  width: 70px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 12px;
+  color: #333333;
+}
+.modifyCon .modify input[type="text"],
+.modifyCon .modify input[type="password"] {
+  width: 450px;
+  height: 42px;
+  padding: 0 10px;
+}
+.modifyCon .modify select {
+  width: 450px;
+  height: 42px;
+}
+.modifyCon .modify .power {
+  font-size: 14px;
+  color: #1269cc;
+  cursor: pointer;
+}
+.modifyCon .modify .fileTree {
+  display: none;
+  width: 268px;
+  height: 350px;
+  background: #eeeeee;
+  position: absolute;
+  top: 0;
+  left: 200px;
+  z-index: 1070;
+}
+.modifyCon .modify .fileTree h2 {
+  width: 100%;
+  height: 38px;
+  line-height: 38px;
+  background: #1269cc;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+.modifyCon .modify .fileTree .fileList {
+  width: 100%;
+  height: 270px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.modifyCon .modify .fileTree input[type="button"] {
+  width: 80%;
+  height: 30px;
+  border: 1px solid #1269cc;
+  color: #1269cc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: 0 10%;
+}
+.modifyCon .modify .fileTree input[type="button"]:hover {
+  border: 1px solid #3d90ee;
+  color: #3d90ee;
+}
+.modifyCon .modify .dayTime,
+.queryTable .dayTime,
+.companyBox .companyCon .companyList li .dayTime,
+.entryList li .entryCon .dayTime,
+.entryList li .entryCon .dayOne,
+.entryList li .entryCon .dayTwo,
+.entryList li .entryCon .dayThree {
+  position: relative;
+  display: inline-block;
+  width: 180px;
+  height: 44px;
+}
+.modifyCon .modify .dayTime input[type="text"],
+.queryTable .dayTime input[type="text"],
+.companyBox .companyCon .companyList li .dayTime input[type="text"],
+.entryList li .entryCon .dayTime input[type="text"],
+.entryList li .entryCon .dayOne input[type="text"],
+.entryList li .entryCon .dayTwo input[type="text"],
+.entryList li .entryCon .dayThree input[type="text"] {
+  width: 180px;
+  height: 44px;
+}
+.modifyCon .modify .dayTime i,
+.queryTable .dayTime i,
+.companyBox .companyCon .companyList li .dayTime i,
+.entryList li .entryCon .dayTime i,
+.entryList li .entryCon .dayOne i,
+.entryList li .entryCon .dayTwo i,
+.entryList li .entryCon .dayThree i {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  color: #1269cc;
+}
+.modifyCon .modify input[type="radio"] {
+  margin: 0 5px 0 16px;
+  vertical-align: middle;
+}
+.modifyCon .modify .alloFile {
+  display: inline-block;
+  vertical-align: middle;
+  width: 180px;
+  height: 42px;
+  border: 1px solid #d8d8d8;
+  line-height: 42px;
+  padding: 0 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  position: relative;
+}
+.modifyCon .modify .alloFile .fileUrl {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.modifyCon .modify .alloFile .fileBtn {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 42px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  cursor: pointer;
+}
+.modifyCon .previewBox {
+  height: 130px;
+}
+.modifyCon .previewBox .preview {
+  display: inline-block;
+  width: 130px;
+  height: 130px;
+  border: 1px solid #d8d8d8;
+}
+.modifyCon .previewBox lable {
+  float: left;
+}
+.modifyCon .editor {
+  width: 1158px;
+  height: 488px;
+  overflow: hidden;
+}
+.modifyCon .special {
+  height: auto;
+}
+.modifyCon .special lable {
+  float: left;
+}
+.modifyCon .special textarea {
+  width: 455px;
+  height: 200px;
+  padding: 4px;
+  font-size: 12px;
+  color: #666666;
+  line-height: 30px;
+  border: 1px solid #d8d8d8;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.modifyCon .special textarea:focus {
+  border: 1px solid #1269cc;
+}
+/*办公用品列表*/
+.office_btn tr td input[type="button"] {
+  width: 110px;
+  height: 30px;
+  margin: 0;
+}
+.office_btn tr td input[type="button"].chase_plete {
+  margin: 0;
+}
+.office_btn tr td input[type="button"].chase_plete:hover {
+  color: #fff;
+}
+.office_btnBox {
+  margin-top: 20px;
+  height: 30px;
+  text-align: left;
+}
+.office_btnBox input[type="button"],
+.btnBox input[type="button"].question_btn,
+.designListBox .design_node .design_btn input[type="button"] {
+  width: 110px;
+  height: 30px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #d8d8d8;
+  margin-right: 20px;
+}
+.office_btnBox input[type="button"]:hover,
+.btnBox input[type="button"].question_btn:hover,
+.designListBox .design_node .design_btn input[type="button"]:hover {
+  color: #1269cc;
+  border: 1px solid #1269cc;
+}
+.officeBox {
+  width: 650px;
+  height: 570px;
+  margin-left: -325px;
+  margin-top: -285px;
+}
+.officeBox .officeCon {
+  width: 100%;
+  height: 440px;
+  margin-top: 25px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.officeBox .officeCon .officeList {
+  width: 588px;
+  margin: 0 auto;
+}
+.officeBox .officeCon .officeList li {
+  min-height: 50px;
+  line-height: 50px;
+  margin-bottom: 14px;
+}
+.officeBox .officeCon .officeList li label,
+.companyBox .companyCon .companyList li label {
+  float: left;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 12px;
+  color: #666666;
+  text-align: left;
+}
+.officeBox .officeCon .officeList li input[type="text"] {
+  float: left;
+  width: 428px;
+  height: 48px;
+  border: 1px solid #fff;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: #fff;
+  padding: 0 10px;
+  margin-right: 10px;
+  font-size: 12px;
+  color: #666666;
+}
+.officeBox .officeCon .officeList li input[type="text"]:focus {
+  border: 1px solid #1269cc;
+}
+.officeBox .officeCon .officeList li textarea {
+  width: 448px;
+  height: 110px;
+  padding: 4px;
+  font-size: 12px;
+  color: #666666;
+  line-height: 30px;
+}
+.officeBox .officeCon .officeList li textarea:focus {
+  border: 1px solid #1269cc;
+}
+/*人事管理*/
+.companyBox {
+  width: 530px;
+  height: 350px;
+  margin-left: -265px;
+  margin-top: -175px;
+}
+.companyBox .companyCon {
+  margin-top: 40px;
+}
+.companyBox .companyCon .companyList {
+  width: 470px;
+  margin: 0 auto;
+}
+.companyBox .companyCon .companyList li {
+  height: 50px;
+  line-height: 50px;
+  margin-bottom: 14px;
+}
+.companyBox .companyCon .companyList li select {
+  width: 346px;
+  height: 50px;
+}
+.companyBox .companyCon .companyList li .dayTime {
+  width: 345px;
+  height: 50px;
+}
+.companyBox .companyCon .companyList li .dayTime input[type="text"] {
+  width: 345px;
+  height: 50px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #d8d8d8;
+  text-indent: 15px;
+}
+.companyBox .companyCon .companyList li .dayTime input[type="text"]:focus {
+  border: 1px solid #1269cc;
+}
+.companyBox .companyCon .companyList li .dayTime i {
+  top: 17px;
+}
+/*=========流程管理===========*/
+.flow_btn {
+  width: 140px;
+  height: 40px;
+  background: #f9f9f9;
+  border: 1px solid #d8d8d8;
+  cursor: pointer;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.flow_btn:hover {
+  background: #1269cc;
+  border: 1px solid #1269cc;
+  color: #fff;
+}
+.designListBox {
+  margin-top: 20px;
+}
+.designListBox .design_node {
+  position: relative;
+  float: left;
+  width: 370px;
+  height: 550px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background: #f9f9f9;
+  margin: 0 10px 14px 0;
+}
+.designListBox .design_node .design_close {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: url("../images/design_icon.png") center center no-repeat;
+  cursor: pointer;
+}
+.designListBox .design_node h3 {
+  height: 50px;
+  line-height: 50px;
+  font-size: 14px;
+  color: #333333;
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.designListBox .design_node .design_txt {
+  width: 340px;
+  height: 44px;
+  line-height: 44px;
+  margin: 12px auto 0 auto;
+}
+.designListBox .design_node .design_txt label {
+  display: inline-block;
+  width: 70px;
+  height: 44px;
+  text-align: left;
+  color: #333333;
+  font-size: 12px;
+}
+.designListBox .design_node .design_txt input[type="text"] {
+  width: 252px;
+  height: 42px;
+}
+.designListBox .design_node .design_samll {
+  height: 35px;
+  line-height: 35px;
+}
+.designListBox .design_node .design_btn {
+  width: 340px;
+  height: 30px;
+  margin: 10px auto 0 auto;
+  text-align: right;
+}
+.design_tit {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+  color: #333333;
+}
+.design_editor {
+  width: 930px;
+  height: 470px;
+  margin-top: 15px;
+  overflow: hidden;
+}
+/*流程管理-条件设置*/
+.setupBox {
+  width: 800px;
+  height: auto;
+  margin-top: 25px;
+}
+.setupBox .setupLeft {
+  width: 400px;
+  height: auto;
+}
+.setupBox .setupLeft .setupTerm {
+  margin-bottom: 30px;
+}
+.setupBox .setupLeft .setupTerm h2 {
+  width: 100%;
+  height: 44px;
+  line-height: 44px;
+  font-weight: normal;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  background: #1269cc;
+  margin-bottom: 14px;
+}
+.setupBox .setupLeft .setupTerm .setupSelect {
+  height: 44px;
+}
+.setupBox .setupLeft .setupTerm .setupSelect select {
+  width: 184px;
+  height: 44px;
+}
+.setupBox .setupLeft .setupTerm .setupSelect select.setupSum {
+  width: 150px;
+  height: 44px;
+  margin-right: 5px;
+}
+.setupBox .setupLeft .setupTerm .setupSelect select.setTerm {
+  width: 56px;
+  height: 44px;
+}
+.setupBox .setupLeft .setupTerm .office_btnBox {
+  text-align: right;
+}
+.setupBox .setupLeft .setupTerm .office_btnBox input[type="button"],
+.setupBox .setupLeft .setupTerm .btnBox input[type="button"].question_btn,
+.setupBox .setupLeft .setupTerm .designListBox .design_node .design_btn input[type="button"] {
+  margin: 0;
+}
+.setupBox .setupRight {
+  width: 320px;
+  height: auto;
+  padding: 20px;
+  background: #f9f9f9;
+  font-size: 14px;
+  color: #333333;
+}
+.setupBox .setupRight p {
+  position: relative;
+  line-height: 30px;
+  margin-bottom: 20px;
+  padding-right: 40px;
+}
+.setupBox .setupRight p .setClose {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 50%;
+  right: 0;
+  margin-top: -15px;
+  background: url("../images/setup_close.png") center center no-repeat;
+}
+/*发起投票 - 投票列表*/
+.voteBox {
+  width: 650px;
+  height: 650px;
+  margin-left: -325px;
+  margin-top: -325px;
+}
+.voteBox .voteConBox {
+  width: 100%;
+  height: 530px;
+  padding: 20px 0 10px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.voteBox .voteConBox p {
+  width: 550px;
+  margin: 10px auto;
+}
+.voteBox .voteConBox p label {
+  float: left;
+  width: 90px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 12px;
+  margin: 0;
+}
+.voteBox .voteConBox p textarea {
+  width: 460px;
+  height: 110px;
+  border: 1px solid #d8d8d8;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  padding: 4px;
+  font-size: 12px;
+  color: #666666;
+  line-height: 30px;
+}
+.voteBox .voteConBox p textarea:focus {
+  border: 1px solid #1269cc;
+}
+.voteBox .voteConBox p input[type="text"] {
+  width: 460px;
+  height: 44px;
+  padding: 0 10px;
+}
+.voteBox .voteConBox p input[type="text"].votetxt {
+  width: 380px;
+  height: 44px;
+}
+.voteBox .voteConBox p input[type="button"] {
+  margin: 0 0 0 10px;
+}
+.voteBox .voteConBox .voteQuestion {
+  width: 550px;
+  height: 336px;
+  padding: 10px 20px;
+  margin: 0 auto;
+  border: 1px solid #dadada;
+  box-sizing: border-box;
+}
+.voteBox .voteConBox .voteQuestion .voteQuesCon input[type="text"],
+.voteBox .voteConBox .voteQuestion .voteQuesCon textarea {
+  width: 415px;
+}
+.voteBox .voteConBox .voteQuestion .voteRadio {
+  height: 30px;
+}
+.voteBox .voteConBox .voteQuestion .voteRadio label {
+  height: 30px;
+  line-height: 30px;
+}
+.voteBox .voteConBox .voteQuestion .voteRadio label.voteLabel {
+  width: 160px;
+}
+.voteBox .voteConBox .voteQuestion .voteRadio span {
+  display: inline-block;
+  line-height: 30px;
+  margin-right: 20px;
+}
+/*投票页面*/
+.voteConList .boteDetail {
+  line-height: 28px;
+  color: #e60012;
+}
+.voteConList .voteList {
+  margin-top: 20px;
+}
+.voteConList .voteList p {
+  line-height: 40px;
+}
+.voteConList .voteList p span {
+  display: inline-block;
+  margin-right: 30px;
+}
+.voteConList .voteList p span input[type="radio"],
+.voteConList .voteList p span input[type="checkbox"] {
+  margin-right: 6px;
+}
+/*投票结果*/
+.resultList .ResultTit {
+  height: 40px;
+  line-height: 40px;
+}
+.resultList .reportList {
+  margin-top: 20px;
+}
+.resultList .reportList li {
+  float: left;
+  width: 33.3333%;
+}
+.resultList .reportList li p {
+  width: 90%;
+  height: 40px;
+  line-height: 20px;
+  overflow: hidden;
+}
+/*员工入职表单*/
+.entryList {
+  margin: 0;
+}
+.entryList li {
+  float: left;
+  width: 33.3334%;
+  height: 44px;
+  margin-bottom: 10px;
+  line-height: 44px;
+  font-size: 12px;
+  color: #333333;
+}
+.entryList li .entryCon {
+  width: 80%;
+  height: 44px;
+}
+.entryList li .entryCon label {
+  width: 70px;
+  margin: 0;
+}
+.entryList li .entryCon label.entryOne {
+  width: 100px;
+}
+.entryList li .entryCon label.entryTwo {
+  width: 160px;
+}
+.entryList li .entryCon label.entryThree {
+  width: 120px;
+}
+.entryList li .entryCon select {
+  width: 75%;
+}
+.entryList li .entryCon input[type="text"] {
+  width: 75%;
+}
+.entryList li .entryCon input[type="text"].txtOne {
+  width: 68%;
+}
+.entryList li .entryCon input[type="text"].dayThree {
+  width: 63.5%;
+}
+.entryList li .entryCon .dayTime {
+  width: 75%;
+}
+.entryList li .entryCon .dayTime input[type="text"] {
+  width: 100%;
+}
+.entryList li .entryCon .dayTime i {
+  top: 18px !important;
+}
+.entryList li .entryCon .dayOne {
+  width: 68%;
+}
+.entryList li .entryCon .dayOne input[type="text"] {
+  width: 100%;
+}
+.entryList li .entryCon .dayOne i {
+  top: 18px !important;
+}
+.entryList li .entryCon .dayTwo {
+  width: 54.5%;
+}
+.entryList li .entryCon .dayTwo input[type="text"] {
+  width: 100%;
+}
+.entryList li .entryCon .dayTwo i {
+  top: 18px !important;
+}
+.entryList li .entryCon .dayThree {
+  width: 63.5%;
+}
+.entryList li .entryCon .dayThree input[type="text"] {
+  width: 100%;
+}
+.entryList li .entryCon .dayThree i {
+  top: 18px !important;
+}
+@media screen and (max-width: 1400px) {
+  .entryList li .entryCon input[type="text"].txtOne {
+    width: 65%;
+  }
+  .entryList li .entryCon input[type="text"].dayThree {
+    width: 58.5%;
+  }
+  .entryList li .entryCon .dayTime {
+    width: 75%;
+  }
+  .entryList li .entryCon .dayTime input[type="text"] {
+    width: 100%;
+  }
+  .entryList li .entryCon .dayTime i {
+    top: 18px !important;
+  }
+  .entryList li .entryCon .dayOne {
+    width: 65%;
+  }
+  .entryList li .entryCon .dayOne input[type="text"] {
+    width: 100%;
+  }
+  .entryList li .entryCon .dayOne i {
+    top: 18px !important;
+  }
+  .entryList li .entryCon .dayTwo {
+    width: 45.5%;
+  }
+  .entryList li .entryCon .dayTwo input[type="text"] {
+    width: 100%;
+  }
+  .entryList li .entryCon .dayTwo i {
+    top: 18px !important;
+  }
+  .entryList li .entryCon .dayThree {
+    width: 58.5%;
+  }
+  .entryList li .entryCon .dayThree input[type="text"] {
+    width: 100%;
+  }
+  .entryList li .entryCon .dayThree i {
+    top: 18px !important;
+  }
+}
+.screenCn .screenOperate a {
+    border-radius: 0;
+    float: left;
+    height: 100%;
+    margin-right: 1px;
+    padding: 0 30px;
+}

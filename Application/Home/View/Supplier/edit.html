@@ -1,0 +1,374 @@
+<extend name="Public/base"/>
+<block name="body">
+<style type="text/css">.dataFormTable input[type="text"], .dataFormTable input[type="password"], .dataFormTable select{width: 99% !important;}</style>
+    <form id="dataform" action="{:U('update')}" method="post" enctype="multipart/form-data">
+    <div class="dataCn fl w ha">
+    <div class="dataFormContainer">
+        <div class="dataFormTitle">基本信息</div>
+        <div class="dataFormContent">
+            <table class="dataFormTable">
+                <tr>
+                    <th>供应商ID：</th>
+                    <td><input readonly="readonly" type="text" name="code" value="{$data.code|default='自动生成'}"></td>
+                    <th>账号(邮箱)：<span class="required">*</span></th>
+                    <td><input type="text" name="email" class="ritem" value="{$data.email}"></td>
+                    <th>供应商名称：<span class="required">*</span></th>
+                    <td><input type="text" name="name" class="ritem"  value="{$data.name}"></td>
+                </tr>
+                <tr>
+                    <th>类型：<span class="required">*</span></th>
+                    <td><bselect name="type" options="op_supplier_type"  class="ritem"  selected="data['type']"/></td>
+                    <th>联系电话：<span class="required">*</span></th>
+                    <td><input type="text" name="mobile"  class="" rtype="phone" value="{$data.mobile}"></td>
+                    <th>地区：<span class="required">*</span></th>
+                    <td><bselect name="region" options="op_region"   class="ritem"  selected="data['region']" first="请选择"/></td>
+                </tr>
+                <tr>
+                    <th>详细地址：<span class="required">*</span></th>
+                    <td><textarea type="text" name="address"  class="" >{$data.address}</textarea></td>
+                    <th>合同OA流水号：</th>
+                    <td><input type="text" item-type="c_num" class="J_dataSelect" readonly="readonly" name="contract_num" value="{$data.contract_num}" dialog-title="OA流水号/广告主名称/签订主体"/>
+                    <if condition="$has_check_auth AND ($_GET['id'] gt 0)">
+                    <th>是否检查：</th>
+                    <td><bradio name="is_check" radios="op_is_check" checked="data['is_check']" separator="  "/></td>
+                    <else/>
+                    <th></th>
+                    <td></td>
+                    </if>
+                </tr>
+            </table>
+        </div>
+
+        <div class="dataFormTitle">对接人信息</div>
+        <div class="dataFormContent">
+            <table id="contacts_tab" class="dynamicTable">
+                <caption align="bottom">
+                    <input id="addContacts" class="addTR" type="button" value="" />
+                </caption>
+                <tr>
+                    <th>联系人姓名<span class="required">*</span></th>
+                    <th>电话<span class="required">*</span></th>
+                    <th>QQ<span class="required">*</span></th>
+                    <th>邮箱<span class="required">*</span></th>
+                    <th>联系地址<span class="required">*</span></th>
+                    <th>业务线<span class="required">*</span></th>
+                    <th>责任商务<span class="required">*</span></th>
+                    <th>操作</th>
+                </tr>
+                <assign name="i" value="1" />
+                <volist name="contactsData" id="item">
+                    <tr>
+                        <td><input type="text" name="contacts[{$i}][name]" value="{$item.name}" class="ritem" /></td>
+                        <td><input type="text" name="contacts[{$i}][mobile]" value="{$item.mobile}" class=""/></td>
+                        <td><input type="text" name="contacts[{$i}][qq]" value="{$item.qq}" /></td>
+                        <td><input type="text" name="contacts[{$i}][email]" value="{$item.email}" /></td>
+                        <td><input type="text" name="contacts[{$i}][address]" value="{$item.address}" class="" /></td>
+                        <td><bselect name="contacts[{$i}][bl_id]" options="op_bl" selected="item['bl_id']" class="ritem" /></td>
+                        <td>
+                            <input readonly="readonly" class="J_dataSelect" item-type="user" type="text" name="show_contacts[{$i}][business_uid]" value="{$item.business_name}"/>
+                            <input type="hidden" name="contacts[{$i}][business_uid]" value="{$item.business_uid}"/>
+                        </td>
+                        <td><span class="doDataDelete" item-id="{$item.id}" item-type="contacts">删除</span></td>
+                        <input type="hidden" name="contacts[{$i}][id]" value="{$item.id}"/>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+
+
+        <div class="dataFormTitle">财务信息</div>
+        <div class="dataFormContent">
+            <table id="finance_tab" class="dynamicTable">
+                <caption align="bottom">
+                    <input id="addFinance" class="addTR" type="button" value="" />
+                </caption>
+                <tr>
+                    <th>财务对象</th>
+                    <th>收款方名称</th>
+                    <th>开户行名称</th>
+                    <th>银行账号</th>
+                    <th>发票类型</th>
+                    <th>业务线</th>
+                    <th>税点</th>
+                    <th>状态</th>
+                </tr>
+                <assign name="i" value="1" />
+                <volist name="financeData" id="item">
+                    <tr>
+                        <td><bselect name="spFinance[{$i}][object_type]" options="op_finance_object" selected="item['object_type']"/></td>
+                        <td><input type="text" name="spFinance[{$i}][payee_name]"   value="{$item.payee_name}"/></td>
+                        <td><input type="text" name="spFinance[{$i}][opening_bank]"  value="{$item.opening_bank}"/></td>
+                        <td><input type="text" name="spFinance[{$i}][bank_no]"  value="{$item.bank_no}"/></td>
+                        <td><bselect name="spFinance[{$i}][invoice_type]"  options="op_invoice_type" selected="item['invoice_type']"/></td>
+                        <td><bselect name="spFinance[{$i}][bl_id]"    options="op_bl" selected="item['bl_id']"/></td>
+                        <td><input type="text" name="spFinance[{$i}][financial_tax]" value="{$item.financial_tax}"   /></td>
+                        <td><span class="doDataDelete" item-id="{$item.id}" item-type="finance">删除</span></td>
+                        <input type="hidden" name="spFinance[{$i}][id]" value="{$item.id}"/>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+
+        <div class="dataFormOperate">
+            <input type="hidden" name="id" value="{$data.id}" />
+            <input id="submitForm" type="button" value="保存" onclick="ck.submit('#sub_1')" id="sub_1"/>
+            <a href="{:U('index')}">返回</a>
+        </div>
+    </div>
+    </div>
+    </form>
+
+    <div class="dataSelectDialog" title="选择框"></div>
+    <div id="bl_dom" style="display: none;">
+        <bselect name="contacts[%s][bl_id]" options="op_bl" selected=""/>
+    </div>
+    <div id="finance_object_type_dom" style="display: none;">
+        <bselect name="spFinance[%s][object_type]" options="op_finance_object" selected=""/>
+    </div>
+    <div id="finance_invoice_type_dom" style="display: none;">
+        <bselect name="spFinance[%s][invoice_type]" options="op_invoice_type" selected=""/>
+    </div>
+    <div id="finance_bl_dom" style="display: none;">
+        <bselect name="spFinance[%s][bl_id]" options="op_bl" selected=""/>
+    </div>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+
+    jQuery(function ($) {
+
+        //新增联系人
+        $("#addContacts").click(function() {
+            var tabObj = $(this).parents('table');
+            var idx = $(tabObj).find('tr').length;
+            var blDom = sprintf($("#bl_dom").html(), idx);
+
+            $(tabObj).append("<tr>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][name]' class=\"ritem\" /></td>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][mobile]' /></td>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][qq]'  /></td>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][email]'  /></td>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][address]' class=\"\" /></td>" +
+                "<td>" + blDom + "</td>" +
+                "<td><input readonly=\"readonly\" class=\"J_dataSelect ritem\" item-type=\"user\" type=\"text\" name=\"show_contacts["+idx+"][business_uid]\"   />" +
+                    "<input type=\"hidden\" name=\"contacts["+idx+"][business_uid]\" /></td>" +
+                "<td>" +
+                "<span class=\"doDataDelete\" item-id=\"\" item-type=\"contacts\">删除</span>" +
+                "</td>" +
+                "</tr>");
+        });
+
+        //新增财务信息
+        $("#addFinance").click(function() {
+            var tabObj = $(this).parents('table');
+            var idx = $(tabObj).find('tr').length;
+            var objectTypeDom = sprintf($("#finance_object_type_dom").html(), idx);
+            var invoiceTypeDom = sprintf($("#finance_invoice_type_dom").html(), idx);
+            var blDom = sprintf($("#finance_bl_dom").html(), idx);
+
+            $(tabObj).append("<tr>" +
+                "<td>" + objectTypeDom + "</td>" +
+                "<td><input type=\"text\" name='spFinance["+idx+"][payee_name]'  /></td>" +
+                "<td><input type=\"text\" name='spFinance["+idx+"][opening_bank]' /></td>" +
+                "<td><input type=\"text\" name='spFinance["+idx+"][bank_no]' /></td>" +
+                "<td>" + invoiceTypeDom + "</td>" +
+                "<td>" + blDom + "</td>" +
+                "<td><input type=\"text\" name='spFinance["+idx+"][financial_tax]'  /></td>" +
+                "<td>" +
+                "<span class=\"doDataDelete\" item-id=\"\" item-type=\"finance\">删除</span>" +
+                "</td>" +
+                "</tr>");
+
+            $("[name='spFinance["+idx+"][payee_name]']").val( $("[name='name']").val());
+        });
+
+        //删除按钮
+        $(".dynamicTable").on('click', '.doDataDelete', function(){
+            var id = $(this).attr('item-id');
+            var type = $(this).attr('item-type');
+            var thisbtn = this;
+
+            if (confirm('确认删除此条信息?')) {
+                if (!id) {
+                    $(thisbtn).parents('tr').remove();
+                } else {
+                    if (type=='contacts') { //删除产品联系人
+                        $.post("{:U('deleteContact')}",{id:id},function(ret){
+                            alertnewpage2(ret.msg);
+                            if(ret.error == 0) {
+                                $(thisbtn).parents('tr').remove();
+                            }
+                        },'json');
+                    } else if (type=='finance') { //删除财务信息
+                        $.post("{:U('deleteFinance')}",{id:id},function(ret){
+                            alertnewpage2(ret.msg);
+                            if(ret.error == 0) {
+                                $(thisbtn).parents('tr').remove();
+                            }
+                        },'json');
+                    }
+                }
+
+            }
+
+        });
+
+        $(".dataSelectDialog").dialog({
+            autoOpen: false,
+            resizable: false,
+            width: "750",
+            height: "550",
+            modal: true,
+            show: "scale",
+            buttons: {
+
+            },
+        });
+
+        //对话框（广告主名称、接入业务线、责任销售、合同编号）
+        var tableObj,itemType;
+        $(".dataFormTable,#contacts_tab").on('click', '.J_dataSelect', function(){
+            tableObj = this;
+            itemType = $(this).attr('item-type');
+            getTable();
+        });
+
+        //缓存点击的值
+        $(".dataSelectDialog").on('click','.dialogTable_list > tbody >tr',function(){
+            $(".dataSelectDialog").data('cho_id', $(this).attr('op-id'));
+            $(".dataSelectDialog").data('cho_name', $(this).attr('op-name'));
+
+            //点击直接保存
+            var field = $(".dataSelectDialog").data('fieldname');
+            var id = $(".dataSelectDialog").data('cho_id');
+            var name = $(".dataSelectDialog").data('cho_name');
+            var realfield = field.indexOf('show')>=0 ? field.substr(5) : field;
+            //设置弹出框选中的值
+            $("[name='"+field+"']").val(name);
+            //真实数据name
+            if (realfield == field) {
+                $("[name='"+realfield+"']").val(name);
+            } else {
+                $("[name='"+realfield+"']").val(id);
+            }
+
+            $(".dataSelectDialog").dialog("close");
+
+        });
+
+        function getTable() {
+            var href = "{:U('Product/optionTable')}" + "?type="+itemType;
+            $.get(href, {}, function(dom){
+                var dataDialog = $(".dataSelectDialog");
+                dataDialog.html(dom);
+                dataDialog.dialog("option","title", $(tableObj).attr('dialog-title'));
+                dataDialog.dialog("open");
+                dataDialog.data('fieldname', $(tableObj).attr('name'));
+                dataDialog.data('href',href);
+            });
+        }
+
+        //弹出框分页
+        $(".dataSelectDialog").on('click','.dataPage_cn a, #searchBtn',function(){
+            var pageObj = this;
+            var url = pageObj.href ? pageObj.href : $(".dataSelectDialog").data('href');
+            var kw = $("input[name='kw']").val();
+            $.get(url,{kw:kw},function(dom){
+                $(".dataSelectDialog").html(dom);
+            },'json');
+            return false;
+        });
+
+        // $("#submitForm").click(function(){
+        //     var form = $("#dataform");
+        //     var url = form.attr('action');
+        //     var btnObj = $(this);
+        //     btnObj.val('保存中...');
+        //     btnObj.attr('disabled',true);
+        //     $.post(url, form.serialize(), function(ret) {
+        //         alertnewpage2(ret.msg, ret.go);
+        //         btnObj.val('保存');
+        //         btnObj.attr('disabled',false);
+        //     });
+        //     return false;
+        // });
+
+    });
+
+    function sprintf() {
+        var arg = arguments,
+                str = arg[0] || '',
+                i, n;
+        for (i = 1, n = arg.length; i < n; i++) {
+            str = str.replace(/%s/, arg[i]);
+        }
+        return str;
+    }
+var ck={
+    checkFill:function(){
+        var list = {
+            ncount:0,
+            valmsg:""
+        };
+        $(".ritem").each(function(){
+            var t=$(this),v=t.val();vtype=t.attr("rtype");
+            if(vtype!=undefined && vtype!=""){
+                //phone
+                if(vtype=="phone"){
+                     if(!(/^\d{11}$/.test(v))){ 
+                        t.css({"border":"1px solid red"});
+                        list.valmsg="手机号码格式不对";
+                        t.focus();  list.ncount++;
+                    } 
+                }
+            }else{
+                if(v==""){
+                    t.css({"border":"1px solid red"});
+                    list.ncount++;
+                    t.focus();
+                }
+            }
+            
+        });
+        return list;
+    },
+    submit:function(sub_id){
+        var form   = $("#dataform");
+        var url    = form.attr('action');
+        var btnObj = $(sub_id);
+        btnObj.val('保存中...');
+        btnObj.attr('disabled',true);
+        var list = ck.checkFill();
+        if(list.ncount==0){
+            $(".ritem").css({"border":"0px"});
+            // layer.msg("ok");
+             $.post(url, form.serialize(), function(ret) {
+                alertnewpage2(ret.msg, ret.go);
+                btnObj.val('保存');
+                btnObj.attr('disabled',false);
+            });
+        }else{
+            var msg="您还有"+list.ncount+"个必填项没填写或者格式不对";
+            if(list.valmsg){
+                msg=list.valmsg;
+            }
+            layer.msg(msg);
+        }
+    },
+    init:function(){
+        this.initFill();
+    },
+    initFill:function(){
+        $(".ritem").each(function(){
+            var t=$(this);
+            t.focusout(function(){
+                if($(this).val()!="") $(this).css({"border":"0px"});
+            });
+        });
+    }
+};
+$(function(){ck.init();});
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+</block>

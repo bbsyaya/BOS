@@ -1,0 +1,188 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__JS__/bootbox.min.js"></script>
+    <script type="text/javascript">
+        $('.check-all').click(function(){
+            $('.ids').prop('checked',this.checked);
+        });
+        $('.ids').click(function(){
+            var option = $('.ids');
+            option.each(function(i) {
+                if(!this.checked){
+                    $('.check-all').prop('checked',false);
+                    return false;
+                }else{
+                    $('.check-all').prop('checked',true);
+                }
+            });
+        });
+
+        $(function() {
+            $(".J_PbillData").click(function(){
+                var chk_value =[];
+                var outData = [];
+                $('input[name="nid"]:checked').each(function(){
+                    chk_value.push($(this).val());
+                    /*var onedata = [];
+                    onedata[0] = $(this).val();
+                    onedata[1] = $(this).parents('tr').find('td').find('input[name="settlementmoney"]').val();
+                    onedata[2] = $(this).parents('tr').find('td').find('input[name="tax"]').val();
+                    onedata[3] = $(this).parents('tr').find('td').find('input[name="ddate"]').val();
+                    outData.push(onedata);*/
+                });
+                if(chk_value ==''){
+                    alert("请选择结算单");return;
+                }
+
+                bootbox.dialog({message: "请耐心等待，正在同步数据...", });
+                $.post("{:U('RBillData')}",{sid:chk_value},function(data){
+                    if(data == "TRUE"){
+                        location.reload();
+                    }else{
+                        alert(data);
+                    }
+                });
+            });
+
+            $(".j_export").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export')}";
+                window.location.href=url+'?'+param;
+            });
+        });
+    </script>
+</block>
+<block name="body">
+    <div class="subMainBox">
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text">同步发票数据</span>
+                <span>财务管理</span>
+            </div>
+            <div class="ri_work">Synchronize invoice data</div>
+        </div>
+    <!--<div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <input type="button" value="确定同步" class="J_PbillData" />
+            <input type="button" value="下载报表" class="j_export" />
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+        </div>
+        <form action="/Finance/index" method='get' id="search_form">
+            <div class="screenList fl w">
+                <table>
+                    <tr>
+                        <th>公司账户：</th>
+                        <td>
+                            <select name='ggzname[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                <foreach name='data_dic' item='v' key='k'>
+                                    <option <php>if(in_array($v['id'],I('get.ggzname')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </td>&lt;!&ndash;<input type="text" name='ggzname' value="{:I('get.ggzname')}"/>&ndash;&gt;
+                        <th>日期：</th>
+                        <td><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="strtime" value="{$strtime}"/></td>
+                        <th>结算单ID：</th>
+                        <td><input type="text" name="sid" value="{:I('get.sid')}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            <input type="submit" value="查询" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>-->
+
+    <div class="screenBox swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <form action="/Finance/index" method='get' id="search_form">
+                        <!--基础查询-->
+                        <h2>基础查询</h2>
+
+                        <div class="swiperRight">
+                            <table class="tableBox">
+                                <tr>
+                                    <th>公司账户：</th>
+                                    <td>
+                                        <select name='ggzname[]' class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                                            <foreach name='data_dic' item='v' key='k'>
+                                                <option <php>if(in_array($v['id'],I('get.ggzname')))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                                            </foreach>
+                                        </select>
+                                    </td><!--<input type="text" name='ggzname' value="{:I('get.ggzname')}"/>-->
+                                    <th>日期：</th>
+                                    <td><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="strtime" value="{$strtime}"/></td>
+                                    <th>结算单ID：</th>
+                                    <td><input type="text" name="sid" value="{:I('get.sid')}"></td>
+                                    <td>
+                                        <input type="submit" value="查询" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </form>
+                    <!--end 基础查询-->
+                </div>
+            </div>
+        </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit">
+            <div class="advancedLeft">
+                <span class="addAdv advBtn">
+                    <input type="button" value="确定同步" class="J_PbillData" />
+                    <input type="button" value="下载报表" class="j_export" />
+                </span>
+            </div>
+        </div>
+        <form action="subaudit" method='post' name='subauditdataform'>
+            <table class="dataTable dataTable1">
+                <thead>
+                <tr>
+                    <th><input class="check-all" name="" type="checkbox">全选</th>
+                    <th>单据编号</th>
+                    <th>发票号</th>
+                    <th>客户编码</th>
+                    <th>客户名称</th>
+                    <th>业务线编码</th>
+                    <th>业务线名称</th>
+                    <th>税率</th>
+                    <th>U8帐套号</th>
+                    <th>金额</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name='data' id='v'>
+                    <tr>
+                        <td><input class="ids" type="checkbox" name="nid" value="{$v['billcode']}"></td>
+                        <td>{$v.billcode}</td>
+                        <td>{$v.billno}</td>
+                        <td>{$v.cuscode}</td>
+                        <td>{$v.cusname}</td>
+                        <td>{$v.itemcode}</td>
+                        <td>{$v.itemname}</td>
+                        <td>{$v.taxrate}</td>
+                        <!--<input type="text" name="notaxmoney" value="{$v.notaxmoney|twonum}">-->
+                        <td>{$v.accid}</td>
+                        <td>{$v.money|twonum}</td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </form>
+        {$_page}
+    </div>
+    </div>
+</block>

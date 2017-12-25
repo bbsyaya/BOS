@@ -1,0 +1,578 @@
+<extend name="Public/base"/>
+
+<block name="script">
+	<script type="text/javascript">
+		function changepaytype(id){
+			if(id==1){
+				$('.J_allmoney').html('');
+				$('#settlementlisttable').show();
+				$('.linelist').hide();
+				$('.textList').hide();
+			}else{
+				$('.J_allmoney').html('<input type="text" name="yfmoney"/>');
+				$('#settlementlisttable').hide();
+				$('.linelist').show();
+				$('.textList').show();
+			}
+		}
+		function getadverlist(){
+			$.post('/Finance/getadverlist',{'name':$('#getadverlistp').find('input[name="name"]').val(),'code':$('#getadverlistp').find('input[name="ad_code"]').val()},function(res){
+				var newhtml='';
+				for(o in res){
+					newhtml+='<tr><td><input type="radio" name="advinfo[]" data="'+res[o].name+'" data_id="'+res[o].id+'" /></td><td>'+res[o].name+'</td><td>'+res[o].code+'</td><td>'+res[o].address+'</td></tr>';
+				}
+				$('.dataSelectDialog').find('tbody').html(newhtml);
+			},'json')
+		}
+		function changetbzt(){
+			//更改同步信息主体查询
+			var tablehtml='';
+			$.post("{:U('gettongbudata')}",{"type":$('#changezt').val()},function(res){
+
+				tablehtml+='<tr><td><a href="javascript:$(\'input[name=tongbuid]\').prop(\'checked\',true);$(\'#allon\').hide();$(\'#alloff\').show();" id="allon">全选</a><a href="javascript:$(\'input[name=tongbuid]\').prop(\'checked\',false);$(\'#allon\').show();$(\'#alloff\').hide();" id="alloff" style="display:none">全不选</a></td><td>日期</td><td>银行流水单据编号</td><td>银行账户编码</td><td>客户编码</td><td>客户名称</td><td>帐套号</td><td>金额</td></tr>';
+				for(var o in res){
+					var thisdata=res[o];
+					tablehtml+="<tr><td><input type='checkbox' value='"+thisdata.id+"' name='tongbuid'/></td><td>"+thisdata.dDate+"</td><td>"+thisdata.BankCode+"</td><td>"+thisdata.BankAccID+"</td><td>"+thisdata.CusCode+"</td><td>"+thisdata.CusName+"</td><td>"+thisdata.AccID+"</td><td>"+thisdata.Money+"</td></tr>";
+				}
+				$(".aRdDialog").find('table').html(tablehtml);
+			},'json');
+		}
+		$(function() {
+
+			//对话框导入流水
+			$(".uploadingDialog").dialog({
+				autoOpen: false,
+				resizable: false,
+				width: "450",
+				height: "200",
+				modal: true,
+				show: "scale",
+				buttons: {
+					"确定":function() {
+						$(this).dialog("close");
+						$('#uploadexcel').submit();
+					},
+					"取消":function(){
+						$(this).dialog("close");
+					}
+				},
+			});
+			//导入流水对话框
+			$(".J_uploading").click(function(){
+				$(".uploadingDialog").dialog("open");
+			});
+
+			//对话框认款
+			$(".affirmDialog").dialog({
+				autoOpen: false,
+				resizable: false,
+				width: "1000",
+				height: "400",
+				modal: true,
+				show: "scale",
+				buttons: {
+					"确定":function() {
+						var fukf=$.trim($('.J_dataSelect').val());
+						var ggz=$.trim($('#paymentname_table').text());
+						fukf=fukf.replace('(','（').replace(')','）');
+						ggz=ggz.replace('(','（').replace(')','）');
+						if(fukf!=ggz && $('.dialogTable_form2').find('input[type="file"]').val()==''){
+							alert('当付款方和广告主名称不一致时，必须上传付款委托书！');
+							return;
+						}
+						var issub=true;
+						if($('.dialogTable_form2').find('select').val()==1){
+							var allsubmoney=0;
+							$('#settlementlisttable').find('tbody').find('input[type="checkbox"]').each(function(){
+								var newnum=parseFloat($(this).parents('tr').find('input[type="text"]').val());
+								var oldnum=parseFloat($(this).parents('tr').find('td').eq(4).text());
+								if($(this).is(':checked')){
+									allsubmoney+=newnum;
+									if(newnum-5>=oldnum)issub=false;
+								}
+							})
+							allsubmoney=Math.round(allsubmoney*100)/100;
+							if(allsubmoney>parseFloat($('#wrkmoney_table').text()))issub=false;
+						}else{
+							if($('.dialogTable_form2').find('input[name="yfmoney"]').val()>parseFloat($('#wrkmoney_table').text()))issub=false;
+						}
+						if(issub){
+							$('#torkmoneyokdoform').attr('target','newpage').submit();
+						}else alert('数据不合格');
+
+
+					},
+					"取消":function(){
+						$(this).dialog("close");
+					}
+				},
+			});
+
+			//认款对话框
+			$(".dataTable").on({
+				click: function() {
+					var datahtml=$(this).parents('tr');
+					$('#adverid').val($(this).attr('data'));
+					$('#paymentname_table').html(datahtml.find('td').eq(3).html());
+					$('#receivablesname_table').html(datahtml.find('td').eq(5).html());
+					$('#adddate_table').html(datahtml.find('td').eq(1).html());
+					$('#money_table').html(datahtml.find('td').eq(4).html());
+					$('#yrkmoney_table').html(datahtml.find('td').eq(7).html());
+					$('#wrkmoney_table').html(datahtml.find('td').eq(8).html());
+					$(".affirmDialog").dialog("open");
+				}
+			}, ".J_affirm");
+
+			//对话框选择广告主
+			$(".dataSelectDialog").dialog({
+				autoOpen: false,
+				resizable: false,
+				width: "600",
+				height: "300",
+				modal: true,
+				show: "scale",
+				buttons: {
+					"确定":function() {
+						$('.dataSelectDialog').find('input').each(function(){
+							if($(this).is(":checked")){
+								var advername=$(this).attr('data');
+								$('#advid').val($(this).attr('data_id'));
+								$('#advername').val($(this).attr('data'));
+								$.post('/Finance/getSettlementInListApi',{'adverid':$(this).attr('data_id')},function(res){
+									var settlementlist='';
+									for(o in res){
+										settlementlist+='<tr><td><input type="checkbox" name="financeid[]" class="J_m" value="'+res[o].id+'"/></td><td>'+advername+'</td><td>'+res[o].comname+'</td><td>'+res[o].strdate+'-'+res[o].enddate+'</td><td>'+Math.round((res[o].settlementmoney-res[o].yskmoney)*100)/100+'</td><td>'+res[o].linename+'</td><td>'+res[o].salername+'</td><td><input name="Financemoney'+res[o].id+'" type="text" /></td></tr>';
+									}
+									$('#settlementlisttable').find('tbody').html(settlementlist);
+								},'json')
+							}
+						})
+						$(this).dialog("close");
+					},
+					"取消":function(){
+						$(this).dialog("close");
+					}
+				},
+			});
+			//选择广告主对话框
+			$(".J_dataSelect").click(function(){
+				$(".dataSelectDialog").dialog("open");
+			});
+			function DX(n){
+				if(n=='' || isNaN(n) || n==0 || n=='0')return '零';
+				if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n))
+					return "数据非法";
+				var unit = "千百拾亿千百拾万千百拾元角分", str = "";
+				n += "00";
+				var p = n.indexOf('.');
+				if (p >= 0)
+					n = n.substring(0, p) + n.substr(p+1, 2);
+				unit = unit.substr(unit.length - n.length);
+				for (var i=0; i < n.length; i++)
+					str += '零壹贰叁肆伍陆柒捌玖'.charAt(n.charAt(i)) + unit.charAt(i);
+				return str.replace(/零(千|百|拾|角)/g, "零").replace(/(零)+/g, "零").replace(/零(万|亿|元)/g, "$1").replace(/(亿)万|壹(拾)/g, "$1$2").replace(/^元零?|零分/g, "").replace(/元$/g, "元整");
+			}
+			function moncom(){
+				var mona=0;
+				$('#settlementlisttable').find('.J_m').each(function(){
+					if($(this).is(':checked'))mona+=parseFloat($(this).parents('tr').find('input[type="text"]').val());
+				})
+				mona=Math.round(mona*100)/100;
+				$('.J_allmoney').html(mona);
+				$('.J_allmoney_DX').html(DX(mona));
+			}
+			$('#settlementlisttable').on({
+				click:function(){
+					moncom();
+				}
+			},'.J_m')
+			$('#settlementlisttable').on({
+				change:function(){
+					moncom();
+				}
+			},'input[type="text"]')
+			$('.J_allmoney').on({
+				change:function(){
+					$('.J_allmoney_DX').html(DX($(this).val()));
+				}
+			},'input');
+			$(".J_Rdata").click(function(){
+				var tablehtml= '';
+					$.post("{:U('gettongbudata')}",{},function(res){
+
+					/*var tablehtml="<select onchange='changetbzt()' class='selectpicker' id='changezt'><option value='0'>全部</option><option value='1'>网聚</option><option value='2'>趣玩</option><option value='3'>趣比</option></select>";*/
+
+					tablehtml+='<tr>' +
+							'<td><a href="javascript:$(\'input[name=tongbuid]\').prop(\'checked\',true);$(\'#allon\').hide();$(\'#alloff\').show();" id="allon">全选</a><a href="javascript:$(\'input[name=tongbuid]\').prop(\'checked\',false);$(\'#allon\').show();$(\'#alloff\').hide();" id="alloff" style="display:none">全不选</a></td>' +
+							'<td>日期</td>' +
+							'<td>银行流水单据编号</td>' +
+							'<td>银行账户编码</td>' +
+							'<td>客户编码</td>' +
+							'<td>客户名称</td>' +
+							'<td>帐套号</td>' +
+							'<td>金额</td>' +
+							'</tr>';
+
+						for(var o in res){
+							var thisdata=res[o];
+							 tablehtml+="<tr>" +
+							 "<td><input type='checkbox' value='"+thisdata.id+"' name='tongbuid'/></td>" +
+							 "<td>"+thisdata.dDate+"</td>" +
+							 "<td>"+thisdata.BankCode+"</td>" +
+							 "<td>"+thisdata.BankAccID+"</td>" +
+							 "<td>"+thisdata.CusCode+"</td>" +
+							 "<td>"+thisdata.CusName+"</td>" +
+							 "<td>"+thisdata.AccID+"</td>" +
+							 "<td>"+thisdata.Money+"</td>" +
+							 "</tr>";
+				 		}
+				$(".aRdDialog").find('table').html(tablehtml);
+				$(".aRdDialog").dialog("open");
+			},'json');
+
+		});
+
+		$(".aRdDialog").dialog({
+			autoOpen: false,
+			resizable: false,
+			width: "900",
+			height: "450",
+			modal: true,
+			show: "scale",
+			buttons: {
+				"确定":function() {
+					//获取合同id
+					var alltbid='';
+					$('input[name="tongbuid"]').each(function(){
+						if($(this).is(":checked"))alltbid+=$(this).val()+',';
+					})
+					if(alltbid.length==0){
+						alert('没有选择任何数据');
+						$(this).dialog("close");
+						return;
+					}else{
+						alltbid=alltbid.substring(0,alltbid.length-1);
+					}
+					$.post("{:U('Rdata')}",{
+						"id":alltbid
+					},function(data){
+						if(data == "TRUE"){
+							location.reload();
+						}else{
+							alert(data);
+						}
+					});
+					$(this).dialog("close");
+				},
+				"取消":function(){
+					$(".aRdDialog").find('table').html('');
+					$(this).dialog("close");
+				}
+			},
+		});
+		});
+	</script>
+</block>
+
+<block name="body">
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">认款管理</span>
+				<span>财务管理</span>
+			</div>
+			<div class="ri_work">Approval management</div>
+		</div>
+		<!--筛选-->
+		<!--<div class="screenCn fl w ha">
+            <div class="screenOperate fl w">
+                <input type="button" value="下载模板" class="" onclick="window.open('/bankmodel.xls')" />
+                <input type="button" value="导入流水" class="J_uploading" />
+                <input type="button" value="导出" class="" onclick="window.open('/Finance/downloadadminmoneylist'+window.location.search)"/>
+                <input type="button" value="筛选" class="J_openScreen" />
+                <input type="button" value="同步收款数据" class="J_Rdata" />&lt;!&ndash;注释于2017.03.08&ndash;&gt;
+                <div class="dataTableShow fr" goal="dataTable1">
+                    <div class="dataTableShow_icon fr"></div>
+                    <div class="dataTable_columnCa pa">
+                        <div class="dataTable_columnCn"></div>
+                        <div class="dataTableShow_close tc">关闭</div>
+                    </div>
+                </div>
+            </div>
+            <div class="screenList fl w">
+            <form action="/Finance/adminMoney" method='get'>
+                <table>
+                    <tr>
+                        <th>付款方名称：</th>
+                        <td><input name="payername" value="{:I('get.payername')}" type="text" /></td>
+                        <th>收款账户：</th>
+                        <td><input type="text" name="receivablesname" value="{:I('get.receivablesname')}" /></td>
+                        <th>认款状态：</th>
+                        <td><select name="status"><option value='0'>全部</option><option value="1">待认款</option><option value="2">已认款</option></select></td>
+                        <th>到账日期：</th>
+                        <td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            <input type="submit" value="查询" />
+                            <input type="button" value="取消" class="J_closeScreen" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            </div>
+        </div>-->
+
+		<div class="screenBox swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<form action="/Finance/adminMoney" method='get'>
+
+						<div class="swiperRight">
+							<table class="tableBox">
+								<tr>
+									<th>付款方名称：</th>
+									<td><input name="payername" value="{:I('get.payername')}" type="text" /></td>
+									<th>收款账户：</th>
+									<td><input type="text" name="receivablesname" value="{:I('get.receivablesname')}" /></td>
+									<th>认款状态：</th>
+									<td><select class="selectpicker" name="status"><option value='0'>全部</option><option value="1">待认款</option><option value="2">已认款</option></select></td>
+									<td>
+										<input type="submit" value="查询" />
+									</td>
+								</tr>
+								<tr>
+									<th>到账日期：</th>
+									<td style="width: 240px;"><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>
+								</tr>
+							</table>
+						</div>
+					</form>
+					<!--end 基础查询-->
+				</div>
+			</div>
+		</div>
+		<!--数据表-->
+		<div class="dataCn fl w ha" id="table_con">
+			<div class="advancedTit" goal="dataTable1">
+
+				<div class="dataTable_columnCa pa">
+					<div class="dataTable_columnCn"></div>
+					<div class="dataTableShow_close tc">关闭</div>
+				</div>
+
+				<div class="advancedLeft">
+						<input type="button" value="下载模板" class="" onclick="window.open('/bankmodel.xls')" />
+
+						<input type="button" value="导入流水" class="J_uploading" />
+						<input type="button" value="导出" class="" onclick="window.open('/Finance/downloadadminmoneylist'+window.location.search)"/>
+						<input type="button" value="同步收款数据" class="J_Rdata" />
+				</div>
+
+				<div class="advancedRight">
+					<div class="dataTableShow fr">
+						<div class="advIcon dataTableShow_icon fr del" style="margin-left: -60px;padding: 0 0px;">筛选</div>
+						<!--<div class="dataTable_columnCa pa">
+                            <div class="dataTable_columnCn"></div>
+                            <div class="dataTableShow_close tc">关闭</div>
+                        </div>-->
+					</div>
+				</div>
+			</div>
+			<table class="dataTable dataTable1">
+				<thead>
+				<tr>
+					<th>编号</th>
+					<th>到款日期</th>
+					<th>摘要</th>
+					<th>付款方名称</th>
+					<th>到账金额</th>
+					<th>收款账户</th>
+					<th>备注</th>
+					<th>已认款金额</th>
+					<th>待认款金额</th>
+					<th>状态</th>
+					<th>付款委托书</th>
+					<th width="150">操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				<volist name="getSum" id="val">
+					<tr>
+						<td>汇总</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>{$val.money}</td>
+						<td></td>
+						<td></td>
+						<td>{$val.yrkmoney}</td>
+						<td>{$val.wrkmoney}</td>
+						<td></td>
+						<td></td>
+						<td width="150"></td>
+					</tr>
+				</volist>
+				<volist name='data' id='v'>
+					<tr>
+						<td>{$v.id}</td>
+						<td>{$v.adddate}</td>
+						<td>{$v.remarks2}</td>
+						<td>{$v.paymentname}</td>
+						<td>{$v.money|twonum}</td>
+						<td>{$v.receivablesname}</td>
+						<td>{$v.remarks}</td>
+						<td>{$v.yrkmoney|twonum}</td>
+						<td>{$v.wrkmoney|twonum}</td>
+						<td><if condition="$v['status'] eq 1">待认款<elseif condition="$v['status'] eq 2"/>已认完<else/>已退款</if></td>
+						<td>
+							<php>if(!empty($v['imgpath'])){
+								$imgpath=explode('$$',$v['imgpath']);
+							</php>
+							<volist name="imgpath" id='val' key='k'>
+								<a target="_blank" href='/{$val}'>预览{$k}</a>
+							</volist>
+							<php>}</php>
+						</td>
+						<td>
+							<eq name="v.status" value="1"><a data="{$v.id}" class="J_affirm">认款</a>&nbsp;</eq>
+							<php>if($v['yrkmoney']/1==0){</php><a target="_blank" href="/Finance/outpay?id={$v.id}">退款</a><php>}</php>
+							<a href="/Finance/paydetail?id={$v.id}" target="_blank">明细</a>
+						</td>
+					</tr>
+				</volist>
+
+				</tbody>
+			</table>
+			<!--分页-->
+			{$_page}
+		</div>
+	</div>
+	</div>
+	<div class="uploadingDialog" title="导入流水">
+		<form action='/Finance/addMoneyForExcel?trace=1' target="newpage" id="uploadexcel" method='post' enctype="multipart/form-data">
+			<table class="dialogTable_form w ha">
+				<tr>
+					<th></th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>导入流水<span class="must">*</span>:</th>
+					<td><input type="file" name='file' multiple="multiple" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<!--弹出框（认款） -->
+	<div class="affirmDialog" title="认款">
+		<form action="/Finance/RKmoneyOkDo<php>if(I('get.xq')=='gasidegg'){echo '?xq=gasidegg';}</php>" method='post' id="torkmoneyokdoform" enctype="multipart/form-data">
+			<table class="dialogTable_form2 w ha">
+				<tr>
+					<th>付款方名称:</th>
+					<td id="paymentname_table">……</td>
+					<th>到款账户:</th>
+					<td id="receivablesname_table">……</td>
+					<th>到款日期:</th>
+					<td id="adddate_table">……</td>
+				</tr>
+				<tr>
+					<th>到款金额:</th>
+					<td id="money_table">……</td>
+					<th>已认款金额:</th>
+					<td id="yrkmoney_table">……</td>
+					<th>待认款金额:</th>
+					<td id="wrkmoney_table">……</td>
+				</tr>
+				<tr>
+					<th>金额类型:</th>
+					<td><select name='actiontype' onchange="changepaytype(this.value)"><option value='1'>结算款</option><option value='2'>预收款</option></select></td>
+					<th>广告主名称:</th>
+					<td><input type="text" readonly="readonly" id="advername" class="J_dataSelect" /><input type="hidden" name='id' id="adverid"/><input type="hidden" name="advid" id="advid"/></td>
+					<th>付款委托书:</th>
+					<td><input type="file" name='file' multiple="multiple" /></td>
+				</tr>
+				<tr>
+					<th>认款金额合计:</th>
+					<td class="J_allmoney">……</td>
+					<th>认款金额大写:</th>
+					<td class="J_allmoney_DX">……</td>
+					<th class="linelist" style="display:none">业务线:</th>
+					<td class="linelist" style="display:none">
+						<select name='lineid'>
+							<volist name="linelist" id='v'>
+								<option value="{$v.id}">{$v.name}</option>
+							</volist>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="textList" style="display:none">备注:</th>
+					<td class="textList" style="display:none">
+						<input type="text" name="is_remark">
+					</td>
+				</tr>
+			</table><br />
+			<table class="dynamicTable w ha dialogTable_list" id="settlementlisttable">
+				<thead>
+				<tr>
+					<th width="40"><input type="checkbox" /></th>
+					<th>广告主名称</th>
+					<th>产品名称</th>
+					<th>起止日期</th>
+					<th>待回款金额</th>
+					<th>业务线</th>
+					<th>所属销售</th>
+					<th>认款金额</th>
+				</tr>
+				</thead>
+
+				<tbody>
+
+				</tbody>
+
+			</table>
+		</form>
+	</div>
+
+	<!--弹出框（选择广告主） -->
+	<div class="dataSelectDialog" title="选择广告主">
+		<table class="dialogTable_list w ha" >
+			<caption id="getadverlistp">
+				名称：
+				<input name="name" type="text" />
+				编码：
+				<input name="ad_code" type="text" />
+				<input type="button" onclick="getadverlist()" value="查询" />
+			</caption>
+			<thead>
+			<tr>
+				<th width="30"><input type="checkbox"/></th>
+				<th>名称</th>
+				<th>编码</th>
+				<th>地址</th>
+			</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+	</div>
+	<style type="text/css">
+		.te {width: 100%; table-layout: fixed;}
+		.te tr{}
+		.te tr th{color: #656c82; width: 100px; height: 40px; line-height: 40px; text-align: right; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+		.te tr td{height: 40px; line-height: 40px;padding-right: 10px;}
+	</style>
+	<!--overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-->
+	<!--弹出框 -->
+	<div class="aRdDialog" title="同步收款数据信息">
+		<div style="width: 200px;text-align: center;margin: 0 auto;display: block;">
+			<select onchange='changetbzt()' class='selectpicker' id='changezt' ><option value='0'>全部</option><option value='1'>网聚</option><option value='2'>趣玩</option><option value='3'>趣比</option></select>
+		</div>
+		<table class="te">
+
+		</table>
+	</div>
+</block>
+

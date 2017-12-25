@@ -1,0 +1,265 @@
+<extend name="Public/base"/>
+<block name="sidebar">
+</block>
+<block name="body">
+    <form id="dataform" action="{:U('update')}" method="post" enctype="multipart/form-data">
+    <div class="dataCn fl w ha">
+    <div class="dataFormContainer">
+        <div class="dataFormTitle">待拓展情报信息</div>
+        <div class="dataFormContent">
+            <table class="dataFormTable">
+                <tr>
+                    <th>产品名称：</th>
+                    <td style="overflow: auto;">
+                        <select name="comid" class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                            <volist name="proList" id='v'>
+                                <option <php>if(in_array($v['id'],$data['comid']))echo "selected='selected'";</php> value="{$v.id}" >{$v.name}</option>
+                            </volist>
+                        </select>
+                    </td>
+                    <th>广告主名称：</th>
+                    <td style="overflow: auto;">
+                        <select name="advid" class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                            <volist name="advList" id='v'>
+                                <option <php>if(in_array($v['id'],$data['advid']))echo "selected='selected'";</php> value="{$v.id}">{$v.name}</option>
+                            </volist>
+                        </select>
+                    </td>
+                    <th>预算额度(单位：万)：</th>
+                    <td><input type="text" name="budget_amount" value="{$data.budget_amount}"></td>
+                </tr>
+                <tr>
+                    <th>联系人：</th>
+                    <td><input type="text" name="contacts" value="{$data.contacts}" /></td>
+                    <th>职级：</th>
+                    <td><input type="text" name="rank" value="{$data.rank}"></td>
+                    <th>联系方式：</th>
+                    <td><input type="text" name="telephone" value="{$data.telephone}" /></td>
+                </tr>
+                <tr>
+                    <th>销售人员：</th>
+                    <td style="overflow: auto;">
+                        <select name='sale_id' class="selectpicker"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                            <!--<option value="0">全部</option>-->
+                            <volist name="userlist2" id='v'>
+                                <option <php>if(in_array($v['id'],I('get.uid')))echo "selected='selected'";</php>
+                                value="{$v.id}">{$v.real_name}</option>
+                            </volist>
+                        </select>
+                    </td>
+                    <th>优先级：</th>
+                    <td>
+                        <select name="priority">
+                            <?php if($data['priority'] == 'S'){?>
+                            <option value="S">S</option>
+                            <?php }elseif($data['priority'] == 'A'){?>
+                            <option value="A">A</option>
+                            <?php }elseif($data['priority'] == 'B'){?>
+                            <option value="B">B</option>
+                            <?php }elseif($data['priority'] == 'C'){?>
+                            <option value="C">C</option>
+                            <?php }elseif($data['priority'] == 'D'){?>
+                            <option value="D">D</option>
+                            <?php }else{?>
+                            <option value="" selected="selected">请选择</option>
+                            <?php }?>
+                        </select>
+                    </td>
+                    <th>业务匹配度：</th>
+                    <td><input type="text" name="matching" value="{$data.matching}" /></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="dataFormOperate">
+            <input type="hidden" name="id" value="{$data.id}" />
+            <input id="submitForm" type="submit" value="保存" />
+            <a href="{:U('index')}">返回</a>
+        </div>
+    </div>
+    </div>
+    </form>
+
+</block>
+
+<block name="script">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<script type="text/javascript">
+
+    jQuery(function ($) {
+
+        //新增联系人
+        $("#addContacts").click(function() {
+            var tabObj = $(this).parents('table');
+            var idx = $(tabObj).find('tr').length;
+            var blDom = sprintf($("#bl_dom").html(), idx);
+
+            $(tabObj).append("<tr>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][name]'/></td>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][mobile]'/></td>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][qq]'/></td>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][email]'/></td>" +
+                "<td><input type=\"text\" name='contacts["+idx+"][address]'/></td>" +
+                "<td>" + blDom + "</td>" +
+                "<td><input readonly=\"readonly\" class=\"J_dataSelect\" item-type=\"user\" type=\"text\" name=\"show_contacts["+idx+"][business_uid]\"/>" +
+                    "<input type=\"hidden\" name=\"contacts["+idx+"][business_uid]\" /></td>" +
+                "<td>" +
+                "<span class=\"doDataDelete\" item-id=\"\" item-type=\"contacts\">删除</span>" +
+                "</td>" +
+                "</tr>");
+        });
+
+        //新增财务信息
+        $("#addFinance").click(function() {
+            var tabObj = $(this).parents('table');
+            var idx = $(tabObj).find('tr').length;
+            var objectTypeDom = sprintf($("#finance_object_type_dom").html(), idx);
+            var invoiceTypeDom = sprintf($("#finance_invoice_type_dom").html(), idx);
+            var blDom = sprintf($("#finance_bl_dom").html(), idx);
+
+            $(tabObj).append("<tr>" +
+                "<td>" + objectTypeDom + "</td>" +
+                "<td><input type=\"text\" name='spFinance["+idx+"][payee_name]'/></td>" +
+                "<td><input type=\"text\" name='spFinance["+idx+"][opening_bank]'/></td>" +
+                "<td><input type=\"text\" name='spFinance["+idx+"][bank_no]'/></td>" +
+                "<td>" + invoiceTypeDom + "</td>" +
+                "<td>" + blDom + "</td>" +
+                "<td><input type=\"text\" name='spFinance["+idx+"][financial_tax]'/></td>" +
+                "<td>" +
+                "<span class=\"doDataDelete\" item-id=\"\" item-type=\"finance\">删除</span>" +
+                "</td>" +
+                "</tr>");
+
+            $("[name='spFinance["+idx+"][payee_name]']").val( $("[name='name']").val());
+        });
+
+        //删除按钮
+        $(".dynamicTable").on('click', '.doDataDelete', function(){
+            var id = $(this).attr('item-id');
+            var type = $(this).attr('item-type');
+            var thisbtn = this;
+
+            if (confirm('确认删除此条信息?')) {
+                if (!id) {
+                    $(thisbtn).parents('tr').remove();
+                } else {
+                    if (type=='contacts') { //删除产品联系人
+                        $.post("{:U('deleteContact')}",{id:id},function(ret){
+                            alertnewpage2(ret.msg);
+                            if(ret.error == 0) {
+                                $(thisbtn).parents('tr').remove();
+                            }
+                        },'json');
+                    } else if (type=='finance') { //删除财务信息
+                        $.post("{:U('deleteFinance')}",{id:id},function(ret){
+                            alertnewpage2(ret.msg);
+                            if(ret.error == 0) {
+                                $(thisbtn).parents('tr').remove();
+                            }
+                        },'json');
+                    }
+                }
+
+            }
+
+        });
+
+        $(".dataSelectDialog").dialog({
+            autoOpen: false,
+            resizable: false,
+            width: "750",
+            height: "550",
+            modal: true,
+            show: "scale",
+            buttons: {
+
+            },
+        });
+
+        //对话框（广告主名称、接入业务线、责任销售、合同编号）
+        var tableObj,itemType;
+        $(".dataFormTable,#contacts_tab").on('click', '.J_dataSelect', function(){
+            tableObj = this;
+            itemType = $(this).attr('item-type');
+            getTable();
+        });
+
+        //缓存点击的值
+        $(".dataSelectDialog").on('click','.dialogTable_list > tbody >tr',function(){
+            $(".dataSelectDialog").data('cho_id', $(this).attr('op-id'));
+            $(".dataSelectDialog").data('cho_name', $(this).attr('op-name'));
+
+            //点击直接保存
+            var field = $(".dataSelectDialog").data('fieldname');
+            var id = $(".dataSelectDialog").data('cho_id');
+            var name = $(".dataSelectDialog").data('cho_name');
+            var realfield = field.indexOf('show')>=0 ? field.substr(5) : field;
+            //设置弹出框选中的值
+            $("[name='"+field+"']").val(name);
+            //真实数据name
+            if (realfield == field) {
+                $("[name='"+realfield+"']").val(name);
+            } else {
+                $("[name='"+realfield+"']").val(id);
+            }
+
+            $(".dataSelectDialog").dialog("close");
+
+        });
+
+        function getTable() {
+            var href = "{:U('Product/optionTable')}" + "?type="+itemType;
+            $.get(href, {}, function(dom){
+                var dataDialog = $(".dataSelectDialog");
+                dataDialog.html(dom);
+                dataDialog.dialog("option","title", $(tableObj).attr('dialog-title'));
+                dataDialog.dialog("open");
+                dataDialog.data('fieldname', $(tableObj).attr('name'));
+                dataDialog.data('href',href);
+            });
+        }
+
+        //弹出框分页
+        $(".dataSelectDialog").on('click','.dataPage_cn a, #searchBtn',function(){
+            var pageObj = this;
+            var url = pageObj.href ? pageObj.href : $(".dataSelectDialog").data('href');
+            var kw = $("input[name='kw']").val();
+            $.get(url,{kw:kw},function(dom){
+                $(".dataSelectDialog").html(dom);
+            },'json');
+            return false;
+        });
+
+        $("#submitForm").click(function(){
+            var form = $("#dataform");
+            var url = form.attr('action');
+            var btnObj = $(this);
+            btnObj.val('保存中...');
+            btnObj.attr('disabled',true);
+            $.post(url, form.serialize(), function(ret) {
+                alertnewpage2(ret.msg, ret.go);
+                btnObj.val('保存');
+                btnObj.attr('disabled',false);
+            });
+            return false;
+        });
+
+    });
+
+    function sprintf() {
+        var arg = arguments,
+                str = arg[0] || '',
+                i, n;
+        for (i = 1, n = arg.length; i < n; i++) {
+            str = str.replace(/%s/, arg[i]);
+        }
+        return str;
+    }
+
+</script>
+
+</block>

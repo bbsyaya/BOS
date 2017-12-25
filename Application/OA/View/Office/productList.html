@@ -1,0 +1,124 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<div class="subConten fl w"  style="padding:2px !important;">
+    <!--内容-->
+<script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+<div class="screenCn fl w ha" style="margin-top:0px;"> 
+<?php if($is_office_adminer){ ?> 
+        <div class="screenOperate fl w">
+        <a class="Js_addOffice addPro"  href="javascript:;" onclick="box.addPro(this)">新增用品</a>
+        <a class="importPro" id="importPro" href="javascript:;">导入办公用品表</a>
+        <a class="J_openScreen"  href="/Public/excel/办公用品导入模板.xlsx"  target="_blank">下载导入办公品模板</a> 
+        </div> 
+<?php } ?>
+       <style type="text/css">body{font-size: 12px !important;}
+.b-name{width:10% !important;height:32px!important;line-height:32px!important;padding:0 5px !important}.com-btn{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:3px!important;color:#fff!important;cursor:pointer!important;margin-left:10px!important;height:32px!important;line-height:32px!important;padding:0 5px !important}.btnBox input[type="button"]{margin: 0px 10px 0 90px !important;}.btnBox{ text-align: center !important;}.btnBox input[type="button"].close{margin:0px !important;}.office_btn tr td input[type="button"]{width:auto !important; padding:0px 8px !important;margin-right: 8px;margin-bottom: 5px;}.Wdate{width: 12% !important;}.listTable tr td{padding: 2px !important;font-size: 12px !important;height: auto !important;}
+       </style>
+       <form method="get" action="/OA/Office/productList">
+            <table class="queryTable fl w" style="margin:10px 0 10px 0px;">
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="fleft">办公用品名称：</span>
+                            <span class="fleft"><input name="name" value="{$map['name']}" type="text"  class="b-name"></span>
+                            <span class="fleft">规格：</span>
+                            <span class="fleft"><input name="format" value="{$map['format']}" type="text"  class="b-name"></span>
+                            <span class="fleft">入库时间：</span>
+                            <span class="fleft">
+                                <input name="time_sdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:m:s'})" class="Wdate" value="{$map['time_sdate']}" type="text">
+                                到
+                                <input name="time_edate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd H:m:s'})" class="Wdate" value="{$map['time_edate']}" type="text">
+                            </span>
+                            <span class="fleft"><input name="" value="查询" class="com-btn" type="submit"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+        <!--办公用品申请列表-->
+        <div class="workListBox">
+            <table class="listTable office_btn Js_tableCon">
+                <thead>
+                    <tr>
+                        <th style="width:5%;"><input class="check-all" name="" type="checkbox" id="checkall">全选</th>
+                        <th style="width:10%;">名称</th>
+                        <th  style="width:10%;">规格</th>
+                        <th  style="width:10%;">单价</th>
+                        <th  style="width:10%;">单位</th>
+                        <th  style="width:10%;">库存</th>
+                        <th  style="width:10%;">备注</th>
+                        <th style="width:10%;">入库时间</th>
+                        <th style="width:15%;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                    <volist name="list" id="vo">
+                        <tr id="tr_{$vo['id']}" data-price="{$vo["price"]}">
+                         <td>
+                            <input class="ids ckitem" name="" type="checkbox"  id="ck_{$vo['id']}" value="{$vo['id']}" data-status="{$vo['status']}">{$vo["id"]}</td>
+                            <td><span>{$vo["name"]}</span></td>
+                            <td><span>{$vo["format"]}</span></td>
+                            <td><span>{$vo["price"]}</span></td>
+                            <td><span>{$vo["unit"]}</span></td>
+                            <td><span>{$vo["stock"]}</span></td>
+                            <td><span>{$vo["remark"]}</span></td>
+                            <td><span>{$vo["dateline"]|strtotime|date="Y-m-d H:i:s",###}</span></td>
+                            <td>
+                            <input name="" type="button" value="我要申领" class="sendApply"  onclick="box.sendApply({$vo['id']})">
+                            <?php if($is_office_adminer){
+                                ?>
+ <input name="" type="button" value="编辑" class="sendApply" id="editOffic_{$vo['id']}"  onclick="box.editOffic({$vo['id']})">
+                             <input name="" type="button" value="删除" class="sendApply" id="delOffic_{$vo['id']}"  onclick="box.delOffic({$vo['id']})">
+                                <?php
+                                } ?>
+                           
+                            </td>
+                        </tr>
+                    </volist>
+                    <else />
+                    <tr>
+                     <td colspan="9" style="height:auto !important;"><div class="no-datas">暂无数据！！</div></td>
+                    </tr>
+                </notempty>
+                </tbody>
+            </table>
+            <div class="no-datas">{$page}</div>
+            <notempty name="list">
+            <?php if($is_office_adminer){ ?> 
+            <div class="office_btnBox">
+                <input name="" type="button" value="删除选中的办公用品" class="delAll" onclick="box.delalloff(this)" style="margin-left:10px;width:170px !important;">
+            </div>
+            <?php } ?>
+        </notempty>
+        </div>
+        <!--end 办公用品申请列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<style type="text/css">
+   .put-shur{border:1px solid #d8d8d8!important;border-radius:3px!important;color:#666!important;font-size:14px!important;height:40px!important;line-height:40px!important}.officeBox .officeCon{height:350px!important}.btnBox{margin-top:0!important;text-align:center}.close{background:#1269cc none repeat scroll 0 0!important;width:110px!important;opacity:1!important;font-weight:normal;font-size:14px;float:left!important;margin-left:10px}.dis-btn{display:inline-block!important}.tj-btn{float:left;margin-left:75px!important}.bz-wz{width:428px!important;border:1px solid #d8d8d8!important}.ui-dialog{z-index:9999!important}.officeBox .officeCon{height:70px!important}.officeBox{height:200px!important;width:400px!important}.put-shur{width:200px!important}.officeBox .officeCon .officeList{width:100%!important}.lav-nbna{margin-left:45px!important;width:80px!important;text-align:center!important}.popupPublic1{background:#f9f9f9 none repeat scroll 0 0;border-radius:6px;display:none;left:50%;top:50%;overflow:hidden;padding-bottom:20px;position:fixed;z-index:2000}.officeBox{margin:0!important}.d-f{display:inline-block!important;width:100%!important}
+</style>
+<div class="mask"></div>
+<div class="popupPublic1 officeBox" style="disnone">
+    <h2 class="d-f">填写申请数量</h2>
+    <div class="officeCon">
+        <ul class="officeList">
+            <li><label class="lav-nbna">申请数量</label><input name="apply_no" id="apply_no" type="text" class="put-shur"></li>
+        </ul>
+    </div>
+    <!--按钮-->
+    <div class="btnBox">
+        <input class="submit dis-btn tj-btn" id="addproduct" name="" type="button" onclick="box.saveApply()" value="提交">
+        <input type="hidden" id="product_id" name="product_id" value=""/>
+        <input class="close dis-btn" name="" type="button" onclick="box.close()"  value="取消">
+    </div>
+    <!--end 按钮-->
+</div>
+<!--end 新增办公用品弹出层-->
+<script type="text/javascript" src="/Public/OA/js/globle.js"></script>
+<script type="text/javascript" src="/Public/OA/js/offpro.js"></script>
+<div class="addDataDialog" title="新增/编辑办公用品" style="display: none;"></div>
+</block>

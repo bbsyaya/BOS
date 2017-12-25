@@ -1,0 +1,299 @@
+<extend name="Public/base"/>
+<block name="style">
+    <meta charset="UTF-8">
+    <title>智能办公平台</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/daterangepicker.css">
+    <style>
+    @charset "utf-8";.form_content{width:1000px;font-size:15px;color:#666}.form_content>div{padding:5px 0 5px 0}#input_content>div{padding:10px 0 4px 0}.form_content .input_group{display:inline-block;width:38%}.input_span{margin-top:8px;display:block;width:120px;text-align:right;float:left;padding-right:10px}.form_content input[type=text]{width:240px;height:36px;border-radius:2px;border:1px solid #ddd;font-size:16px;line-height:36px}#input_radio_content input:first-child{margin-left:0}.form_content input[type=radio]{margin:11px 0 11px 25px;padding-left:5px}.form_content .verify{display:inline-block;width:150px;height:150px;margin:5px 0 5px 20px;font-size:14px;border:1px solid #eee;padding:0}.form_content .verify p{text-align:center;background-color:#1268cb;height:30px;line-height:30px;color:#fff;margin:0;padding:2px}.form_content .verify{background-color:#fafafa;border-radius:5px}.form_content .verify span{text-align:center;line-height:100px;display:block;color:#3385ff}.form_content .time_input{background:url("img/calender.jpg") 213px center no-repeat;margin:0 2px}.form_content .textarea{overflow:hidden}.btn_agree{height:36px;border:0;border-radius:5px;padding:5px 10px;margin:0 10px;color:#fff;font-size:14px;width:100px;}.btn_disagree{height:36px;border:1px solid #6F7281;border-radius:5px;padding:5px 10px;margin:0 10px;color:#6F7281;font-size:14px;width:100px;}button:hover{cursor:pointer}.btn_agree{background-color:#1269cc}.btn_disagree{background-color:#EDEDED}.sel_input{width:240px;height:45px;border:1px solid #ddd;border-radius:5px;padding:0 20px}.reSpan{color:#F00}.hiddenSpan{display:none}.projectTable_container{position:relative;color:#58585c;left:50%;width:1000px;height:auto;font-size:14px;margin-left:-500px;margin-bottom:100px;overflow:hidden}.tableForm{margin:0}.projectTable_title{color:#2c99ff;width:100%;height:80px;font-family:"微软雅黑";text-align:center;line-height:80px;font-size:24px;letter-spacing:2px;overflow:hidden}.apply_container,.audity_container{width:100%;height:auto;overflow:hidden}.audity_container{margin-top:-1px}.apply_tb,.audity_tb{width:100%;height:auto;table-layout:fixed;border-spacing:0;empty-cells:show;border-collapse:collapse}.apply_tb tr th,.audity_tb tr th{color:#000;padding:0;height:35px;margin:0;text-align:center;line-height:30px;font-weight:100;border:solid 1px #1f497d}.apply_tb tr td,.audity_tb tr td{color:#000;height:35px;text-align:center;line-height:30px;margin:0;padding:0;white-space:nowrap;text-overflow:ellipsis;border:solid 1px #1f497d;overflow-x:hidden}.audity_tb tr td{text-align:left;height:60px;line-height:60px}.audity_tb tr td.tc{text-align:center}.applyDynamic_tb{min-width:101%;min-height:101%;margin-top:-2px;margin-left:-2px;table-layout:fixed;border-collapse:collapse;border-spacing:0}.applyDynamic_tb tr th,.applyDynamic_tb tr td{height:30px;text-align:center;line-height:30px;font-weight:100;border:0;border-top:solid 1px #1f497d;border-left:solid 1px #1f497d}.applyDynamic_tb tr td{height:30px;line-height:30px}.applyDynamic_tb tr td .iptText{height:30px;line-height:30px}.applyDynamic_tb tr td .iptButton{margin-top:16px}.iptText{display:inline-block;width:100%;height:100%;min-height:30px;line-height:30px;padding:0;margin:0;border:0;outline:0;vertical-align:middle}.iptText_borderBottom{width:50%;height:22px;line-height:22px;margin-top:6px;margin-bottom:6px;vertical-align:middle;border:0;border-bottom:#d5d5d5 1px solid}.iptText_time{width:130px;height:22px;line-height:22px;margin-top:6px;margin-bottom:6px;vertical-align:middle;border:0;border-bottom:#d5d5d5 1px solid}.iptTexr{width:100%;height:100%;padding:2px;margin:0;white-space:normal;line-height:22px;border:0;overflow:hidden}.selectList1{width:80%;height:30px;padding-left:4px;margin:4px;border-style:none;border:1px solid #d5d5d5;cursor:pointer}.selectList2{max-width:50%;height:30px;padding-left:4px;margin:4px;margin-left:25px;border-style:none;border:1px solid #d5d5d5;cursor:pointer;vertical-align:middle}.iptButton{color:#474747;width:86px;height:31px;padding:0;margin:0;font-size:14px;line-height:31px;text-align:center;border:0;cursor:pointer;background-repeat:no-repeat}.iptButton:hover{background-image:url(../img/button_focus.png)}.labels{width:auto;padding:0;margin:0;font-size:14px;cursor:pointer}.iptRadio{padding:0;margin:0;cursor:pointer}.iptCkx{cursor:pointer;line-height:12px}.apply_tb tr .height72,.audity_tb tr .height72{height:72px;line-height:22px;white-space:normal}.apply_tb tr .autoWrap,.audity_tb tr .autoWrap{height:auto;white-space:normal;line-height:22px}.apply_tb tr .autoHeight,.audity_tb tr .autoHeight{height:auto}.leftTitle{width:60px;height:auto}.apply_tb tr td button,.apply_tb tr td input[type="button"]{color:#474747;width:86px;height:31px;padding:0;margin:4px 10px;font-size:14px;line-height:31px;text-align:center;border:0;cursor:pointer;background:0;background-image:url(/theme/workflow/2016/common/img/button.png);background-repeat:no-repeat}.audity_tb tr td input[type="button"]{color:#474747;width:86px;height:31px;padding:0;margin:0;font-size:14px;line-height:31px;text-align:center;border:0;cursor:pointer;background:0;background-image:url(/theme/workflow/2016/common/img/button.png);background-repeat:no-repeat}
+.projectTable_container tr td button:focus,.projectTable_container tr td input[type="button"]:focus{border:0;outline:0}.projectTable_container tr td button:hover,.projectTable_container tr td input[type="button"]:hover{background-image:url(/theme/workflow/2016/common/img/button_focus.png)}.LIST_VIEW_HEADER .BigInput,.LIST_VIEW .BigInput{width:100%;height:100%;padding:0;margin:0;line-height:30px;border:0;margin-top:-1px;background:0;border:0}.LIST_VIEW_HEADER .BigInput:hover,.LIST_VIEW .BigInput:hover{background:0;border:0}.LIST_VIEW_HEADER select,.LIST_VIEW select{max-width:50%;height:30px;padding:4px;margin:4px;border:0;border:1px solid #d5d5d5;cursor:pointer;background:0}.applyDynamic_tb1{margin-top:-1px}.applyDynamic_tb1 tr th,.applyDynamic_tb1 tr td{height:30px;text-align:center;line-height:30px;font-weight:normal}.applyDynamic_tb1 tr td .iptButton{margin-top:16px}.AUTO{display:inline-block;width:100%;height:100%;min-height:30px;line-height:30px;padding:0;margin:0;border:0;outline:0}.CALC{display:inline-block;width:100%;height:100%;min-height:30px;line-height:30px;padding:0;margin:0;border:0;outline:0}input.bigstatic1,textarea.bigstatic1{color:#000;max-width:100%;border:0;background:0}.audity_tb tr td .websign{display:inline-block;width:300px;height:60px;margin-left:200px;margin-top:-30px}.audity_tb tr td div div div{line-height:0;vertical-align:middle;margin-left:150px;margin-top:-70px}.iptText:focus,.iptTexr:focus,.LIST_VIEW_HEADER .BigInput:focus,.LIST_VIEW .BigInput:focus,.AUTO:focus,.CALC:focus{border:0;outline:0}.selectList1:focus,.selectList2:focus,.LIST_VIEW_HEADER select,.LIST_VIEW select{border:0;outline:0;border:1px solid #d5d5d5}.iptText_time:focus,.iptText_borderBottom:focus{border:0;outline:0;border-bottom:#d5d5d5 1px solid}input::-ms-clear{display:none}
+    </style>
+</block>
+<block name="script">
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script>
+    function getajaxname(){
+        $.post(posturl,{"name":$('#getajaxnameval').val()},function(res){
+            if(res.type=='radio'){
+                var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+                for(var i in res.data){
+                    showhtml+="<tr><td style='width:35px'><input type='radio' name='data' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                    if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                    showhtml+="</tr>";
+                }
+                showhtml+="</table>";
+                $('.dataSelectDialog').html(showhtml);
+            }else if(res.type=='checkbox'){
+                var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+                if(res.title)showhtml+=res.title;
+                for(var i in res.data){
+                    showhtml+="<tr><td style='width:35px'><input type='checkbox' name='ajaxcheckboxdata' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                    if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                    showhtml+="</tr>";
+                }
+                showhtml+="</table>";
+                $('.dataSelectDialog').html(showhtml);
+            }
+        },'json')
+    }
+    var allinput={$data.tablekeylist};
+    var posturl='';
+    
+    $(function(){
+
+        if($('.select_user').length>0){
+            $.get('/OA/Ajax/getalluser',{},function(data){
+                str='';
+                for(var i in data){
+                    str+="<option value='"+data[i].id+"'>"+data[i].real_name+"</option>";
+                }
+                $('.select_user').html(str);
+
+            },'json');
+        }
+        $.get('/OA/Ajax/getnowdata',{},function(res){
+            if($('.nowuser').length>0)$('.nowuser').val(res.nowuser);//用户名称
+            if($('.nowuserid').length>0)$('.nowuserid').val(res.nowuserid);//用户ID
+            if($('.nowbumen').length>0)$('.nowbumen').val(res.nowbumen);//部门名称
+            if($('.nowdate').length>0)$('.nowdate').val(res.nowdate);//日期
+            if($('.nowid').length>0)$('.nowid').val(res.nowid);//OAID
+            $('#this_lcid').val(res.nowid);
+            if($('.nowgw').length>0)$('.nowgw').val(res.nowgw);//角色名称
+            if($('.nowgs').length>0)$('.nowgs').val(res.nowgs);//公司名称
+        },'json');
+        $(".dataSelectDialog").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    width: "600",
+                    height: "500",
+                    modal: true,
+                    show: "scale",
+                    buttons: {
+                        "确定":function() {
+                            if($(this).find('input[type="radio"]').length>0){
+                                $(this).find('input[type="radio"]').each(function(){
+                                    if($(this).is(":checked")){
+                                        this_input.val($(this).val());
+                                        this_input.change();
+                                    }
+                                })
+                            }
+                            if($(this).find('input[type="checkbox"]').length>0){
+                                var allvaluestr='';
+                                $(this).find('input[type="checkbox"]').each(function(){
+                                    if($(this).is(":checked")){
+                                        allvaluestr+=$(this).val()+',';
+                                    }
+                                })
+                                this_input.val(allvaluestr.substring(0,allvaluestr.length-1));
+                                this_input.change();
+                            }
+
+                            $(this).dialog("close");
+                        },
+                        "取消":function(){
+                            $(this).dialog("close");
+                        }
+                    },
+                });
+        $(".form_content").on({click:function(){
+                this_input=$(this);
+                posturl=this_input.attr('url');
+                if(this_input.attr('url')!=''){
+                    if(this_input.attr('data')!='')var data=eval(this_input.attr('data'));
+                    else var data={};
+                    $.post(this_input.attr('url'),data,function(res){
+                        if(res.type=='radio'){
+                            var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+
+                            for(var i in res.data){
+                                showhtml+="<tr><td><input type='radio' name='data' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                                if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                                showhtml+="</tr>";
+                            }
+                            showhtml+="</table>";
+                            $('.dataSelectDialog').html(showhtml);
+                        }else if(res.type=='checkbox'){
+                            var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+                            if(res.title)showhtml+=res.title;
+                            for(var i in res.data){
+                                showhtml+="<tr><td><input type='checkbox' name='ajaxcheckboxdata' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                                if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                                showhtml+="</tr>";
+                            }
+                            showhtml+="</table>";
+                            $('.dataSelectDialog').html(showhtml);
+                        }
+                        $(".dataSelectDialog").dialog("open");
+                    },'json');
+                }else{
+                    $(".dataSelectDialog").dialog("open");
+                }
+                
+            }},'.opdio');
+        $(".form_content").on({dblclick:function(){
+                this_input=$(this);
+                posturl=this_input.attr('url');
+                if(this_input.attr('url')!=''){
+                    if(this_input.attr('data')!='')var data=eval(this_input.attr('data'));
+                    else var data={};
+                    $.post(this_input.attr('url'),data,function(res){
+                        if(res.type=='radio'){
+                            var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+
+                            for(var i in res.data){
+                                showhtml+="<tr><td><input type='radio' name='data' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                                if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                                showhtml+="</tr>";
+                            }
+                            showhtml+="</table>";
+                            $('.dataSelectDialog').html(showhtml);
+                        }else if(res.type=='checkbox'){
+                            var showhtml='<input type="text" name="name" id="getajaxnameval"/><button onclick="getajaxname()">查询</button><table>';
+                            if(res.title)showhtml+=res.title;
+                            for(var i in res.data){
+                                showhtml+="<tr><td><input type='checkbox' name='ajaxcheckboxdata' value='"+res.data[i].id+"'/></td><td>"+res.data[i].name+"</td>";
+                                if(res.data[i].url)showhtml+="<td style='50px'><a target='_blank' href='"+res.data[i].url+"'>查看</a></td>";
+                                showhtml+="</tr>";
+                            }
+                            showhtml+="</table>";
+                            $('.dataSelectDialog').html(showhtml);
+                        }
+                        $(".dataSelectDialog").dialog("open");
+                    },'json');
+                }else{
+                    $(".dataSelectDialog").dialog("open");
+                }
+                
+            }},'.opdio2');
+        $('#tableform').submit(function(){
+            var check_bool=true;
+            var nodataname='';
+            $('.bitian').each(function(){
+                if(!check_bool)return;
+                if($(this).attr('type')=='radio'){
+                    var thisinput_name=$(this).attr('name');
+                    check_bool=false;
+                    $('input[name="'+thisinput_name+'"]').each(function(){
+                        if($(this).is(":checked"))check_bool=true;
+                    })
+                    if(!check_bool){
+                        nodataname=$(this).attr('name');
+                        if(nodataname==undefined)nodataname=$(this).attr('data');
+                    }
+                }else{
+                    if($(this).val()=='' && !$(this).attr("readonly")){
+                        check_bool=false;
+                        nodataname=$(this).attr('name');
+                        if(nodataname==undefined)nodataname=$(this).attr('data');
+                    }
+                }
+            })
+            if(!check_bool){
+                for(o in allinput){
+                    if(nodataname==allinput[o].code)nodataname=allinput[o].name;
+                }
+                layer.msg(nodataname+'不能为空');
+                return false;
+            }
+            $('input[data_type="int"]').each(function(){
+                if(!check_bool || $(this).val()=='')return;
+                if(isNaN($(this).val())){
+                    check_bool=false;
+                    nodataname=$(this).attr('name');
+                    if(nodataname==undefined)nodataname=$(this).attr('data');
+                }
+            })
+            if(!check_bool){
+                for(o in allinput){
+                    if(nodataname==allinput[o].code)nodataname=allinput[o].name;
+                }
+                layer.msg(nodataname+'必须为数字类型');
+                return false;
+            }
+            return true;
+        })
+
+    })
+    </script>
+</block>
+
+<block name="body">
+<script>
+    function rechange() {
+        $('#myfile').val('');
+        $('#mydiv').hide();
+    }
+    function mychange() {
+        if($('#myfile').val()!=''){
+            $('#mydiv').show();
+        }
+    }
+var alldata={$alldata};
+$(function(){
+    for(var d_i in alldata){
+            if($('input[name="'+d_i+'"').length>0){
+                $('input[name="'+d_i+'"').val(alldata[d_i]);
+            }
+        }
+});
+</script>
+
+<link rel="stylesheet" href="__PUBLIC__/OA/css/oaliuc.css?v={:GetVersion()}">
+<form action="/OA/Index/addDo" method='post' id='tableform' enctype="multipart/form-data">
+<input type='hidden' name="thisliuchenid" value="{$data.id}"/>
+<input type="hidden" name="this_lcid" value="" id="this_lcid"/>
+<div style="padding:20px 20px 50px 20px;width:100%;">
+<div class="crumbs"><a href="/OA/Index/loading" style="color:#1269cc;"> 我的流程</a>&nbsp;&gt;&nbsp;<span  style="color:#999 !important;">发起流程</span></div>
+<!-- 流程图 -->
+<div class="lc-sec" style="margin-top:10px;">
+<div class="lc-neks">
+    <div class="lc-item lc-on-ed lc-on-now">
+        开始节点
+        <div class="lc-com-rt"></div>
+    </div>
+     <div class="lc-item  ">
+        待审核
+        <div class="lc-com-rt"></div>
+    </div>
+     
+     <div class="lc-item " style="line-height:40px;">
+         ......
+        <div class="lc-com-rt"></div>
+    </div>
+     <div class="lc-item  ">
+         待审核
+        
+    </div>
+</div>
+</div>
+<!-- end 流程图 -->
+    <div class="form_content yw-sec" style="margin-top:10px;">
+        <div class="yw-titls"><span class="input_span yw-bt yw-btt">标题:</span><input type="text" name="name" value="{$data.name}"/></div>
+        
+        {$data.tablestyle|htmlspecialchars_decode}
+        <div style="width:100%;display: inline-block;padding: 5px 0;">
+                <span style="float:left;width:110px;text-align: right;height: 28px;line-height: 28px;">   上传附件:</span>
+                <span style="float:left;margin-left: 8px">  <input name="file" id="myfile" onchange="mychange()" type="file">  </span>
+                <span style="float:left;">  <a id="mydiv" href="javascript:rechange();" style="display: none;">取消</a> </span>
+        </div>
+        <div style="width:100%;display: inline-block;padding: 5px 0;">
+            <span style="height:120px;line-height:120px;float:left;width:110px;text-align:right;">会签意见:</span>
+            <span style="float:left;"><textarea name='hqyj' style="width:840px;height:120px;border:1px solid #ddd;padding:5px;"/></textarea></span>
+        </div>
+        <div style="width:100%;display: inline-block;text-align:center;;padding: 5px 0;">
+            <button type='submit' class="btn_agree"> 确认 </button>
+            <button onclick="window.history.back()" class="btn_disagree"> 取消 </button>
+        </div>
+        
+    </div>
+</div>
+</form>
+<div class="dataSelectDialog">
+
+</div>
+</block>

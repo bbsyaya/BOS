@@ -1,0 +1,102 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+    <script type="text/javascript" src="__JS__/bootbox.min.js"></script>
+    <script type="text/javascript">
+        $('.check-all').click(function(){
+            $('.ids').prop('checked',this.checked);
+        });
+        $('.ids').click(function(){
+            var option = $('.ids');
+            option.each(function(i) {
+                if(!this.checked){
+                    $('.check-all').prop('checked',false);
+                    return false;
+                }else{
+                    $('.check-all').prop('checked',true);
+                }
+            });
+        });
+
+        $(function() {
+            $(".J_PbillData").click(function(){
+                var chk_value =[];
+                var outData = [];
+                $('input[name="nid"]:checked').each(function(){
+                    chk_value.push($(this).val());
+                    //alert($(this).parents('tr').find('td').eq(5).html());return;
+                    var onedata = [];
+                    onedata[0] = $(this).val();
+                    onedata[1] = $(this).parents('tr').find('td').find('input[name="ddate"]').val();
+                    outData.push(onedata);
+                });
+                if(chk_value ==''){
+                    alert("请选择数据");return;
+                }
+                //bootbox.dialog({message: "请耐心等待，正在同步数据...", });
+                $.post("{:U('update')}",{sid:chk_value,outdata:outData},function(data){
+                    if(data == "TRUE"){
+                        alert("修改成功");
+                        location.reload();
+                    }else{
+                        alert(data);
+                    }
+                });
+            });
+        });
+    </script>
+</block>
+<block name="body">
+    <div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <input type="button" value="确定修改" class="J_PbillData" />
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+        </div>
+        <form action="/UpdatePayTime/index" method='get'>
+            <div class="screenList fl w">
+                <table>
+                    <tr>
+                        <th>OA号：</th>
+                        <td><input type="text" name='run_id' value="{:I('get.run_id')}"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            <input type="submit" value="查询" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha">
+        <form action="subaudit" method='post' name='subauditdataform'>
+            <table class="dataTable dataTable1">
+                <thead>
+                <tr>
+                    <th style="width: 250px;"><input class="check-all" name="" type="checkbox">全选</th>
+                    <th>OA号</th>
+                    <th>支付日期</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name='list' id='v'>
+                    <tr>
+                        <td><input class="ids" type="checkbox" name="nid" value="{$v['id']}"></td>
+                        <td>{$v.run_id}</td>
+                        <td><input type="text" name="ddate" class="Wdate" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd H:m:s'})" value="{$v['pay_date']}" ></td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </form>
+        {$_page}
+    </div>
+</block>

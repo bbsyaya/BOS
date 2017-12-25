@@ -1,0 +1,330 @@
+<extend name="Public/base"/>
+<block name="script">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+	<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+	<script type="text/javascript">
+	var nowmonth='<php>echo date("Ym");</php>';
+			$(function() {
+				var configData;
+				$.post('/Ajax/getConfig',{},function(res){
+					configData=res;
+				},'json')
+				var makeFinanceDataId;
+				//对话框开票
+				$(".invoiceDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "1000",
+					height: "600",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$(this).dialog("close");
+							$('#financeform').submit();
+							//location.reload();
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				//新增对话框
+				$(".screenOperate").on({
+					click: function() {
+						$('#financeform').attr('action','/Target/addTarget');
+						$('#username').html($('#userlist').html());
+						$(".invoiceDialog").dialog("open");
+					}
+				}, ".J_Add");		
+				//新增目标
+				$('.dynamicTable').on({
+					click:function(){
+						var tabObj = $(this).parents('table');
+		                $(tabObj).append($('#addtrclone').html());
+					}
+				},'#add_blplanning')
+				//删除按钮
+	
+				//修改信息
+	            $(".dataTable").on({
+					click:function(){
+						$.post('/Target/getOneUserTargetDataApi',{'id':$(this).attr('data')},function(res){
+							$('#username').html(res.udata.real_name);
+							$('.dialogTable_form').find('input[name="id"]').val(res.udata.id);
+							$('#groupid').html(res.udata.groupname);
+							$('#posttype').html(res.udata.posttype);
+							$('.dialogTable_form').find('input[name="postrule"]').val(res.udata.postrule);
+							$('.dynamicTable').html('<caption align="bottom"><input id="add_blplanning" class="addTR" type="button" value="" /></caption>');
+							for(var i in res.tdata){
+								$('.dynamicTable').append("<tr><th>考核类型:</th><td><select name='type[]'><option value='1'>毛利润</option><option value='2'>收入流水</option><option value='3'>成本流水</option></select></td><th>指标:</th><td><input style='width:90%'' type='text' name='target[]'/>元</td><th>所属月份:</th><td><input style='width:90%' type='text' name='month[]'/>月</td><td><a href='javascript:;' class='J_del'>删除</a></td></tr>");
+							}
+							for(var j=0;j<$('.dynamicTable').find('tr').length;j++){
+								var thisTr=$('.dynamicTable').find('tr').eq(j);
+								var data=res.tdata[j];
+								if(data.month<nowmonth){
+									thisTr.find('select').val(data.type).attr("readonly", "readonly");
+									thisTr.find('input[name="target[]"]').val(data.target).attr("readonly", "readonly");
+									thisTr.find('input[name="month[]"]').val(data.month).attr("readonly", "readonly");
+								}else{
+									thisTr.find('select').val(data.type);
+									thisTr.find('input[name="target[]"]').val(data.target);
+									thisTr.find('input[name="month[]"]').val(data.month);
+								}
+							}
+							$('#financeform').attr('action','/Target/changeTarget');
+							$(".invoiceDialog").dialog("open");
+						},'json');
+						
+					}
+				},".J_change")
+				//删除月目标
+				$(".dynamicTable").on({
+					click:function(){
+						if($(this).parents('tr').find('input[name="month[]"]').val() !='') {
+							if ($(this).parents('tr').find('input[name="month[]"]').val() < nowmonth) {
+								alert('你不能删除过去的目标！');
+							} else {
+								if (confirm('确认删除此条信息?')) {
+									$(this).parents('tr').remove();
+								}
+							}
+						}else{
+							if (confirm('确认删除此条信息?')) {
+								$(this).parents('tr').remove();
+							}
+						}
+					}
+				},".J_del")
+	            //
+	            $('select[name="uid"]').change(function(){
+	            	var thisV=$(this).val();
+					//alert(thisV);
+	            	$(this).find('option').each(function(){
+	            		if($(this).val()==thisV){
+	            			$('#groupid').html($(this).attr('data'));
+	            			$('#posttype').html($(this).attr('data-typename'));
+	            		}
+	            	})
+	            })
+	            $('select[name="uid"]').change();
+	            //对话框导入流水
+				$(".uploadingDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "450",
+					height: "200",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$(this).dialog("close");
+							$('#uploadexcel').submit();
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//导入流水对话框
+				$(".J_uploading").click(function(){
+					$(".uploadingDialog").dialog("open");
+				});
+			});
+		</script>
+</block>
+
+<block name="body">
+			<div class="subMainBox">
+				<div class="ri_header">
+					<div class="ri_title_box">
+						<span class="clip-text">目标设置</span>
+						<span>商务管理</span>
+					</div>
+					<div class="ri_work">Target setting</div>
+
+					<div class="dataTable_columnCa_b pa">
+						<div class="dataTable_columnCn_b"></div>
+						<div class="dataTableShow_close_b tc">关闭</div>
+					</div>
+				</div>
+
+				<div><span class="field_customize">查询自定义</span></div>
+
+				<div class="screenBox">
+					<form action="{:U('index')}" id="search_form">
+
+						<div class="t_left">
+							<div class="ziduan">
+								<label>期间：</label>
+									<select class="selectpicker" name='year' style="width: 100px;">
+										<option value="0" >全部</option>
+										<php>for($i=2016;$i<=2019;$i++){</php>
+										<option value="{$i}" <eq name='i' value="$_GET['year']">selected="selected"</eq>>{$i}年</option>
+										<php>}</php>
+									</select>
+									<select class="selectpicker" name="month" style="width: 49%!important;">
+										<option value="0" >全部</option>
+										<php>for($j=1;$j<=12;$j++){</php>
+										<option value="{$j}" <eq name='j' value="$_GET['month']">selected="selected"</eq>>{$j}月</option>
+										<php>}</php>
+									</select>
+							</div>
+							<div class="ziduan">
+								<label>部门：</label>
+								<input type="text" name="groupid">
+							</div>
+							<div class="ziduan">
+								<label>姓名：</label>
+								<input type="text" name="uid">
+							</div>
+							<div class="ziduan">
+								<label>岗位类型：</label>
+									<select class="selectpicker" name='posttype'>
+										<option value="0">全部</option>
+										<option <eq name='v.posttype' value="1">selected="selected"</eq> value="1">销售</option>
+										<option <eq name='v.posttype' value="2">selected="selected"</eq> value="2">商务</option>
+
+									</select>
+							</div>
+						</div>
+						<div class="t_right"><input type="submit" value="查询" /></div>
+					</form>
+				</div>
+				<!--数据表-->
+				<style type="text/css">
+					.te{margin-left: 0!important;}
+				</style>
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<span class="addAdv advBtn"><input type="button" value="新增" class="J_Add" /></span>
+							<span class="export advBtn te"><input type="button" value="导出" class="" onclick="window.open('/Target/downloadtargetlist'+window.location.search)" /></span>&nbsp;&nbsp;
+							<input type="button" value="导入"  class="J_uploading" />&nbsp;&nbsp;
+							<input type="button" value="下载模板" onclick="window.open('/目标设置.xlsx')" />
+
+						</div>
+					</div>
+					<form action="subaudit" method='post' name='subauditdataform'>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th>序号</th>
+							<th>姓名</th>
+							<th>所属部门</th>
+							<th>岗位类型</th>
+							<th>岗位指标</th>
+							<th>绩效指标</th>
+							<th>月份</th>
+							<th>考核类型</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name='getSum' id='sum'>
+							<tr>
+								<td>汇总</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>{$sum.postrule}</td>
+								<td>{$sum.target}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</volist>
+						<volist name='data' id='v'>
+							<tr>
+								<td>{$v.id}</td>
+								<td>{$v.real_name}</td>
+								<td>{$v.title}</td>
+								<td>{$v.groupname}</td>
+								
+								<td>{$v.postrule}</td>
+								<td>{$v.target}</td>
+								<td>{$v.month}</td>
+								<td>{:C('option.targettype')[$v['type']]}</td>
+								<td><a href="javascript:;" class="J_change" data='{$v.uid}'>修改</a>&nbsp;<a onclick="return confirm('确认删除此员工所有目标信息?')" href="/Target/delOneUserTarget?id={$v.uid}">删除</a></td>
+					        </tr>
+						</volist>
+						</tbody>
+					</table>
+					</form>
+				</div>
+
+			</div>
+
+			<div class="invoiceDialog" title="目标设置">
+			<form id="financeform" action="/Target/addTarget" method='post' target="newpage">
+			
+				<table class="dialogTable_form w ha">
+				<input type='hidden' name='id'/>
+					<tr>
+						<th>姓名:</th>
+						<td id='username'>
+							
+						</td>
+						<th>所属部门:</th>
+						<td id="groupid"></td>
+						
+						
+					</tr>
+					<tr>
+						<th>岗位类型:</th>
+						<td id="posttype"></td>
+						<th>岗位指标:</th>
+						<td><input style="width:90%" type='text' name='postrule'/>元</td>
+					</tr>
+				</table>
+				<table class="dynamicTable w ha">
+					<caption align="bottom">
+                        <input id="add_blplanning" class="addTR" type="button" value="" />
+                    </caption>
+					
+				</table>
+				</form>
+				<table id="addtrclone" style="display:none">
+					<tr>
+						<th>考核类型:</th>
+						<td><select name='type[]'>
+							<option value="1">毛利润</option>
+							<option value="2">收入流水</option>
+							<option value="3">成本流水</option>
+						</select></td>
+						<th>指标:</th>
+						<td><input style="width:90%" type='text' name='target[]'/>元</td>
+						<th>所属月份:</th>
+						<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyyMM'})" type="text" name="month[]" value="{:I('get.strtime')}"/>月</td>
+						<td><a href="javascript:;" class="J_del">删除</a></td>
+					</tr>
+				</table>
+		<div class="uploadingDialog" title="导入流水">
+			<form action='/Target/uploadTargetForExcel' target="newpage" id="uploadexcel" method='post' enctype="multipart/form-data">
+			<table class="dialogTable_form w ha">
+				<tr>
+					<th></th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>导入流水<span class="must">*</span>:</th>
+					<td><input type="file" name='file' multiple="multiple" /></td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div id='userlist' style="display:none;">
+			<select name='uid'>
+				<!--<option value="0">全部</option>-->
+				<volist name="userlist2" id='v'>
+					<option value="{$v.id}" data="{$v.groupname}" data-typename="{$v.posttype}">{$v.real_name}</option>
+				</volist>
+			</select>
+		</div>
+</block>
+
+

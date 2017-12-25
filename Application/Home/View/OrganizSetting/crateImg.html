@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Document</title>
+	<script src="__MODULE__/jquery-2.1.1.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/Public/static/ecotree/ECOTree.js?v=erer"></script>
+	
+	<link type="text/css" rel="stylesheet" href="/Public/static/ecotree/ECOTree.css" />
+</head>
+<body>
+	<div id="myTreeContainer" class="tree-sec"></div>
+	<script>
+		var myTree = null;
+		function CreateTree() {
+			myTree = new ECOTree('myTree','myTreeContainer');	
+			myTree.config.colorStyle = ECOTree.CS_LEVEL;
+			myTree.config.nodeFill = ECOTree.NF_FLAT;
+			myTree.config.useTarget = true;
+			myTree.config.selectMode = ECOTree.SL_NONE;
+			myTree.config.defaultNodeWidth = 150;
+			myTree.config.defaultNodeHeight = 50;
+			myTree.config.iSiblingSeparation = 20;
+			myTree.config.canvasWidth=3000;
+			myTree.config.canvasPaddingLeft = 20;
+			$.get("/OrganizSetting/getJsonTrees",function(data){
+				if(data){
+					$.each(data,function(i,o){
+						o.pid = o.pid==0?-1:o.pid;
+						myTree.add(o.id,o.pid,o.name, "","","#fff","","");
+					});
+					myTree.UpdateTree();
+				}
+			});
+		}
+		$(function(){
+			CreateTree();
+		});		
+	</script>	
+</body>
+</html>

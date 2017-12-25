@@ -1,0 +1,334 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+<!-- data -->
+<div class="subConten fl w" style="padding:2px !important;">
+    <!--内容-->
+    <div class="screenCn fl w ha" style="margin-top:0px;">
+    
+       <div class="screenOperate fl w">
+       <?php $isshow="style='display:none;'"; if($is_office_adminer){ $isshow="style='display:block;'"; } ?>
+        <a class="Js_addOffice addPro" {$isshow} onclick="box.addPro(this)"  href="javascript:;">新增用品</a>
+        <a class="importPro" {$isshow} id="importPro" href="javascript:;">导入办公用品表</a>
+        <a class="J_openScreen"  {$isshow} href="/Public/excel/办公用品导入模板.xlsx"  target="_blank">下载导入办公品模板</a> 
+        <a class="J_openScreen" {$isshow} onclick="p.exportCgDan(this)">导出采购列表</a>
+        
+         <a class="J_openScreen"  href="/OA/office/productList" >我要申请办公用品</a>
+       </div> 
+   
+       <style type="text/css">body{font-size: 12px !important;}
+.b-name{width:300px!important;height:32px!important;line-height:32px!important;padding:0!important}.com-btn{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:3px!important;color:#fff!important;cursor:pointer!important;margin-left:10px!important;height:32px!important;line-height:32px!important;padding:0 5px !important}.btnBox input[type="button"]{margin: 0px 10px 0 200px !important;}.btnBox{ text-align: center !important;}.btnBox input[type="button"].close{margin:0px !important;}.Wdate{width: 12% !important;}.cwt{color: #fff!important;}.listTable tr td{padding:10px 5px !important;font-size: 12px !important;height: auto !important;overflow: hidden;white-space: nowrap; text-overflow: ellipsis;}.fw{width: 100%;}.fw1{width:50%;text-align: right;display:inline-block;}.fw2{width:50%;text-align: left;display:inline-block;}.queryTable input[type="text"], .modifyCon .modify input[type="text"], .modifyCon .modify input[type="password"], .designListBox .design_node .design_txt input[type="text"], .voteBox .voteConBox p input[type="text"], .entryList li .entryCon input[type="text"]{padding: 0 2px !important;}
+       </style>
+       <form method="get" action="/OA/Office/applyList" id="applyListform">
+            <table class="queryTable fl w" style="margin:10px 0 10px 0px;">
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="fleft">办公用品名称：</span>
+                            <span class="fleft"><input name="name" value="{$map['name']}" type="text"  class="b-name"></span>
+                            <span class="fleft">申请时间：</span>
+                            <span class="fleft">
+                                <input name="time_sdate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$map['time_sdate']}" type="text">
+                                到
+                                <input name="time_edate" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$map['time_edate']}" type="text">
+                            </span>
+                            <span class="fleft"><input name="" value="查询" class="com-btn" type="submit"></span>
+                            <input name="order_no" id="order_no"  class="Wdate" value="" type="hidden">
+                            <input name="order_depart" id="order_depart"  class="Wdate" value="" type="hidden">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+   
+    </div>
+    <div class="subCon">
+        <!--ned 功能区-->
+        <!--办公用品列表-->
+        <script type="text/javascript">
+        var p={
+            paix:function(type){
+                $("#order_no").val(type);
+                $("#applyListform").submit();
+            },
+            exportCgDan:function(){
+                var u='/OA/Office/exportPurchase.html';
+                $("#applyListform").attr("action",u);
+                $("#applyListform").attr("target","_blank");
+                $("#applyListform").submit();
+                $("#applyListform").attr("action","/OA/Office/applyList");
+                 $("#applyListform").attr("target","");
+            },
+            paixDepart:function(type){
+                $("#order_depart").val(type);
+                $("#applyListform").submit();
+            }
+        };
+        </script>
+        <div class="workListBox">
+            <table class="listTable office_btn Js_tableCon">
+                <thead>
+                    <tr>
+                        <th width="80"><input class="check-all" name="" type="checkbox">全选</th>
+                        <th>名称</th>
+                        <th>规格</th>
+                        <th>单价</th>
+                        <th>申请人</th>
+                        <th>
+                        
+<a href="javascript:void(0);" class="cwt" onclick="p.paixDepart('{$order_depart}')">申请部门<?php if($order_depart=="asc"){ ?> ↓ <?php }else{ ?> ↑<?php } ?> </a>
+                        </th>
+                        <th><a href="javascript:void(0);" class="cwt" onclick="p.paix('{$order_applyno}')">申请数量<?php if($order_applyno=="asc"){ ?> ↓ <?php }else{ ?> ↑<?php } ?> </a></th>
+                         <th>单位</th>
+                        <th>总金额</th>
+                        <th width="150">总计</th>
+                        <th width="150">申请时间</th>
+                        <th>状态</th>
+                         <?php if($is_office_adminer){ ?>
+                        <th width="150">操作</th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                <?php $total_count = 0;$taotal_money=0; ?>
+                	<volist name="list" id="vo">
+	                	<tr>
+	                        <td>
+	                        <input class="ids ckitem" name="" type="checkbox"  id="ck_{$vo['id']}" value="{$vo['id']}" data-status="{$vo['status']}"></td>
+	                        <td title="{$vo['name']}"><span>{$vo['name']}</span></td>
+	                        <td title="{$vo['format']}"><span>{$vo['format']}</span></td>
+	                        <td title="{$vo['price']}"><span>{$vo['price']}</span></td>
+                            <?php if($vo["real_name"]){ ?>  
+	                        <td rowspan="{$vo["rowspan"]}" ><span>{$vo['real_name']}</span></td>
+                            <?php    } ?>
+                            <?php if($vo["depart_name"]){ ?>
+	                        <td title="{$vo['firstname']}-{$vo['depart_name']}" rowspan="{$vo["rowspan"]}" >{$vo['depart_name']}</span></td>
+                             <?php    } ?>
+	                        <td><span>{$vo['apply_no']}</span></td>
+                            <td><span>{$vo['unit']}</span></td>
+	                        <td><span>{$vo['total_money']}</span></td>
+                            <?php if($vo["total_apply_row"] && $vo["total_money_row"]){ ?>  
+                            <td rowspan="{$vo["rowspan"]}"  >
+                                <div class="fw">
+                                    <span class="fw1">总数量：</span>
+                                    <span class="fw2">{$vo["total_apply_row"]}</span>
+                                </div>
+                                 <div class="fw">
+                                    <span class="fw1">总&nbsp;&nbsp;&nbsp;&nbsp;价：</span>
+                                    <span class="fw2">{$vo["total_money_row"]}元</span>
+                                </div>
+                            </td>
+                            <?php    } ?>
+	                        <td><span>{$vo['dateline']}</span></td>
+                            
+	                        <td >
+    	                        <?php if($vo["status"]==0){ ?> <span class="rest_red">未发放</span> <?php } ?>
+    	                        <?php if($vo["status"]==1){ ?>  <span class="rest_green">已发放</span> <?php } ?>
+    	                        <?php if($vo["status"]==2){ ?>  <span class="rest">需采购</span> <?php } ?>
+	                        </td>
+                          
+                            <?php if($is_office_adminer){ ?>
+	                        <td>
+								<if condition="$vo['status'] eq 0">
+									<input type="button" value="发放" onclick="box.changeStatus_fafang({$vo['id']})" />
+								<elseif condition="$vo['status'] eq 2"/>
+									<input type="button"  onclick="C.finishTake({$vo['id']})" value="采购完成" />
+                                <else />
+                                - -
+								</if>
+                            
+	                        </td>
+                            <?php } ?>
+	                    </tr>
+                        <?php $total_count = $total_count+$vo['apply_no'];$taotal_money = $taotal_money+$vo['total_money']; ?>
+                    	</volist>
+                        <tr>
+                            <td colspan="6" style="text-align:right !important;padding: 5px !important;"><font style="margin-right:2%;">当前页申请总计：</font></td>
+                            <td>{$total_count}</td>
+                            <td>--</td>
+                            <td <?php if($is_office_adminer){ ?> colspan="5" <?php }else{ ?>  colspan="4" <?php } ?> style="text-align:left !important;padding: 5px !important;"><font style="margin-left:9%;">{$taotal_money}元</font></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align:right !important;padding: 5px !important;"><font style="margin-right:2%;">申请总计：</font></td>
+                            <td>{$total_data["t_apply_no"]}</td>
+                            <td>--</td>
+                            <td <?php if($is_office_adminer){ ?> colspan="5" <?php }else{ ?>  colspan="4" <?php } ?> style="text-align:left !important;padding: 5px !important;"><font style="margin-left:9%;">{$total_data["t_total_money"]}元</font></td>
+                        </tr>
+                	<else />
+                	<tr>
+                        <td <?php if($is_office_adminer){ ?> colspan="13" <?php }else{ ?>  colspan="12" <?php } ?> style="height:auto !important;"><div class="no-datas">暂无数据！</div></td>
+                    </tr>
+                </notempty>
+                </tbody>
+            </table>
+        </div>
+         <notempty name="list">
+        <div class="no-datas">{$page}</div></notempty>
+        <!--end 办公用品列表-->
+        <!--按钮-->
+        <notempty name="list">
+        
+            <div class="office_btnBox" style="margin-bottom:50px;">
+                <!-- <input name="" type="button" value="批量处理完成采购" class="applyAll"> -->
+                <?php if($is_office_adminer){ ?>
+                <input name="" type="button" value="批量处理发放完成" onclick="box.applyAll_over(this)">
+                <?php } ?>
+                <input name="" type="button" value="删除勾选的办公用品申请" class="delAll" style="width:200px;">
+            </div>
+       
+        </notempty>
+        <!--end 按钮-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<!--遮罩层-->
+<div class="mask"></div>
+<!--end 遮罩层-->
+<!--新增办公用品弹出层-->
+<style type="text/css">
+	.put-shur{border:1px solid #d8d8d8!important;border-radius:3px!important;color:#666!important;font-size:14px!important;height:40px!important;line-height:40px!important}.officeBox .officeCon{height:400px!important}.btnBox{margin-top:0!important;text-align:center}.close{background:#1269cc none repeat scroll 0 0!important;width:110px!important;opacity:1!important;font-weight:normal;font-size:14px;float:left!important;margin-left:10px}.dis-btn{display:inline-block!important}.tj-btn{float:left;margin-left:180px!important}.bz-wz{width:428px!important;border:1px solid #d8d8d8!important}.ui-dialog{z-index: 9999 !important;}.mgleft230{margin-left: 230px !important;}.mgleft10{margin-left: 10px !important;}
+</style>
+<div class="popupPublic officeBox">
+    <h2>新增办公用品</h2>
+    <div class="officeCon">
+        <!-- <ul class="officeList">
+            <li><label>办公用品名称</label><input name="officename" id="officename" type="text" class="put-shur"></li>
+            <li><label>规格</label><input name="format" id="format" type="text" class="put-shur"></li>
+            <li><label>单价</label><input  name="price" id="price" type="text" class="put-shur">元</li>
+            <li><label>现有数量</label><input name="stock" id="stock" type="text" class="put-shur"></li>
+            <li><label>备注</label><textarea class="bz-wz" name="remark" id="remark"></textarea></li>
+        </ul> -->
+    </div>
+    <!--按钮-->
+    <div class="btnBox">
+        <input class="submit dis-btn tj-btn mgleft230" id="addproduct" name="" type="button" onclick="C.addOffice()" value="提交">
+        <input class="close dis-btn mgleft10" name="" type="button" value="取消">
+    </div>
+    <!--end 按钮-->
+</div>
+<!--end 新增办公用品弹出层-->
+<script type="text/javascript" src="/Public/OA/js/globle.js"></script>
+<script type="text/javascript">
+    // $(function(){
+    //     var Popupe = new PopupBase();
+    //     Popupe.show('.Js_addOffice', '.mask,.officeBox');
+    //     Popupe.hide('.close','.mask,.officeBox');
+    // });
+var addDialogData="";
+var box={
+      addPro:function(obj){
+        $(obj).html("加载中...");
+        if (!addDialogData) {
+            $.get("/OA/Office/add",function(dom){
+                addDialogData = dom;
+                $(".addDataDialog").html(addDialogData);
+                $(".addDataDialog").dialog({
+                    width:400
+                });
+                $(obj).html("新增办公用品");
+            });
+        } else {
+            $(".addDataDialog").html(addDialogData);
+            $(".addDataDialog").dialog();$(obj).html("新增办公用品");
+        }
+    },
+    applyAll_over:function(obj){
+        var ids,params={};
+        params.ids = box.getAllChecked_box();
+        if(!params.ids){
+            layer.alert("请选择需要批量处理已发放的申请");return false;
+        }else{
+            layer.confirm("您确定已发放了吗？",function(){
+                $.post("/OA/Office/updateStock.html",params,function(data){
+                    layer.alert(data.msg);
+                    window.location.reload();
+                });
+            });
+        }
+
+    },
+    getAllChecked_box:function(){
+        var ids = "";
+        $(".ckitem").each(function(){
+            if(this.checked){
+                ids+=$(this).val()+",";
+            }
+        });
+        if(ids){
+            ids = ids.substr(0,ids.length-1);
+        }
+        return ids;
+    },
+    saveData:function(obj){
+        var params = {};
+        params.officename = $("#officename").val();
+        params.format     = $("#format").val();
+        params.price      = $("#price").val();
+        params.stock      = $("#stock").val();
+        params.remark     = $("#remark").val();
+        params.unit     = $("#unit").val();
+        params.id     = $("#pid").val();
+        if(box.checkAddOffice(params)){
+            var o = $(obj);
+            o.val("提交中...");
+            o.attr("onclick","");
+            $.post("/OA/Office/addProduct.html",params,function(data){
+                o.val("提交");
+                o.attr("onclick","C.addOffice()");
+                layer.alert(data.msg);
+                if(data.code==200){
+                    $(".ui-widget-overlay").remove();
+                     window.location.href="/OA/office/productList";
+                }
+            });
+        }
+        $(".ui-widget-overlay").remove();
+    },
+    checkAddOffice:function(params){
+        if(params.officename==""){
+            layer.alert("请填写办公用品名称");
+            $("#officename").focus();
+            return false;
+        }
+        if(params.format==""){
+            layer.alert("请填写办公用品规格");
+            $("#format").focus();
+            return false;
+        }
+        if(params.unit==""){
+            layer.alert("请填写单位");
+            $("#unit").focus();
+            return false;
+        }
+        if(params.price==""){
+            layer.alert("请填写办公用品单价");$("#price").focus();
+            return false;
+        }
+        if(params.stock==""){
+            layer.alert("请填写办公用品库存");$("#stock").focus();
+            return false;
+        }
+        return true;
+    },
+    changeStatus_fafang:function(id){
+        var params={};
+        params.ids=id;
+         layer.confirm("您确定已发放了吗？",function(){
+
+            $.post("/OA/Office/updateStock.html",params,function(data){
+                layer.alert(data.msg);
+                window.location.reload();
+            });
+        });
+    }
+};
+</script>
+<!-- end data -->
+
+<script type="text/javascript">var pType="applyList";</script>
+<script type="text/javascript" src="/Public/Home/js/fun.js"></script>
+<div class="addDataDialog" title="新增/编辑办公用品" style="display: none;"></div>
+</block>

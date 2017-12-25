@@ -1,0 +1,450 @@
+<extend name="Public/base"/>
+<block name="style">
+    <meta charset="UTF-8">
+    <title>流程管理</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+
+    <link rel="stylesheet" href="__PUBLIC__/OA/js/kindeditor-4.1.10/themes/default/default.css" />
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+</block>
+<block name="script">
+    <script charset="utf-8" src="__PUBLIC__/OA/js/kindeditor-4.1.10/kindeditor-min.js"></script>
+    <script charset="utf-8" src="__PUBLIC__/OA/js/kindeditor-4.1.10/lang/zh_CN.js"></script>
+
+    <script>
+                var thiscode="x<php>echo substr(md5(date('Y-m-d H:i:s')),3,6);</php>";
+                var allkj=[];
+                var editor;
+                var this_input;//正在选择的input
+                KindEditor.ready(function(K) {
+                    editor = K.create('textarea[name="content"]', {
+                        allowFileManager : true,
+                        items : [
+                            'source', '|','undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+            'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+            'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+            'anchor', 'link', 'unlink', '|', 'about']
+                    });
+
+                    K('input[name=getallkj]').click(function(e) {
+                        $('#showhtml').html(htmlspecialchars($('.ke-edit-iframe').contents().find('body').html()));
+                    });
+
+                    K('input[name=insertHtml_text]').click(function(e) {
+                        $(".dataSelectDialog").find("#getadverlistp").html('');
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span><input name='type' value='text' type='hidden' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>控件名：<input name='name' type='text' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>宽度：<input name='len' type='text' /></span>");
+                        $(".dataSelectDialog").dialog('open');
+                        
+                    });
+                    K('input[name=insertHtml_select]').click(function(e) {
+                        $(".dataSelectDialog").find("#getadverlistp").html('');
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span><input name='type' value='select' type='hidden' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>控件名：<input name='name' type='text' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>宽度：<input name='len' type='text' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>选项值(逗号分隔)：<input name='allval' type='text' /></span>");
+                        $(".dataSelectDialog").dialog('open');
+                        
+                    });
+                    K('input[name=insertHtml_radio]').click(function(e) {
+                        $(".dataSelectDialog").find("#getadverlistp").html('');
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span><input name='type' value='radio' type='hidden' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>控件名：<input name='name' type='text' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>选项值(逗号分隔)：<input name='allval' type='text' /></span>");
+                        $(".dataSelectDialog").dialog('open');
+                    });
+                    K('input[name=insertHtml_checkbox]').click(function(e) {
+                        $(".dataSelectDialog").find("#getadverlistp").html('');
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span><input name='type' value='checkbox' type='hidden' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>控件名：<input name='name' type='text' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>选项值(逗号分隔)：<input name='allval' type='text' /></span>");
+                        $(".dataSelectDialog").dialog('open');
+                    });
+                    K('input[name=insertHtml_date]').click(function(e) {
+                        $(".dataSelectDialog").find("#getadverlistp").html('');
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span><input name='type' value='date' type='hidden' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>控件名：<input name='name' type='text' /></span>");
+                        $(".dataSelectDialog").dialog('open');
+                    });
+                    K('input[name=insertHtml_user]').click(function(e) {
+                        $(".dataSelectDialog").find("#getadverlistp").html('');
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span><input name='type' value='user' type='hidden' /></span>");
+                        $(".dataSelectDialog").find("#getadverlistp").append("<span>控件名：<input name='name' type='text' /></span>");
+                        $(".dataSelectDialog").dialog('open');
+                    });
+                    K('input[name=clear]').click(function(e) {
+                        editor.html('');
+                    });
+                });
+        function htmlspecialchars(str){            
+              str = str.replace(/&/g, '&amp;');  
+              str = str.replace(/</g, '&lt;');  
+              str = str.replace(/>/g, '&gt;');  
+              str = str.replace(/"/g, '&quot;');  
+              str = str.replace(/'/g, '&#039;');  
+              return str;  
+        }  
+        function sub_dialog(type){
+            if(type=='text'){
+                return '<div class="input_group"><span class="input_span">'+$('.dataSelectDialog').find("input[name='name']").val()+":</span><input type='text' name='"+thiscode+"_"+allkj.length+"' style='width:"+$('.dataSelectDialog').find("input[name='len']").val()+"px'/></div>";
+            }
+            if(type=='select'){
+                var option_html='';
+                var option_arr=$('.dataSelectDialog').find("input[name='allval']").val().split(",");
+                for(var i in option_arr){
+                    option_html+='<option value="'+option_arr[i]+'">'+option_arr[i]+'</option>';
+                }
+                return '<div class="input_group"><span class="input_span">'+$('.dataSelectDialog').find("input[name='name']").val()+":</span><select name='"+thiscode+"_"+allkj.length+"' style='width:"+$('.dataSelectDialog').find("input[name='len']").val()+"px'>"+option_html+"</select></div>";
+            }
+            if(type=='radio'){
+                var radio_html='';
+                var radio_arr=$('.dataSelectDialog').find("input[name='allval']").val().split(",");
+                for(var i in radio_arr){
+                    radio_html+='<input name="'+thiscode+"_"+allkj.length+'" type="radio" value="'+radio_arr[i]+'"/>'+radio_arr[i]+'&nbsp;';
+                }
+                return '<div id="input_radio_content"><span class="input_span">'+$('.dataSelectDialog').find("input[name='name']").val()+":</span>"+radio_html+'</div>';
+            }
+            if(type=='checkbox'){
+                var radio_html='';
+                var radio_arr=$('.dataSelectDialog').find("input[name='allval']").val().split(",");
+                for(var i in radio_arr){
+                    radio_html+='<input name="'+thiscode+"_"+allkj.length+'[]" type="checkbox" value="'+radio_arr[i]+'"/>'+radio_arr[i]+'&nbsp;';
+                }
+                return '<div id="input_radio_content"><span class="input_span">'+$('.dataSelectDialog').find("input[name='name']").val()+":</span>"+radio_html+'</div>';
+            }
+            if(type=='date'){
+                return '<div><span class="input_span">'+$('.dataSelectDialog').find("input[name='name']").val()+":</span><input type='text' name="+thiscode+"_"+allkj.length+"  readonly='true' class='Wdate' onClick='"+"WdatePicker({dateFmt:'yyyy-MM-dd HH'})"+"' /></div>";
+            }
+            if(type=='user'){
+                return '<div class="input_group"><span class="input_span">'+$('.dataSelectDialog').find("input[name='name']").val()+":</span><select name="+thiscode+"_"+allkj.length+" class='select_user'></select></div>";
+            }
+        }
+    $(function(){
+        $(".dataSelectDialog").dialog({
+            autoOpen: false,
+            resizable: false,
+            width: "800",
+            height: "350",
+            modal: true,
+            show: "scale",
+            buttons: {
+                "确定":function(){
+                    
+                    var thistype=$(".dataSelectDialog").find("input[name='type']").val();
+                    var res=sub_dialog(thistype);
+                    allkj[allkj.length]={"name":$('.dataSelectDialog').find("input[name='name']").val(),"code":thiscode+"_"+allkj.length,'type':thistype};
+                    editor.insertHtml(res);
+                    $(this).dialog("close");
+                },
+                "取消":function(){
+                    $(this).dialog("close");
+                }
+            },
+        });
+        $('#addform').submit(function(){
+            
+            var newhtml = ($('.ke-edit-textarea').val()!='')?htmlspecialchars($('.ke-edit-textarea').val()):htmlspecialchars($('.ke-edit-iframe').contents().find('body').html());
+
+            $('#addform').find('textarea[name=tablestyle]').html(newhtml);
+            $('#addform').find('input[name=allkj]').val(JSON.stringify(allkj));
+        })
+    })
+    </script>
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+    <script type="text/javascript">
+        function in_array(stringToSearch, arrayToSearch) {
+         for (s = 0; s < arrayToSearch.length; s++) {
+          thisEntry = arrayToSearch[s].toString();
+          if (thisEntry == stringToSearch) {
+           return true;
+          }
+         }
+         return false;
+        }
+        $(function(){
+            
+            var newjdhtml='<div class="design_node">'+
+                    '<span class="design_close"></span>' +
+                    '<h3>节点一</h3>' +
+                    '<p class="design_txt"><label for="">节点名称</label><input name="tname1346" type="text"></p>' +
+                    '<p class="design_txt"><label for="">人员</label><input name="userid1346" class="checkuser" type="text"></p>' +
+                    '<p class="design_txt"><label for="">角色</label><input name="bumen1346" class="checkjiaose" type="text"></p>' +
+                    '<p class="design_txt"><label for="">部门</label><input name="jiaose1346" class="checkbumen" type="text"></p>' +
+                    '<p class="design_txt"><label for="">默认主办</label><input class="checkauto" name="autouser1346" placeholder="0表示本部门经理" type="text"></p>' +
+                    '<p class="design_txt"><label for="">默认经办</label><input class="checkautojb" name="autojb1346" placeholder="0表示本部门经理" type="text"></p>' +
+                    '<p class="design_txt"><label for="">预估时间</label><input name="alltime1346" type="text"></p>' +
+                    '<p class="design_txt"><label for="">执行顺序</label><input name="sort1346" type="text"></p>' +
+                    '</div>';
+            var num=1;
+            var Popupe = new PopupBase();
+            Popupe.show('.title_btn', '.mask,.conDetails');
+            Popupe.hide('.colse','.mask,.conDetails');
+            /*$('.designListBox').on('click',function(){
+                $(this).parents('.design_node').remove();
+            },'.design_close');*/
+            $(".designListBox").on({
+                click:function(){
+                    $(this).parents('.design_node').remove();
+                }
+            },".design_close");
+            $('.add_design').on('click',function(){
+
+                $('.designListBox').append(
+                    newjdhtml.replace(/1346/g,num)
+                );
+                num++;
+            });
+            $(".dataSelectDialog_user").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    width: "600",
+                    height: "500",
+                    modal: true,
+                    show: "scale",
+                    buttons: {
+                        "确定":function() {
+                            $(this_input).val($(this).find('select').val())
+                            $(this).find('select').val('');
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        },
+                        "取消":function(){
+                            $(this).find('select').val('')
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        }
+                    },
+                });
+            $(".dataSelectDialog_jiaose").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    width: "600",
+                    height: "500",
+                    modal: true,
+                    show: "scale",
+                    buttons: {
+                        "确定":function() {
+                            $(this_input).val($(this).find('select').val())
+                            $(this).find('select').val('');
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        },
+                        "取消":function(){
+                            $(this).find('select').val('')
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        }
+                    },
+                });
+            $(".dataSelectDialog_bumen").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    width: "600",
+                    height: "500",
+                    modal: true,
+                    show: "scale",
+                    buttons: {
+                        "确定":function() {
+                            $(this_input).val($(this).find('select').val())
+                            $(this).find('select').val('')
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        },
+                        "取消":function(){
+                            $(this).find('select').val('')
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        }
+                    },
+                });
+            $(".dataSelectDialog_auto").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    width: "600",
+                    height: "500",
+                    modal: true,
+                    show: "scale",
+                    buttons: {
+                        "确定":function() {
+                            $(this_input).val($(this).find('select').val())
+                            $(this).find('select').val('')
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        },
+                        "取消":function(){
+                            $(this).find('select').val('')
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        }
+                    },
+                });
+            $(".dataSelectDialog_autojb").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    width: "600",
+                    height: "500",
+                    modal: true,
+                    show: "scale",
+                    buttons: {
+                        "确定":function() {
+                            $(this_input).val($(this).find('select').val())
+                            $(this).find('select').val('')
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        },
+                        "取消":function(){
+                            $(this).find('select').val('')
+                            $(this).find('.filter-option').html('');
+                            $(this).find('.dropdown-menu').find('li').removeClass('selected');
+                            $(this).dialog("close");
+                        }
+                    },
+                });
+            $("body").on(
+                {
+                    click:function(){
+                        this_input=this;
+                        $(".dataSelectDialog_user").dialog("open");
+                        }
+                    },'.checkuser');
+            $("body").on({click:function(){
+                this_input=this;
+                $(".dataSelectDialog_auto").dialog("open");
+            }},'.checkauto');
+            $("body").on({click:function(){
+                this_input=this;
+                $(".dataSelectDialog_autojb").dialog("open");
+            }},'.checkautojb');
+            $("body").on({click:function(){
+                this_input=this;
+                $(".dataSelectDialog_jiaose").dialog("open");
+            }},'.checkjiaose');
+
+            $("body").on({click:function(){
+                this_input=this;
+                $(".dataSelectDialog_bumen").dialog("open");
+            }},'.checkbumen');
+            $('.selectpicker').selectpicker({
+                        selectAllText: '全选',
+                        deselectAllText: '全不选'
+                    });
+        });
+    </script>
+</block>
+
+<block name="body">
+<div class="subConten">
+    <!--面包屑-->
+    <div class="crumbs"><a href="">系统管理</a>&nbsp;&gt;&nbsp;<a href="">流程管理</a>&nbsp;&gt;&nbsp;<span>设计流程</span></div>
+    <!--end 面包屑-->
+    <!--内容-->
+    <div class="subCon">
+        <!--条件查询-->
+        <form action="/OA/LCAdmin/addDo" method="post" id='addform'>
+        <div class="query">
+            <table class="queryTable">
+                <tbody>
+                    <tr>
+                        <th>流程名称：</th>
+                        <td><input name="name" type="text"></td>
+                        <td>发起权限（人员）：</td>
+                        <td><input type="text" name="userlist" class="checkuser"/></td>
+                        <td>发起权限（角色）：</td>
+                        <td><input type="text" name="jiaoselist" class="checkjiaose"/>
+                        </td>
+                        <td>发起权限（部门）：</td>
+                        <td><input type="text" name="bumenlist" class="checkbumen"/>
+                        </td>
+                        <td><input class="add_design" name="" type="button" value="新增节点"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- end 条件查询-->
+        <!--修改流程节点列表-->
+        <div class="designListBox">
+
+        </div>
+        <!--end 修改流程节点列表-->
+        <p class="design_tit">数据表单</p>
+        <!--功能区-->
+        <input type='hidden' name='allkj'/>
+        <textarea name='tablestyle' style="display:none"></textarea><br/>
+        <div class="dataSelectDialog">
+                <div id="getadverlistp">
+                </div>
+        </div>
+        <!--ned 功能区-->
+        <!--按钮-->
+        
+        </form>
+        <!--end 按钮-->
+        <textarea name="content" style="width:800px;height:400px;visibility:hidden;"></textarea>
+
+        <div class="shopBtn">
+            <input type="button" name="getallkj" value="显示html" />
+            <input type="button" name="insertHtml_text" value="插入单行文本框" />
+            <input type="button" name="insertHtml_select" value="插入下拉菜单" />
+            <input type="button" name="insertHtml_radio" value="插入单选框" />
+            <input type="button" name="insertHtml_checkbox" value="插入复选框" />
+            <input type="button" name="insertHtml_date" value="插入日历控件" />
+            <input type="button" name="insertHtml_user" value="插入部门人员控件" />
+            <input type="button" name="clear" value="清空内容" />
+            <input type="reset" name="reset" value="Reset" />
+        </div>
+        <div class="btnBox" style="text-align: left;">
+            <input class="submit" onclick="$('#addform').submit()" type="button" value="提交">
+        </div>
+    </div>
+    <!--end 内容-->
+</div>
+<div id='showhtml'></div>
+<div class="dataSelectDialog_user" title="选择人员">
+            <select name="user" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true"><volist name="usedata" id="v"><option value="{$v.id}" >{$v.real_name}</option></volist></select>
+</div>
+<div class="dataSelectDialog_jiaose" title="选择角色">
+            <select name="jiaose" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                        <volist name='jsdata' id='v'>
+                            <option value="{$v.id}" >{$v.name}</option>
+                        </volist>
+                        </select>
+</div>
+<div class="dataSelectDialog_bumen" title="选择部门">
+            <select name="bumen" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                        <volist name='dedata' id='v'>
+                            <option value="{$v.id}" >{$v.name}</option>
+                        </volist>
+                        </select>
+</div>
+<div class="dataSelectDialog_auto" title="选择默认主办">
+            <select name="auto" class="selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+                        <volist name='usdata2' id='v'>
+                            <option value="{$v.id}" >{$v.real_name}</option>
+                        </volist>
+                        </select>
+</div>
+<div class="dataSelectDialog_autojb" title="选择默认经办">
+            <select name="autojb" class="selectpicker" multiple data-actions-box="true" data-done-button="true" data-live-search="true">
+                        <volist name='usdata2' id='v'>
+                            <option value="{$v.id}" >{$v.real_name}</option>
+                        </volist>
+                        </select>
+</div>
+</block>

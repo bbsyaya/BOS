@@ -1,0 +1,217 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="subMainBox">
+    <!--筛选-->
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text">数据字典</span>
+                <span>系统管理</span>
+            </div>
+            <div class="ri_work">Data Dictionary</div>
+        </div>
+    <div class="screenBox swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <form action="{:U('index')}" id="search_form">
+                    <!--基础查询-->
+                    <h2>基础查询</h2>
+                    <div class="swiperRight">
+                        <table class="tableBox">
+                            <tr>
+                                <th>字典名称：</th>
+                                <td><input type="text" name="name" value="{$Think.get.name}"/></td>
+                                <td colspan="6">
+                                    <input type="submit" value="查询" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+                <!--end 基础查询-->
+            </div>
+        </div>
+    </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit">
+        <div class="advancedLeft">
+            <span class="addAdv advBtn"><input type="button" class="J_addData" value="新增"></span>
+        </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <if condition="$_GET['tid'] gt 0">
+                    <th>类型</th>
+                </if>
+                <th>编码</th>
+                <th>名称</th>
+                <th>状态</th>
+                <th width="150">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                <volist name="list" id="item">
+                    <tr>
+                        <td>{$item.id}</td>
+                        <if condition="$_GET['tid'] gt 0">
+                            <td>{$typeName}</td>
+                        </if>
+                        <td>{$item.code}</td>
+                        <td>{$item.name}</td>
+                        <td>{$op_function_status[$item['status']]}</td>
+                        <td>
+                            <if condition="$_GET['tid'] ELT 0">
+                                <a href="{:U('index?tid='.$item['id'])}">子级</a>
+                            </if>
+                            <a item-id="{$item['id']}" class="J_updateData">编辑</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+        <!--分页-->
+        {$_page}
+    </div>
+    </div>
+
+    <!--————————————————————————————————————————————————————————————————————————————————————————————————————-->
+    <!--弹出框（新增角色） -->
+    <div class="addDataDialog" title="新增角色" style="display: none;">
+
+    </div>
+    <!--弹出框（权限） -->
+    <div class="authorizationDialog" title="访问权限">
+        <!--结构树-->
+        <ul id="treeDemo" class="ztree"></ul>
+    </div>
+
+</block>
+
+<block name="script">
+    <!--JQuery zTree-->
+    <script type="text/javascript">
+        $(function() {
+            //对话框（新增、修改）
+            $(".addDataDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "500",
+                height: "300",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "保存":function() {
+                        var thisdialog = this;
+                        var tableform = $("#tableForm");
+                        $.post("{:U('update')}",tableform.serialize(),function(ret){
+                            if (ret == 'ok') {
+                                $(thisdialog).dialog("close");
+                                alertnewpage2('保存成功',window.location.href);
+                            } else {
+                                alertnewpage2(ret);
+                            }
+                        });
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+            //新增对话框
+            var addDialogData = '';
+            $(".J_addData").click(function(){
+                //ajax加载表格数据
+                if (!addDialogData) {
+                    var tid = "{$_GET['tid']}";
+                    $.get("{:U('add')}",{tid:tid},function(dom){
+                        addDialogData = dom;
+                        $(".addDataDialog").html(addDialogData);
+                        $(".addDataDialog").dialog("open");
+                    });
+                } else {
+                    $(".addDataDialog").html(addDialogData);
+                    $(".addDataDialog").dialog("open");
+                }
+
+            });
+            //修改对话框
+            $(".dataTable").on({
+                click: function() {
+                    var id = $(this).attr('item-id');
+                    var tid = "{$_GET['tid']}";
+                    if (!id) {
+                        $("<div>参数错误</div>").dialog();
+                    }
+                    $.get("{:U('edit')}",{id:id,tid:tid},function (dom) {
+                        $(".addDataDialog").html(dom);
+                        $(".addDataDialog").dialog("open");
+
+                    })
+                }
+            }, ".J_updateData");
+
+
+            //对话框授权
+            $(".authorizationDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "500",
+                height: "600",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        var thisDialog = this;
+                        var chkNodes = treeObj.getCheckedNodes(true);
+                        var itemId = $(this).data('item-id');
+                        var chkIds = [];
+                        if (chkNodes) {
+                            for(var obj in chkNodes) {
+                                chkIds.push(chkNodes[obj].id);
+                            }
+                        }
+                        $.post("{:U('udpateRule')}",{id:itemId,rules:chkIds},function(ret){
+                            $(thisDialog).dialog("close");
+                            alertnewpage2(ret);
+                        });
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+            //授权对话框
+            $(".dataTable").on({
+                click: function() {
+                    var itemid = $(this).attr('item-id');
+                    if (!itemid) {$("<div>参数错误</div>").dialog(); }
+                    $.get("{:U('getGroupRuleTree')}",{id:itemid},function(zNodes){
+                        treeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                        treeObj.expandAll(true);
+                        $(".authorizationDialog").data("item-id",itemid).dialog("open");
+                    });
+                }
+            }, ".J_authorization");
+
+            /*---------------------------------树----------------------*/
+            var setting = {
+                check: {
+                    enable: true
+                },
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "pid",
+                        rootPId: 0
+                    }
+                }
+            };
+            var treeObj;
+
+        });
+    </script>
+
+</block>

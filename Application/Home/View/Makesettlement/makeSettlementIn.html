@@ -1,0 +1,376 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+			<script type="text/javascript">
+			var configData='';
+			var advcontacesData='';
+			var listStatus;
+			var nowdioid;
+			var fileid=1;
+			function changeAdvcontacts(){
+				var nowselectval=$('#advcontactsid').val();
+				for(o in advcontacesData){
+					if(advcontacesData[o].id==nowselectval){
+						$('#sjtel').html(advcontacesData[o].mobile);
+						$('#sjaddress').html(advcontacesData[o].address);
+					}
+				}
+			}
+			function getonesettlementdata(id){
+				nowdioid=id;
+					$.post('/Makesettlement/detail',{'id':id},function(res){
+						advcontacesData=res.advcontaces;
+						var invoice_typeid=res.advdata.invoice_type;
+						var invoice_type=configData.invoice_type[invoice_typeid];
+						var selecthtml='';
+						for(o in advcontacesData){
+							selecthtml+="<option value='"+res.advcontaces[o].id+"'>"+res.advcontaces[o].name+"</option>";
+						}
+						var tablehtml='<form id="toConfirmSettlement" target="_blank" action="/Makesettlement/confirmSettlement" method="post" enctype="multipart/form-data"><input type="hidden" name="id" value="'+res.settlementdata.id+'"/><table class="dialogTable_form2 dialogTable_list w ha"><tr><th>广告主名称</th><td>'+res.advdata.name+'</td><th>发票类型</th><td>'+invoice_type+'</td><th>发票内容</th><td>'+res.advdata.invoice_remark+'</td></tr><tr><th>纳税人识别号</th><td>'+res.advdata.taxpayer_num+'</td><th>开户银行名称</th><td>'+res.advdata.opening_bank+'</td><th>开户行账号</th><td id="bankcode">'+res.advdata.bank_no+'</td></tr><tr><th>结算主体</th><td id="jszt">'+res.jszt.jszt+'</td><th>开票金额</th><td>'+Math.round(res.settlementdata.settlementmoney*100)/100+'</td><th>起止时间</th><td>'+res.settlementdata.strdate+'-'+res.settlementdata.enddate+'</td></tr><tr><th>收件人姓名</th><td><select id="advcontactsid" name="advcontactsid" onchange="changeAdvcontacts()">'+selecthtml+'</select></td><th>收件人电话</th><td id="sjtel"></td><th>收件人地址</th><td id="sjaddress"></td></tr><tr><th>所属销售</th><td id="saler">'+res.jszt.sealname+'</td><th>要不要开发票</th><td><select name="iskaipiao"><option value="1">要</option><option ';
+						if(invoice_type=='无发票')tablehtml+='selected="selected"';
+						tablehtml+=' value="2">不要</option></select></td></tr></table><table class="dynamicTable invoiceDetails w ha" style="margin-top: -1px;"><caption align="bottom"><input class="addTR" type="button" value="" /></caption><tr><th>结算依据</th><td><input type="file" name="file0"/></td></tr></table></form>';
+						$(".generateBillDialog2").html(tablehtml);
+						changeAdvcontacts();
+						$(".generateBillDialog2").dialog('open');
+						$('.invoiceDetails').on({
+							click:function(){
+								$('.invoiceDetails').append('<tr><th>结算依据</th><td><input type="file" name="file'+fileid+'"/></td></tr>');
+								fileid++;
+							}
+						},'.addTR')
+					},'json')
+			}
+			
+			$(function() {
+				$.post('/Ajax/getConfig',{},function(res){
+					configData=res;
+				},'json')
+				/*$(".J_generateBill").click(function(){
+					$('#comidform').submit();
+					$(".generateBillDialog").show();
+					
+				});*/
+
+				$(".generateBillDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "800",
+					height: "350",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确认":function(){
+							
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				$(".generateBillDialog2").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "900",
+					height: "500",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确认":function(){
+							if($('#bankcode').text()=='' || $('#saler').text()=='' || $('#jszt').text()==''){
+								alert('信息不全');
+								return;
+							}
+							$('#toConfirmSettlement').attr('target','newpage').submit();
+							$(this).dialog("close");
+							if(listStatus=='1'){
+								$('#dialogtable').find('tr[data="'+nowdioid+'"]').remove();
+							}
+						},
+						"取消":function(){
+							$(this).dialog("close");
+
+						}
+					},
+				});
+				//生成结算单对话框
+				$(".J_generateBill").click(function(){
+					var id='';
+					var jfid = '';
+					$('#comidform').find('input[name="id[]"]').each(function(){
+						if($(this).is(':checked')){
+							id+=$(this).attr('value')+',';
+							jfid+=$(this).attr('jfid')+',';
+						}
+					});
+					var strtime=$('#comidform').find('input[name="strtime"]').val();
+					var endtime=$('#comidform').find('input[name="endtime"]').val();
+					id=id.substring(0,id.length-1);
+					jfid=jfid.substring(0,jfid.length-1);
+					$.post('/Makesettlement/makeSettlementInDo',{'id':id,'strtime':strtime,'endtime':endtime,'jfid':jfid},function(res){
+						listStatus=res.type;
+						if(res.type=='1'){
+							var newhtml='';
+							for(o in res.data){
+								newhtml+='<tr data='+res.data[o].id+'><td>'+res.data[o].advername+'</td><td>'+res.data[o].settlementmoney+'</td><td><a href="javascript:void(0);" onclick="getonesettlementdata('+res.data[o].id+')">信息确认</a></td></tr>';
+							}
+							$('.generateBillDialog').html('<table id="dialogtable" class="dialogTable_list w ha"><tr><th>广告主名称</th><th>结算金额</th><th>操作</th></tr>'+newhtml+'</table>');
+							$(".generateBillDialog").dialog('open');
+						}else{
+							var newid=res.data[0].id;
+							getonesettlementdata(newid);
+						}
+					},'json')
+					
+				});
+				//起草邮件
+				$(".J_makeemail").click(function(){
+					var id='';
+					var jfid = '';
+					$('#comidform').find('input[name="id[]"]').each(function(){
+						if($(this).is(':checked')){
+							id+=$(this).attr('value')+',';
+							jfid+=$(this).attr('jfid')+',';
+						}
+					});
+					var strtime=$('#comidform').find('input[name="strtime"]').val();
+					var endtime=$('#comidform').find('input[name="endtime"]').val();
+					id=id.substring(0,id.length-1);
+					jfid=jfid.substring(0,jfid.length-1);
+					window.open('/Home/Duizhang/makeemail?strtime='+strtime+'&endtime='+endtime+'&jfid='+jfid);
+				});
+				$(".invoiceDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "900",
+					height: "600",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+
+							var id='';
+							var ysdata = 0;
+							var enddata = 0;
+							var ysmoney = 0;
+							var endmoney = 0;
+							var ad_id= $(".invoiceDialog").attr('ad_id');
+							 $('#DaydataInfoTable').find('input[name="id[]"]').each(function(){
+							 	if($(this).is(':checked')){
+									id+=$(this).attr('value')+',';
+									ysdata+=parseFloat($(this).attr('ysdata'));
+									enddata+=parseFloat($(this).attr('enddata'));
+									ysmoney+=parseFloat($(this).attr('ysmoney'));
+									endmoney+=parseFloat($(this).attr('endmoney'));
+								}
+
+							 });
+							id=id.substring(0,id.length-1);
+							$('.dataTable1').find('tr').each(function(){
+								//alert($(this).find('td').eq(0).find('input[name="id[]"]').val());
+								if($(this).find('td').eq(0).find('input[name="id[]"]').val() !=undefined && $(this).find('td').eq(0).find('input[name="id[]"]').val() == ad_id){
+									$(this).find('td').eq(4).html(ysdata);
+									$(this).find('td').eq(5).html(enddata);
+									$(this).find('td').eq(6).html(ysmoney);
+									$(this).find('td').eq(7).html(endmoney);
+									$(this).find('td').eq(0).find('input[name="id[]"]').attr('jfid',id);
+								}
+							});
+							//alert(id+'--'+ysdata+'--'+enddata+'--'+ysmoney+'--'+endmoney);
+
+							/*var Allinmoney=0;
+							if(Allinmoney!=Allsetmoney){
+								if(confirm('应开票金额与实际开票金额不一致！')){
+									$(this).dialog("close");
+									$('#financeform').attr('target','newpage').submit();
+								}
+							}else{
+								$(this).dialog("close");
+								$('#financeform').attr('target','newpage').submit();
+							}*/
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				//全选反选
+				$(".dialogTable_list").on({change:function() {
+					if ($(this).is(":checked")) {
+						//alert(1);alert($(this).parents('tr').siblings('tr').find('td:first input:checkbox').length);
+						$(this).parents('tr').siblings('tr').find('td:first input:checkbox').prop("checked", true);//attr("checked", "checked");
+					} else {
+						$(this).parents('tr').siblings('tr').find('td:first input:checkbox').removeAttr("checked");
+					}
+				}},"#selectAll");
+
+				$(".dataTable").on({
+					click: function() {
+						var ad_id=$(this).attr('ad_id');//产品id
+						var start_date=$(this).attr('start_date');//开始时间
+						var end_date=$(this).attr('end_date');//结束时间
+
+						$.post('/Makesettlement/makejfApi',{ad_id:ad_id,start_date:start_date,end_date:end_date},function(res){
+							//$('#invoiceid').val(ad_id);//产品ID 外键关联
+							var Intab=$(".invoiceDialog");
+							//Allsetmoney=res.data.settlementmoney;
+							var DaydataInfoTableHtml='<tr><th><input type="checkbox" checked="checked" id="selectAll" /></th><th>计费标识名称</th><th>计费标识编码</th><th>账单期间</th><th>结算金额</th></tr>';
+							for(o in res.data){
+								DaydataInfoTableHtml+='<tr><td><input type="checkbox" checked="checked" name="id[]" value='+res.data[o].id+' endmoney='+res.data[o].endmoney+' ysmoney='+res.data[o].ysmoney+' ysdata='+res.data[o].ysdata+' enddata='+res.data[o].enddata+' /></td><td>'+res.data[o].name+'</td><td>'+res.data[o].code+'</td><td>'+res.data[o].date+'</td><td>'+res.data[o].endmoney+'</td></tr>';
+							}
+							Intab.find('#DaydataInfoTable').html(DaydataInfoTableHtml);
+							$(".invoiceDialog").attr("ad_id",ad_id);
+							$(".invoiceDialog").dialog("open");
+						},'json')
+					}
+				}, ".J_choice");
+			});
+		</script>
+</block>
+<block name="body">
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">生成收入结算单</span>
+
+				<span>结算单管理</span>
+			</div>
+			<div class="ri_work">Generate revenue statement</div>
+		</div>
+				<!--筛选-->
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<input type="button" value="生成结算单" class="J_generateBill" />
+						<input type="button" value="筛选" class="J_openScreen" />
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					<div class="screenList fl w">
+						<form action="/Makesettlement/makeSettlementIn" method='get'>
+						<table>
+							<tr>
+								<th>广告主名称：</th>
+								<td><input type="text" name='advername' value="{:I('get.advername')}"/></td>
+								<th>产品名称：</th>
+								<td><input type="text" name='comname' value="{:I('get.comname')}" /></td>
+								<th>销售人员：</th>
+								<td><input type="text" name='saler_id' value="{:I('get.saler_id')}" /></td>
+								<th>账单期间：</th>
+								<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>
+								
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+									<input type="button" value="取消" class="J_closeScreen" />
+								</td>
+							</tr>
+						</table>
+						</form>
+					</div>
+				</div>-->
+
+				<div class="screenBox swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<form action="/Makesettlement/makeSettlementIn" method='get'>
+								<div class="swiperRight">
+									<table class="tableBox">
+										<tr>
+											<th>广告主名称：</th>
+											<td><input type="text" name='advername' value="{:I('get.advername')}"/></td>
+											<th>产品名称：</th>
+											<td><input type="text" name='comname' value="{:I('get.comname')}" /></td>
+											<th>销售人员：</th>
+											<td><input type="text" name='saler_id' value="{:I('get.saler_id')}" /></td>
+
+											<td>
+												<input type="submit" value="查询" />
+											</td>
+										</tr>
+										<tr>
+											<th>账单期间：</th>
+											<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>
+
+										</tr>
+									</table>
+								</div>
+							</form>
+							<!--end 基础查询-->
+						</div>
+					</div>
+				</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<span class="addAdv advBtn">
+								<input type="button" value="生成结算单" class="J_generateBill" />
+								<input type="button" value="起草对账邮件" class="J_makeemail" />
+							</span>
+						</div>
+					</div>
+				<form action="/Makesettlement/makeSettlementInDo" method="post" id='comidform' target="newpage">
+				<input type='hidden' name='strtime' value="{$strtime}"/>
+				<input type='hidden' name='endtime' value="{$endtime}"/>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th width="40"><input type="checkbox" /></th>
+							<th>产品名称</th>
+							<th>广告主名称</th>
+							<th>账单期间</th>
+							<th>预估数据</th>
+							<th>有效数据</th>
+							<th>预估金额</th>
+							<th>结算金额（含税）</th>
+							<th>结算主体</th>
+							<th>所属销售</th>
+							<th>选择计费标识</th>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name='data' id='v'>
+							<tr>
+								<td><input type="checkbox" name='id[]' value="{$v.comid}" jfid="{$v.jfid}"  /></td><!--<neq name='v.error' value=''>disabled="disabled" title="{$v.error}"</neq>-->
+								<td>{$v.comname}</td>
+								<td>{$v.advername}</td>
+								<td>{$v.date}</td>
+								<td>{$v.ysdata|round}</td>
+								<td>{$v.enddata|round}</td>
+								<td>{$v.ysmoney|twonum}</td>
+								<td>{$v.endmoney|twonum}</td>
+								<td>{$v.jszt}</td>
+								<td>{$v.username}</td>
+								<td><span style="cursor: pointer;color: #1A72D6" class="J_choice" ad_id="{$v.comid}" start_date="{$v.start_date}" end_date="{$v.end_date}">选择</span></td>
+							</tr>
+						</volist>
+						
+						</tbody>
+					</table>
+				</form>
+					<!--分页-->
+					{$_page}
+				</div>
+	</div>
+			<iframe src="" style="display:none;" name='newiframe'></iframe>
+			<div class="generateBillDialog" title="生成结算单">
+			
+		</div>
+			<div class="generateBillDialog2" title="生成结算单">
+			
+		</div>
+
+		<div class="invoiceDialog" style="display:none;" title="选择计费标识详情">
+			<table id="DaydataInfoTable" class="dialogTable_list w ha">
+			</table>
+		</div>
+</block>

@@ -1,0 +1,634 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<style type="text/css">
+	label{font-weight:normal!important}.wd300{width:68% !important}.wd100{width:100% !important}.dayTwo-1{width:28%!important}.fd-k{margin-top:20px}.fs-color{color:#1269cc!important;border-bottom-color:#1269cc!important}.btnBox{padding-bottom:100px!important}.a-com{border:medium none;border-radius:3px;color:#fff;height:36px;margin:0 15px;background:#1269cc none repeat scroll 0 0;width:110px;line-height:36px;display:inline-block;color:#fff!important;font-size:14px;text-align:center}.submit{width: auto !important;padding: 0px 20px !important;height: 36px;line-height: 36px;}.btnBox input[type="button"]{ margin: 0px !important;}.glzw{color:#1269cc !important;font-size:12px;margin-left:8px;text-decoration: underline !important;}.dayTwo-a{width:48% !important;}.entryList li .entryCon label{width: 20% !important;height: 44px !important;overflow: hidden;line-height: 44px !important;display: inline-block !important; float: left;}.xt-sz{color:#1269cc !important;}.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){width: 60% !important;}.bootstrap-select.btn-group .dropdown-menu li{width: 100% !important; height: 32px !important; line-height: 32px  !important;}
+</style>
+<!--主体-->
+<div class="subConten  fl w">
+    <!--内容-->
+    <div class="subCon  fl w">
+        <form action="/OA/HrManage/saveEntry.html" method="get" id="dataForm">
+	       	<!--员工入职表单-->
+			<fieldset class="fl w">
+				<legend class="fs-color">基本信息</legend>
+				<ul class="entryList">
+
+
+
+				<!-- teat -->
+				<li>
+					<p class="entryCon">
+					<label for="">入职公司</label>
+					<select name="company_id" id="company_id">
+					<option>加载中...</option>
+					</select>
+					<script type="text/javascript">
+					var _default={};
+					_default.company_id="{$one['company_id']}";
+					</script>
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="">部　　门</label>
+					<select name="depart_id" id="depart_id">
+					<option>加载中...</option>
+					</select>
+					<script type="text/javascript">
+					_default.depart_id="{$one['depart_id']}";
+					</script>
+					</p>
+				</li>
+				<li>
+
+					<p class="entryCon">
+					<label for="" style="color:red;"><font style="color:red;">*</font>姓　　名</label>
+					<input name="user_name" id="user_name" type="text"  placeholder="请输入姓名,重名请加1,比如张三01,必填"  class="items zditem" value="{$one['user_name']}">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="">职　　务</label>
+					<!-- <input name="duty" id="duty" type="text" class="items" value="{$one['duty']}"> -->
+					<select name="duty" id="duty" style="width:54% !important;"  class="selectpicker1"  data-live-search="true">
+						<option>加载中...</option>
+					</select>
+					<a href="/Home/Duty/index" target="_blank" class="glzw">管理职位</a>
+						<script type="text/javascript">
+						_default.duty="{$one['duty']}";
+					</script>
+					</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">岗位评级</label>
+				<input name="job_rating" id="job_rating" value="{$one['job_rating']}" class="items"  placeholder="请输入岗位评级,非必填" data-v="请输入岗位评级" type="text">
+				</p>
+				</li>
+				<li>
+
+				<p class="entryCon">
+				<label for="" style="color:red;"><font style="color:red;">*</font>姓名拼音</label>
+				<input name="username_pinyin" id="username_pinyin" type="text" class="items" placeholder="系统生成姓名拼音,重名请加1,比如zhangsan01,必填"   value="{$one['username_pinyin']}" style="background:#E3E3E3;"  placeholder="使用它登录Boss系统" >
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">职等职级</label>
+				<input name="grade_rank" id="grade_rank" type="text" class="items"   placeholder="请输入职等职级,非必填"   value="{$one['grade_rank']}" >
+				</p>
+				</li>
+
+					<li>
+				<p class="entryCon">
+				<label for="">层　　级</label>
+				<select name="level" id="level"  <?php if($isPer){ ?> onchange="f.initBitie()" <?php } ?> s="{$one['level']}">
+				<?php foreach ($level as $k => $vo) {
+				?>
+					<option value="{$k}" <?php if($k==$one['level']){ ?> selected="selected" <?php } ?>>{$vo}</option>
+				<?php
+				} ?>
+				</select>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">性　　别</label>
+				<select name="sex" id="sex">
+				<?php foreach ($sexOptions as $k => $vo) {
+				?>
+				<option value="{$k}"   <?php if($k==$one['sex']){ ?> selected="selected" <?php } ?> >{$vo}</option>
+				<?php
+				} ?>
+				</select>
+				</p>
+</li>
+					<li>
+				<p class="entryCon">
+				<label for="" style="color:red;"><font style="color:red;">*</font>身份证号</label>
+				<input name="body_no" id="body_no"   placeholder="请输入身份证号,必填,请确保正确" type="text" class="items zditem" value="{$one['body_no']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for=""  class="xt-sz">出生年月</label>
+				<span class="dayTime"><input type="text" placeholder="系统根据身份证号智能获取，不可输入" class="items" id="birth" name="birth"  readonly="readonly" value="<?php if($one['birth'] && $one['birth']!="0000-00-00 00:00:00"){ ?> {$one['birth']|strtotime|date='Y-m-d',###} <?php }  ?>"></span>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for=""  class="xt-sz">年　　龄</label>
+				<input name="age" id="age"  placeholder="系统根据身份证号智能获取，不可输入" readonly="readonly" type="text" class="items" value="{$one['age']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label class="entryOne" for=""  style="width:30% !important;">首次工作时间</label>
+				<span class="dayOne"  style="width:60% !important;"><input placeholder="请输入首次工作时间,非必填"  type="text" class="items" id="start_work"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})"
+  value="<?php if($one['start_work'] && $one['start_work']!="0000-00-00 00:00:00"){ ?> {$one['start_work']|strtotime|date='Y-m-d',###} <?php }  ?>"  name="start_work"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+
+				<li>
+					<p class="entryCon">
+					<label for="">婚姻情况</label>
+					<select name="is_marry" id="is_marry">
+					<?php foreach ($is_marry as $k => $vo) {
+					?>
+					<option value="{$k}"   <?php if($k==$one['is_marry']){ ?> selected="selected" <?php } ?> >{$vo}</option>
+					<?php
+					} ?>
+					</select>
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="">身　　高</label>
+					<input name="height" id="height" type="text"  placeholder="请输入身高,非必填"  class="wd300 items" value="{$one['height']}">&nbsp;厘米
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="">体　　重</label>
+					<input name="weight" id="weight" type="text"  placeholder="请输入体重,非必填"  class="wd300 items" value="{$one['weight']}">&nbsp;kg
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="">户口性质</label>
+					<select name="account_nature" id="account_nature">
+					<?php foreach ($accountNature as $k => $vo) {
+					?>
+					<option value="{$k}"  <?php if($k==$one['account_nature']){ ?> selected="selected" <?php } ?>>{$vo}</option>
+					<?php
+					} ?>
+					</select>
+					</p>
+				</li>
+					
+				
+				<li>
+					<p class="entryCon">
+					<label for="">民　　族</label>
+					<input name="nation" id="nation" type="text" placeholder="请输入民族,非必填"  class="items" value="{$one['nation']}">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="">籍　　贯</label>
+					<input name="passby" id="passby" type="text"    placeholder="请输入籍贯,非必填" class="items" value="{$one['passby']}">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="">联系地址</label>
+					<input name="adress" id="adress" class="items"  value="{$one['adress']}"   placeholder="请输入联系地址,非必填" data-v="" type="text">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="" style="width:24% !important;display:inline-block;">身份证地址</label>
+					<input  placeholder="请输入身份证地址,非必填"    name="id_card_address"  style="width:70% !important;display:inline-block;" id="id_card_address" type="text" class="items"   value="{$one['id_card_address']}">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="" style="width:24% !important;">紧急联系人</label>
+					<input name="emergen_user" id="emergen_user" placeholder="请输入紧急联系人,非必填"   style="width:70% !important;" type="text" class="items" value="{$one['emergen_user']}">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="" style="width:25% !important;">与本人关系</label>
+					<input name="relation_me" id="relation_me"  placeholder="请输入与本人关系,非必填"    style="width:70% !important;" type="text" class="items"  value="{$one['relation_me']}">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="">紧急电话</label>
+					<input name="emergen_phone" placeholder="紧急联系人电话,非必填" id="emergen_phone" type="text" class="items" value="{$one['emergen_phone']}">
+					</p>
+				</li>
+<li>
+				<p class="entryCon">
+				<label for="">学　　历</label>
+				<select name="educate" id="educate">
+				<?php foreach ($educate as $k => $vo) {
+				?>
+					<option value="{$k}"  <?php if($k==$one['educate']){ ?> selected="selected" <?php } ?> > {$vo}</option>
+				<?php
+				} ?>
+				</select>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">毕业时间</label>
+				<span class="dayTime"><input type="text"  placeholder="请输入毕业时间,非必填"  class="items"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})"  value="<?php if($one['graduat_time'] && $one['graduat_time']!="0000-00-00 00:00:00"){ ?> {$one['graduat_time']|strtotime|date='Y-m-d',###} <?php }  ?>" name="graduat_time" id="graduat_time"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+<li>
+				<p class="entryCon">
+				<label for="">毕业院校</label>
+				<input name="graduat_school" id="graduat_school"  placeholder="请输入毕业院校,非必填"   type="text" class="items" value="{$one['graduat_school']}">
+				</p>
+				</li>
+
+				<li>
+				<p class="entryCon">
+				<label for="">专　　业</label>
+				<input name="profession" id="profession"   placeholder="请输入专业,非必填" type="text" class="items" value="{$one['profession']}">
+				</p>
+				</li>
+
+				<li>
+					<p class="entryCon">
+					<label for="">联系电话</label>
+					<input name="phone" id="phone" type="text" class="items"  placeholder="请输入联系电话,非必填"   value="{$one['phone']}">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="">备用电话</label>
+					<input name="back_phone" id="back_phone" type="text" placeholder="请输入备用电话,非必填" class="items" value="{$one['back_phone']}">
+					</p>
+				</li>
+					<li>
+				<p class="entryCon">
+				<label for="">Q　　Q</label>
+				<input name="qq"  id="qq" type="text" placeholder="请输入QQ,非必填"   class="items" value="{$one['qq']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">入职时间</label>
+				<span class="dayTime"><input type="text" class=" items"   placeholder="请输入入职时间,非必填"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" value="<?php if($one['entry_time'] && $one['entry_time']!="0000-00-00 00:00:00"){ ?> {$one['entry_time']|strtotime|date='Y-m-d',###} <?php }  ?>" name="entry_time" id="entry_time" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for=""  class="xt-sz">司　　龄</label>
+					<input name="company_age"  placeholder="请选择入职时间，系统自动计算" disabled="true"    id="company_age" type="text"  class="items"  value="{$one['company_age']}" d='{$one['company_age']}'>
+					</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">拟转正日期</label>
+				<span class="dayTime"><input type="text" placeholder="请输入拟转正日期,非必填"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" value="<?php if($one['proposed_time'] && $one['proposed_time']!="0000-00-00 00:00:00"){ ?> {$one['proposed_time']|strtotime|date='Y-m-d',###} <?php }  ?>" class="items" id="proposed_time" name="proposed_time"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label class="entryOne" for="" style="width:25% !important;">实转正日期</label>
+					<span class="dayOne" style="width:65% !important;"><input  placeholder="请输入实转正日期,非必填"   type="text" class="items"  value="<?php if($one['real_proposed'] && $one['real_proposed']!="0000-00-00 00:00:00"){ ?> {$one['real_proposed']|strtotime|date='Y-m-d',###} <?php }  ?>" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" name="real_proposed" id="real_proposed" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+				<li>
+					<p class="entryCon">
+					<label for="" title="" class="xt-sz">工  号</label>
+					<input name="job_no" id="job_no" type="text" class="items" value="{$one['job_no']}" disabled="disabled" placeholder="指纹编号，无需填写系统生成">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="" title="" class="xt-sz">邮 箱</label>
+					<input name="post_email" id="post_email" type="text" class="items" value="{$one['post_email']}"  placeholder="系统根据用户名生成，请确保用户姓名唯一，发送工资条需要它">
+					</p>
+				</li>
+				<!-- end test -->
+
+				</ul>
+			</fieldset>
+
+			<?php if($isPer){ ?>
+			<fieldset class="fd-k fl w">
+				<legend class="fs-color">福利信息</legend>
+				<ul class="entryList">
+
+				<!-- aa -->
+				<li>
+					<p class="entryCon">
+					<label for="" class="xt-sz">工龄津贴</label>
+					<input name="age_allowance" id="age_allowance"  class="items" type="text"  value="{$one['age_allowance']}" placeholder="高层：300元/年；中层：200元/年；基层：100元/年。从第二年起每年50元叠加。">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for=""  class="xt-sz">交通补助</label>
+					<input name="trasport_allowance" id="trasport_allowance"  value="{$one['trasport_allowance']}" class="items" type="text" placeholder="高层：200元/月；中层：200元/月;基层：100元/月">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for=""  class="xt-sz">通讯补助</label>
+					<input name="commun_allowance" id="commun_allowance" value="{$one['commun_allowance']}"  class="items" type="text" placeholder="高层：200元/月；中层：100元/月；基层：0。">
+					</p>
+					<script type="text/javascript">
+					$(function(){f.init();});
+					var f={
+						init:function(){
+							this.initBitie();
+						},
+						initBitie:function(){
+							var level = $("#level option:selected").val(),company_age=$("#company_age").val();
+							var gl_money=0,jt_money=0,zx_money=0;
+							company_age = parseFloat(company_age);var age_int=parseInt(company_age),age_int_1=age_int-1;
+							
+							//基层
+							if(level==1 && company_age>1){
+								gl_money=100+(50*age_int_1);
+							}
+							if(level==1){
+								jt_money = 100;
+							}
+
+							//中层
+							if(level==2 && company_age>1){
+								company_age = parseInt(company_age);
+								gl_money=200+(50*age_int_1);
+							}
+							if(level==2){
+								jt_money = 200;
+								zx_money=100;
+							}
+							//高层
+							if(level==3 && company_age>1){
+								gl_money=300+(50*age_int_1);
+							}
+							if(level==3){
+								jt_money = 200;
+								zx_money=200;
+							}
+
+
+							$("#age_allowance").val(gl_money);
+							$("#trasport_allowance").val(jt_money);
+							$("#commun_allowance").val(zx_money);
+							f.setper_radio(level);
+						},
+						setper_radio:function(level){
+							//m:2000,3000,4000,5000;b:10%,20%,30%,40%
+							var per_radio=0,basic_pay=0;
+							if(level==1){
+								basic_pay=2000;per_radio=0.1;
+							}
+							if(level==2){
+								basic_pay=3000;per_radio=0.2;
+							}
+							if(level==3){
+								basic_pay=4000;per_radio=0.3;
+							}
+							if(level==4){
+								basic_pay=5000;per_radio=0.4;
+							}
+							$("#per_radio").val(per_radio);
+							$("#basic_pay").val(basic_pay);
+						}
+					};
+					</script>
+					</li>
+				<li>
+					<p class="entryCon">
+					<label for="">社保办理</label>
+					<input name="social_man" placeholder="请输入社保办理,非必填"  id="social_man" type="text" class="items" value="{$one['social_man']}" style="width:75% !important;" >
+					</p>
+					</li>
+				
+				<li>
+				<p class="entryCon">
+				<label class="entryOne" for=""  style="width:28% !important;">公积金办理</label>
+				<input class="txtOne items"  placeholder="请输入公积金办理,非必填"  style="width:65% !important;" name="provident_start" id="provident_start" type="text" value="{$one['provident_start']}" >
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label class="entryOne" for=""  style="width:28% !important;">社保卡办理</label>
+				<input class="txtOne items"  placeholder="请输入社保卡办理,非必填"  style="width:67% !important;" name="social_card" id="social_card" type="text"  value="{$one['social_card']}" >
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label class="entryOne xt-sz" for=""  style="width:28% !important;" >绩效考核比例</label>
+				<input class="txtOne"  placeholder="请输入绩效考核比例,非必填"  onblur="getPay()"    style="width:66% !important;" name="per_radio" id="per_radio" type="text"  class="items" value="{$one['per_radio']}">
+				</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="" title="入职薪资">入职薪资</label>
+					<input name="entry_salary" id="entry_salary"  placeholder="请输入入职薪资,非必填"   type="text"  class="items" value="{$one['entry_salary']}">
+					</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="" title="入职薪资,也是excel的工资总额">工资总额</label>
+					<input name="turn_salary" id="turn_salary" onblur="getPay()"  placeholder="请输入入职薪资,也是excel的工资总额，非必填"   type="text"  class="items" value="{$one['turn_salary']}">
+					</p>
+					<script type="text/javascript">
+					function getPay(){
+						var v=$("#turn_salary").val(),v_ =parseFloat(v),per_radio=parseFloat($("#per_radio").val());
+						if(v!="" && v_>0){
+							var per_pay=v_*per_radio;
+							per_pay = per_pay.toFixed(2);
+							$("#per_pay").val(per_pay);//绩效工资
+							//职务工资
+							var basic_pay = parseFloat($("#basic_pay").val());
+							var job_salary = v_-per_pay-basic_pay;
+							job_salary = job_salary.toFixed(2);
+							$("#job_salary").val(job_salary);
+						}else{
+							$("#turn_salary").val(0);
+						}
+					}
+					</script>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label for="" class="xt-sz">基本工资</label>
+					<input name="basic_pay"  onblur="getPay()"  placeholder="请输入基本工资,非必填"  id="basic_pay" type="text"  class="items" value="{$one['basic_pay']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="" class="xt-sz">职务工资</label>
+					<input name="job_salary" placeholder="=工资总额-基本工资-绩效工资;"  id="job_salary" type="text"  class="items" value="{$one['job_salary']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="" class="xt-sz">绩效工资</label>
+					<input name="per_pay" placeholder="=工资总额*绩效考核比例;"  id="per_pay" type="text"  class="items" value="{$one['per_pay']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="" style="width:50% !important;">第一次签证合同开始时间</label>
+					<span class="dayTwo dayTwo-a" style="width:45% !important;"><input placeholder="请输入第一次签证合同开始时间,非必填"  type="text" class="items" value="<?php if($one['first_visa_start'] && $one['first_visa_start']!="0000-00-00 00:00:00"){ ?> {$one['first_visa_start']|strtotime|date='Y-m-d',###} <?php }  ?>" d="{$one['first_visa_start']}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="first_visa_start" name="first_visa_start"> <i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="" style="width:50% !important;">第一次签证合同结束时间</label>
+					<span class="dayTwo dayTwo-a" style="width:45% !important;"><input placeholder="请输入第一次签证合同结束时间,非必填"  type="text" class="items" value="<?php if($one['fist_visa_end'] && $one['fist_visa_end']!="0000-00-00 00:00:00"){ ?> {$one['fist_visa_end']|strtotime|date='Y-m-d',###} <?php }  ?>"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="fist_visa_end" name="fist_visa_end" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="" style="width:50% !important;">第二次签证合同开始时间</label>
+					<span class="dayTwo dayTwo-a" style="width:45% !important;"><input placeholder="请输入第二次签证合同开始时间,非必填" type="text" class="items"  value="<?php if($one['sec_visa_start'] && $one['sec_visa_start']!="0000-00-00 00:00:00"){ ?> {$one['sec_visa_start']|strtotime|date='Y-m-d',###} <?php }  ?>" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="sec_visa_start" name="sec_visa_start"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="" style="width:50% !important;">第二次签证合同结束时间</label>
+					<span class="dayTwo dayTwo-a" style="width:45% !important;"><input placeholder="请输入第二次签证合同结束时间,非必填" type="text" class="items" value="<?php if($one['sec_visa_end'] && $one['sec_visa_end']!="0000-00-00 00:00:00"){ ?> {$one['sec_visa_end']|strtotime|date='Y-m-d',###} <?php }  ?>"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="sec_visa_end" name="sec_visa_end"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="" style="width:50% !important;">第三次签证合同开始时间</label>
+					<span class="dayTwo dayTwo-a" style="width:45% !important;"><input placeholder="请输入第三次签证合同开始时间,非必填"  type="text" class="items" value="<?php if($one['third_visa_start'] && $one['third_visa_start']!="0000-00-00 00:00:00"){ ?> {$one['third_visa_start']|strtotime|date='Y-m-d',###} <?php }  ?>"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="third_visa_start" name="third_visa_start" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<!-- <li>
+					<p class="entryCon">
+					<label class="entryTwo" for="" style="width:50% !important;">第三次签证合同结束时间</label>
+					<span class="dayTwo dayTwo-a" style="width:45% !important;"><input placeholder="请输入第三次签证合同结束时间,非必填" type="text" class="items"  value="{$one['third_visa_end']}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="third_visa_end" name="third_visa_end"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li> -->
+					<li>
+					<p class="entryCon">
+					<label class="entryThree" for="" style="width:30% !important;">保密/竞业禁止</label>
+					<span class="dayThree" style="width:65% !important;"><input type="text"  placeholder="请输入保密/竞业禁止,非必填"  id="probihibe" style="width:100% !important;"  name="probihibe"  class="items" value="{$one['probihibe']}"></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">银行卡1</label>
+					<input name="bank_cardno1" id="bank_cardno1" placeholder="请输入银行卡1,非必填" type="text"  class="items" value="{$one['bank_cardno1']}" >
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryThree" for=""  style="width:30% !important;">银行卡1开户行</label>
+					<input class="dayThree items"  style="width:65% !important;" placeholder="请输入银行卡1开户行,非必填" name="bank_card1" id="bank_card1" type="text" value="{$one['bank_card1']}" >
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">银行卡2</label>
+					<input name="bank_cardno2" id="bank_cardno2" placeholder="请输入银行卡2,非必填" type="text"  class="items" value="{$one['bank_cardno2']}" >
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryThree" for="" style="width:30% !important;">银行卡2开户行</label>
+					<input class="dayThree items" style="width:65% !important;" placeholder="请输入银行卡2开户行,非必填" name="bank_card2" id="bank_card2" type="text" value="{$one['bank_card2']}" >
+					</p>
+					</li>
+					<li style="width:100% !important;height:auto !important;">
+					<style type="text/css">
+	.fleft{float:left;width:80px}.jx-sec{float:left;width:90%}.jx-items{float:left;border:1px solid #d8d8d8;border-radius:3px;color:#666;font-size:14px;height:40px;line-height:40px;width:120px;padding:0 5px;margin:0 8px 8px 0}.jx-bj{width:100%;float:left}.btn-kx{background:#1269cc none repeat scroll 0 0;width:110px;border:medium none;border-radius:3px;color:#fff;margin-left:0px;width:120px!important;padding:0!important;height: 40px;float:left;margin: 0 8px 8px 0px;}.fls{float:left}.jx-ts{color:red;margin: 0 8px 8px 0px;width:450px;display: inline-block;float:left;font-size: 12px}
+					</style>
+						<span class="fleft">各年度绩效</span>
+						<div class="jx-sec">
+						<notempty name="perList">
+							<volist name="perList" id="vo" key="key">
+								<input type="text" name="jx_per[]" placeholder="格式:2015-Q1-95" id="jx_per_{$key}" value="{$vo}"  class="jx-items" />
+							</volist>
+						<else />
+							<input type="text" name="jx_per[]" placeholder="格式:2015-Q1-95" id="jx_per_0" value=""  class="jx-items" />
+						</notempty>
+						<input class="submit btn-kx" name=""  value="添加绩效输入框" id="btnjx" type="button" onclick="jx.addPer()">
+						<span class="jx-ts">*绩效格式必须是2015-Q1-95,表示2015年Q1季度分数是95分。不填写就是删除！</span>
+						</div>
+						<script type="text/javascript">
+						var jx={
+							addPer:function(){
+								var jsec=$(".jx-sec"),jsec_len = jsec.find(".jx-items").length,ht="";
+								ht='<input type="text" name="jx_per[]" placeholder="格式:2015-Q1-95" id="jx_per_'+(jsec_len+1)+'" value=""  class="jx-items" />';
+								$("#btnjx").before(ht);
+							}
+						};
+						</script>
+					</li>
+				<!-- end aa -->
+
+
+
+
+				
+				</ul>
+			</fieldset>
+			<?php } ?>
+
+
+	        <fieldset class="fd-k fl w">
+				<legend class="fs-color">其它信息</legend>
+				<ul class="entryList">
+					<li>
+						<p class="entryCon">
+						<label class="entryThree" for="" style="width:30% !important;">合同签订公司</label>
+						<input class="dayThree items"  placeholder="请输入合同签订公司,非必填" style="width:65% !important;" name="sign_company" id="sign_company" type="text" value="{$one['sign_company']}">
+						</p>
+					</li>
+					<li>
+						<p class="entryCon">
+						<label for="">员工状态</label>
+						<select name="status" id="status">
+						<?php foreach ($userAttr as $k => $v) {
+						?>
+						<option value="{$k}" <?php if($k==$one['status']){ ?> selected="selected" <?php } ?> >{$v}</option>
+						<?php
+						} ?>
+						</select>
+						</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">招聘渠道</label>
+					<input name="rec_channel"  placeholder="请输入司龄,非必填" id="rec_channel" type="text"  class="items" value="{$one['rec_channel']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">服务异动</label>
+					<input name="job_change"   placeholder="请输入服务异动,非必填" id="job_change" type="text"  class="items" value="{$one['job_change']}">
+					</p>
+					</li>
+
+
+					
+				</ul>
+			</fieldset>
+	        <!--end 员工入职表单-->
+	        <!--按钮-->
+	        <div class="btnBox fl w" style="text-align: center;">
+	        <?php if($one['id']){
+	        	?>
+	        	<input type="hidden"  id="hrid" name="hrid" value="{$one['id']}" />
+        	<?php
+        	} ?>
+	        	<?php if($isPer){ ?>
+	            <input class="submit" name="" type="button" value="保存资料" onclick="E.saveData(this)" id="btnsave">
+	            <?php } ?>
+	             <a href="/OA/HrManage/hrList.html"  class="a-com">返回列表</a>
+	        </div>
+        </form>
+        <!--end 按钮-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<script type="text/javascript" src="/Public/OA/js/globle.js"></script>
+<!--双日期插件-->
+<script type="text/javascript" src="/Public/OA/js/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/Public/OA/js/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="/Public/OA/js/entry.js?v=<?php echo time(); ?>"></script>
+
+</block>

@@ -1,0 +1,528 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public:commonoa" />
+<style type="text/css">
+body{font-size: 12px !important;}
+    .btnBox input.close[type="button"]{float:none !important}.close{opacity:1!important;font-size:14px!important;font-weight:normal!important;margin-left: 10px !important;}.listTable tr th,.listTable tr td{border:1px solid #eee;color:#333;height:40px;line-height:40px;overflow:hidden;text-align:center;text-overflow:ellipsis;white-space:nowrap;padding:0px 5px !important;}.listTable tr th{color: #fff;}.b-name{width:200px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.com-btn{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:3px!important;color:#fff!important;cursor:pointer!important;margin-left:10px!important;height:32px!important;line-height:32px !important;padding:0 5px !important}.color1a72d6{color: #1a72d6 !important; }.ui-dialog-buttons{z-index: 2000 !important;}.Wdate{width:185px !important;padding: 0 2px !important;}.edit-b{ border: 1px solid #dadada;
+    border-radius: 3px;
+    height: 30px;
+    margin-left: 20px;
+    width: 50px;line-height: 30px;}
+    .edit-b:hover{
+        background: #1269CC;color: #fff;
+    }.btnBox input[type="button"]{ margin: 0px !important;float: left !important;margin-left: 145px !important;}.btnBox input.close[type="button"]{margin-left: 10px  !important;float: left !important;}.listTable tr th, .listTable tr td{font-size: 12px !important;}.screenOperate{height: auto !important;}.screenCn .screenOperate a{border-top:1px solid #fff;}.screenCn .screenOperate a{padding:0 10px;}
+.ri_header{
+    height: 45px;
+    width: 450px;
+    margin: 15px 0;font-size: 18px;
+    font-weight: bold;line-height: 1;
+    text-align: left;}
+</style>
+ <!--swiper  css文件-->
+<link rel="stylesheet" href="__PUBLIC__/newUI/js/swiper/swiper.min.css">
+<!--bootstrap-select  css文件-->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/js/bootstrapselect/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/js/bootstrapselect/css/bootstrap-select.css"/>
+<div class="subConten  fl w" style="padding:5px !important;">
+<script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+    <!--内容-->
+    <div class="subCon fl w" style="margin-top:0px;">
+    <div class="screenCn fl w ha" style="margin-top:0px;">
+
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text"><a href="/OA/HrManage/hrList" style="color: #1a72d6;">人事办公</a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #1a72d6;">-></span>
+                <span><a href="/OA/HrManage/hrList" style="color: #1a72d6;">人事管理</a></span>
+            </div>
+        </div>
+        <div class="xian"></div>
+
+    <?php if($isPer){ ?>
+        <div class="screenOperate fl w">
+
+            <a class="Js_addOffice addPro" href="/Home/User/index.html">办理入职</a>
+            <a class="Js_addOffice quit_btn" href="javascript:;">办理离职</a>
+            <a class="Js_addOffice turn_company" href="javascript:;">转公司</a>
+            <a class="Js_addOffice" href="/OA/HrManage/exportIncumbent?type=on" target="_blank">导出在职人员表</a>
+            <a class="Js_addOffice"  href="/OA/HrManage/exportIncumbent?type=out" target="_blank">导出离职人员表</a>
+            
+           <!--  <a class="Js_addOffice" href="/OA/HrManage/exportCurrentMonthSalaryData" target="_blank">导出当月工资表</a> -->
+            <a class="Js_addOffice  importPro" href="javascript:;"  id="importPro">导入当月特殊工资</a>
+             <a class="Js_addOffice" href="/Public/excel/每月特殊工资模板.xls" target="_blank">下载当月特殊工资excel模板</a>
+            
+        </div>
+         <div class="screenOperate fl w">
+            <a class="Js_addOffice  sec-link importHrInfo" id="importHrInfo">导入员工信息</a>
+            <a class="Js_addOffice  sec-link" href="/Public/excel/员工信息导入模板.xls">下载导入员工信息excel模板</a>
+        </div>
+         <div class="screenOperate fl w">
+            <form id="dc_gongz" target="_blank" action="">
+            <span style="float:left;height:40px;"><input  name="month"  onclick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate"
+             value="<?php echo date("Y-m",time()); ?>" type="text" style="height:40px;width:181px !important;" ></span>
+           
+            <a class="Js_addOffice" href="javascript:void(0);" onclick="exportGongz('/OA/HrManage/exportCurrentMonthSalaryData')">导出excel工资表详细</a>
+             <a class="Js_addOffice" href="javascript:void(0);" onclick="exportGongz('/OA/HrManage/exportMonthSalaryLine.html')">导出excel工资条</a>
+           </form>
+           <script type="text/javascript">
+               function exportGongz(url){
+                $("#dc_gongz").attr("action",url).submit();
+               }
+           </script>
+        </div>
+        <?php } ?>
+        <form method="get" action="/OA/HrManage/hrList.html">
+        <table class="queryTable fl w" style="margin:10px 0 10px 0px;">
+        <tbody>
+        <tr>
+        <td>
+            <span class="fleft" >姓名：</span>
+            <span class="fleft" ><input name="user_name" value="{$map['user_name']}" type="text" class="b-name"></span>
+            <span class="fleft">姓名拼音：</span>
+            <span class="fleft"  ><input name="username_pinyin" value="{$map['username_pinyin']}"  type="text"  class="b-name"></span>
+            <span class="fleft">入职时间：</span>
+            <span class="fleft">
+                <input  name="entry_time_sdate"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$map['entry_time_sdate']}" type="text">
+                到
+                <input  name="entry_time_edate"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$map['entry_time_edate']}" type="text">
+            </span>
+            <span class="fleft">状态：</span>
+            <span class="fleft">
+            <select name="status" style="width:100px !important;"> 
+            <option value="-1">全部</option>
+                <?php foreach ($userAttr as $k => $v) {
+                    ?>
+                    <option value="{$k}" <?php if($k==$map["status"]){ ?> selected="selected" <?php } ?>>{$v}</option>
+                    <?php
+                } ?>
+            </select></span>
+        </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="fleft" >部门：</span>
+                <span class="fleft" >
+                    <select id="dep" name='dep' class="sel-djs"  data-actions-box="true" data-done-button="true" data-live-search="true" style="width: 200px !important;">
+                        <volist name="dep" id='v'>
+                            <option value="">请选择</option>
+                            <option value="{$v.id}" <php>if($v['id'] == $map['dep'])echo "selected='selected'";</php>>{$v.name}</option>
+                        </volist>
+                    </select>
+                </span>
+                <span class="fleft" >归属公司：</span>
+                <span class="fleft" >
+                    <select name="company_id" style="width: 200px !important;">
+                        <option value="">请选择</option>
+                        <option value="157" <?php if($map['company_id'] == 157){ ?> selected="selected" <?php } ?> >上海趣比科技有限公司</option>
+                        <option value="158" <?php if($map['company_id'] == 158){ ?> selected="selected" <?php } ?> >重庆趣玩科技有限公司</option>
+                        <option value="159" <?php if($map['company_id'] == 159){ ?> selected="selected" <?php } ?> >上饶市网聚天下科技有限公司</option>
+                        <option value="160" <?php if($map['company_id'] == 160){ ?> selected="selected" <?php } ?> >重庆话语科技有限公司</option>
+                    </select>
+                </span>
+                <span class="fleft">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;性别：</span>
+                <span class="fleft">
+                    <select name="sex" style="width:100px !important;">
+                        <option value="" selected>请选择</option>
+                        <option value="1" <?php if($map['sex'] == 1){ ?> selected="selected" <?php } ?> >女</option>
+                        <option value="2" <?php if($map['sex'] == 2){ ?> selected="selected" <?php } ?> >男</option>
+                    </select>
+                </span>
+                <span class="fleft"><input name="" value="查询" class="com-btn" type="submit"></span>
+            </td>
+        </tr>
+        </tbody>
+        </table>
+
+        </form>
+     <!-- 12121 -->
+    </div>
+        <!--ned 功能区-->
+        <!--制度列表-->
+        <div class="workListBox">
+            <table class="listTable Js_tableCon">
+                <thead>
+                    <tr>
+                        <th><input class="_checkall" id="_checkall" name="" type="checkbox">序号</th>
+                        <th>归属公司</th>
+                        <th>部门</th>
+                        <th>姓名</th>
+                        <th>姓名拼音</th>
+                        <th>职务</th>
+                        <th>岗位评级</th>
+                        <th>性别</th>
+                        <?php if($isPer){ ?>
+                        <th>身份证号码</th>
+                         <?php } ?>
+                        <th>入职时间</th>
+                        <?php if($isPer){ ?>
+                        <th>银行卡号</th>
+                        <th>银行卡开户行</th>
+                        <th>入职薪资</th>
+                        <th>转正薪资</th>
+                        <?php } ?>
+                        <th>状态</th>
+                        <th width="150">详情</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>
+                            <input class="ids ckitem" name="" type="checkbox"  id="ck_{$vo['id']}" value="{$vo['id']}">&nbsp;
+                            {$vo["id"]}
+                            </td>
+                            <td title="{$op_companyList[$vo['company_id']]}"><span>{$op_companyList[$vo['company_id']]}</span></td>
+                            
+                            <td title="{$vo["firstname"]} - {$vo["depart_name"]}"><span>{$vo["depart_name"]}</span></td>
+                            <td title="{$vo["user_name"]}"><span>{$vo["user_name"]}</span></td>
+                            <td title="{$vo["username_pinyin"]}"><span>{$vo["username_pinyin"]}</span></td>
+                            <td title="{$vo["duty"]}"><span>{$vo["duty"]}</span></td>
+                            <td title="{$vo['job_rating']}"><span>{$vo['job_rating']}</span></td>
+                            <td title="<?php if($vo['sex']==1){ echo "女";}else{ echo "男";} ?>"><span><?php if($vo['sex']==1){ echo "女";}else{ echo "男";} ?></span></td>
+                             <?php if($isPer){ ?>
+                            <td title="{$vo["body_no"]}"><span>{$vo["body_no"]}</span></td>
+                            <?php } ?>
+                            <td title="{$vo["entry_time"]|strtotime|date="Y.m.d",###}"><span>{$vo["entry_time"]|strtotime|date="Y.m.d",###}</span></td>
+                            <?php if($isPer){ ?>
+                            <td title="{$vo["bank_cardno1"]}"><span>{$vo["bank_cardno1"]}</span></td>
+                            <td title="{$vo["bank_card1"]}"><span>{$vo["bank_card1"]}</span></td>
+                            <td title="{$vo["entry_salary"]}"><span>{$vo["entry_salary"]}</span></td>
+                            <td title="{$vo["turn_salary"]}"><span>{$vo["turn_salary"]}</span></td>
+                            <?php } ?>
+                            
+                            <td title="{$userAttr[$vo["status"]]}"><span>{$userAttr[$vo["status"]]}</span></td>
+                            <td><!--<a href="/OA/HrManage/entry.html?editeId={$vo["id"]}" class="edit-b">查看</a>-->
+                                <a href="/OA/HrManage/edit.html?editeId={$vo["id"]}&status={$vo["status"]}" class="edit-b">编辑</a>
+                                <a href="/OA/HrManage/detail.html?editeId={$vo["id"]}" class="edit-b">查看</a>
+                            </td>
+                        </tr>
+                    </volist>
+                    <else />
+                    <tr>
+                        <td  <?php if($isPer){ ?>  colspan="15" <?php }else{ ?>  colspan="11" <?php } ?>><div class="no-datas">暂无数据！！</div></td>
+                    </tr> 
+                </notempty>
+
+                </tbody>
+            </table>
+            <notempty name="list">
+                <div class="no-datas">{$page}</div>
+            </notempty>
+            <notempty name="list">
+             <div class="office_btnBox" style="margin-bottom:50px;">
+                <!-- <input name="" type="button" value="批量删除员工信息" class="delAll" onclick="r.deleteAll(this)"> -->
+            </div>
+            <script type="text/javascript">
+            var r = {
+                deleteAll:function(){
+                    var ids,params={};
+                    params.ids = r.getAllChecked_box();
+                    if(!params.ids){
+                        layer.alert("请选择你要删除的员工");return false;
+                    }else{
+                        layer.confirm("您确定要删除吗？",function(){
+                            $.post("/OA/HrManage/deletehr.html",params,function(data){
+                                layer.alert(data.msg);
+                                window.location.reload();
+                            });
+                        });
+                    }
+                },
+                getAllChecked_box:function(){
+                    var ids = "";
+                    $(".ckitem").each(function(){
+                        if(this.checked){
+                            ids+=$(this).val()+",";
+                        }
+                    });
+                    if(ids){
+                        ids = ids.substr(0,ids.length-1);
+                    }
+                    return ids;
+                }
+            };
+            </script>
+            </notempty>
+        </div>
+        <!--end 制度列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<!--遮罩层-->
+<div class="mask"></div>
+<!--end 遮罩层-->
+<!--转公司弹出层-->
+<div class="popupPublic companyBox Js_company">
+    <h2>转公司</h2>
+    <div class="companyCon">
+        <ul class="companyList">
+            <li>
+                <label>新公司</label>
+                <select name="companyid" id="companyid">
+                    <option>加载中...</option>
+                </select>
+            </li>
+            <li>
+                <label>新部门</label>
+                <select name="depart_id" id="depart_id">
+                    <option>加载中...</option>
+                </select>
+            </li>
+            <li>
+                <label>是否重置司龄</label>
+                <select name="is_reset_cage" id="is_reset_cage">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+            </li>
+        </ul>
+    </div>
+    <!--按钮-->
+    <div class="btnBox">
+        <input class="submit" name="" type="button" value="提交" onclick="Hr.turnCompany(this)"><input class="close" name="" type="button" value="取消">
+    </div>
+    <!--end 按钮-->
+</div>
+<!--end 转公司弹出层-->
+<!--离职弹出层-->
+<div class="popupPublic companyBox Js_Quit">
+    <h2>离职</h2>
+    <div class="companyCon">
+        <ul class="companyList">
+            <li>
+                <label>离职日期</label>
+                <span class="dayTime"><input type="text"    onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="departure_time" name="departure_time" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+            </li>
+            <li>
+                <label>社保停办日</label>
+                <span class="dayTime"><input type="text"    onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="social_close_time" name="social_close_time" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+            </li>
+            <li>
+                <label>公积金停办日</label>
+                <span class="dayTime"><input type="text"    onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="prident_close_time" name="prident_close_time"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+            </li>
+        </ul>
+    </div>
+    <!--按钮-->
+    <div class="btnBox">
+        <input class="submit" name="" onclick="Hr.quitEnent(this)" type="button" value="办理"><input class="close" name="" type="button" value="取消">
+    </div>
+    <!--end 按钮-->
+</div>
+<!--end 离职弹出层-->
+<script type="text/javascript" src="/Public/OA/js/globle.js"></script>
+<!--双日期插件-->
+<script type="text/javascript" src="/Public/OA/js/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/Public/OA/js/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script type="text/javascript">
+    var Hr={
+        init:function(){
+            this.initEvent();this._checkAll();this.lazyCompany();this.lazyDepart();this.initimportHrInfo();
+        },
+        initimportHrInfo:function(){
+            //导入员工信息
+            var button = $('#importHrInfo');
+            new AjaxUpload(button,{
+                action: "/OA/HrManage/importHrInfo.html",
+                name: 'files',
+                onSubmit:function(file, ext){
+                    //  if (!(ext && /^(csv)$/.test(ext))) {
+                    //     layer.alert("仅支持csv格式，您需要将excel文件转换为csv格式！");
+                    //     return false;
+                    // }
+                    button.html("导入中...");
+                },
+                onComplete: function(file, response){
+                    var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+                    if(list.logdata){
+                        layer.open({
+                          type: 2,
+                          title: '导入结果',
+                          shadeClose: true,
+                          shade: 0.8,
+                          area: ['800px', '80%'],
+                          content: '/Home/Public/showLog.html'//iframe的url
+                        }); 
+                        // Hr.createForm();
+                        // window.location.reload();
+                    }else{
+                        layer.alert(list.msg);
+                    }
+                }
+            });
+        },
+        createForm:function(logdata){
+           layer.open({
+              type: 2,
+              title: '我来跟进',
+              shadeClose: true,
+              shade: 0.8,
+              area: ['800px', '80%'],
+              content: '/Home/Public/showLog.html'//iframe的url
+            }); 
+            // var html_="<form id=\"logForm\" method='post' target=\"_blank\" action=\"/Home/Public/showLog.html\"><input type=\"hidden\" name=\"datalog\" value=\""+logdata+"\"/></form>";
+            // $("body").append(html_);
+            // $("#logForm").submit().remove();
+        },
+        turnCompany:function(obj){
+            var params={};
+            params.companyid     =$("#companyid").val();
+            params.depart_id  =$("#depart_id").val();
+            params.is_reset_cage =$("#is_reset_cage").val();
+            params.ids=Hr.getAllChecked();
+            if(!params.ids){
+                layer.alert("请选择需要办理离职的员工");
+                return false;
+            }else{
+                $(obj).val("提交中...");
+                $(obj).attr("onclick","");
+                $.post("/OA/HrManage/turnNewCompany.html",params,function(data){
+                    layer.alert(data.msg);
+                    $(".ui-widget-overlay").hide();
+                    $(obj).val("提交");
+                    $(obj).attr("onclick","S.addSetting(this)");
+                });
+            }
+            $(".ui-widget-overlay").remove();
+        },
+        lazyCompany:function(){
+            setTimeout(function(){
+            $.get("/OA/OrganizSetting/getCompnanys.html",function(data){
+                var ht='';
+                $.each(data,function(i,o){
+                    ht+='<option value="'+o.id+'">'+o.name+'</option>';
+                });
+                $("#companyid").html(ht);
+                });
+            },1000);
+        },
+        lazyDepart:function(){
+                setTimeout(function(){
+                    $.get("/OA/OrganizSetting/getAllList.html",function(data){
+                        var ht='';
+                        $.each(data,function(i,o){
+                            ht+='<option value="'+o.id+'">'+o.name+'</option>';
+                        });
+                        $("#depart_id").html(ht);
+                    });
+                },1000);
+            },
+        _checkAll:function(){
+            $("#_checkall").on("click",function(){
+                var f=this.checked;
+                $(".ckitem").prop("checked",f);
+            });
+        },
+        getAllChecked:function(){
+            var ids = "";
+            $(".ckitem").each(function(){
+                if(this.checked){
+                    ids+=$(this).val()+",";
+                }
+            });
+            if(ids){
+                ids = ids.substr(0,ids.length-1);
+            }
+            return ids;
+        },
+        quitEnent:function(obj){
+            var params={};
+            params.departure_time     =$("#departure_time").val();
+            params.social_close_time  =$("#social_close_time").val();
+            params.prident_close_time =$("#prident_close_time").val();
+            params.ids=Hr.getAllChecked();
+            if(Hr.checkquitEnent(params)){
+                $(obj).val("办理中...");
+                $(obj).attr("onclick","");
+                $.post("/OA/HrManage/resignationDo",params,function(data){
+                    layer.alert(data.msg);
+                    $(".ui-widget-overlay").hide();
+                    $(obj).val("办理");
+                    $(obj).attr("onclick","S.addSetting(this)");
+                });
+            }
+            $(".ui-widget-overlay").remove();
+        },
+        checkquitEnent:function(params){
+            if(!params.departure_time){
+                layer.alert("请选择离职日期");
+                $("#departure_time").focus();
+                return false;
+            }
+            // if(!params.social_close_time){
+            //    layer.alert("请选择社保停办日");
+            //     $("#social_close_time").focus();
+            //     return false;
+            // }
+            // if(!params.prident_close_time){
+            //     layer.alert("请选择公积金停办日");
+            //     $("#prident_close_time").focus();
+            //     return false;
+            // }
+            if(!params.ids){
+                layer.alert("请选择需要办理离职的员工");
+                return false;
+            }
+            return true;
+        },
+        initEvent:function(){
+            var Popupe = new PopupBase();
+            Popupe.show('.turn_company', '.mask,.Js_company');
+            Popupe.show('.quit_btn', '.mask,.Js_Quit');
+            Popupe.hide('.close','.mask,.Js_company,.Js_Quit');
+        }
+    };
+    $(function(){Hr.init();});
+</script>
+<script type="text/javascript">var pType="entry";</script>
+<script type="text/javascript" src="/Public/Home/js/fun.js"></script>
+<script type="text/javascript" src="__PUBLIC__/newUI/js/index.js"></script>
+<!--swiper插件-->
+<script type="text/javascript" src="__PUBLIC__/newUI/js/swiper/swiper.min.js"></script>
+<!--bootstrap-select-->
+<script type="text/javascript" src="__PUBLIC__/newUI/js/bootstrapselect/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/newUI/js/bootstrapselect/bootstrap-select.js"></script>
+<script type="text/javascript" src="__PUBLIC__/newUI/js/bootstrapselect/select.js"></script>
+<script type="text/javascript">
+    // $(function(){
+    //     //swiper插件
+    //     var mySwiper = new Swiper('.swiper-container',{
+    //         //pagination: '.swiper-pagination',
+    //         paginationClickable: true,
+    //         nextButton: '.swiper-button-next,.screenClick',
+    //         prevButton: '.swiper-button-prev',
+    //         parallax: true,
+    //         spaceBetween: 80,
+    //         effect: 'fade'
+    //     });
+    //     //监听搜索输入框事件
+    //     $('input[name="swiperOne"]').bind('input propertychange',function(){
+    //         var valTxt = $(this).val();
+    //         if(valTxt){
+    //             $(this).siblings('.closeSearch').show();
+    //         }else{
+    //             $(this).siblings('.closeSearch').hide();
+    //         }
+    //     });
+    //     $('.closeSearch').on('click',function(){
+    //         $(this).siblings('input[name="swiperOne"]').val('');
+    //         $(this).hide();
+    //     });
+
+    //     $('input[name="swiperTwo"]').bind('input propertychange',function(){
+    //         var valTxt = $(this).val();
+    //         if(valTxt){
+    //             $(this).siblings('.closeSearch').show();
+    //         }else{
+    //             $(this).siblings('.closeSearch').hide();
+    //         }
+    //     });
+    //     $('.closeSearch').on('click',function(){
+    //         $(this).siblings('input[name="swiperTwo"]').val('');
+    //         $(this).hide();
+    //     })
+    // });
+</script>
+</block>

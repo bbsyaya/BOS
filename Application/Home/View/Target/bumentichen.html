@@ -1,0 +1,233 @@
+<extend name="Public/base"/>
+
+<block name="script">
+<style>
+.crumbsNavCn{display: none;}
+</style>
+	<script src="__PUBLIC__/Home/module/ECharts/echarts-all.js" type="text/javascript"></script>
+		
+		<script type="text/javascript">
+			$(function() {
+				$(".cartogramCn").width($(".tab_contentWrapper").width())
+
+				var myChart5 = echarts.init(document.getElementById('myChart5'));
+	
+
+				var brokenLine3 = {
+				    tooltip : {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        data:["<php>echo implode('","',$supername_arr);</php>"]
+				    },
+				    calculable : true,
+				    xAxis : [
+				        {
+				            type : 'category',
+				            boundaryGap : false,
+				            data : ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+				        }
+				    ],
+				    yAxis : [
+				        {
+				            type : 'value',
+				            axisLabel : {
+				                formatter: '{value} %'
+				            }
+				        }
+				    ],
+				    series : [
+				    	<php>
+							foreach($allgxdata as  $key => $val){
+								echo "{name:'$key',type:'line',data:[";
+								$datanow=array();
+								for($i=1;$i<=12;$i++){
+									$datanow[]=$val[$i];
+								}
+								echo implode(',',$datanow);
+								echo "]},";
+							}
+				    	</php>
+				        
+				    ]
+				};
+				$.get('/Ajax/getbumentichendata',{},function(res){
+					var getbumendata=[];
+					var num=0;
+					for(var o in res){
+						var thisobj={};
+						var thisdata='';
+						thisobj.name=o;
+						thisobj.type='line';
+						for(var i in res[o]){
+							thisdata=thisdata+res[o][i]+',';
+						}
+						thisdata=thisdata.substr(0,thisdata.length-1);
+						thisobj.data='['+thisdata+']';
+						getbumendata[num]=thisobj;
+						num++;
+					}
+					brokenLine3.series=getbumendata;
+					myChart5.setOption(brokenLine3);
+				},'json');
+		        
+		        $('.dataTable').each(function(){
+		        	var Tindex;
+		        	var Ttb=$(this);
+		        	$(this).find('thead').find('tr').eq(1).find('td').each(function(){
+		        		if($(this).hasClass('J_sum')){
+		        			var Tsumnum=0;
+		        			Tindex=$(this).index();
+							Ttb.find('tbody').find('tr').each(function(){
+		        				Tsumnum+=($(this).find('td').eq(Tindex).text()*1);
+		        			})
+		        			$(this).html(Math.round(Tsumnum*100)/100);
+		        		}
+		        	})
+		        	
+		        	
+		        })
+			});
+		</script>
+</block>
+
+<block name="body">
+<div class="subMainBox">
+				<div class="ri_header">
+					<div class="ri_title_box">
+						<span class="clip-text">部门提成</span>
+						<span>商务管理</span>
+					</div>
+					<div class="ri_work">Department of commission</div>
+				</div>
+				<div class="tabCa pa">
+						<!--销售业绩-->
+
+							
+						<div class="tab_content pa " style="display: block;">
+							<!--筛选-->
+							<!--<div class="screenCn fl w ha">
+								<div class="screenOperate fl w">
+									<input type="button" value="导出" class="J_addData" onclick="window.open('/Target/downloadperformancelist_saler'+window.location.search)" />
+								</div>
+								<div class="screenList fl w">
+								<form action="/Target/bumentichen" method="get">
+								<input type='hidden' name='type' value="1"/>
+									<table>
+										<tr>								
+											<th>期间：</th>
+											<td>
+												<select name='year' style="width: 45%!important;">
+													<php>for($i=2016;$i<=date('Y');$i++){</php>
+														<option value="{$i}" <eq name='i' value="$_GET['year']">selected="selected"</eq>>{$i}年</option>
+													<php>}</php>
+												</select>
+												<select name="month" style="width: 45%!important;">
+													<php>for($j=1;$j<=12;$j++){</php>
+														<option value="{$j}" <eq name='j' value="$_GET['month']">selected="selected"</eq>>{$j}月</option>
+													<php>}</php>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="8">
+												<input type="submit" value="查询" />
+											</td>
+										</tr>
+									</table>
+								</form>
+								</div>
+							</div>-->
+
+							<div class="screenBox swiper-container">
+								<div class="swiper-wrapper">
+									<div class="swiper-slide">
+										<form action="/Target/bumentichen" method="get">
+
+											<div class="swiperRight">
+												<table class="tableBox">
+													<tr>
+														<th>期间：</th>
+														<td>
+															<select class="selectpicker" name='year' style="width: 45%!important;">
+																<php>for($i=2016;$i<=date('Y');$i++){</php>
+																<option value="{$i}" <eq name='i' value="$_GET['year']">selected="selected"</eq>>{$i}年</option>
+																<php>}</php>
+															</select>
+															<select class="selectpicker" name="month" style="width: 45%!important;">
+																<php>for($j=1;$j<=12;$j++){</php>
+																<option value="{$j}" <eq name='j' value="$_GET['month']">selected="selected"</eq>>{$j}月</option>
+																<php>}</php>
+															</select>
+														</td>
+														<td colspan="6">
+															<input type="submit" value="查询" />
+														</td>
+													</tr>
+												</table>
+											</div>
+										</form>
+										<!--end 基础查询-->
+									</div>
+								</div>
+							</div>
+
+							<div class="cartogramCn w fl" id="myChart5">
+								
+							</div>
+							<!--数据表-->
+							<div class="dataCn fl w ha" id="table_con">
+								<div class="advancedTit">
+									<div class="advancedLeft">
+										<span class="export advBtn"><input type="button" value="导出" class="J_addData" onclick="window.open('/Target/downloadperformancelist_saler'+window.location.search)" /></span>
+									</div>
+								</div>
+								<table class="dataTable dataTable1">
+									<thead>
+									<tr>
+										<th width="60">序号</th>
+										<th>部门</th>
+										<th>最低毛利指标</th>
+										<th>考核类型</th>
+										<th>实际毛利润</th>
+										<th>业绩完成率</th>
+										<th>提成系数</th>
+										<th>提成金额</th>
+										<th>毛利贡献率</th>
+									</tr>
+									<tr>
+										<td>汇总</td>
+										<td></td>
+										<td class="J_sum"></td>
+										<td></td>
+										<td class="J_sum"></td>
+										<td></td>
+										<td></td>
+										<td class="J_sum"></td>
+										<td></td>
+									</tr>
+									</thead>
+									<tbody>
+									<volist name='bumenarr' id='v' key='k'>
+										<tr>
+											<td>{$k}</td>
+											<td>{$v.name}</td>
+											<td>{$v.min}</td>
+											<td>{:C('option.targettype')[$v['type']]}</td>
+											<td>{$v.money|twonum}</td>
+											<td>{$v.wclv}%</td>
+											<td><php>echo $v['xs']*100</php>%</td>
+											<td>{$v.tichen|twonum}</td>
+											<td>{$v.gxlv|twonum}%</td>
+										</tr>
+									</volist>
+									</tbody>
+								</table>
+							</div>							
+							<!--分页-->
+				            
+						</div>
+					</div>
+</div>
+</block>
+

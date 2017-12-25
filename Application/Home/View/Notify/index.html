@@ -1,0 +1,193 @@
+<extend name="Public/base"/>
+
+<block name="script">
+    <script type="text/javascript" src="__JS__/bootbox.min.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+
+    <script type="text/javascript">
+        function stick(ids){
+            var chk_value =[];
+            $('input[name="nid"]:checked').each(function(){
+                chk_value.push($(this).val());
+            });
+            if(chk_value ==''){
+                alert("请选择标题");return;
+            }
+            $.get("{:U('top')}",{top:ids,nid:chk_value},function(data){
+                if(data=="TRUE"){
+                    alert("操作成功");
+                    location.reload();
+                }else{
+                    alert(data);
+                }
+            });
+        }
+
+        $(function() {
+
+            $(".title_btn").click(function(){
+                var nid = $(this).attr('nid');
+                if(nid){
+                    $.get("{:U('up_title')}",{
+                        nid:nid
+                    },function(data){
+                        $(".til").html(data.subject);
+                        $(".per").html(data.real_name);
+                        $(".tim").html(data.send_time);
+                        $(".detailsTxt").html(data.content);
+                        $(".lj").attr('href',data.attachment_name);
+                        $(".lj").text(data.subject);
+                    });
+                }
+
+                $(".popupPublicDialog").dialog("open");
+            });
+            $("#delete").click(function(){
+                var chk_value =[];
+                $('input[name="nid"]:checked').each(function(){
+                    chk_value.push($(this).val());
+                });
+                if(chk_value ==''){
+                    alert("请选择删除内容");return;
+                }
+                if (confirm('确认删除信息?')) {
+                    $.get("{:U('delete')}", {nid: chk_value}, function (data) {
+                        if (data == "TRUE") {
+                            alert("操作成功");
+                            location.reload();
+                        } else {
+                            alert(data);
+                        }
+                    });
+                }
+            });
+
+            $(".popupPublicDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "750",
+                height: "600",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    /*"确定":function() {
+                    },*/
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".Js_details").click(function(){
+                if($(this).attr('nid')>0) {
+                    if (confirm('确认删除此条信息?')) {
+                        $.get("{:U('delete')}",{nid:$(this).attr('nid')},function(data){
+                            if(data=="TRUE"){
+                                alert("操作成功");
+                                location.reload();
+                            }else{
+                                alert(data);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</block>
+
+<block name="body">
+
+    <div class="subCon">
+
+        <div class="query">
+            <form action="{:U('index')}" id="search_form" method="get">
+                <table class="queryTable">
+                    <tbody>
+                    <tr>
+                        <th >标题：</th>
+                        <td ><input type="text" name="name" value="{$Think.get.name}"></td>
+                        <th >类型：</th>
+                        <td ><bselect name="notify_type" options="notify_type" selected="_GET['notify_type']" first="请选择"/></td>
+                        <th >状态：</th>
+                        <td ><bselect name="status_type" options="status_type" selected="_GET['status_type']" first="请选择"/></td>
+                        <td colspan="2">
+                            <input id="search_btn" type="submit" value="查询" />
+                            <input type="hidden" name="p" value="1"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+
+        <div class="shopBtn">
+            <a href="{:U('edit')}"><span class="add_icon" id="add">新增</span></a>
+            <span class="up_icon" id="stick" onclick="stick(1);">置顶</span>
+            <span class="down_icon" id="cancel_stick" onclick="stick(0);">取消置顶</span>
+            <span class="delete_icon" id="delete">删除所选内容</span>
+        </div>
+
+        <div class="workListBox">
+            <table class="listTable Js_tableCon">
+            <thead>
+                <tr>
+                    <th><input class="check-all" name="" type="checkbox">全选</th>
+                    <th>发布人</th>
+                    <th>类型</th>
+                    <th>阅读权限</th>
+                    <th width="600">标题</th>
+                    <th>生效时间</th>
+                    <th>终止时间</th>
+                    <th>状态</th>
+                    <th width="150">操作</th>
+                </tr>
+                <volist name="list" id="v">
+                <tr>
+                    <td><input class="ids" type="checkbox" name="nid" value="{$v['notify_id']}"></td>
+                    <td>{$v.real_name}</td>
+                    <td>{$v.TYPE_ID}</td>
+                    <td>{$v.user}</td>
+                    <td><span class="title_btn" nid="{$v['notify_id']}">{$v.subject}</span></td>
+                    <td>{$v.begin_date}</td>
+                    <td>{$v.end_date}</td>
+                    <if condition="$v.status eq '生效'">
+                        <td><span class="rest">{$v.status}</span></td>
+                    <else />
+                        <td><span class="rest_red">{$v.status}</span></td>
+                    </if>
+                    <td><a class="rest up" nid="{$v['notify_id']}" style="cursor:pointer" href="{:U('edit?id='.$v['notify_id'])}">修改</a>|<a class="Js_details" href="javascript:void(0);" nid="{$v['notify_id']}">删除</a></td>
+                </tr>
+                </volist>
+            </thead>
+        </table>
+        </div>
+    </div>
+    {$_page}
+
+    <div class="popupPublicDialog" title="">
+        <div class="popupPublic conDetails" style="display: block">
+            <!--关闭按钮-->
+            <a href="javascript:void(0);" class="colse"></a>
+            <!--end 关闭按钮-->
+            <h2 class="til"></h2>
+            <div class="detailsCon">
+                <p class="detailsCrumbs">发布人：<span class="per"></span>&nbsp;&nbsp;发布于：<span class="tim"></span></p>
+                <div class="detailsTxt">
+                    <p>全体员工：</p>
+                    <p>为加强公司保密工作的管理，防范和杜绝各种泄密事件的发生，维护公司正常经营管理秩
+                        序，保障公司合法权益不受侵犯，特制定本制度。详情请查阅附件！</p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </div>
+                <p>附件文件：</p>
+                <p><a href="#" class="lj" target="_blank"></a></p>
+            </div>
+        </div>
+    </div>
+</block>

@@ -1,0 +1,170 @@
+<extend name="Public/basehtml"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+
+    <div class="d-f main-cont" style="width:95%;">
+        <!-- head -->
+        <!-- <div class="hd-qbks">
+            <select class="xigs-g">
+                <option>--请选择--</option>
+                <option>恢复状态</option>
+                <option>关闭此条情报</option>
+            </select>
+        </div> -->
+        <!-- end head -->
+        <div class="d-f mis-sks mgps-xks" style="margin-top:0px;">
+            <span class="mis-lea">标题：</span>
+            <span class="mis-rb t-tile">
+                <input type="text" id="qb_title"  class="tks-ps" value="{$one['head_title']}"  <?php if($is_my_task==500){ ?> disabled="true" <?php } ?>/>
+                <input type="hidden" id="hd_is_my_task" value="{$is_my_task}" />
+            </span>
+        </div>
+        <div class="d-f mis-sks mgps-xks">
+            <span class="mis-lea">负责人：</span>
+            <span class="wd150" >
+                <select class="fzr-selcks-s11" id="qb_fzr" data-actions-box="true" data-done-button="true" data-live-search="true"  <?php if($is_my_task==500){ ?> disabled="true" <?php } ?>>
+                    <option>加载中...</option>
+                </select>
+                <script type="text/javascript">
+                var dvalue={};
+                dvalue.qb_fzr = "{$one["pri_uid"]}";
+                </script>
+            </span>
+            <span class="mis-lea " style="margin-left:130px;">计划完成：</span>
+            <span class="mis-rb t-tile qb-right">
+                <input  type="text" class="tks-ps js-time" id="qb_jhwcsj" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" value="{$one['exp_end_time']}" <?php if($is_my_task==500){ ?> disabled="true" <?php } ?>/>
+            </span>
+        </div>
+        <div class="d-f mis-sks mgps-xks">
+            <span class="mis-lea">描述：</span>
+            <span class="mis-rb t-tile" style="height:auto;">
+                <textarea class="txt-ms-s" placeholder="请输入任务描述" id="qb_ms" <?php if($is_my_task==500){ ?> disabled="true" <?php } ?>>{$one['qb_ms']}</textarea>
+            </span>
+        </div>
+        <div class="d-f mis-sks mgps-xks">
+            <span class="mis-lea">已有标签：</span>
+            <span class=" wd150">
+                <select class="fzr-selcks-s11" onchange="qb.setRwXuQiu()"  data-actions-box="true" data-done-button="true" data-live-search="true" id="qb_xqzd" <?php if($is_my_task==500){ ?> disabled="true" <?php } ?> >
+                    <option>加载中...</option>
+                </select>
+            </span>
+            <?php if($is_my_task==200){ ?>
+            <input type="button" value="添加标签" class="tx-zi" onclick="qb.addZd(1)" style="margin-left:10px;float:left;" />
+            <span style="float:left;height:30px;line-height:30px;margin-left:10px;color:red;"> 提示：请优先选择已有标签！</span>
+             <?php } ?>
+            
+        </div>
+        <form id="zd_form">
+            <div class="xuq-se  d-f " id="qb_xq_zd" style="padding-bottom: 15px;display:block;">
+                <div class="" style="height:40px;line-height:40px;text-align:center;">加载中....</div>
+            </div>
+        </form>
+       
+        <!-- add-zi-se -->
+        
+        <!-- end -->
+        
+
+        <div class="d-f qb-tia-zkd bor-tp1" style="text-align:center;padding:20px 0px;margin-top:0px;">
+        <?php if($is_my_task==200){ ?> <input type="button" id="jx_bcbtn" value="保存任务" onclick="qb.saveTaskGoOn()" /> <?php } ?>
+             
+             <input type="hidden" value="{$one['id']}" id="hd_task_id" />
+             <input type="hidden" value="{$fdata}" id="fields_data_count">
+             <input type="hidden" value="{$is_query}" id="is_query">
+        </div>
+
+
+<div class="d-f mg-logzi">
+    <div class="mg-titls d-f"><?php if($is_my_task==200){ ?>保存完任务后<?php } ?>您还可以做以下操作：</div>
+</div>
+<?php if($is_my_task==200){ ?>
+        <div class="d-f mgis-a bor-tp1">
+            <input type="button" value="添加子任务" class="tx-zi" onclick="qb.addZrw()"  />
+           <!--  <input type="button" value="添加子任务" class="tx-zi add-zrw" onclick="qb.addZrw()"  /> -->
+        </div>
+<?php } ?>
+        <div class="d-f" style="margin-top:10px;">
+            <table class="sy-zrw-tb" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="zrw-title">
+                        <td>标题</td>
+                        <td>期望完成时间</td>
+                        <td>子任务负责人</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <tbody id="tzrw">
+                    <tr class="zw-dattd"><td colspan="4" class="nthsi">加载中...</td></tr>
+                </tbody>
+            </table>
+        </div>
+       
+       <if condition="$rw_status neq 3">
+            <div class="d-f mg-sls">
+                <div class="d-f mg-logzi" style="margin-top:0px;">
+                    <div class="mg-titls d-f">主任务和子任务的跟进都在这里操作哟！：</div>
+                </div>
+                <div class="d-f" style="margin-top:10px;"><input type="button" value="添加合作跟进" class="tx-zi" onclick="qb.addFlow()"  /></div>
+                <!-- list -->
+                 <div class="d-f" style="margin-top:10px;">
+                    <table class="sy-zrw-tb" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="zrw-title">
+                                <td>时间</td>
+                                <td>跟进人</td>
+                                <td>跟进结果</td>
+                                <td>跟进状态</td>
+                                <td>操作</td>
+                            </tr>
+                        </thead>
+                        <tbody id="genjin_list">
+                            <tr class="zw-dattd"><td colspan="4" class="nthsi">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="pagen d-f" id="page_genjin" style="margin-top:12px;"></div>
+                </div>
+                
+                 
+            </div>
+        </if>
+
+        <div class="d-f mg-logzi">
+            <div class="mg-titls d-f">情报日志</div>
+            <div class="d-f logzirfk" id="logloading">加载中....</div>
+            <div class="d-f log-cansurk" style="display:none;" id="rz_sec">
+                <div class="qb-riz-sec d-f" id="log_data" style="">
+                    
+                </div>
+                <div class="pagen d-f" id="page_zqb" style="margin-top:12px;"></div>
+                <div class="d-f hus-esss">
+                    <div class="d-f ">
+                    <form action="/Home/IntelligenceSystem/addLogMesSer.html" id="lyanform" method="post" enctype="multipart/form-data" >
+                        <input type="text" class="hf-txlsk" placeholder="说点什么留个脚印也好！" name="msgxx" id="msgxx"/>
+
+                        <span  class="shc-fjj-s"  title="上传附件" onclick="qb.upAttchFiles()">
+                            <input type="file" class="shc-fjj" title="上传附件" name="files" id="upfj"/>
+                        </span>
+                        <input type="hidden" id="hd_attach_url" value="" />
+                        <input type="button" id="lybtn" value="留言" class="tx-zi" onclick="qb.addLogMes()" style="margin-left:2%;" />
+                        <input type="hidden" value="{$one['id']}" id="hd_task_id" name="hd_task_id" />
+                        <input type="hidden" value="{$rw_status}" id="hd_rw_status" name="hd_rw_status" />
+
+                        <input type="hidden" value="" id="ysfilename" name="ysfilename" />
+                        <input type="hidden" value="" id="hasimg" name="hasimg" />
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+<script type="text/javascript" src="/Public/Home/js/qb.allotask.js?v={:getVersion()}"></script>  
+<script type="text/javascript" src="/Public/static/layer/layer.js"></script>
+
+</block>

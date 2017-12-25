@@ -1,0 +1,76 @@
+<extend name="Public/base"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+<div class="d-f main-content">
+    <div class="subMainBox d-f">
+        <div  style="width:95%;" class="d-f">
+            <div style="width:80%;float:left;height:auto;" class="ri_header">
+                <div class="ri_title_box">
+                    <span class="clip-text hov-ser" style="cursor:pointer;" onclick="window.location.href='/Home/IntelligenceSystem/index.html';" >情报采集工作流</span>
+                    <span class="lsl-sk" style="margin-left:52px;">{$zqbOne["title"]}</span>
+                     <?php if($isNow && ($zqbOne["status"]!=3)){ ?>
+                        <input type="button" value="编辑主情报" onclick="Ga.editZqb()"  style="margin-right:10px;" />
+                        <input type="button" value="主情报入库" style="margin-right:10px;"  id="zqbrukbtn" onclick="Ga.zqbRuku()" />
+                     <?php } ?>
+                     <input type="button" value="返回情报首页"   onclick="window.location.href='/Home/IntelligenceSystem/index.html';" />
+                </div>
+                <div class="ri_work">System home page</div>
+            </div>
+
+            
+            
+        </div>
+    </div>
+    <div class="d-f dl-gzl">
+        <div class="dl-glzl">工作流</div>
+        <div class="gzl-a">情报分解</div>
+        <div class="gzl-a gzl-a-jt">>></div>
+        <div class="gzl-a">情报采集</div>
+        <div class="gzl-a gzl-a-jt">>></div>
+        <div class="gzl-a">情报完成</div>
+    </div>
+    <div class="d-f gzl-lsk" id="lc_sec">
+        <div class="glz-wldk-a lc-mainsec">
+            <div class="d-f gong-l-sec lc_list" id="dcl_lc_list">
+                <div class="qb-ngkks-a d-f" id="loading" style="height:200px;line-height:200px;text-align:center;color#666;">加载中....</div>
+            </div>
+            <div class="d-f add-sec">
+            <?php if(($zqbOne["status"]!=3) && ($can_create_task==true)){ ?>
+                <input  type="button" class="add-slks" value="分解主情报" id="add_btn"  onclick="Ga.addTask()" /><font style="color:red;margin-left:10px;">*继续分解主情报</font>
+            <?php } ?>
+            </div>
+            <!-- add-sec -->
+            <div class="d-f add-tisp" id="add_task" style="display:none;">
+                <div class="add-txt-s d-f">
+                    <textarea class="d-f txt-area" placeholder="请输入任务标题"></textarea>
+                </div>
+                <div class="d-f ad-fze ">
+                    <span class="fz-es">负责人：</span>
+                    <select class="rft-sec">
+                        <option>请选择</option>
+                        <option>请选择</option>
+                        <option>请选择</option>
+                    </select>
+                </div>
+                <div class="d-f frz-wls">
+                     <input type="button" class="add-qibs" value="创建任务" />
+                </div>
+            </div>
+        </div>
+        <div class="glz-wldk-a glz-mgks lc-mainsec" id="clz_lc_list">
+            <div class="qb-ngkks-a d-f" id="loading1" style="height:200px;line-height:200px;text-align:center;color#666;">加载中....</div>
+
+        </div>
+        <div class="glz-wldk-a glz-mgks lc-mainsec" id="ywc_lc_list">
+    
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _default = {};
+    _default.zqb_id = "{$zqbOne["id"]}";
+    _default.issure = "{$issure}";//1-分解，2-不分解
+</script>
+<script type="text/javascript" src="/Public/static/layer/layer.js"></script>
+<script type="text/javascript" src="/Public/Home/js/qb.liucheng.js?v={:getVersion()}"></script>
+</block>

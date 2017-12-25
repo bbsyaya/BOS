@@ -1,0 +1,246 @@
+<extend name="Public/base"/>
+
+<block name="body">
+<style type="text/css">
+    .MainContent .hd-tis{margin-left: 0px !important;width:100% !important;line-height: 40px;height: 40px;margin-bottom: 10px;}.nos-ts{text-align: center;}
+.pagen{margin-top: 10px;}.jf-ktis{margin-left: 10px;}.hd-tis a{margin-left: 20px; color: #fff;}.tableCon a{color: #fff;}
+    .tableCon tr th{color: white;}
+</style>
+    <div class="MainContent">
+        <div class="classifyBox"></div>
+        <div class="tableBox">
+            <div class="hd-tis" style="table-layout: fixed; width: 100%;background: #1a69c5;color: #fff;font-size: 14px;">
+                <span class="jf-ktis">计费标识状态</span><a href="/Home/DataRecognition/exportCharLogStatus.html" target="_blank">【导出计费标识状态】</a>
+            </div>
+            <table class="tableCon ab">
+                <tr id="af">
+                    <th style="color: white;">业务线</th>
+                    <th>使用中<span id="total_syz"></span> </th>
+                    <th>未分配<span id="total_wfp"></span></th>
+                    <th>已回收<span id="total_yhs"></span></th>
+                </tr>
+                <tbody class="lazychar">
+                <tr>
+                    <td colspan="4">
+                        <div class="nos-ts">加载中...</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagen" id="pagen_a" style="text-align: center;"></div>
+        </div>
+    </div>
+
+    <div class="MainContent">
+        <div class="tableBox">
+            <div class="hd-tis" style="table-layout: fixed; width: 100%;background: #1a69c5;color: #fff;font-size: 14px;">
+                <span class="jf-ktis">未上量计费标识(使用中且连续7天无数据产生)</span><a href="/Home/DataRecognition/exportCharLognNot.html" target="_blank">【导出未上量计费标识(使用中且连续7天无数据产生】</a>
+            </div>
+            <table class="tableCon a1">
+                <tr>
+                    <th>计费标识</th>
+                    <th>业务线</th>
+                    <th>产品名称</th>
+                    <th>广告主</th>
+                    <th>销售</th>
+                    <th>商务</th>
+                    <th>供应商</th>
+                </tr>
+                <tbody class="lzywsl">
+                <tr>
+                    <td colspan="7">
+                        <div class="nos-ts">加载中...</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagen" id="pagen" style="text-align: center;"></div>
+        </div>
+    </div>
+
+    <div class="MainContent">
+        <div class="tableBox">
+            <div class="hd-tis" style="table-layout: fixed; width: 100%;background: #1a69c5;color: #fff;font-size: 14px;">
+                <span class="jf-ktis">可利用计费标识</span><a href="/Home/DataRecognition/exportCharLogCanUse.html" target="_blank">【导出可利用计费标识】</a>
+            </div>
+            <table class="tableCon a2">
+                <tr>
+                    <th>产品名称</th>
+                    <th>未分配个数<span id="total_wfp_canuse"></th>
+                    <th>已回收个数<span id="total_yhs_canuse"></th>
+                </tr>
+                <tbody class="lzycanuse">
+                <tr>
+                    <td colspan="3">
+                        <div class="nos-ts">加载中...</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagen" id="pagen_b" style="text-align: center;"></div>
+        </div>
+    </div>
+
+    <div class="MainContent">
+        <div class="tableBox">
+            <div class="hd-tis" style="table-layout: fixed; width: 100%;background: #1a69c5;color: #fff;font-size: 14px;">
+                <span class="jf-ktis">计费标识回收分析</span>
+                <a href="/Home/DataRecognition/exportCharLogAnalisy.html" target="_blank">【导出计费标识回收分析】</a>
+            </div>
+            <table class="tableCon a3">
+                <tr>
+                    <th>供应商名称</th>
+                    <th>产品下线<span id="total_cpxx"></th>
+                    <th>渠道未上量<span id="total_wsl"></th>
+                    <th>渠道质量差<span id="total_zlc"></th>
+                    <th>渠道作弊<span id="total_zb"></th>
+                    <th>渠道下线<span id="total_qdxx"></th>
+                </tr>
+                <tbody class="layzfns">
+                <tr>
+                    <td colspan="6">
+                        <div class="nos-ts">加载中...</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagen" id="pagen_c" style="text-align: center;"></div>
+        </div>
+    </div>
+</block>
+
+<block name="script">
+    <script>
+        /*未上量计费标识*/
+        var J={
+            init:function(){
+                setTimeout(this.ajaxChargStatus(1),2000);
+            },
+            ajaxChargStatus:function(nowPage){
+                 var lhtml='<tr><td colspan="7"><div class="nos-ts">加载中...</div></td></tr>';
+                $(".lzywsl").html(lhtml);
+                $.get("{:U('ajax_zt')}",{
+                    p:nowPage
+                },function(ret) {
+                    var page = ret.page;
+                    var ide = ret.wsl;
+                    var newhtml = '';
+                    for (var o in ide) {
+                        if(ide[o].cl_name !='') {
+                            newhtml += '<tr>' +
+                                    '<td>' + ide[o].cl_name + '</td>' +
+                                    '<td>' + ide[o].bl_name + '</td>' +
+                                    '<td>' + ide[o].pro_name + '</td>' +
+                                    '<td>' + ide[o].adv_name + '</td>' +
+                                    '<td>' + ide[o].real_name + '</td>' +
+                                    '<td>' + ide[o].sw_name + '</td>' +
+                                    '<td>' + ide[o].sup_name + '</td>' +
+                                    '</tr>';
+                        }
+                    }
+                    $(".lzywsl").html(newhtml);
+                    $("#pagen").html("");
+                    $("#pagen").html(page).show();
+                });
+            }
+        };
+        $(function(){J.init();});
+
+        /*计费标识状态*/
+        var ch={
+            init:function(){
+                setTimeout(this.ajaxCh(1),1000);
+                setTimeout(this.lazyCharlogCount(),1500);
+            },
+            ajaxCh:function(nowPage){
+                var lhtml='<tr><td colspan="4"><div class="nos-ts">加载中...</div></td></tr>';
+                $(".lazychar").html(lhtml);
+                $.get("{:U('ajax_ch')}",{
+                    p:nowPage
+                },function(ret) {
+                    var page = ret.page;
+                    var j_zt = ret.zt;
+                    var ztHtml = '';
+                    for (var o in j_zt) {
+                        ztHtml += '<tr><td>' + j_zt[o].bl_id + '</td><td>' + j_zt[o].syz + '</td><td>' + j_zt[o].wfp + '</td><td>' + j_zt[o].yhs + '</td></tr>';
+                    }
+                    $(".lazychar").html(ztHtml);
+                    $("#pagen_a").html("");
+                    $("#pagen_a").html(page).show();
+                });
+            },
+            lazyCharlogCount:function(){
+                $.get("/Home/DataRecognition/lazyCharlogCount",function(data){
+                    $("#total_syz").html("  (总："+data.total_syz+"条)");
+                    $("#total_wfp").html("  (总："+data.total_wfp+"条)");
+                    $("#total_yhs").html("  (总："+data.total_yhs+"条)");
+                });
+            }
+        };
+        $(function(){ch.init();});
+
+        /*可利用计费标识*/
+        var kly={
+            init:function(){
+                setTimeout(this.ajaxKly(1),3000);
+                setTimeout(this.lazyChartCanUseCount(),3500);
+            },
+            ajaxKly:function(nowPage){
+                $.get("{:U('ajaxKly')}",{
+                    p:nowPage
+                },function(ret) {
+                    var page = ret.page;
+                    var j_kly = ret.kly;
+                    var ztHtml = '';
+                    for (var o in j_kly) {
+                        ztHtml+='<tr><td>'+j_kly[o].name+'</td><td>'+j_kly[o].wfp+'</td><td>'+j_kly[o].yhs+'</td></tr>';
+                    }
+                    $(".lzycanuse").html(ztHtml);
+                    $("#pagen_b").html("");
+                    $("#pagen_b").html(page).show();
+                });
+            },
+            lazyChartCanUseCount:function(){
+                $.get("/Home/DataRecognition/lazyChartCanUseCount",function(data){
+                    $("#total_wfp_canuse").html("  (总："+data.total_wfp+"条)");
+                    $("#total_yhs_canuse").html("  (总："+data.total_yhs+"条)");
+                });
+            }
+        };
+        $(function(){kly.init();});
+
+        /*计费标识分析*/
+        var hs={
+            init:function(){
+                setTimeout(this.ajaxHs(1),4000);
+                setTimeout(this.layzCharlogAnisylesCount(),4500)
+            },
+            ajaxHs:function(nowPage){
+                $.get("{:U('ajaxHs')}",{
+                    p:nowPage
+                },function(ret) {
+                    var page = ret.page;
+                    var j_hs = ret.hs;
+                    var ztHtml = '';
+                    for (var o in j_hs) {
+                        ztHtml+='<tr><td>'+j_hs[o].name+'</td><td>'+j_hs[o].cpxx+'</td><td>'+j_hs[o].wsl+'</td><td>'+j_hs[o].zlc+'</td><td>'+j_hs[o].zb+'</td><td>'+j_hs[o].qdxx+'</td></tr>';
+                    }
+                    $(".layzfns").html(ztHtml);
+                    $("#pagen_c").html("");
+                    $("#pagen_c").html(page).show();
+                });
+            },
+            layzCharlogAnisylesCount:function(){
+                $.get("/Home/DataRecognition/layzCharlogAnisylesCount",function(data){
+                    $("#total_cpxx").html("  (总："+data.total_cpxx+"条)");
+                    $("#total_wsl").html("  (总："+data.total_wsl+"条)");
+                    $("#total_zlc").html("  (总："+data.total_zlc+"条)");
+                    $("#total_zb").html("  (总："+data.total_zb+"条)");
+                    $("#total_qdxx").html("  (总："+data.total_qdxx+"条)");
+                });
+            }
+        };
+        $(function(){hs.init();});
+
+    </script>
+</block>

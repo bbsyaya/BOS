@@ -1,0 +1,206 @@
+<extend name="Public/base"/>
+<block name="subnav">
+</block>
+
+<block name="script">
+<style type="text/css">
+    .classifyList li a{font-size: 14px; height: 35px;
+    line-height: 35px;}
+</style>
+    <script type="text/javascript" src="__MODULE__/bootstrapselect/bootstrap-select.js"></script>
+    <script src="__MODULE__/ECharts/echarts-all.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function pl_id(pl) {
+            $("#lineid").val(pl);
+            $('.classifyList').find('a').removeClass('ifyhover');
+            if (pl == 47) {
+                $('.classifyList').find('a').eq(3).addClass('ifyhover');
+            } else if (pl == 48) {
+                $('.classifyList').find('a').eq(4).addClass('ifyhover');
+            } else if (pl == 44) {
+                $('.classifyList').find('a').eq(5).addClass('ifyhover');
+            } else if (pl == 34) {
+                $('.classifyList').find('a').eq(6).addClass('ifyhover');
+            } else if (pl == 42) {
+                $('.classifyList').find('a').eq(7).addClass('ifyhover');
+            } else {
+                $('.classifyList').find('a').eq(pl).addClass('ifyhover');
+            }
+            if (pl == '' || pl < 0) {
+                pl = 0;
+            }
+            //$("#rc").submit();
+            chuShi(pl);
+        }
+        var ldhtml=' <tr><td colspan="6"><div style="line-height:30px;text-align:center;">加载中...</div></td></tr>';
+        /*初始化*/
+        function chuShi(pl){
+            $(".ajax_c").html(ldhtml);
+            $.get("{:U('AjaxRisk')}",{lineid:pl},function(ret){
+                var str = '';
+                var sumData = ret.sumData;
+                for(var s in sumData){
+                    str +='<tr>' +
+                            '<td>汇总</td>' +
+                            '<td>'+format(sumData[s].newmoney)+'</td>' +
+                            '<td>'+format(sumData[s].out_money)+'</td>' +
+                            '<td>'+format(sumData[s].whk_money)+'</td>' +
+                            '<td>'+format(sumData[s].out_whk_money)+'</td>' +
+                            '<td></td>'+
+                            '</tr>';
+                }
+                var resData = ret.resData;
+                for(var o in resData){
+                    str +='<tr>' +
+                            '<td>'+resData[o].month+'月'+'</td>' +
+                            '<td>'+format(resData[o].newmoney)+'</td>' +
+                            '<td>'+format(resData[o].out_money)+'</td>' +
+                            '<td>'+format(resData[o].whk_money)+'</td>' +
+                            '<td>'+format(resData[o].out_whk_money)+'</td>' +
+                            '<td><a target="_blank" href="/RiskOverdue/detail?mon='+resData[o].year_y+'&wqr_sr='+resData[o].newmoney+'&wqr_cb='+resData[o].out_money+'&whk_sr='+resData[o].whk_money+'&whk_cb='+resData[o].out_whk_money+'">明细</a></td>' +
+                            '</tr>';
+                }
+                $(".ajax_c").html(str);
+            });
+
+        }
+        /*隐藏业务线*/
+        $(".J_openScreen").click(function(){
+            $(".classifyBox").hide();
+        });
+
+        /*日期查询*/
+        $(".chaXun").click(function(){
+            $(".ajax_c").html(ldhtml);
+            var time_s = $("#time_s").val();
+            var time_e = $("#time_e").val();
+            $.get("{:U('AjaxRisk')}",{time_s:time_s,time_e:time_e},function(ret){
+                var str = '';
+                var sumData = ret.sumData;
+                for(var s in sumData){
+
+                    str +='<tr>' +
+                            '<td>汇总</td>' +
+                            '<td>'+format(sumData[s].newmoney)+'</td>' +
+                            '<td>'+format(sumData[s].out_money)+'</td>' +
+                            '<td>'+format(sumData[s].whk_money)+'</td>' +
+                            '<td>'+format(sumData[s].out_whk_money)+'</td>' +
+                            '<td></td>'+
+                            '</tr>';
+                }
+                var resData = ret.resData;
+                for(var o in resData){
+                    str +='<tr>' +
+                            '<td>'+resData[o].month+'月'+'</td>' +
+                            '<td>'+format(resData[o].newmoney)+'</td>' +
+                            '<td>'+format(resData[o].out_money)+'</td>' +
+                            '<td>'+format(resData[o].whk_money)+'</td>' +
+                            '<td>'+format(resData[o].out_whk_money)+'</td>' +
+                            '<td><a target="_blank" href="/RiskOverdue/detail?mon='+resData[o].year_y+'&wqr_sr='+resData[o].newmoney+'&wqr_cb='+resData[o].out_money+'&whk_sr='+resData[o].whk_money+'&whk_cb='+resData[o].out_whk_money+'">明细</a></td>' +
+                            '</tr>';
+                }
+                $(".ajax_c").html(str);
+            });
+        });
+
+        function format(input) {
+            var n = parseFloat(input).toFixed(2);
+            var re = /(\d{1,3})(?=(\d{3})+(?:\.))/g;
+            return n.replace(re, "$1,");
+        }
+
+        $(function() {
+            pl_id(0);
+
+            $("#doExport").click(function(){
+                var param = $("#rc").serialize();
+                var url = "{:U('export')}";
+                window.location.href=url+'?'+param;
+            });
+        });
+
+    </script>
+</block>
+
+<block name="body">
+    <style type="text/css">
+        .cla{height: 100px;}
+        .bca{width: 100%;}
+    </style>
+<div class="subMainBox">
+    <div class="tabCa pa">
+        <div class="tab_contentWrapper pa">
+            <!--核检概览-->
+            <div class="tab_content pa " style="display: block;">
+                <!--筛选-->
+                <div class="screenCn fl w ha bca">
+                    <!--<div class="screenOperate fl w">
+                        <input type="button" value="高级筛选" class="J_openScreen" />
+                        <input id="doExport" type="button" value="下载报表" class="" />
+                    </div>-->
+                    <!--<div class="screenList fl w">-->
+                        <form action="/RiskPay/index" method="get" id="rc">
+                            <input type='hidden' name='type' value="1"/>
+                            <table>
+                                <tr>
+                                    <div class="classifyBox cla">
+                                        <ul class="classifyList clear">
+                                            <li><a class="ifyhover" href="javascript:pl_id(0)">全公司</a></li>
+                                            <li><a href="javascript:pl_id(1)">优效分发平台</a></li>
+                                            <li><a href="javascript:pl_id(2)">优效SSP平台</a></li>
+                                            <li><a href="javascript:pl_id(47)">优效营销平台</a></li>
+                                            <li><a href="javascript:pl_id(48)">优效商家平台</a></li>
+                                            <li><a href="javascript:pl_id(46)">优效发行平台</a></li>
+                                            <li><a href="javascript:pl_id(34)">分发(一)</a></li>
+                                            <li><a href="javascript:pl_id(42)">分发(二)</a></li>
+                                        </ul>
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <th class="expertScreen">开始日期：</th>
+                                    <td class="expertScreen"><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" id="time_s" name="time_s" value="{:I('get.time_s')}" /></td>
+                                    <th class="expertScreen">结束日期：</th>
+                                    <td class="expertScreen"><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" id="time_e" name="time_e" value="{:I('get.time_e')}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="expertScreen" colspan="8">
+                                        <input type="button" class="chaXun" value="查询" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    <!--</div>-->
+                </div>
+                <!--数据表-->
+                <div class="dataCn fl w ha" id="table_con">
+                    <div class="advancedTit">
+                        <div class="advancedLeft tt">
+                            <span class="export advBtn" id="doExport">下载报表</span>
+                        </div>
+                    </div>
+                    <table class="dataTable dataTable1" id="alldatatable">
+                        <thead>
+                        <tr>
+                            <th>月份</th>
+                            <th>未确认收入</th>
+                            <th>未确认成本</th>
+                            <th>未回款收入</th>
+                            <th>未付款成本</th>
+                            <th>明细</th>
+                        </tr>
+                        </thead>
+                        <tbody class="ajax_c">
+                           <tr>
+                               <td colspan="6"><div style="line-height:30px;text-align:center;">加载中...</div></td>
+                           </tr>
+                        </tbody>
+                    </table>
+                    <!--分页-->
+                    {$_page}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <link rel="stylesheet" type="text/css" href="__MODULE__/bootstrapselect/css/bootstrap-select.css"/>
+</block>

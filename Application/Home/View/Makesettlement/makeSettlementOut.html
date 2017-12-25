@@ -1,0 +1,264 @@
+<extend name="Public/base"/>
+<block name="script">
+			<script type="text/javascript">
+			var configData='';
+			var advcontacesData='';
+			var listStatus;
+			var nowdioid;
+			function changeAdvcontacts(){
+				var nowselectval=$('#advcontactsid').val();
+				for(o in advcontacesData){
+					if(advcontacesData[o].sp_id==nowselectval){
+						$('#bankname').html(advcontacesData[o].opening_bank);
+						$('#bankcode').html(advcontacesData[o].bank_no);invoice_type
+						$('#invoice_type').html(configData.invoice_type[advcontacesData[o].invoice_type])
+					}
+				}
+			}
+			function getonesettlementdata(id){
+				nowdioid=id;
+					$.post('/Makesettlement/outdetail',{'id':id},function(res){
+						if(res.status==0){
+							alert(res.msg);
+							return;
+						}
+						advcontacesData=res.advbankdata;
+						var invoice_typeid=res.advbankdata.invoice_type;
+						var invoice_type=configData.invoice_type[invoice_typeid];
+						if(res.advcontacts.type==1){
+							var selecthtml='';
+							for(o in advcontacesData){
+								selecthtml+="<option value='"+advcontacesData[o].sp_id+"'>"+advcontacesData[o].payee_name+"</option>";
+							}
+							var tablehtml='<form id="toConfirmSettlement" target="_blank" action="/Makesettlement/confirmSettlementOut" method="post" enctype="multipart/form-data"><input type="hidden" name="id" value="'+res.settlementdata.id+'"/><table class="dialogTable_list w ha"><tr><th>供应商名称</th><td>'+res.advcontacts.name+'</td><th>收款方名称</th><td><select id="advcontactsid" name="advcontactsid" onchange="changeAdvcontacts()">'+selecthtml+'</select></td><th>发票类型</th><td id="invoice_type"></td></tr><tr><th>开户银行名称</th><td id="bankname"></td><th>开户行账号</th><td id="bankcode"></td><th>结算主体</th><td id="jszt">'+res.jszt.jszt+'</td></tr><tr><th>结算金额</th><td>'+res.settlementdata.settlementmoney+'</td><th>起止时间</th><td>'+res.settlementdata.strdate+'-'+res.settlementdata.enddate+'</td><th>所属商务</th><td id="saler">'+res.jszt.sealname+'</td></tr></table></form>';
+							$(".generateBillDialog2").html(tablehtml);
+							changeAdvcontacts();
+						}else{
+							var tablehtml='<form id="toConfirmSettlement" target="_blank" action="/Makesettlement/confirmSettlementOut" method="post" enctype="multipart/form-data"><input type="hidden" name="id" value="'+res.settlementdata.id+'"/><input type="hidden" name="advcontactsid" value="'+res.advbankdata.sp_id+'"/><table class="dialogTable_list w ha"><tr><th>供应商名称</th><td>'+res.advcontacts.name+'</td><th>收款方名称</th><td>'+res.advbankdata.payee_name+'</td><th>发票类型</th><td id="invoice_type">'+res.advbankdata.invoice_type+'</td></tr><tr><th>开户银行名称</th><td id="bankname">'+res.advbankdata.opening_bank+'</td><th>开户行账号</th><td id="bankcode">'+res.advbankdata.bank_no+'</td><th>结算主体</th><td id="jszt">'+res.jszt.jszt+'</td></tr><tr><th>结算金额</th><td>'+res.settlementdata.settlementmoney+'</td><th>起止时间</th><td>'+res.settlementdata.strdate+'-'+res.settlementdata.enddate+'</td><th>所属商务</th><td id="saler">'+res.jszt.sealname+'</td></tr></table></form>';
+							$(".generateBillDialog2").html(tablehtml);
+						}
+						
+						$(".generateBillDialog2").dialog('open');
+					},'json')
+			}
+			$(function() {
+				$.post('/Ajax/getConfig',{},function(res){
+					configData=res;
+				},'json')
+				/*$(".J_generateBill").click(function(){
+					$('#comidform').submit();
+					$(".generateBillDialog").show();
+					
+				});*/
+				
+				$(".generateBillDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "800",
+					height: "350",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确认":function(){
+							
+							$(this).dialog("close");
+							
+						},
+						"取消":function(){
+							$(this).dialog("close");
+
+						}
+					},
+				});
+				$(".generateBillDialog2").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "800",
+					height: "350",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确认":function(){
+							if($('#bankcode').text()=='' || $('#saler').text()=='' || $('#jszt').text()==''){
+								alert('信息不全');
+								return;
+							}
+							$('#toConfirmSettlement').attr('target','newpage').submit();
+							$(this).dialog("close");
+							if(listStatus=='1'){
+								$('#dialogtable').find('tr[data="'+nowdioid+'"]').remove();
+							}else{
+								setTimeout(function(){window.location.reload();}, 1000);
+							}
+						},
+						
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//生成结算单对话框
+				$(".J_generateBill").click(function(){
+					var id='';
+					$('#comidform').find('input[name="id[]"]').each(function(){
+						if($(this).is(':checked'))id+=$(this).attr('value')+',';
+					});
+					var strtime=$('#comidform').find('input[name="strtime"]').val();
+					var endtime=$('#comidform').find('input[name="endtime"]').val();
+					id=id.substring(0,id.length-1);
+					$.post('/Makesettlement/makeSettlementOutDo',{'cl_id':id,'strtime':strtime,'endtime':endtime},function(res){
+						listStatus=res.type;
+						if(res.type=='1'){
+							var newhtml='';
+							for(o in res.data){
+								newhtml+='<tr data='+res.data[o].id+'><td>'+res.data[o].advername+'</td><td>'+res.data[o].settlementmoney+'</td><td><a href="javascript:void(0);" onclick="getonesettlementdata('+res.data[o].id+')">信息确认</a></td></tr>';
+							}
+							$('.generateBillDialog').html('<table id="dialogtable" class="dialogTable_list w ha"><tr><th>广告主名称</th><th>结算金额</th><th>操作</th></tr>'+newhtml+'</table>');
+							$(".generateBillDialog").dialog('open');
+						}else if(res.type=='2'){
+							alert(res.msg);
+							return;
+						}else{
+							var newid=res.data[0].id;
+							getonesettlementdata(newid);
+						}
+					},'json')
+					
+				});
+			});
+		</script>
+</block>
+<block name="body">
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">生成成本结算单</span>
+				<span>结算单管理</span>
+			</div>
+			<div class="ri_work">Generate a cost statement</div>
+		</div>
+				<!--筛选-->
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<input type="button" value="生成结算单" class="J_generateBill" />
+						<input type="button" value="筛选" class="J_openScreen" />
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					<div class="screenList fl w">
+						<form action="/Makesettlement/makeSettlementOut" method='get'>
+						<table>
+							<tr>
+								<th>供应商名称：</th>
+								<td><input type="text" name='advername' value="{:I('get.advername')}"/></td>
+								<th>产品名称：</th>
+								<td><input type="text" name='comname' value="{:I('get.comname')}" /></td>
+								<th>所属商务：</th>
+								<td><input type="text" name='saler_id' value="{:I('get.saler_id')}" /></td>
+								<th>账单期间：</th>
+								<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+								</td>
+							</tr>
+						</table>
+						</form>
+					</div>
+				</div>-->
+
+				<div class="screenBox swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<form action="/Makesettlement/makeSettlementOut" method='get'>
+
+								<div class="swiperRight">
+									<table class="tableBox">
+										<tr>
+											<th>供应商名称：</th>
+											<td><input type="text" name='advername' value="{:I('get.advername')}"/></td>
+											<th>产品名称：</th>
+											<td><input type="text" name='comname' value="{:I('get.comname')}" /></td>
+											<th>所属商务：</th>
+											<td><input type="text" name='saler_id' value="{:I('get.saler_id')}" /></td>
+											<td>
+												<input type="submit" value="查询" />
+											</td>
+										</tr>
+										<tr>
+											<th>账单期间：</th>
+											<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>
+
+										</tr>
+									</table>
+								</div>
+							</form>
+							<!--end 基础查询-->
+						</div>
+					</div>
+				</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<span class="addAdv advBtn">
+								<input type="button" value="生成结算单" class="J_generateBill" />
+							</span>
+						</div>
+					</div>
+				<form action="/Makesettlement/makeSettlementInDo" method="post" id='comidform' target="newpage">
+				<input type='hidden' name='strtime' value="{$strtime}"/>
+				<input type='hidden' name='endtime' value="{$endtime}"/>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th width="40"><input type="checkbox" /></th>
+							<th>产品名称</th>
+							<th>供应商名称</th>
+							<th>账单期间</th>
+							<th>预估数据</th>
+							<th>有效数据</th>
+							<th>预估金额</th>
+							<th>结算金额（含税）</th>
+							<th>结算主体</th>
+							<th>所属商务</th>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name='data' id='v'>
+							<tr>
+								<td><input type="checkbox" name='id[]' value="{$v.id}" <neq name='v.error' value=''>disabled="disabled" title="{$v.error}"</neq> /></td>
+								<td>{$v.comname}</td>
+								<td>{$v.advername}</td>
+								<td>{$v.date}</td>
+								<td>{$v.ysdata|round}</td>
+								<td>{$v.enddata|round}</td>
+								<td><php>echo round($v['ysmoney'],2);</php></td>
+								<td><php>echo round($v['endmoney'],2);</php></td>
+								<td>{$v.qdzt}</td>
+								<td>{$v.username}</td>
+							</tr>
+						</volist>
+						
+						</tbody>
+					</table>
+				</form>
+				<!--分页-->
+				{$_page}
+				</div>
+		</div>
+
+			<iframe src="" style="display:none;" name='newiframe'></iframe>
+			<div class="generateBillDialog" title="生成结算单">
+			
+		</div>
+			<div class="generateBillDialog2" title="生成结算单">
+			
+		</div>
+</block>

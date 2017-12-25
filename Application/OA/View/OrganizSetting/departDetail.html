@@ -1,0 +1,143 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<style type="text/css">
+.fw{width: 100%;display: inline-block;}
+	.d-sec{
+	margin-top: 50px;
+	}
+	.fw-tit{float: left;font-size: 18px;color: #1269cc;}
+	.d-t-se{border-bottom: 1px solid #1269cc;}
+	.fw-bj{float:right;cursor: pointer;height: 25px;line-height: 25px;margin-left: 10px;color: #1269cc}
+   .de-desc{font-size: 14px;line-height: 25px;color: #666;margin-top: 10px;}
+   .disnone{display: none;}
+   .bj-txt{border:1px solid #1269cc;padding: 5px;height: 100px;}
+   .bj-ank{margin-top: 8px;text-align: center;}
+   .bj-san{ background: #1269cc none repeat scroll 0 0;
+    min-width: 70px;
+    padding: 0 5px; border: medium none;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 12px;
+    height: 30px;
+    margin-right: 20px;}
+    .sx-bt{line-height: 40px;
+      text-align: center;font-size: 20px;margin-top: 20px;}
+   .x-fzr{text-align: center;color: #666;border-bottom: 1px dashed #ddd;padding-bottom: 10px;}
+</style>
+<!--主体-->
+<div class="subConten  fl w" style="padding-top:2px;padding-bottom:100px;">
+
+<div class="crumbs" style="padding-bottom:10px;">
+   <a href="/OA/OrganizSetting/crateImg" style="color:#1269cc;">查看部门</a>&nbsp;&gt;&nbsp;
+   <span style="color:#999 !important;">部门详细</span>
+</div>
+
+
+<div class="sx-bt">{$done["p_name"]}--{$done["name"]}</div>
+
+<div class="x-fzr" style="">部门负责人：{$done["heads"]}</div>
+   <div class="d-sec fw" style="margin-top:20px;display:none;">
+   		<div class="fw d-t-se">
+   			<span class="fw-tit">部门使命</span>
+   			<span class="fw-bj" onclick="D.edit(1)" id="kbj_1">-编辑</span>
+   		</div>
+   		<div class="de-desc fw" id="desc_1">
+         <?php if($done["miss"]){ ?> {$done["miss"]} <?php }else{ ?> 还没有人描述它哟！ <?php } ?>
+         </div>
+         <div class="de-desc fw disnone" id="bj_1">
+            <textarea class="fw bj-txt" name="txt_1" id="txt_1">{$done["miss"]}</textarea>
+            <div class="fw bj-ank">
+            <input class="bj-san" name="" value="保存" type="button" onclick="D.saveDepart(1,'miss','{$done['id']}')" id="btn_1">
+            <input class="bj-san" name="" value="取消" type="button" onclick="D.canceledit(1)">
+            </div>
+         </div>
+   </div>
+   <div class="d-sec fw" style="display:none;">
+         <div class="fw d-t-se">
+            <span class="fw-tit">部门职责</span>
+            <span class="fw-bj" onclick="D.edit(2)" id="kbj_2">-编辑</span>
+         </div>
+         <div class="de-desc fw" id="desc_2">
+         <?php if($done["functions"]){ ?> {$done["functions"]} <?php }else{ ?> 还没有人描述它哟！ <?php } ?>
+         </div>
+         <div class="de-desc fw disnone" id="bj_2">
+            <textarea class="fw bj-txt" name="txt_2" id="txt_2">{$done["functions"]}</textarea>
+            <div class="fw bj-ank">
+            <input class="bj-san" name=""  id="btn_2" value="保存" type="button" onclick="D.saveDepart(2,'functions','{$done['id']}')">
+            <input class="bj-san" name="" value="取消" type="button" onclick="D.canceledit(2)"></div>
+         </div>
+   </div>
+   <div class="d-sec fw" style="display:none;">
+         <div class="fw d-t-se">
+            <span class="fw-tit">愿景目标</span>
+            <span class="fw-bj" onclick="D.edit(3)" id="kbj_3">-编辑</span>
+         </div>
+         <div class="de-desc fw" id="desc_3">
+         <?php if($done["obj_vision"]){ ?> {$done["obj_vision"]} <?php }else{ ?> 还没有人描述它哟！ <?php } ?>
+         </div>
+         <div class="de-desc fw disnone" id="bj_3">
+            <textarea class="fw bj-txt" name="txt_3" id="txt_3">{$done["obj_vision"]}</textarea>
+            <div class="fw bj-ank"><input id="btn_3" class="bj-san" name="" value="保存" type="button" onclick="D.saveDepart(3,'obj_vision','{$done['id']}')">
+            <input class="bj-san" name="" value="取消" type="button" onclick="D.canceledit(3)"></div>
+         </div>
+   </div>
+   <div class="d-sec fw" style="display:none;">
+         <div class="fw d-t-se">
+            <span class="fw-tit">负责项目</span>
+         </div>
+         <div class="de-desc fw" id="desc_22">
+         --
+         </div>
+   </div>
+   <div class="d-sec fw"  style="display:none;">
+         <div class="fw d-t-se">
+            <span class="fw-tit">部门架构</span>
+         </div>
+         <div class="de-desc fw" id="desc_33">
+         --
+         </div>
+   </div>
+   <style type="text/css">
+   .u-infok{
+      width: 100px;
+      height: 130px;
+      float: left;
+      margin:10px 10px 0px 0px;overflow:hidden;
+   }
+   .b-us{
+      width: 100px;
+      height: 100px;
+      float: left;
+     overflow:hidden;
+      /*border:1px solid #e1e1e1;*/
+   }
+   .u-name{width: 100%;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      color: #333;}
+   </style>
+   <div class="d-sec fw">
+         <div class="fw d-t-se">
+            <span class="fw-tit">部门成员</span>
+         </div>
+         <div class="de-desc fw" id="desc_5">
+            <notempty name="userList">
+               <volist name="userList" id="vo">
+               <div class="u-infok">
+                  <div class="b-us" <?php if($vo['sex']==1){ ?> style="background:url('/Public/OA/images/woman.jpg') no-repeat;" <?php }else{ ?>  style="background:url('/Public/OA/images/man.jpg') no-repeat;" <?php } ?>></div>
+                  <div class="u-name">{$vo['user_name']}</div>
+               </div>
+                  
+               </volist>
+               <else />
+               暂时还没有人哟！
+            </notempty>
+            
+         </div>
+   </div>
+</div>
+<script type="text/javascript" src="/Public/OA/js/depart.js"></script>
+<!--end 主体-->
+</block>

@@ -1,0 +1,128 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public:commonoa" />
+<style type="text/css">
+body{font-size:12px!important}.btnBox input.close[type="button"]{float:none!important}.close{opacity:1!important;font-size:14px!important;font-weight:normal!important;margin-left:10px!important}.listTable tr th,.listTable tr td{border:1px solid #eee;color:#333;height:40px;line-height:40px;overflow:hidden;text-align:center;text-overflow:ellipsis;white-space:nowrap;padding:0 5px!important}.listTable tr th{color:#fff}.b-name{width:300px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.com-btn{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:3px!important;color:#fff!important;cursor:pointer!important;margin-left:10px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.color1a72d6{color:#1a72d6!important}.ui-dialog-buttons{z-index:2000!important}.Wdate{width:185px!important;padding:0 2px!important}.edit-b{border:1px solid #dadada;border-radius:3px;height:30px;margin-left:20px;width:50px;line-height:30px}.edit-b:hover{background:#1269cc;color:#fff}.btnBox input[type="button"]{margin:0!important;float:left!important;margin-left:145px!important}.btnBox input.close[type="button"]{margin-left:10px!important;float:left!important}.listTable tr th,.listTable tr td{font-size:12px!important}.screenOperate{height:auto!important}.screenCn .screenOperate a{border-top:1px solid #fff}.screenCn .screenOperate a{padding:0 10px}.fleft{float: left;height: 30px;line-height: 30px;}
+.bootstrap-select > .dropdown-toggle{height: 30px !important;}.selectpicker1{height: 30px;}.listTable tr td a{margin: 0px !important;padding:0 !important;color: #1a72d6;margin-right: 5px !important;}.dataTable tr td{padding:5px 5px;}.dataTbodyTr_odd {
+    background-color: #f6f6f6;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<div class="subConten  fl w" style="padding:5px !important;">
+    <!--内容-->
+    <div class="subCon fl w" style="margin-top:0px;">
+        <div class="workListBox" style="margin-top:10px;">
+            <table class="dataTable dataTable1">
+                <thead>
+                    <tr>
+                        <th>产品ID</th>
+                        <th title="广告主名称">广告主名称</th>
+                        <th title="合作方（产品）">产品名称</th>
+                        <th title="计费模式">计费模式</th>
+                        <th title="合作状态"  >合作状态</th>
+                        <th title="标签"   >标签</th>
+                        <th title="业务线">业务线</th>
+                        <th title="地域">地域</th>
+                        <th title="广告主等级"  >广告主等级</th>
+                        <th title="{$prev_year}年总收入" style="line-height:auto !important;">
+                        <p  style="line-height:20px !important;">{$prev_year}年总收入</p>
+                        </th>
+                         <th title="{$prev_year}年总利润" style="line-height:auto !important;">
+                        <p  style="line-height:20px !important;">{$prev_year}年总利润</p>
+                        </th>
+                        <th title="前日流水">
+                         <p  style="line-height:20px !important;"> 前日流水</p>
+                        </th>
+                        <th title="跟进时间">跟进时间</th>
+                        <th title="跟进结果">跟进结果</th>
+                        <th title="销售人员">销售人员</th>
+                        <th title="联系人"  >联系人</th>
+                        <th title="联系方式"  >联系方式</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>
+                            {$vo["id"]}
+                            </td>
+                            <td title="{$vo['ad_name']}" ><span>{$vo['ad_name']}</span></td>
+                            <td title="{$vo["pro_name"]}"><span>{$vo["pro_name"]}</span></td>
+                            <?php $charging_mode_str = $charging_mode_options[$vo["charging_mode"]]; ?>
+                            <td title="{$charging_mode_str}"><span>{$charging_mode_str}</span></td>
+                            <td title="{$vo["cooperate_state_str"]}" data-s="{$vo["cooperate_state"]}"><span>{$vo["cooperate_state_str"]}</span></td>
+                            <td title="{$vo["tag"]}"><span>{$vo["tag"]}</span></td>
+                            <td title="{$vo["line_name"]}"><span>{$vo["line_name"]}</span></td>
+                            <td title="{$vo["region_name"]}" ><span>{$vo["region_name"]}</span></td>
+                            <td title="广告主等级：{$vo["ad_grade"]}"><span>{$vo["ad_grade"]}</span></td>
+                            <td title="{$vo["total_in"]}" >
+                                <p  style="line-height:20px !important;">{$vo["total_in"]}</p>
+                            </td>
+                            <td title="{$vo["total_liushui"]}" >
+                                <p  style="line-height:20px !important;">{$vo["total_liushui"]}</p>
+                            </td>
+                            <td title="{$vo['yestoday_total_in1']}"><span>{$vo['yestoday_total_in1']}</span></td>
+                           
+                            <td title="{$vo["add_time"]|strtotime|date='Y-m-d',###}"><span> <?php if($vo["add_time"]){ ?> {$vo["add_time"]|strtotime|date='Y-m-d',###} <?php }else{ ?> -- <?php } ?></span></td>
+                             <td title="{$vo["f_result"]}">
+                             <span>
+                             <?php 
+                                $show_follow = true;
+                                if($role_type==1 && $vo["ad_grade"]=="S"){ $show_follow = true; } 
+                                if($role_type==2 && $vo["ad_grade"]=="A"){ $show_follow = true; } 
+                                if($role_type==3 && ($vo["ad_grade"]=="B" || $vo["ad_grade"]=="C" || $vo["ad_grade"]=="D")){ 
+                                $show_follow = true; } 
+                            // if($need_follow_products==200){ $show_follow = true; } 
+                            ?>   
+                             <?php if($vo["f_result"]){ ?> 
+                                <?php if($show_follow){ ?>
+                                    <a href="javascript:void(0);" onclick="E.expand({$vo['ad_id']},5)" title="我来跟进">{$vo["f_result"]}</a>
+                                <?php }else{  ?> {$vo["f_result"]} <?php } ?>
+                             <?php }else{ ?> 
+                                
+                                <?php if($show_follow){ ?>
+                                    <a href="javascript:void(0);" onclick="E.expand({$vo['ad_id']},5)" title="我来跟进">我来跟进</a>
+                                <?php }else{  ?> -- <?php } ?>
+
+                             <?php } ?>
+                             </span>
+                             </td>
+                             <td title="{$vo["real_name"]}"><span>{$vo["real_name"]}</span></td>
+                             <td title="{$vo["adc_name"]}"><span><?php if($vo["adc_name"]){ ?> {$vo["adc_name"]} <?php }else{ ?> -- <?php } ?></span></td>
+                              <td title="{$vo["adc_mobile"]}"><span><?php if($vo["adc_mobile"]){ ?> {$vo["adc_mobile"]} <?php }else{ ?> -- <?php } ?></span></td>
+                        </tr>
+                    </volist>
+                    <else />
+                    <tr>
+                        <td  colspan="17"><div class="no-datas">暂无数据！！</div></td>
+                    </tr> 
+                </notempty>
+                </tbody>
+            </table>
+            <notempty name="list">
+                <div class="no-datas">{$page}</div>
+            </notempty>
+        </div>
+        <!--end 制度列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<script type="text/javascript">
+    var E={
+         expand:function(id,type_id){
+            layer.open({
+              type: 2,
+              title: '我来跟进',
+              shadeClose: true,
+              shade: 0.8,
+              area: ['800px', '70%'],
+              content: '/Home/InteSystem/expand.html?extid='+id+"&type_id="+type_id //iframe的url
+            }); 
+        }
+    };
+</script>
+</block>

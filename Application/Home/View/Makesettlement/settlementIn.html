@@ -1,0 +1,56 @@
+<extend name="Public/base"/>
+
+
+
+<block name="body">
+
+				<!--筛选-->
+				
+				<!--数据表-->
+				<div class="dataCn fl w ha">
+					<div class="dataFormTitle">基础信息</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr>
+								<td>广告主名称</td><td>{$data.advername}</td><td>发票类型</td><td>{:C('option.invoice_type')[$data['invoice_type']]}</td><td>发票内容</td><td>{$data.invoice_remark}</td>
+							</tr>
+							<tr>
+								<td>纳税人识别号</td><td>{$data.taxpayer_num}</td><td>开户银行名称</td><td>{$data.opening_bank}</td><td>开户行账号</td><td>{$data.bank_no}</td>
+							</tr>
+							<tr>
+								<td>结算主体</td><td>{$data.jszt}</td><td>开票金额</td><td>{$data.settlementmoney}</td><td>起止时间</td><td>{$data.strdate}-{$data.enddate}</td>
+							</tr>
+							<tr>
+								<td>收件人姓名</td><td>{$data.username}</td><td>收件人电话</td><td>{$data.mobile}</td><td>收件人地址</td><td>{$data.address}</td>
+							</tr>
+							<tr>
+								<td>所属销售</td><td>{$data.salername}</td><td>结算依据</td><td><php>if(!empty($v['basispath'])){
+								$imgpath=explode(',',$v['basispath']);
+								</php>
+								<volist name="imgpath" id='val' key='k'>
+								<a target="_blank" href='/{$val}'>预览{$k}</a>
+								</volist>
+								<php>}</php></td><td>要不要开发票</td><td><eq name='data.iskaipiao' value='1'>要<else/>不要</eq></td>
+							</tr>
+
+						</tbody>
+					</table>
+					<br/><br/>
+					<div class="dataFormTitle">产品明细<a target="_blank" href="/Makesettlement/settlementIn_down?id={$_GET['id']}">下载</a></div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr><td>产品名称</td><td>计费标识名称</td><td>返量方式</td><td>计费标识ID</td><td>起止日期</td><td>结算金额</td><td>业务线</td></tr>
+							<volist name='logodata' id='v'>
+								<tr><td>{$v.comname}</td><td>{$v.jfname}</td><td>{$v.url}</td><td>{$v.jfid}</td><td>{$v.strtime} - {$v.endtime}</td><td>{$v.endmoney|twonum}</td><td>{$v.linename}</td></tr>
+							</volist>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+
+</block>
+
+

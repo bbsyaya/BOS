@@ -1,0 +1,547 @@
+<extend name="Public/base"/>
+<block name="body">
+
+<div class="subMainBox" goal="t_left">
+    <div class="ri_header">
+        <div class="ri_title_box">
+            <span class="clip-text">产品管理</span>
+            <span>合作管理</span>
+        </div>
+        <div class="ri_work">Product management</div>
+
+        <div class="dataTable_columnCa_b pa">
+            <div class="dataTable_columnCn_b"></div>
+            <div class="dataTableShow_close_b tc">关闭</div>
+        </div>
+
+    </div>
+
+    <div><span class="field_customize">查询自定义</span></div>
+
+    <!--筛选-->
+    <div class="screenBox">
+        <form action="{:U('index')}" id="search_form">
+            <div class="t_left">
+                <div class="ziduan">
+                    <label>广告主:</label><input type="text" id="ad_name" name="ad_name" value="{:I('get.ad_name')}" />
+                </div>
+                <div class="ziduan">
+                    <label>产品:</label><input type="text" id="name" name="name" value="{:I('get.name')}" />
+                </div>
+
+                <div class="ziduan">
+                    <label>结算主体:</label><bselect class="selectpicker" id="sel_sb_id" options="sb_id" selected="_GET['sb_id']" first="请选择"/>
+                    <input type="hidden"  class="form-control" id="sb_id" name="sb_id" value="{:I('get.sb_id')}">
+                </div>
+                <div class="ziduan">
+                    <label>归属销售:</label><input type="text" id="saler_id" name="saler_id" value="{:I('get.saler_id')}" />
+                </div>
+                <div class="ziduan">
+                    <label>产品类型:</label><bselect class="selectpicker" id="sel_product_type" options="product_type" selected="_GET['product_type']" first="请选择"/>
+                    <input type="hidden"  class="form-control" id="product_type" name="product_type" value="{$Think.get.product_type}">
+                </div>
+
+                <div class="ziduan">
+                    <label>订单类型:</label><bselect class="selectpicker" id="sel_order_type" options="order_type" selected="_GET['order_type']" first="请选择"/>
+                    <input type="hidden"  class="form-control" id="order_type" name="order_type" value="{$Think.get.order_type}">
+                </div>
+                <div class="ziduan">
+                    <label>来源类型:</label><bselect class="selectpicker" id="sel_source_type" options="source_type" selected="_GET['source_type']" first="请选择"/>
+                    <input type="hidden"  class="form-control" id="source_type" name="source_type" value="{$Think.get.source_type}">
+                </div>
+                <div class="ziduan">
+                    <label>合作状态:</label><bselect class="selectpicker" id="sel_order_cooperate_state" options="order_cooperate_state" selected="_GET['order_cooperate_state']" first="请选择"/>
+                    <input type="hidden"  class="form-control" id="order_cooperate_state" name="cooperate_state" value="{$Think.get.cooperate_state}">
+                </div>
+                <div class="ziduan">
+                    <label>添加时间:</label><input name="add_time" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$Think.get.add_time}"/>
+                </div>
+                <div class="ziduan">
+                    <label>是否检查:</label><bselect class="selectpicker" id="sel_is_check" options="is_check" selected="_GET['is_check']" first="请选择"/>
+                    <input type="hidden"  class="form-control" id="is_check" name="is_check" value="{$Think.get.is_check}">
+                </div>
+            </div>
+
+            <div class="t_right"><input type="submit" value="查询" /></div>
+        </form>
+    </div>
+
+
+    <!--<div class="screenBox swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <form action="{:U('index')}" method='get'>
+                    &lt;!&ndash;基础查询&ndash;&gt;
+                    <span class="screenClick a">点击高级查询</span>
+                    <h2>基础查询</h2>
+                    <div class="swiperRight">
+                        <table class="tableBox">
+
+                            <tr>
+                                <th>广告主名称：</th>
+                                <td>
+                                    <input type="text" id="ad_name" name="ad_name" value="{:I('get.ad_name')}" />
+                                </td>
+                                <th>产品名称：</th>
+                                <td>
+                                    <input type="text" id="name" name="name" value="{:I('get.name')}" />
+                                </td>
+                                <th>结算主体：</th>
+                                <td>
+                                    <bselect class="selectpicker" id="sel_sb_id" options="sb_id" selected="_GET['sb_id']" first="请选择"/>
+                                    <input type="hidden"  class="form-control" id="sb_id" name="sb_id">
+                                </td>
+                                <td><input type="submit" value="查询" /></td>
+                            </tr>
+                            <tr>
+                                <th>归属销售：</th>
+                                <td>
+                                    <input type="text" id="saler_id" name="saler_id" value="{:I('get.saler_id')}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    &lt;!&ndash;<div class="swiperRight">
+                        <bsearchtable datasource="search1Options"/>
+                    </div>&ndash;&gt;
+
+                &lt;!&ndash;end 基础查询&ndash;&gt;
+            </div>
+            <div class="swiper-slide">
+                <span class="screenClick b">点击基础查询</span>
+                    &lt;!&ndash;高级查询&ndash;&gt;
+                    <h2>高级查询</h2>
+                    &lt;!&ndash;<div class="swiperLeft">
+                        <p class="swiperTit"><img src="__new_boss__/images/screen_gj.png" alt=""></p>
+                        <div class="searchBox">
+                            <input class="searchTxt" name="name" value="{$Think.get.name}" type="text" placeholder="产品名称">
+                            <p class="closeSearch"></p>
+                        </div>
+                    </div>&ndash;&gt;
+                    <div class="swiperRight">
+                        <table class="tableBox">
+                            <tr>
+                                <th>产品类型：</th>
+                                <td><bselect class="selectpicker" id="sel_product_type" options="product_type" selected="_GET['product_type']" first="请选择"/>
+                                    <input type="hidden"  class="form-control" id="product_type" name="product_type" value="{$Think.get.product_type}">
+                                </td>
+                                <th>订单类型：</th>
+                                <td><bselect class="selectpicker" id="sel_order_type" options="order_type" selected="_GET['order_type']" first="请选择"/>
+                                    <input type="hidden"  class="form-control" id="order_type" name="order_type" value="{$Think.get.order_type}">
+                                </td>
+                                <th>来源类型：</th>
+                                <td class="no_back"><bselect class="selectpicker" id="sel_source_type" options="source_type" selected="_GET['source_type']" first="请选择"/>
+                                    <input type="hidden"  class="form-control" id="source_type" name="source_type" value="{$Think.get.source_type}"></td>
+                                <td><input type="submit" value="查询" /></td>
+                            </tr>
+                            <tr>
+                                <th>合作状态：</th>
+                                <td>
+                                    <bselect class="selectpicker" id="sel_order_cooperate_state" options="order_cooperate_state" selected="_GET['order_cooperate_state']" first="请选择"/>
+                                    <input type="hidden"  class="form-control" id="order_cooperate_state" name="cooperate_state" value="{$Think.get.cooperate_state}">
+                                </td>
+                                <th>添加时间：</th>
+                                <td>
+                                    <input name="add_time" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM'})" class="Wdate" value="{$Think.get.add_time}"/>
+                                    &lt;!&ndash;<input type="text" name="add_time">&ndash;&gt;
+                                </td>
+                                <th>是否检查：</th>
+                                <td>
+                                    <bselect class="selectpicker" id="sel_is_check" options="is_check" selected="_GET['is_check']" first="请选择"/>
+                                    <input type="hidden"  class="form-control" id="is_check" name="is_check" value="{$Think.get.is_check}">
+                                </td>
+                            </tr>
+                        </table>
+                        &lt;!&ndash;<bsearchtable datasource="searchOptions"/>&ndash;&gt;
+                    </div>
+                </form>
+                &lt;!&ndash;end 高级查询&ndash;&gt;
+            </div>
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>-->
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit" goal="dataTable1">
+
+            <div class="dataTable_columnCa">
+                <div class="dataTable_columnCn selectpicker">
+                </div>
+                <div class="dataTableShow_close tc">关闭</div>
+            </div>
+            <style type="text/css">
+                .te{margin-left: 0!important;}
+            </style>
+            <div class="advancedLeft tt">
+                <span class="addAdv advBtn"><a href="{:U('edit')}" >新增</a></span>
+                <span class="export advBtn te"><a id="doExport" href="javascript:;">导出</a></span>
+            </div>
+
+            <div class="advancedRight">
+                <div class="advIcon statisticsThumbnail_icon J_statisticsThumbnail fr">可视化报表</div>
+                <div class="dataTableShow fr" goal="dataTable1">
+                    <div class="advIcon dataTableShow_icon fr del">字段筛选</div>
+                    <!--<div class="dataTable_columnCa pa">
+                        <div class="dataTable_columnCn selectpicker"></div>
+                        <div class="dataTableShow_close tc">关闭</div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>产品编码</th>
+                <th>产品名称</th>
+                <th>结算主体</th>
+                <th>广告主名称</th>
+                <th>产品类型</th>
+                <th>产品明细分类</th>
+                <th>来源类型</th>
+                <th>订单类型</th>
+                <th>归属销售</th>
+                <th>合作状态</th>
+                <th>添加时间</th>
+                <?php if($isHas_check==200){ ?>
+                <th>是否检查</th>
+                <?php } ?>
+                <th width="150">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <notempty name="list">
+                        <volist name="list" id="item">
+                            <tr>
+                                <td>{$item.id}</td>
+                                <td>{$item.code}</td>
+                                <td>{$item.name}</td>
+                                <td>{$item.sb_id}</td>
+                                <td>{$item.ad_id}</td>
+                                <td>{$op_product_type[$item['type']]}</td>
+                                <td>{$item.category}</td>
+                                <td>{$op_order_source_type[$item['source_type']]}</td>
+                                <td>{$op_order_type[$item['order_type']]}</td>
+                                <td>{$item['saler_id']}</td>
+                                <td>{$op_order_cooperate_state[$item['cooperate_state']]}</td>
+                                <td>{$item.add_time}</td>
+                                <?php if($isHas_check==200){ ?>
+                                <td><if condition="$item.is_check eq 1">是<else/>否</if></td>
+                                <?php } ?>
+                                <td>
+                                    <a href="{:U('edit?id='.$item['id'])}" >修改</a>
+                                    <a href="{:U('detail?id='.$item['id'])}" >明细</a>
+                                    <!--<a class="J_deleteData">删除</a>-->
+                                </td>
+                            </tr>
+                        </volist>
+                <else />
+                <tr>
+                    <td <?php if($isHas_check==200){ ?> colspan="13" <?php }else{ ?> colspan="14" <?php } ?> >
+                       <div class="no-datas">暂无数据！！！！</div>
+                    </td>
+                </tr>
+            </notempty>
+            
+
+            </tbody>
+        </table>
+        <!--分页-->
+        <notempty name="list">
+            {$_page}
+        </notempty>
+    </div>
+
+</div>
+    <!--统计缩略图-->
+    <div class="statisticsThumbnail">
+        <img src="__IMG__/statisticsThumbnail_close.png" class="statisticsThumbnail_close" />
+
+        <div id="myChart1" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+        <div id="myChart2" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+        <div id="myChart3" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+
+        <div id="myChart4" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+        <div id="myChart5" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+        <div id="myChart6" class="fl" style=" margin: 2%; width: 29%; height: 40%; "></div>
+    </div>
+</block>
+
+<block name="script">
+    <script src="__MODULE__/ECharts/echarts-all.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    var P={
+        init:function(){
+            //setTimeout(this.initStas(),2000);
+            this.initPort();
+        },
+        initPort:function(){
+           $("#doExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export')}";
+                window.location.href=url+'?'+param;
+            });
+        },
+        initStas:function(){
+             //=============================统计图=============================
+            // 基于准备好的dom，初始化echarts图表
+            /*var myChart1 = echarts.init(document.getElementById('myChart1'));
+            var myChart2 = echarts.init(document.getElementById('myChart2'));
+            var myChart3 = echarts.init(document.getElementById('myChart3'));
+            var myChart4 = echarts.init(document.getElementById('myChart4'));
+            var myChart5 = echarts.init(document.getElementById('myChart5'));
+
+            //饼图
+            var pie = {
+                backgroundColor: 'rgba(255,255,255,0.9)',
+                title : {
+                    text: '',
+                    x: 'center',
+                    textStyle: {
+                        fontSize: 16,
+                        color: '#1a72d6'
+                    },
+                    padding: 15,
+                },
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                /!*legend: {
+                    orient: 'vertical',
+                    left: 'right',
+                    data: []
+                },*!/
+                calculable : true,
+                series : [
+                    {
+                        name:'',
+                        type:'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data:[],
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            //页面跳转
+            /!*myChart1.on('click', function (param){ window.open('index.html') });
+            *!/
+            var charts = [1,2,3,4,5];
+            for(var i in charts) {
+                var item = charts[i];
+                $.get("{:U('chartView')}",{item:item},function(ret){
+                    var idx = ret.item;
+                    var data = ret.data;
+                    var fields = ret.fields;
+                    switch (idx) {
+                        case 1:
+                            pie.title.text = '来源类型占比';
+                            //pie.legend.data = fields;
+                            pie.series[0].name = '类型';
+                            pie.series[0].data = data;
+                            // 为echarts对象加载数据
+                            myChart1.setOption(pie);
+                        break;
+                        case 2:
+                            pie.title.text = '合作状态占比';
+                            //pie.legend.data = fields;
+                            pie.series[0].name = '状态';
+                            pie.series[0].data = data;
+                            // 为echarts对象加载数据
+                            myChart2.setOption(pie);
+                        break;
+                        case 3:
+                            pie.title.text = '产品类型占比';
+                            //pie.legend.data = fields;
+                            pie.series[0].name = '类型';
+                            pie.series[0].data = data;
+                            // 为echarts对象加载数据
+                            myChart3.setOption(pie);
+                        break;
+                        case 4:
+                            pie.title.text = '产品明细分类';
+                            //pie.legend.data = fields;
+                            pie.series[0].name = '行业';
+                            pie.series[0].data = data;
+                            // 为echarts对象加载数据
+                            myChart4.setOption(pie);
+                            break;
+                        case 5:
+                            pie.title.text = '接入业务线';
+                            //pie.legend.data = fields;
+                            pie.series[0].name = '业务线';
+                            pie.series[0].data = data;
+                            // 为echarts对象加载数据
+                            myChart5.setOption(pie);
+                            break;
+                    }
+                });
+            }*/
+        }
+    };
+    $(function(){
+        P.init();
+        var myChart1 = echarts.init(document.getElementById('myChart1'));
+        var myChart2 = echarts.init(document.getElementById('myChart2'));
+        var myChart3 = echarts.init(document.getElementById('myChart3'));
+        var myChart4 = echarts.init(document.getElementById('myChart4'));
+        var myChart5 = echarts.init(document.getElementById('myChart5'));
+
+        //饼图
+        var pie = {
+            backgroundColor: 'rgba(255,255,255,0.9)',
+            title : {
+                text: '',
+                x: 'center',
+                textStyle: {
+                    fontSize: 16,
+                    color: '#1a72d6'
+                },
+                padding: 15,
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            /*legend: {
+             orient: 'vertical',
+             left: 'right',
+             data: []
+             },*/
+            calculable : true,
+            series : [
+                {
+                    name:'',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        //页面跳转
+        /*myChart1.on('click', function (param){ window.open('index.html') });
+         */
+        var charts = [1,2,3,4,5];
+        for(var i in charts) {
+            var item = charts[i];
+            $.get("{:U('chartView')}",{item:item},function(ret){
+                var idx = ret.item;
+                var data = ret.data;
+                var fields = ret.fields;
+                switch (idx) {
+                    case 1:
+                        pie.title.text = '来源类型占比';
+                        //pie.legend.data = fields;
+                        pie.series[0].name = '类型';
+                        pie.series[0].data = data;
+                        // 为echarts对象加载数据
+                        myChart1.setOption(pie);
+                        break;
+                    case 2:
+                        pie.title.text = '合作状态占比';
+                        //pie.legend.data = fields;
+                        pie.series[0].name = '状态';
+                        pie.series[0].data = data;
+                        // 为echarts对象加载数据
+                        myChart2.setOption(pie);
+                        break;
+                    case 3:
+                        pie.title.text = '产品类型占比';
+                        //pie.legend.data = fields;
+                        pie.series[0].name = '类型';
+                        pie.series[0].data = data;
+                        // 为echarts对象加载数据
+                        myChart3.setOption(pie);
+                        break;
+                    case 4:
+                        pie.title.text = '产品明细分类';
+                        //pie.legend.data = fields;
+                        pie.series[0].name = '行业';
+                        pie.series[0].data = data;
+                        // 为echarts对象加载数据
+                        myChart4.setOption(pie);
+                        break;
+                    case 5:
+                        pie.title.text = '接入业务线';
+                        //pie.legend.data = fields;
+                        pie.series[0].name = '业务线';
+                        pie.series[0].data = data;
+                        // 为echarts对象加载数据
+                        myChart5.setOption(pie);
+                        break;
+                }
+            });
+        }
+
+        $('#sel_sb_id').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+            var tmpSelected = $('#sel_sb_id').val();
+            if (tmpSelected != null) {
+                $('#sb_id').val(tmpSelected);
+            } else {
+                $('#sb_id').val("");
+            }
+        });
+        $('#sel_product_type').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+            var tmpSelected = $('#sel_product_type').val();
+            if (tmpSelected != null) {
+                $('#product_type').val(tmpSelected);
+            } else {
+                $('#product_type').val("");
+            }
+        });
+        $('#sel_order_type').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+            var tmpSelected = $('#sel_order_source_type').val();
+            if (tmpSelected != null) {
+                $('#order_type').val(tmpSelected);
+            } else {
+                $('#order_type').val("");
+            }
+        });
+        $('#sel_source_type').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+            var tmpSelected = $('#sel_source_type').val();
+            if (tmpSelected != null) {
+                $('#source_type').val(tmpSelected);
+            } else {
+                $('#source_type').val("");
+            }
+        });
+        $('#sel_order_cooperate_state').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+            var tmpSelected = $('#sel_order_cooperate_state').val();
+            if (tmpSelected != null) {
+                $('#order_cooperate_state').val(tmpSelected);
+            } else {
+                $('#order_cooperate_state').val("");
+            }
+        });
+        $('#sel_is_check').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+            var tmpSelected = $('#sel_is_check').val();
+            if (tmpSelected != null) {
+                $('#is_check').val(tmpSelected);
+            } else {
+                $('#is_check').val("");
+            }
+        });
+
+        //查询字段初始化 2017.10.27
+        if(getCookie('boss30_on_'+getHref()+'_t_left_state')!='activate' || getCookie('boss30_on_'+getHref()+'_t_left_state')=='' || getCookie('boss30_on_'+getHref()+'_t_left_state')==null || getCookie('boss30_on_'+getHref()+'_t_left_state')==undefined) {
+            setCookie('boss30_on_'+getHref()+'_t_left','1111000000',30);
+        }
+    });
+    </script>
+</block>

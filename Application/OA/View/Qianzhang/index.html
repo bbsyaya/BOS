@@ -1,0 +1,96 @@
+<extend name="Public/base"/>
+<block name="script">
+<script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+<!--双日期插件-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/jquery.timepicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/jquery.datepair.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/datepicker.js"></script>
+</block>
+
+<block name="body">
+<div class="subConten">
+    <!--面包屑-->
+    <div class="crumbs" style=""><a href="#">系统管理</a>&nbsp;&gt;&nbsp;<a href="#">签章管理</a></div>
+    <!--end 面包屑-->
+    <!--内容-->
+    <style type="text/css">
+    .fwd{width: 100%;display: inline-block;}
+    .fl{float: left;}
+    .fidls-d{margin-top: 40px;}
+    .fs-color{font-size: 16px;}
+    .submit-btn{background: #1a72d6 none repeat scroll 0 0 !important;
+    border: medium none!important;
+    border-radius: 3px!important;
+    color: #ffffff!important;
+    cursor: pointer!important;
+    margin-right: 10px!important;
+   
+}
+.ChoiceBox{cursor:pointer;}
+.queryTable{width:500px;}
+.t-dks{text-align: right;}
+.queryTable tr td{padding: 8px 0px;}
+    </style>
+    <div class="subCon fl w" style="margin-top:10px;padding:0px 20px;width:96% !important;">
+        <!--条件查询-->
+        <?php if($img){ ?>
+            <div class="fwd">
+                <span class="fl">当前签章：</span>
+                <img  class="fl" src="{$img}"/>
+            </div>
+        <?php } ?>
+        
+        <fieldset class="fl w fidls-d" >
+            <legend class="fs-color">上传签章</legend>
+            <div class="fwd">
+            <form action="/OA/Qianzhang/changeimg" method='post' enctype="multipart/form-data">
+            
+         <!--    <span class="fl"><input type='file' name="file"/></span>
+ -->
+
+             <span class="ChoiceBox fl">浏览<input name="file" value="浏览" type="file" style="height:32px !important;"></span>
+
+
+            <span class="fl" style="margin-left:10px;"><input type="submit" class="submit-btn" value="上传签章图片"/></span>
+           
+            </form>
+        </div>
+        </fieldset>
+        
+        <fieldset class="fl w fidls-d" >
+            <legend class="fs-color">修改签章密码</legend>
+             <div class="fwd">
+            <form action="/OA/Qianzhang/changepw" method='post'>
+            <table class="queryTable">
+                <tbody>
+                    <tr>
+                        <th class="t-dks">原密码：</th>
+                        <td><input name="oldpw" type="password"></td>
+                        
+                    </tr>
+                    <tr>
+                        <th class="t-dks">新密码：</th>
+                        <td><input name="newpw" type="password"></td>
+                        
+                    </tr>
+                    <tr>
+                        <th class="t-dks">重复新密码：</th>
+                        <td><input name="newpw2" type="password"></td>
+                        
+                    </tr>
+                    <tr><td colspan="2" style="text-align:center;"><input name="" type="submit" class="submit-btn" value="修改签章密码"></td></tr>
+                </tbody>
+            </table>
+            </form>
+        </div>
+        </fieldset>
+        <!--end 发起流程列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+
+
+</block>
+

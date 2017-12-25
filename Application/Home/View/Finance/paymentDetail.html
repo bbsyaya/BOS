@@ -1,0 +1,61 @@
+<extend name="Public/base"/>
+
+<block name="body">
+
+				<!--筛选-->
+				
+				<!--数据表-->
+				<div class="dataCn fl w ha">
+					<div class="dataFormTitle">基础信息</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+						<volist name='detailData' id='v'>
+							<tr>
+								<td>OA流水号</td><td>{$v.run_id}</td><td>申请人</td><td>{$v.data_1}</td><td>申请时间</td><td>{$v.data_3}</td>
+							</tr>
+							<tr>
+								<td>收款方名称</td><td>{$v.data_9}</td><td>发票类型</td><td>{$v.data_5}</td><td>发票编号</td><td>{$v.data_8}</td>
+							</tr>
+							<tr>
+								<td>开户银行名称</td><td>{$v.data_16}</td><td>开户行账号</td><td>{$v.data_17}</td>
+							</tr>
+							<tr>
+								<td>付款金额合计</td><td>{$v.data_22}</td><td>付款金额大写</td><td>{$v.data_24}</td>
+							</tr>
+							</volist>
+						</tbody>
+					</table>
+					<br/><br/>
+					<div class="dataFormTitle">产品明细</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr><td>产品名称</td><td>计费标识</td><td>开始时间</td><td>结束时间</td><td>结算金额</td></tr>
+							<volist name='ourData' id='va'>
+
+								<tr><td>{$va.bp_name}</td><td>{$va.name}</td><td>{$strdate}</td><td>{$enddate}</td><td>{$va.moneysum}</td></tr>
+							</volist>
+						</tbody>
+					</table>
+					<br/><br/>
+
+					<div class="dataFormTitle">付款明细</div>
+					<table class="dataTable dataTable1">
+						<tbody>
+							<tr><td>登记时间</td><td>操作人</td><td>支付金额</td><td>支付日期</td><td>支付银行账户编号</td></tr>
+							<volist name='moreData' id='v'>
+								<tr><td>{$v.addtime}</td><td>{$v.real_name}</td><td>{$v.pay_money}</td><td>{$v.pay_date}</td><td>{$v.pay_num}</td></tr>
+							</volist>
+						</tbody>
+					</table>
+				</div>
+				<br/><br/>
+				<div class="dataFormOperate">
+					<a href="payment.html">返回</a>
+				</div>
+			</div>
+
+</block>
+
+

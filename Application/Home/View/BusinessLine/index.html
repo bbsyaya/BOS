@@ -1,0 +1,122 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="subMainBox">
+        <!--面包屑-->
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text">业务线管理</span>
+                <span>系统管理</span>
+            </div>
+            <div class="ri_work">Business line management</div>
+        </div>
+    <!--筛选-->
+    <div class="screenBox swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <form action="{:U('index')}" id="search_form">
+                    <!--基础查询-->
+                    <h2>基础查询</h2>
+                    <div class="swiperRight">
+                        <table class="tableBox">
+                            <tr>
+                                <th>业务线名称：</th>
+                                <td><input type="text" name="name" value="{$Think.get.name}"/></td>
+                                <td colspan="6">
+                                    <input type="submit" value="查询" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+                <!--end 基础查询-->
+            </div>
+        </div>
+    </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit">
+        <div class="advancedLeft">
+            <span class="addAdv advBtn"><input type="button" class="J_addData" value="新增"></span>
+        </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>名称</th>
+                <th>业务线编码</th>
+                <th>业务线分类</th>
+                <th>签订主体</th>
+                <th width="150">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="list" id="item">
+                <tr>
+                    <td>{$item.id}</td>
+                    <td>{$item.name}</td>
+                    <td>{$item.bl_code}</td>
+                    <td>{$item.type}</td>
+                    <td>{$item.sb_id}</td>
+                    <td>
+                        <a item-id="{$item.id}" class="J_updateData" >编辑</a>
+                    </td>
+                </tr>
+            </volist>
+
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    {$_page}
+</div>
+    <!--————————————————————————————————————————————————————————————————————————————————————————————————————-->
+    <!--弹出框（新增用户） -->
+    <div class="addDataDialog" title="编辑"></div>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        $(function() {
+            //对话框（新增、修改）
+            $(".addDataDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "450",
+                height: "300",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "保存":function() {
+                        var thisdialog = this;
+                        var tabform = $("#tableForm");
+                        $.post("{:U('update')}", tabform.serialize(), function(ret){
+                            if (ret == 'ok') {
+                                $(thisdialog).dialog("close");
+                                alertnewpage2('保存成功',window.location.href);
+                            } else {
+                                alertnewpage2(ret);
+                            }
+                        });
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+    //------------------------------------------------------------------------------------
+            //新增修改
+            $(".rightCa").on({
+                click: function() {
+                    var id = $(this).attr('item-id');
+                    $.get("{:U('edit')}",{id:id},function (dom) {
+                        $(".addDataDialog").html(dom);
+                        $(".addDataDialog").dialog("open");
+                    })
+                }
+            }, ".J_updateData,.J_addData");
+
+
+        });
+    </script>
+</block>

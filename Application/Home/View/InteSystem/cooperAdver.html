@@ -1,0 +1,230 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public:commonoa" />
+<style type="text/css">
+body{font-size:12px!important}.btnBox input.close[type="button"]{float:none!important}.close{opacity:1!important;font-size:14px!important;font-weight:normal!important;margin-left:10px!important}.listTable tr th,.listTable tr td{border:1px solid #eee;color:#333;height:40px;line-height:40px;overflow:hidden;text-align:center;text-overflow:ellipsis;white-space:nowrap;padding:0 5px!important}.listTable tr th{color:#fff}.b-name{width:300px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.com-btn{background:#1a72d6 none repeat scroll 0 0!important;border:medium none!important;border-radius:3px!important;color:#fff!important;cursor:pointer!important;margin-left:10px!important;height:32px!important;line-height:32px!important;padding:0 5px!important}.color1a72d6{color:#1a72d6!important}.ui-dialog-buttons{z-index:2000!important}.Wdate{width:185px!important;padding:0 2px!important}.edit-b{border:1px solid #dadada;border-radius:3px;height:30px;margin-left:20px;width:50px;line-height:30px}.edit-b:hover{background:#1269cc;color:#fff}.btnBox input[type="button"]{margin:0!important;float:left!important;margin-left:145px!important}.btnBox input.close[type="button"]{margin-left:10px!important;float:left!important}.listTable tr th,.listTable tr td{font-size:12px!important}.screenOperate{height:auto!important}.screenCn .screenOperate a{border-top:1px solid #fff}.screenCn .screenOperate a{padding:0 10px}.fleft{float: left;height: 30px;line-height: 30px;}
+.bootstrap-select > .dropdown-toggle{height: 30px !important;}.selectpicker1{height: 30px;}.listTable tr td a{margin: 0px !important;padding:0 !important;color: #1a72d6;margin-right: 5px !important;}.dataTable tr td{padding:5px 5px;}.dataTbodyTr_odd {
+    background-color: #f6f6f6;
+} .sc{
+        display: inline-block;
+        width: 100%;
+        line-height: 30px;
+        color: red;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+
+<div class="subMainBox">
+    <div class="ri_header">
+        <div class="ri_title_box">
+            <span class="clip-text">已拓展-广告主</span>
+            <span>情报体系</span>
+        </div>
+        <div class="ri_work">Has been expanded - advertisers</div>
+    </div>
+<!--<div class="subConten  fl w" style="padding:5px !important;">-->
+    <!--内容-->
+    <!--<div class="subCon fl w" style="margin-top:0px;">-->
+    <div class="screenCn fl w ha" style="margin-top:0px;">
+        <!--<div class="screenOperate fl w">
+            <a class="" href="javascript:void(0);" onclick="e.explortAd()">导出广告主信息</a>
+            <script type="text/javascript">
+            var e={
+                explortAd:function(){
+                    var adform = $('#adform');
+                    adform.attr("action","/Home/InteSystem/exportAdverList.html");
+                    adform.attr("target","_blank");
+                    adform.submit();
+                    adform.attr("action","/Home/InteSystem/cooperAdver.html");
+                    adform.attr("target","");
+                }
+            };
+            </script>
+            <a class="" href="/Home/ShowDataImg/profit.html?querytop10=200" target="_blank">查看广告主TOP10</a>
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+        </div>-->
+        <div  class="sc">
+        *导出功能：可以选择条件进行过滤再导出
+        </div>
+        <form method="get" action="/Home/InteSystem/cooperAdver.html" id="adform">
+        <table class="queryTable fl w" style="margin:10px 0 10px 0px;">
+        <tbody>
+        <tr>
+        <td>
+
+            <span class="fleft">广告主名称：</span>
+            <span class="fleft"><input name="ggz_name" value="{$map['ggz_name']}" type="text"  class="b-name"></span>
+            
+        </td>
+       
+        <td>
+            <span class="fleft">合作状态：</span>
+            <span class="fleft"  style="width:70% !important;">
+                <select name="hz_status" id="hz_status" style="height:30px !important;" >
+                <option value=""  >全部</option>
+                    <?php foreach ($hz_status_list as $k => $v) {
+                    ?>
+                    <option value="{$k}" <?php if($k==$map['hz_status']){ ?> selected="selected" <?php } ?> >{$v}</option>
+                    <?php
+                    } ?>
+                </select>
+                
+            </span>
+
+            
+        </td>
+
+          <td>
+            <span class="fleft">地域：</span>
+            <span class="fleft"><input name="diqu_name" value="{$map['diqu_name']}" type="text"  class="b-name"></span>
+            
+        </td>
+        
+        </tr>
+        
+        <tr>
+            <td colspan="3">
+            <input type="hidden" name="need_follow_adverids" value="{$need_follow_adverids}"/>
+                 <span class="fleft"><input name="" value="查询" class="com-btn" type="submit"></span>
+                
+            </td>
+
+        </tr>
+        </tbody>
+        </table>
+        </form>
+        
+    </div>
+        <!--ned 功能区-->
+        <!--制度列表-->
+        <style type="text/css">
+            .no-show{
+                width: 0px;
+            }
+        </style>
+        <div class="dataCn" id="table_con">
+            <div class="advancedTit">
+                <div class="advancedLeft">
+                    <span class="addAdv advBtn">
+                        <a class="" href="javascript:void(0);" onclick="e.explortAd()">导出广告主信息</a>&nbsp;&nbsp;
+                        <a class="" href="/Home/ShowDataImg/profit.html?querytop10=200" target="_blank">查看广告主TOP10</a>
+                    </span>
+                </div>
+            </div>
+            <table class="dataTable dataTable1">
+                <thead>
+                    <tr>
+                        <th>广告主ID</th>
+                        <th title="广告主名称">广告主名称</th>
+                        <th title="标签"   >标签</th>
+                        <th title="地域">地域</th>
+                        <th title="广告主等级"  >广告主等级</th>
+                        <th title="{$prev_year}年总收入" style="line-height:auto !important;">
+                            <p  style="line-height:20px !important;">{$prev_year}年总收入</p>
+                        </th>
+                        <th title="{$prev_year}年总利润" style="line-height:auto !important;">
+                            <p  style="line-height:20px !important;">{$prev_year}年总利润</p>
+                        </th>
+                        <th title="跟进时间">跟进时间</th>
+                        <th title="跟进结果">跟进结果</th>
+                        <th title="销售">销售</th>
+                        <th title="合作状态">合作状态</th>
+                        <th>详情</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>
+                            {$vo["ad_id"]}
+                            </td>
+                            <td title="{$vo['ad_name']}"><a  href="/Home/InteSystem/adverIncome.html?adverid={$vo['ad_id']}" target="_blank">{$vo['ad_name']}</a></td>
+                            
+                            <td title="{$vo["tag"]}"><span>{$vo["tag"]}</span></td>
+                            <td title="{$vo["region_name"]}"><span>{$vo["region_name"]}</span></td>
+                            <td title="广告主等级：{$ad_grade_str}"><span>{$vo["ad_grade"]}</span></td>
+                            
+                            <td title="{$vo["total_in"]}" >
+                                
+                                <p  style="line-height:20px !important;">{$vo["total_in"]}</p>
+                            </td>
+
+                            <td title="{$vo["total_liushui"]}">
+                                <p  style="line-height:20px !important;">{$vo["total_liushui"]}</p>
+                            </td>
+
+                            <td title="{$vo["add_time"]|strtotime|date='Y-m-d',###}"><span> <?php if($vo["add_time"]){ ?> {$vo["add_time"]|strtotime|date='Y-m-d',###} <?php }else{ ?> -- <?php } ?></span>
+                            </td>
+                             <td title="{$vo["f_result"]}">
+                             <span> 
+                                 <?php 
+                                    $show_follow = true;
+                                    if($role_type==1 && $vo["ad_grade"]=="S"){ $show_follow = true; } 
+                                    if($role_type==2 && $vo["ad_grade"]=="A"){ $show_follow = true; } 
+                                    if($role_type==3 && ($vo["ad_grade"]=="B" || $vo["ad_grade"]=="C" || $vo["ad_grade"]=="D")){ 
+                                    $show_follow = true; } 
+                                // if($need_follow_products==200){ $show_follow = true; } 
+                                ?>   
+                                 <?php if($vo["f_result"]){ ?> 
+                                    <?php if($show_follow){ ?>
+                                        <a href="javascript:void(0);" onclick="E.expand({$vo['ad_id']},2)" title="我来跟进">{$vo["f_result"]}</a>
+                                    <?php }else{  ?> {$vo["f_result"]} <?php } ?>
+                                 
+
+                                 <?php }else{ ?> 
+                                    
+
+                                    <?php if($show_follow){ ?>
+                                        <a href="javascript:void(0);" onclick="E.expand({$vo['ad_id']},2)" title="我来跟进">我来跟进</a>
+                                    <?php }else{  ?> -- <?php } ?>
+
+                                 <?php } ?>
+                             </span>
+                             </td>
+                          
+                          <td title="{$vo["xs_user_names"]}"><?php if($vo["xs_user_names"]){ ?> {$vo["xs_user_names"]} <?php }else{ ?> -- <?php } ?>
+                              </td>
+                              <td title="{$vo["hz_status_str"]}"><?php if($vo["hz_status_str"]){ ?> {$vo["hz_status_str"]} <?php }else{ ?> -- <?php } ?>
+                              </td>
+                            <td>
+                                
+                                <a href="/Home/InteSystem/cooperAdverDetail.html?adverid={$vo['ad_id']}" target="_blank">明细</a>
+                            </td>
+                        </tr>
+                    </volist>
+                    <else />
+                    <tr>
+                        <td  colspan="12"><div class="no-datas">暂无数据！！</div></td>
+                    </tr> 
+                </notempty>
+                </tbody>
+            </table>
+            {$page}
+            <!--<notempty name="list">
+                <div class="no-datas">{$page}</div>
+            </notempty>-->
+            <notempty name="list">
+             <div class="office_btnBox" style="margin-bottom:50px;">
+                <!-- <input name="" type="button" value="批量删除员工信息" class="delAll" onclick="r.deleteAll(this)"> -->
+            </div>
+           
+            </notempty>
+        <!--</div>-->
+        <!--end 制度列表-->
+    </div>
+    <!--end 内容-->
+<!--</div>-->
+<!--end 主体-->
+</div>
+<script type="text/javascript">var pType="";</script>
+<script type="text/javascript" src="/Public/Home/js/cooperadver.js"></script>
+</block>

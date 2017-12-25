@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>流程管理</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+</head>
+<body>
+<!--主体-->
+<div class="subConten">
+    <!--面包屑-->
+    <div class="crumbs"><a href="">OA管理</a>&nbsp;&gt;&nbsp;<a href="">流程管理</a>&nbsp;&gt;&nbsp;<span>条件编辑</span></div>
+    <!--end 面包屑-->
+    <!--内容-->
+    <div class="subCon">
+        <!--条件查询-->
+        <div class="query">
+            <table class="queryTable">
+                <tbody>
+                    <tr>
+                        <th>流程名称：</th>
+                        <td colspan="6">{$data.name}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- end 条件查询-->
+        <!--修改流程节点列表-->
+        <div class="designListBox">
+	        <volist name="list" id="v">
+		        <div class="design_node" style="height:270px">
+	                <span class="design_close"></span>
+	                <h3>{$v.name}</h3>
+	                <p class="design_txt design_samll"><label for="">经办人</label>{$v.userid}</p>
+	                <p class="design_txt design_samll"><label for="">预估时间</label>{$v.alltime}秒</p>
+	                <p class="design_txt design_samll"><label for="">执行顺序</label>{$v.sort}</p>
+	                <p class="design_btn"><input onclick="window.location.href='/LCAdmin/edittiaojian_detail?id={$v.id}'" name="" type="button" value="编辑"></p>
+	            </div>
+
+			</volist>
+            
+        </div>
+        <!--end 修改流程节点列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var Popupe = new PopupBase();
+        Popupe.show('.title_btn', '.mask,.conDetails');
+        Popupe.hide('.colse','.mask,.conDetails');
+        $(".designListBox").on({
+            click:function(){
+                $(this).parents('.design_node').remove();
+            }
+        },".design_close");
+    });
+</script>
+</body>
+</html>

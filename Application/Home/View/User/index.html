@@ -1,0 +1,209 @@
+<extend name="Public/base"/>
+<block name="body">
+<style type="text/css">
+    .fr{
+        float: right;
+    }
+</style>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <div class="subMainBox">
+    <!--筛选 test-->
+    <div class="screenCn fl w ha">
+        <div class="screenOperate fl w" style="width:100%;">
+            <a class="J_addData" id="J_addData_id" href="javascript:void(0);">新增</a>
+            <a class="" id="" href="/OA/OrganizSetting/settingList.html">设置部门权限</a>
+            <a class="" id="" href="/Home/AuthManager/index">设置角色权限</a>
+            <a class="" id="" href="/OA/HrManage/hrList.html">返回人事管理</a>
+
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+            <div class="line fr h"></div>
+        </div>
+        <bsearchtable datasource="searchOptions"/>
+    </div>
+    
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th style="width:80px;">工号</th>
+                <th style="width:220px;">部门</th>
+                <th style="width:80px;">姓名</th>
+                <th style="width:100px;">职位</th>
+                <th style="width:80px;">在职状态</th>
+                <th style="width:560px">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="list" id="item">
+                <tr>
+                    <td>{$item.employee_number}</td>
+                    <td>{$item.dept_id}</td>
+                    <td>{$item.real_name}</td>
+                    <td>{$item.position_id}</td>
+                    <td>{$op_user_status[$item['status']]}</td>
+                    <td>
+
+                        <php>if(checkRuleForName_xq('/Home/User/edit')){</php>
+                        <a item-id="{$item.id}" class="J_updateData cur-link" >编辑</a>
+                        <php>}</php>
+                        <a item-id="{$item.id}" class="J_lookData cur-link" >查看</a>
+                        <php>if(checkRuleForName_xq('/Home/User/resetPwd')){</php>
+                        <a item-id="{$item.id}" class="J_resetPwd cur-link" >重置密码</a>
+                        <php>}</php>
+                    </td>
+                </tr>
+            </volist>
+
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    {$_page}
+</div>
+    <!--————————————————————————————————————————————————————————————————————————————————————————————————————-->
+    <!--弹出框（新增用户） -->
+    <div class="addDataDialog" title="新增用户"></div>
+    <div class="detailDataDialog" title="用户详情"></div>
+    <!--弹出框（重置密码） -->
+    <div class="resetPwdDialog" title="重置密码" style="display: none;">
+        <br />
+        <p class="tc f14 lh200" style="color: #555555">确定重置密码？重置密码为“123456”！</p>
+    </div>
+
+
+    <script type="text/javascript">var pType="UserIndex";</script>
+    <script type="text/javascript" src="/Public/Home/js/auth.js?v={:getVersion()}"></script>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        $(function() {
+            //对话框（新增、修改）
+            $(".addDataDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "800",
+                height: "400",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "保存":function() {
+                        var thisdialog = this;
+                        var userform = $("#userform");
+                        $.post("{:U('update')}",userform.serialize(),function(ret){
+                            if (ret == 'ok') {
+                                $(thisdialog).dialog("close");
+                                alertnewpage2('保存成功',window.location.href);
+                            } else {
+                                alertnewpage2(ret);
+                            }
+
+                        });
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+            //详情对话框
+            $(".detailDataDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "800",
+                height: "400",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "关闭":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+    //------------------------------------------------------------------------------------
+            //新增对话框
+            var addDialogData = '';
+            $(".J_addData").click(function(){
+                $("#J_addData_id").html("加载中...");
+                //ajax加载表格数据
+                if (!addDialogData) {
+                    $.get("{:U('add')}",{},function(dom){
+                        addDialogData = dom;
+                        $(".addDataDialog").html(addDialogData);
+                        $(".addDataDialog").dialog("open");
+                        $("#J_addData_id").html("新增");
+                    });
+                } else {
+                    $(".addDataDialog").html(addDialogData);
+                    $(".addDataDialog").dialog("open");
+                    $("#J_addData_id").html("新增");
+                }
+            });
+
+            //修改
+            $(".dataTable").on({
+                click: function() {
+                    var id = $(this).attr('item-id');
+                    if (!id) {
+                        $("<div>参数错误</div>").dialog();
+                    }
+                    $.get("{:U('edit')}",{id:id},function (dom) {
+                        $(".addDataDialog").html(dom);
+                        $(".addDataDialog").dialog("open");
+                    })
+                }
+            }, ".J_updateData");
+
+            //详情对话框
+            $(".dataTable").on({
+                click: function() {
+                    var id = $(this).attr('item-id');
+                    if (!id) {
+                        $("<div>参数错误</div>").dialog();
+                    }
+                    $.get("{:U('detail')}",{id:id},function (dom) {
+                        $(".detailDataDialog").html(dom);
+                        $(".detailDataDialog").dialog("open");
+                    })
+                }
+            }, ".J_lookData");
+
+            //对话框重置密码
+            $(".resetPwdDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "400",
+                height: "200",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "保存":function() {
+                        var thisDialog = this;
+                        $.get("{:U('resetPwd')}",{id:$(this).data('item-id')},function (ret) {
+                            $(thisDialog).dialog("close");
+                            alertnewpage2(ret);
+                        })
+
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+
+            //重置密码对话框
+            $(".dataTable").on({
+                click: function() {
+                    $(".resetPwdDialog").data("item-id",$(this).attr('item-id')).dialog("open");
+                }
+            }, ".J_resetPwd");
+
+        });
+    </script>
+</block>

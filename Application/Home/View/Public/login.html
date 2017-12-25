@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 设置 viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 兼容国产浏览器的高速模式 -->
+    <meta name="renderer" content="webkit">
+    <title>智能办公平台</title>
+    <link rel="stylesheet" href="__PUBLIC__/newUI/css/animate.css">
+    <script src="__PUBLIC__/newUI/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <link href="__PUBLIC__/newUI/css/myCss.css" type="text/css" rel="stylesheet">
+    <style>
+        html {
+            min-height: 100vh;
+        }
+
+        body {
+            min-height: 100vh;
+            background: url(__PUBLIC__/newUI/images/login_back.jpg) center center no-repeat;
+            background-size: cover;
+            overflow: hidden;
+            /*outline: 1px solid red;*/
+            position: relative;
+        }
+
+        @media screen and (min-width: 1px) and (max-width: 1440px) {
+            body {
+                transform: scale(.75);
+
+            }
+            .login_text{
+                margin:10px auto 30px auto!important;
+            }
+        }
+
+        @media screen and (min-width: 1440px) and (max-width: 1600px) {
+            body {
+                transform: scale(.8);
+
+            }
+        }
+
+        @media screen and (min-width: 1600px) and (max-width: 1920px) {
+            body {
+                transform: scale(.85);
+
+            }
+        }
+
+        @media screen and (min-width: 1920px) {
+            body {
+                transform: scale(.9);
+            }
+        }
+
+        .section_box {
+
+            width: 960px;
+            height: 100%;
+            margin: 0 auto;
+            /*outline: 1px solid black;*/
+        }
+
+        .login_form {
+            width: 490px;
+            height: 620px;
+            margin: 0px auto;
+
+            /*outline: 1px solid forestgreen;*/
+        }
+
+        .login_title {
+            width: 320px;
+            height: 80px;
+            margin: 0px auto;
+            /*outline: 1px solid royalblue;*/
+        }
+
+        .login_title > img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .login_text {
+            width: 266px;
+            height: 66px;
+            margin: 30px auto 90px auto;
+        }
+
+        .login_text > img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .form_box {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, .3);
+            opacity: 1;
+            transition: 2s;
+
+        }
+
+        .input_form {
+            width: 380px;
+            height: 50px;
+            background-color: white;
+            border-radius: 5px;
+            margin: 50px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .login_btn {
+            font-size: 22px;
+            color: white;
+            background: url(__PUBLIC__/newUI/images/login_btn.png) center center no-repeat;
+            background-size: cover;
+            background-size: 110% 200%;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
+            transform: scale(1);
+            user-select: none;
+        }
+
+        .input_form > span {
+            width: 10%;
+            height: 50px;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 15px 0px 10px;
+            /*outline: 1px solid royalblue;*/
+        }
+
+        #close_btn {
+            position: absolute;
+            top: 0;
+            right: -5px;
+            width: 30px;
+            height: 100%;
+            line-height: 50px;
+            text-align: center;
+            font-size: 22px;
+            color: #A965AD;
+            display: inline-block;
+            cursor: pointer;
+            transform: scale(1);
+            user-select: none;
+            display: none;
+            /*outline: 1px solid royalblue;*/
+        }
+
+        .input_form > input {
+            width: 70%;
+            height: 43px;
+            outline: none;
+            font-size: 21px;
+            margin-top: 1px;
+            color: #666;
+            border: none;
+        }
+
+        .icon_name {
+            background: url(__PUBLIC__/newUI/images/login_name.png) no-repeat;
+            background-position: 8px 5px;
+            /*background-size: 80% 70%;*/
+        }
+
+        .icon_key {
+            background: url(__PUBLIC__/newUI/images/login_key.png) no-repeat;
+            background-position: 8px 5px;
+        }
+
+        .sub_title {
+            position: absolute;
+            bottom: 5%;
+            left: 0;
+            width: 100%;
+            min-height: 20px;
+            min-width: 500px;
+            text-align: center;
+            /*outline: 1px solid royalblue;*/
+        }
+
+        .sub_title > div {
+            display: inline-block;
+            text-align: left;
+            width: auto;
+            min-height: 20px;
+            font-size: 22px;
+            /*outline: 1px solid royalblue;*/
+        }
+
+        .sub_title > div:nth-of-type(2) {
+            margin: 0px 100px;
+        }
+
+        .sub_title .c_word {
+            color: white;
+        }
+
+        .sub_title .e_word {
+            color: rgba(255, 255, 255, .5);
+        }
+
+        .sub_title:hover {
+            cursor: default;
+        }
+
+        .copyright {
+            text-align: center;
+            color: #d3d5da;
+            line-height: 24px;
+            font-size: 14px;
+            position: absolute;
+            bottom: -2%;
+            left: 0;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+        }
+
+        .dia_tishi {
+            background-color: rgba(0, 0, 0, .6);
+            position: absolute;
+            top:0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            width: 300px;
+            height: 100px;
+            z-index: 100;
+            text-align: center;
+            line-height: 100px;
+            color: white;
+            font-size: 18px;
+            border-radius: 10px;
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="dia_tishi"></div>
+<div class="section_box">
+    <div id="login_box">
+
+        <div class="login_form">
+            <div class="login_title">
+                <img src="__PUBLIC__/newUI/images/login_icon.png" alt="">
+            </div>
+            <div class="login_text">
+                <img src="__PUBLIC__/newUI/img/login_text.png" alt="">
+            </div>
+            <form id='loginfrom' method="post" action="{:U('/Home/Public/login')}">
+            <div class="form_box">
+                <div class="input_form">
+                    <span class="icon_name"></span>
+                    <input type="text" autocomplete="off" name="username" placeholder="请输入用户名" id="name">
+                    <span id="close_btn">X</span>
+
+                </div>
+                <div class="input_form">
+                    <span class="icon_key"></span>
+                    <input type="password" autocomplete="off" name="password" placeholder="请输入密码" id="word">
+
+                </div>
+                <div class="input_form login_btn">
+                    <div id="go_login">登录</div>
+                </div>
+            </div>
+            </form>
+            <div class="sub_title">
+                <div>
+                    <span class="c_word">互信</span>
+                    <span class="e_word">mutual trust</span>
+                </div>
+                <div>
+                    <span class="c_word">互助</span>
+                    <span class="e_word">mutual assistance</span>
+                </div>
+                <div>
+                    <span class="c_word">高效</span>
+                    <span class="e_word">efficient</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="copyright">
+    版权所有 : 重庆话语科技有限公司 &nbsp;&nbsp; 公司地址 : 重庆市渝中区华盛路10号企业天地2号楼19楼1-6
+</div>
+<script src="__PUBLIC__/newUI/js/jquery-1.9.1.min.js"></script>
+<script>
+    $(function () {
+        //$('.form_box').css('opacity', ' 1');
+        var hostarr=window.location.host.split('.');
+        if(hostarr[0]=='bos3'){
+            window.location="http://it.yandui.com/Home/Public/showRediectMsg.html";
+        }
+
+        $('#close_btn').on('mousedown', function () {
+            $(this).css('transform', 'scale(1.1)')
+        }).on('mouseup', function () {
+            $(this).css('transform', 'scale(1)')
+        })
+        $('.login_btn').on('mousedown', function () {
+            $(this).css('transform', 'scale(1.1)')
+        }).on('mouseup', function () {
+            $(this).css('transform', 'scale(1)')
+        })
+
+
+        $('#go_login').on('click', function () {
+
+            var name = $('#name').val();
+            var posword = $('#word').val();
+            var no_h = false;
+            var no_k = false
+            var reg = new RegExp("[\\u4E00-\\u9FFF]+", "g");
+
+            if (!reg.test(name) && !reg.test(posword)) {
+                no_h = true
+            } else {
+                no_h = false;
+            }
+            if (name != '' && posword != '') {
+                no_k = true
+            } else {
+                no_k = false;
+            }
+
+            if (no_h == false) {
+                $('.dia_tishi').css('display', 'block');
+                $('.dia_tishi').text('账号或密码不能有汉字')
+
+                setTimeout(function () {
+                    $('.dia_tishi').css('display', 'none');
+                }, 500)
+            } else if (no_k == false) {
+                $('.dia_tishi').css('display', 'block');
+                $('.dia_tishi').text('账号或密码不能为空')
+                setTimeout(function () {
+                    $('.dia_tishi').css('display', 'none');
+                }, 1000)
+            } else if (no_h == true && no_k == true) {
+                $('.dia_tishi').css('display', 'block');
+
+                $.post("{:U('/Home/Public/login')}",{"username":$('input[name="username"]').val(),"password":$('input[name="password"]').val()},function(data){
+                    $('.dia_tishi').text(data.msg);
+                    if(data.status==1){
+                        window.location.href=data.url;
+                    }
+                   
+                },'json')
+
+                setTimeout(function () {
+                    $('.dia_tishi').css('display', 'none');
+                }, 1000)
+            }
+        })
+
+        document.onkeydown = function (event) {
+            if(event.keyCode ==13){
+                var name = $('#name').val();
+                var posword = $('#word').val();
+                var no_h = false;
+                var no_k = false
+                var reg = new RegExp("[\\u4E00-\\u9FFF]+", "g");
+
+                if (!reg.test(name) && !reg.test(posword)) {
+                    no_h = true
+                } else {
+                    no_h = false;
+                }
+                if (name != '' && posword != '') {
+                    no_k = true
+                } else {
+                    no_k = false;
+                }
+
+                if (no_h == false) {
+                    $('.dia_tishi').css('display', 'block');
+                    $('.dia_tishi').text('账号或密码不能有汉字')
+
+                    setTimeout(function () {
+                        $('.dia_tishi').css('display', 'none');
+                    }, 500)
+                } else if (no_k == false) {
+                    $('.dia_tishi').css('display', 'block');
+                    $('.dia_tishi').text('账号或密码不能为空')
+                    setTimeout(function () {
+                        $('.dia_tishi').css('display', 'none');
+                    }, 1000)
+                } else if (no_h == true && no_k == true) {
+                    $('.dia_tishi').css('display', 'block');
+
+                    $.post("{:U('/Home/Public/login')}",{"username":$('input[name="username"]').val(),"password":$('input[name="password"]').val()},function(data){
+                        $('.dia_tishi').text(data.msg);
+                        if(data.status==1){
+                            window.location.href=data.url;
+                        }
+
+                    },'json')
+
+
+                    setTimeout(function () {
+                        $('.dia_tishi').css('display', 'none');
+                    }, 1000)
+                }
+            }
+        };
+
+        $("#name").bind('input propertychange', function () {
+            var val = $(this).val();
+            if (val != '') {
+                $('#close_btn').css('display', 'block')
+            } else {
+                $('#close_btn').css('display', 'none')
+            }
+        });
+        $('#close_btn').on('click', function () {
+            $("#name").val('')
+            $(this).css('display', 'none')
+        })
+
+//
+
+
+    })
+</script>
+</body>
+</html>

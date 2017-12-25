@@ -1,0 +1,198 @@
+<extend name="Public/base"/>
+<block name="body">
+<div class="dataCn fl w ha">
+    <div class="dataFormContainer">
+        <div class="dataFormTitle">基本信息</div>
+        <div class="dataFormContent">
+            <table class="dataFormTable">
+                <tr>
+                    <th>广告主编码：</th>
+                    <td>{$adInfo.ad_code}</td>
+                    <th>广告主名称：</th>
+                    <td>{$adInfo.name}</td>
+                    <th>广告主属性：</th>
+                    <td>{$op_adtype[$adInfo['ad_type']]}</td>
+                </tr>
+                <tr>
+                    <th>地址：</th>
+                    <td>{$adInfo.address}</td>
+                    <th>合同oa流水号</th>
+                    <td>{$adInfo.contract_num}</td>
+                    <th>办公地区</th>
+                    <td>{$op_region['province']}-{$op_region['city']}-{$op_region['district']}</td>
+                </tr>
+                <tr>
+                    <th>广告主类型</th>
+                        <td>{$adInfo['tag']}</td>
+                    <th>合作金额：</th>
+                    <td>{$adInfo.hezuomoney}万</td>
+                    <th>预算：</th>
+                    <td>{$adInfo.yushuan}万</td>
+                </tr>
+                <tr>
+                    <th>资质文件：</th>
+                    <td>
+                        <if condition="!empty($adInfo['qualif_img'])">
+                            <a target="_blank" href="http://{$Think.server.HTTP_HOST}{$adInfo['qualif_img']}" class="fileDownload">下载</a>
+                        <else/>
+                            无
+                        </if>
+                    </td>
+                   <th></th>
+                   <td></td>
+                    <th>实力评级：</th>
+                    <td>{$op_ad_rating[$adInfo['rating_level']]}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="dataFormTitle">对接人信息</div>
+        <div class="dataFormContent">
+            <table class="dynamicTable">
+                <tr>
+                    <th>姓名</th>
+                    <th>手机号码</th>
+                    <th>QQ</th>
+                    <th>邮箱</th>
+                    <th>我方对接人</th>
+                </tr>
+                <volist name="adContactInfo" id="item">
+                    <tr>
+                        <td>{$item.name}</td>
+                        <td>{$item.mobile}</td>
+                        <td>{$item.qq}</td>
+                        <td>{$item.email}</td>
+                        <td>{$item.user}</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+
+        <div class="dataFormTitle">财务信息</div>
+        <div class="dataFormContent">
+            <table class="dataFormTable">
+                <tr>
+                    <th>账户类型：</th>
+                    <td>{$op_finance_object[$adInfo['object_type']]}</td>
+                    <th>账户名称：</th>
+                    <td>{$adInfo.account_name}</td>
+                    <th>开户行名称：</th>
+                    <td>{$adInfo.opening_bank}</td>
+                </tr>
+                <tr>
+                    <th>开户行账号：</th>
+                    <td>{$adInfo.bank_no}</td>
+                    <th>发票类型：</th>
+                    <td>{$op_invoice_type[$adInfo['invoice_type']]}</td>
+                    <th>开票内容：</th>
+                    <td>{$adInfo.invoice_remark}</td>
+                </tr>
+                <tr>
+                    <th>纳税人识别号：</th>
+                    <td>{$adInfo.taxpayer_num}</td>
+                    <th>注册地址：</th>
+                    <td>{$adInfo.reg_address}</td>
+                    <th>注册电话：</th>
+                    <td>{$adInfo.reg_mobile}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="dataFormTitle">财务收件人</div>
+        <div class="dataFormContent">
+            <table class="dynamicTable">
+                <tr>
+                    <th>收件人姓名</th>
+                    <th>收件人电话</th>
+                    <th>收件人地址</th>
+                </tr>
+                <foreach name="adFinReceiver" item="item" >
+                    <tr>
+                        <td>{$item.name}</td>
+                        <td>{$item.mobile}</td>
+                        <td>{$item.address}</td>
+                    </tr>
+                </foreach>
+            </table>
+        </div>
+
+        <div class="dataFormTitle">产品信息&nbsp;&nbsp;<a target="_blank" href="{:U('Product/index?ad_id='.$adInfo['id'])}">查看更多</a></div>
+        <div class="dataFormContent">
+            <table class="dynamicTable">
+                <tr>
+                    <th>产品名称</th>
+                    <th>产品编码</th>
+                    <th>产品类型</th>
+                    <th>结算主体</th>
+                    <th>接入业务线</th>
+                </tr>
+                <volist name="productInfo" id="item">
+                    <tr>
+                        <td>{$item.name}</td>
+                        <td>{$item.code}</td>
+                        <td>{$op_product_type[$item['type']]}</td>
+                        <td>{$op_sb[$item['sb_id']]}</td>
+                        <td>{$op_bl[$item['bl_id']]}</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+
+        <div class="dataFormTitle">系统信息</div>
+        <div class="dataFormContent">
+            <table class="dataFormTable">
+                <tr>
+                    <th>注册时间：</th>
+                    <td>
+                        {$adInfo.reg_time}
+                    </td>
+                    <th>分配人：</th>
+                    <td>{$adInfo.assigner}</td>
+                    <th>分配时间：</th>
+                    <td>
+                        {$adInfo.assign_time}
+                    </td>
+                </tr>
+                <tr>
+                    <th>审核人：</th>
+                    <td>{$adInfo.auditor}</td>
+                    <th>审核时间：</th>
+                    <td>
+                        {$adInfo.audit_time}
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <div class="dataFormTitle">广告主评级（特殊编辑权限）</div>
+        <div class="dataFormContent">
+            <table class="dataFormTable">
+                <tr>
+                    <th>注册资本：</th>
+                    <td>{$op_ad_capital[$adInfo['register_capital']]}</td>
+                    <th>成立时间：</th>
+                    <td>
+                        {$adInfo.established_time}
+                    </td>
+                    <th>开始合作时间：</th>
+                    <td>
+                        {$adInfo.cooperation_time}
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="dataFormOperate">
+            <a href="javascript:history.go(-1);">返回</a>
+        </div>
+    </div>
+
+</div>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+
+    </script>
+</block>

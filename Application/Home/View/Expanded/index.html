@@ -1,0 +1,105 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="subMainBox">
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text">待拓展情报</span>
+                <span>合作管理</span>
+            </div>
+            <div class="ri_work">To expand intelligence</div>
+        </div>
+    <!--筛选-->
+        <div class="screenBox swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <form action="{:U('index')}" id="search_form">
+
+                        <div class="swiperRight">
+                            <table class="tableBox">
+                                <tr>
+                                    <th>产品名称：</th>
+                                    <td><input type="text" name="pro_name" value="{$Think.get.pro_name}"/></td>
+                                    <th>广告主名称：</th>
+                                    <td><input type="text" name="adv_name" value="{$Think.get.adv_name}"/></td>
+                                    <td colspan="4">
+                                        <input type="submit" value="查询" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </form>
+                    <!--end 基础查询-->
+                </div>
+            </div>
+        </div>
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit">
+        <div class="advancedLeft tt">
+            <span class="addAdv advBtn"><a href="{:U('edit')}">新增</a></span>
+        </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>产品名称</th>
+                <th>广告主名称</th>
+                <th>联系人</th>
+                <th>职级</th>
+                <th>联系方式</th>
+                <th>优先级</th>
+                <th>预算额度(万元)</th>
+                <th>销售人员</th>
+                <th>业务匹配度</th>
+                <th width="150">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="data" id="item">
+                <tr>
+                    <td>{$item.id}</td>
+                    <td>{$item.pro_name}</td>
+                    <td>{$item.adv_name}</td>
+                    <td>{$item.contacts}</td>
+                    <td>{$item.rank}</td>
+                    <td>{$item.telephone}</td>
+                    <td>{$item.priority}</td>
+                    <td>{$item.budget_amount}</td>
+                    <td>{$item.real_name}</td>
+                    <td>{$item.matching}</td>
+                    <td>
+                        <a href="{:U('edit?id='.$item['id'])}">编辑</a>
+                        <!--<a href="{:U('detail?id='.$item['id'])}">明细</a>-->
+                    </td>
+                </tr>
+            </volist>
+
+            </tbody>
+        </table>
+        <!--分页-->
+        {$_page}
+    </div>
+    </div>
+</block>
+<block name="script">
+    <script>
+
+        jQuery(function($) {
+
+            $("#doExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export')}";
+                window.location.href=url+'?'+param;
+            });
+
+            $("#doFinanceExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('financeExport')}";
+                window.location.href=url+'?'+param;
+            });
+
+        });
+
+    </script>
+</block>

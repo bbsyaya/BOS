@@ -1,0 +1,53 @@
+<extend name="Public/base"/>
+
+<block name="body">
+
+				<!--筛选-->
+				
+				<!--数据表-->
+				<div class="dataCn fl w ha">
+					<div class="dataFormTitle">基础信息</div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr>
+								<td>供应商名称</td><td>{$data.supername}</td><td>收款方名称</td><td>{$data.showkuanname}</td><td>发票类型</td><td>{:C('option.invoice_type')[$data['invoice_type']]}</td>
+							</tr>
+							<tr>
+								<td>开户银行名称</td><td>{$data.bankname}</td><td>开户行账号</td><td>{$data.banknum}</td><td>结算主体</td><td>{$data.jszt}</td>
+							</tr>
+							<tr>
+								<td>应结算金额</td><td>{$data.settlementmoney}</td><td>起止时间</td><td>{$data.strdate}-{$data.enddate}</td><td>所属商务</td><td>{$data.real_name}</td>
+							</tr>
+							<tr><td>实际结算金额</td><td>{$data.notaxmoney}</td></tr>
+						</tbody>
+					</table>
+					<br/><br/>
+					<div class="dataFormTitle">产品明细<a target="_blank" href="/Makesettlement/settlementOut_down?id={$_GET['id']}">下载</a></div>
+					<table class="dataTable dataTable1">
+
+						<tbody>
+							<tr><td>业务线</td><td>产品名称</td><td>计费标识名称</td><td>计费标识ID</td><td>起止日期</td><td>结算金额</td><td>收入金额</td><td>毛利率</td><td>收入状态</td></tr>
+							<volist name='logodata' id='v'>
+								<tr><td>{$v.linename}</td><td>{$v.comname}</td><td>{$v.jfname}</td><td>{$v.jfid}</td><td>{$v.strtime} - {$v.endtime}</td><td>{$v.endmoney|twonum}</td><td>{$v.inmoney|twonum}</td><td>{$v.lirun|twonum}%</td><td>
+								<php>
+									$arr=explode(',',$v['instatus']);
+									$tarr=array();
+									foreach($arr as $v){
+									if(!in_array($v,$tarr)){
+										$tarr[]=$v;
+										echo C('option.indata_status')[$v['status']].' ';
+									}
+									
+									}
+								</php></td></tr>
+							</volist>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+
+</block>
+
+

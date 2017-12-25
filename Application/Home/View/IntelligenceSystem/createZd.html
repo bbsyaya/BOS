@@ -1,0 +1,15 @@
+<extend name="Public/basehtml"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+<div class="xuq-se  d-f " style="display:none;" id="add_zd_mb"> 
+             <div class="d-f qu-item" style="width:92%;padding:0 4%;">
+                <span class="mis-lea" style="width:15%;text-align:right;">需求字段名：</span>
+                <span class="mis-rb t-tile" style="width:50%;">
+                    <input type="text"  id="zx_add_name" value="" class="tks-ps tpols-ck" placeholder="请输入需求字段名"   style="width:100% !important;" />
+                </span>
+                <input type="button" value="添加字段" class="tx-zi" id="tjzdbtn" onclick="qb.saveZd()" style="margin-left:20px;" />
+            </div>
+        </div>
+<script type="text/javascript" src="/Public/static/layer/layer.js"></script>
+<script type="text/javascript" src="/Public/Home/js/qb.createzd.js?v={:getVersion()}"></script>
+</block>

@@ -1,0 +1,514 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<style type="text/css">
+	label{font-weight:normal!important}.wd300{width:295px!important}.wd100{width:128px!important}.dayTwo-1{width:132px!important}.fd-k{margin-top:20px}.fs-color{color:#1269cc!important;border-bottom-color:#1269cc!important}.btnBox{padding-bottom:100px!important}.a-com{border:medium none;border-radius:3px;color:#fff;height:36px;margin:0 15px;background:#1269cc none repeat scroll 0 0;width:110px;line-height:36px;display:inline-block;color:#fff!important;font-size:14px;text-align:center}.submit{width: auto !important;padding: 0px 20px !important;height: 36px;line-height: 36px;}.btnBox input[type="button"]{ margin: 0px !important;}
+</style>
+<!--主体-->
+<div class="subConten  fl w">
+    <!--内容-->
+    <div class="subCon  fl w">
+        <form action="/HrManage/saveEntry.html" method="post" id="dataForm">
+	       	<!--员工入职表单-->
+			<fieldset class="fl w">
+				<legend class="fs-color">基本信息</legend>
+				<ul class="entryList">
+				<li>
+				<p class="entryCon">
+				<label for="">入职公司</label>
+				<select name="company_id" id="company_id">
+					<option>加载中...</option>
+				</select>
+				<script type="text/javascript">
+					var _default={};
+					_default.company_id="{$one['company_id']}";
+				</script>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">岗位评级</label>
+				<input name="job_rating" id="job_rating" value="{$one['job_rating']}" class="items" data-v="请输入岗位评级" type="text">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">联系地址</label>
+				<input name="adress" id="adress" class="items"  value="{$one['adress']}"  data-v="请输入联系地址" type="text">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">参保时间</label>
+				<span class="dayTime"><input type="text"  value="{$one['start_insure']}"   onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})"   id="start_insure" name="start_insure"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">职等职级</label>
+				<input name="grade_rank" id="grade_rank" type="text" class="items"  value="{$one['grade_rank']}" >
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">身份证地址</label>
+				<input name="id_card_address" id="id_card_address" type="text" class="items"   value="{$one['id_card_address']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">部　　门</label>
+				<select name="depart_id" id="depart_id">
+				<option>加载中...</option>
+				</select>
+				<script type="text/javascript">
+				_default.depart_id="{$one['depart_id']}";
+				</script>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">层　　级</label>
+				<select name="level" id="level">
+				<?php foreach ($level as $k => $vo) {
+				?>
+					<option value="{$k}" <?php if($k==$one['level']){ ?> selected="selected" <?php } ?>>{$vo}</option>
+				<?php
+				} ?>
+				</select>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">出身年月</label>
+				<span class="dayTime"><input type="text" class="items" id="birth" name="birth"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})"  value="{$one['birth']}"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+				<li>
+
+				<p class="entryCon">
+				<label for="">姓　　名</label>
+				<input name="user_name" id="user_name" type="text" class="items" value="{$one['user_name']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">紧急联系人</label>
+				<input name="emergen_user" id="emergen_user" type="text" class="items" value="{$one['emergen_user']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">与本人关系</label>
+				<input name="relation_me" id="relation_me" type="text" class="items"  value="{$one['relation_me']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">联系电话</label>
+				<input name="phone" id="phone" type="text" class="items" value="{$one['phone']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">备用电话</label>
+				<input name="back_phone" id="back_phone" type="text" class="items" value="{$one['back_phone']}">
+				</p>
+				</li>
+				
+				<li>
+				<p class="entryCon">
+				<label for="">工  号</label>
+				<input name="job_no" id="job_no" type="text" class="items" value="{$one['job_no']}" disabled="disabled" placeholder="无需填写系统生成">
+				</p>
+				</li>
+				
+				
+				<li>
+				<p class="entryCon">
+				<label for="">职　　务</label>
+				<input name="duty" id="duty" type="text" class="items" value="{$one['duty']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">年　　龄</label>
+				<input name="age" id="age" type="text" class="items" value="{$one['age']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">紧急电话</label>
+				<input name="emergen_phone" id="emergen_phone" type="text" class="items" value="{$one['emergen_phone']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">岗位层级</label>
+				<input name="post_level" id="post_level" type="text" class="items" value="{$one['post_level']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label class="entryOne" for="">首次工作时间</label>
+				<span class="dayOne"><input type="text" class="items" id="start_work"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})"
+  value="{$one['start_work']}"  name="start_work"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">学　　历</label>
+				<select name="educate" id="educate">
+				<?php foreach ($educate as $k => $vo) {
+				?>
+				<option value="{$k}">{$vo}</option>
+				<?php
+				} ?>
+				</select>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">性　　别</label>
+				<select name="sex" id="sex">
+				<?php foreach ($sexOptions as $k => $vo) {
+				?>
+				<option value="{$k}"   <?php if($k==$one['sex']){ ?> selected="selected" <?php } ?> >{$vo}</option>
+				<?php
+				} ?>
+				</select>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">婚姻情况</label>
+				<select name="is_marry" id="is_marry">
+				<?php foreach ($is_marry as $k => $vo) {
+				?>
+				<option value="{$k}"   <?php if($k==$one['is_marry']){ ?> selected="selected" <?php } ?> >{$vo}</option>
+				<?php
+				} ?>
+				</select>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">毕业时间</label>
+				<span class="dayTime"><input type="text" class="items"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})"  value="{$one['graduat_time']}" name="graduat_time" id="graduat_time"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">身份证号</label>
+				<input name="body_no" id="body_no" type="text" class="items" value="{$one['body_no']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">籍　　贯</label>
+				<input name="passby" id="passby" type="text"  class="items" value="{$one['passby']}">
+				</p>
+				</li>
+				
+				<li>
+				<p class="entryCon">
+				<label for="">入职时间</label>
+				<span class="dayTime"><input type="text" class=" items"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" value="{$one['entry_time']}" name="entry_time" id="entry_time" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">转正日期</label>
+				<span class="dayTime"><input type="text" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" value="{$one['proposed_time']}" class="items" id="proposed_time" name="proposed_time"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+				</p>
+				</li>
+				<li>
+					<p class="entryCon">
+					<label class="entryOne" for="">实转正日期</label>
+					<span class="dayOne"><input type="text" class="items"  value="{$one['real_proposed']}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" name="real_proposed" id="real_proposed" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+				<li>
+				<p class="entryCon">
+				<label for="">毕业院校</label>
+				<input name="graduat_school" id="graduat_school" type="text" class="items" value="{$one['graduat_school']}">
+				</p>
+				</li>
+				
+				<li>
+				<p class="entryCon">
+				<label for="">体　　重</label>
+				<input name="weight" id="weight" type="text" class="wd300 items" value="{$one['weight']}">&nbsp;kg
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">身　　高</label>
+				<input name="height" id="height" type="text" class="wd300 items" value="{$one['height']}">&nbsp;厘米
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">专　　业</label>
+				<input name="profession" id="profession" type="text" class="items" value="{$one['profession']}">
+				</p>
+				</li>
+				<li>
+				<p class="entryCon">
+				<label for="">户口性质</label>
+				<select name="account_nature" id="account_nature">
+				<?php foreach ($accountNature as $k => $vo) {
+				?>
+				<option value="{$k}"  <?php if($k==$one['account_nature']){ ?> selected="selected" <?php } ?>>{$vo}</option>
+				<?php
+				} ?>
+				</select>
+				</p>
+				</li>
+					
+				
+				<li>
+				<p class="entryCon">
+				<label for="">民　　族</label>
+				<input name="nation" id="nation" type="text" class="items" value="{$one['nation']}">
+				</p>
+				</li>
+				
+				
+				
+				<li>
+				<p class="entryCon">
+				<label for="">Q　　Q</label>
+				<input name="qq"  id="qq" type="text"  class="items" value="{$one['qq']}">
+				</p>
+				</li>
+				
+				</ul>
+			</fieldset>
+			<fieldset class="fd-k fl w">
+				<legend class="fs-color">福利信息</legend>
+				<ul class="entryList">
+					
+					
+					<li>
+					<p class="entryCon">
+					<label for="">工龄津贴</label>
+					<input name="age_allowance" id="age_allowance"  class="items" type="text"  value="{$one['age_allowance']}" placeholder="高层：300元/年；中层：200元/年；基层：100元/年。从第二年开始每年50元叠加。">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">交通补助</label>
+					<input name="trasport_allowance" id="trasport_allowance"  value="{$one['trasport_allowance']}" class="items" type="text" placeholder="高层：200元/月；中层：200元/月;基层：100元/月">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">通讯补助</label>
+					<input name="commun_allowance" id="commun_allowance" value="{$one['commun_allowance']}"  class="items" type="text" placeholder="高层：200元/月；中层：100元/月；基层：0。">
+					</p>
+					</li>
+
+					<li>
+					<p class="entryCon">
+					<label for="">入职薪资</label>
+					<input name="entry_salary" id="entry_salary" type="text"  class="items" value="{$one['entry_salary']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">转正薪资</label>
+					<input name="turn_salary" id="turn_salary" type="text"  class="items" value="{$one['turn_salary']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryOne" for="">绩效考核比例</label>
+					<input class="txtOne" name="per_radio" id="per_radio" type="text"  class="items" value="{$one['per_radio']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">绩效工资</label>
+					<input name="per_pay" id="per_pay" type="text"  class="items" value="{$one['per_pay']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">基本工资</label>
+					<input name="basic_pay" id="basic_pay" type="text"  class="items" value="{$one['basic_pay']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">职务工资</label>
+					<input name="job_salary" id="job_salary" type="text"  class="items" value="{$one['job_salary']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryThree" for="">试用期起止时间</label>
+					<span class="dayTwo dayTwo-1"><input type="text"  class=" wd100 items "  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})"  value="{$one['try_start']|strtotime|date="Y-m-d",###}" id="try_start" name="try_start" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>~
+					<span class="dayTwo  dayTwo-1"><input type="text" class=" wd100 items"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})"  value="{$one['try_end']|strtotime|date="Y-m-d",###}" id="try_end" name="try_end" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryOne" for="">社保卡办理</label>
+					<input class="txtOne items" name="social_card" id="social_card" type="text"  value="{$one['social_card']}" >
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryOne" for="">公积金办理</label>
+					<input class="txtOne items" name="provident_start" id="provident_start" type="text" value="{$one['provident_start']}" >
+					</p>
+					</li>
+					
+					<li>
+					<p class="entryCon">
+					<label for="">社保办理</label>
+					<input name="social_man" id="social_man" type="text" class="items" value="{$one['social_man']}" >
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="">第一次签证合同开始时间</label>
+					<span class="dayTwo"><input type="text" class="items" value="{$one['first_visa_start']}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="first_visa_start" name="first_visa_start"> <i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="">第一次签证合同结束时间</label>
+					<span class="dayTwo"><input type="text" class="items" value="{$one['fist_visa_end']}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="fist_visa_end" name="fist_visa_end" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="">第二次签证合同开始时间</label>
+					<span class="dayTwo"><input type="text" class="items"  value="{$one['sec_visa_start']}" onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="sec_visa_start" name="sec_visa_start"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="">第二次签证合同结束时间</label>
+					<span class="dayTwo"><input type="text" class="items" value="{$one['sec_visa_end']}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="sec_visa_end" name="sec_visa_end"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="">第三次签证合同开始时间</label>
+					<span class="dayTwo"><input type="text" class="items" value="{$one['third_visa_start']}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="third_visa_start" name="third_visa_start" ><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryTwo" for="">第三次签证合同结束时间</label>
+					<span class="dayTwo"><input type="text" class="items"  value="{$one['third_visa_end']}"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" id="third_visa_end" name="third_visa_end"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+					</p>
+					</li>
+					
+
+
+					
+					<li>
+					<p class="entryCon">
+					<label for="">银行卡1</label>
+					<input name="bank_cardno1" id="bank_cardno1" type="text"  class="items" value="{$one['bank_cardno1']}" >
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryThree" for="">银行卡1开户行</label>
+					<input class="dayThree items" name="bank_card1" id="bank_card1" type="text" value="{$one['bank_card1']}" >
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">银行卡2</label>
+					<input name="bank_cardno2" id="bank_cardno2" type="text"  class="items" value="{$one['bank_cardno2']}" >
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryThree" for="">银行卡2开户行</label>
+					<input class="dayThree items" name="bank_card2" id="bank_card2" type="text" value="{$one['bank_card2']}" >
+					</p>
+					</li>
+
+
+					
+				</ul>
+			</fieldset>
+	        <fieldset class="fd-k fl w">
+				<legend class="fs-color">其它信息</legend>
+				<ul class="entryList">
+					<li>
+						<p class="entryCon">
+						<label for="">司　　龄</label>
+						<input name="company_age" id="company_age" type="text"  class="items"  value="{$one['company_age']}">
+						</p>
+						</li>
+					<li>
+					<p class="entryCon">
+					<label for="">指纹编号</label>
+					<input name="finger_no" id="finger_no" type="text"  class="items" value="{$one['finger_no']}"> 
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">招聘渠道</label>
+					<input name="rec_channel" id="rec_channel" type="text"  class="items" value="{$one['rec_channel']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryThree" for="">合同签订公司</label>
+					<input class="dayThree items" name="sign_company" id="sign_company" type="text" value="{$one['sign_company']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label class="entryThree" for="">保密/竞业禁止</label>
+					<span class="dayThree"><input type="text" id="probihibe" name="probihibe"  class="items" value="{$one['probihibe']}"></span>
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">服务异动</label>
+					<input name="job_change" id="job_change" type="text"  class="items" value="{$one['job_change']}">
+					</p>
+					</li>
+					<li>
+					<p class="entryCon">
+					<label for="">员工状态</label>
+					<select name="status" id="status">
+					<?php foreach ($userAttr as $k => $v) {
+					?>
+					<option value="{$k}" <?php if($k==$one['status']){ ?> selected="selected" <?php } ?> >{$v}</option>
+					<?php
+					} ?>
+					</select>
+					</p>
+					</li>
+				</ul>
+			</fieldset>
+	        <!--end 员工入职表单-->
+	        <!--按钮-->
+	        <div class="btnBox fl w" style="text-align: center;">
+	        <input type="hidden"  id="hrid" name="hrid" value="{$one['id']}" />
+	            <input class="submit" name="" type="button" value="保存资料" onclick="E.saveData(this)" id="btnsave">
+	             <a href="/HrManage/hrList.html"  class="a-com">返回列表</a>
+	        </div>
+        </form>
+        <!--end 按钮-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<script type="text/javascript" src="/Public/OA/js/globle.js"></script>
+<!--双日期插件-->
+<script type="text/javascript" src="/Public/OA/js/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/Public/OA/js/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="/Public/OA/js/entry.js"></script>
+</block>

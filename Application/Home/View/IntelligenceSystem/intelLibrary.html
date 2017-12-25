@@ -1,0 +1,101 @@
+<extend name="Public/base"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+<div class="m-tlist d-f">
+ <div class="subMainBox d-f">
+    <div class="ri_header" style="height:auto;width:100%;">
+        <div class="ri_title_box">
+            <span class="clip-text" href="" style="cursor:pointer;" >情报库</span>
+         
+        </div>
+        <div class="ri_work">Intelligence Library</div>
+    </div>
+</div>
+    <div class="d-f mt-query-se">
+    <form method="get" action="/Home/IntelligenceSystem/intelLibrary.html">
+        <table style="width:100%;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td> 
+                <span class="fleft name-xa">情报名称：</span>
+                <span class="fleft name-ijks" >
+                    <input type="text" class="nam-pus" id="xm_name" name="xm_name" value="{$map['xm_name']}" />
+                </span>
+                    
+               
+                <span class="fleft name-xa">主负责人：</span>
+                <span class="fleft name-ijks" >
+                    <select class="sec-ims"  id="fzr" name="fzr"   data-actions-box="true" data-done-button="true" data-live-search="true">
+                        <option value="">加载中....</option>
+                    </select>
+                    <script type="text/javascript">
+                    var d={
+                        fzr:"{$map['fzr']}"
+                    };
+                    </script>
+                </span>
+
+              
+                <span class="fleft name-ijks" style="margin-left:8px;">
+                 <input value="查询" type="submit">
+                   </span>
+                </td>
+                
+            </tr>
+        </table>
+    </form>
+    </div>
+
+    <div class="d-f mst-ktlsx" style="margin-top:10px;">
+        <table class="dataTable dataTable1"  style="width:100%;">
+            <tbody>
+            <tr>
+                <td>id</td>
+                <td>情报名称</td>
+                <td>情报条数</td>
+                <td>主负责人</td>
+                <td>状态</td>
+                <td>情报状态</td>
+                <td>发起时间</td>
+                <td>期望完成</td>
+                <td>结束时间</td>
+                <td>操作</td>
+            </tr>
+            <notempty name="list">
+                <volist name="list" id="vo">
+                        <tr>
+                            <td><a href="/Home/IntelligenceSystem/taskdetail.html?zqb_id={$vo['id']}">{$vo['id']}</a></td>
+                            <td><a href="/Home/IntelligenceSystem/taskdetail.html?zqb_id={$vo['id']}">{$vo['title']}</a></td>
+                            <td>{$vo['mr_no']}</td>
+                            <td>{$vo['real_name']}</td>
+                            <td>{$vo['status_str']}</td>
+                            <td>{$vo['sum_status']}</td>
+                            <td>{$vo['ctime']}</td>
+                            <td><?php if($vo['exp_end_time']){ ?> {$vo['exp_end_time']} <?php }else{ ?> -- <?php } ?></td>
+                            <td><?php if($vo['fact_end_time']){ ?> {$vo['fact_end_time']} <?php }else{ ?> -- <?php } ?></td>
+                            <td>
+                                <a href="/Home/IntelligenceSystem/taskdetail.html?zqb_id={$vo['id']}" class="tx-zi quer-b">查看</a>
+                            </td>
+                        </tr>
+                </volist>
+                <else />
+                <tr>
+                    <td colspan="9" style="width:100%;text-align:center;">
+                        暂无情报！
+                    </td>
+                </tr>
+            </notempty>
+            </tbody>
+        </table>
+        <notempty name="list">
+                <div class="no-datas d-f">{$page}</div>
+        </notempty>
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<script type="text/javascript" src="/Public/static/layer/layer.js"></script>
+<script type="text/javascript" src="/Public/Home/js/qb.qbk.js?v={:getVersion()}"></script>
+</block>

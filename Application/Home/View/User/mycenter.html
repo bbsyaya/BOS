@@ -1,0 +1,50 @@
+<extend name="Public/base"/>
+<block name="style">
+</block>
+<block name="sidebar"></block>
+<block name="subnav"></block>
+<block name="body">
+	<form action="{:U('User/submitPassword')}" method="post" id="userForm">
+	<div class="dataFormTitle">修改密码</div>
+	<div class="dataFormContent">
+		<table class="dataFormTable">
+			<tr>
+				<th>原密码：</th>
+				<td><input type="password" name="old"/></td>
+				<th>新密码：</th>
+				<td><input type="password" name="password"/></td>
+				<th>重复新密码：</th>
+				<td><input type="password" name="repassword"/></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="dataFormOperate">
+		<input type="submit" class="J_updatePwd" value="保存" />
+		<a href="javascript:history.back(-1);">返回</a>
+	</div>
+	</form>
+</block>
+<block name="script">
+	<script type="text/javascript">
+
+		jQuery(function ($) {
+			$("#userForm").submit(function(){
+				var form = $(this);
+				$.post(form.attr('action'),form.serialize(),function(ret) {
+					if (ret == 'ok') {
+						alertnewpage2('密码修改成功',window.location.href);
+					} else {
+						alertnewpage2(ret);
+					}
+				});
+
+				return false;
+			});
+
+
+
+		});
+
+	</script>
+</block>

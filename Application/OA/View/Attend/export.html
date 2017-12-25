@@ -1,0 +1,141 @@
+<extend name="Public/base"/>
+
+<block name="script">
+    <script type="text/javascript" src="__JS__/bootbox.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".uploadingDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "450",
+                height: "250",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "确定":function() {
+                        save_list();
+                        $(this).dialog("close");
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+
+            $("#doExport").click(function(){
+                var date = $("input[name='date']").val();
+                var e_date = $("input[name='e_date']").val();
+                var url = "{:U('exportDataExcel')}";
+                window.location.href=url+'?'+'date='+date+'&e_date='+e_date;
+            });
+
+            $("#submitForm").click(function() {
+                var form = $("#add_remark");
+                var url = form.attr('action');
+                var btnObj = $(this);
+                btnObj.val('保存中...');
+                btnObj.attr('disabled', true);
+                $("#add_remark").ajaxSubmit({
+                    type: 'post',
+                    url: url,
+                    timeout: 5000,
+                    success:function(ret){
+                        //alertnewpage2(ret.msg, ret.go);
+                        btnObj.val('保存');
+                        btnObj.attr('disabled',false);
+                        location.reload();
+                    },
+                    error:function(xhr, status, error){
+                        if(status=='timeout'){
+                            alertnewpage2('服务器繁忙，请稍后再试!');
+                        } else {
+                            alertnewpage2('保存出错,请联系技术');
+                        }
+                        btnObj.val('保存');
+                        btnObj.attr('disabled',false);
+                    }
+
+                });
+                return false;
+            });
+        });
+        </script>
+</block>
+
+<block name="body">
+
+    <div class="screenCn fl w ha">
+
+        <div class="screenOperate fl w">
+            <a id="doExport">导出考勤记录</a>
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+            <div class="line fr h"></div>
+            <div class="statisticsThumbnail_icon J_statisticsThumbnail fr"  ></div>
+        </div>
+        <div class="screenList fl w">
+            <form action="{:U('export')}" id="search_form">
+                <table>
+                    <tr>
+                        <th >开始日期：</th>
+                        <td >
+                            <input id="date" name="date" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$Think.get.date}"/>
+                        </td>
+                        <th >结束日期：</th>
+                        <td >
+                            <input id="e_date" name="e_date" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$Think.get.e_date}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            <!--<input id="search_btn" type="submit" value="查询" />-->
+                            <input type="hidden" name="p" value="1"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="dataCn fl w ha">
+        <form action="{:U('RemarkUpdate')}" id="add_remark"  method="post" enctype="multipart/form-data">
+            考勤异常情况类型：<textarea type="text" name="res" style="width:300px;height:100px;">{$res}</textarea>
+            <input id="submitForm" type="submit" value="提交" />
+            <span style="color: red;">(多个类型请以英式逗号隔开)</span>
+        </form>
+        <table class="dataTable dataTable1">
+            <thead>
+                <!--<tr>
+                    <th>序号</th>
+                    <th>广告主编码</th>
+                    <th>广告主名称</th>
+                    <th>地区</th>
+                    <th>对接人</th>
+                    <th>类型</th>
+                    <th>添加时间</th>
+                    <th>广告主等级</th>
+                    <th>是否检查</th>
+                    <th width="150">操作</th>
+                </tr>-->
+            </thead>
+        </table>
+    </div>
+
+    <!--弹出框-->
+    <div class="uploadingDialog" title="如迟到或早退原因，加班情况等（100字内）">
+            <table class="dialogTable_form w ha">
+                <tr>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th style="text-align: center;"><!--考勤备注输入框-->
+                        <textarea class="checkingIn_explain_ter" maxlength="100" id="CONTENT" name="CONTENT"></textarea>
+                    </th>
+                </tr>
+            </table>
+    </div>
+</block>

@@ -1,0 +1,149 @@
+<extend name="Public/base"/>
+<block name="script">
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('#sel_status').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+                var tmpSelected = $('#sel_status').val();
+                if (tmpSelected != null) {
+                    $('#status').val(tmpSelected);
+                } else {
+                    $('#status').val("");
+                }
+            });
+            var st = $("#status").val();
+            if(st){
+                $('#sel_status').find("option[value="+st+"]").attr("selected", "true");
+                $("#sel_status").selectpicker('refresh');
+            }
+
+            $(".del").click(function(){
+                var mid = $(this).attr('mid');
+                if (confirm('确认删除此条信息?')) {
+                    if (mid) {
+                        $.post("{:U('deleteMain')}",{id:mid},function(ret){
+                            if(ret.status == 1){
+                                layer.alert(ret.msg);
+                                location.reload();
+                            }else{
+                                layer.alert(ret.msg);
+                            }
+                        });
+                    }
+
+                }
+            });
+        })
+    </script>
+</block>
+<block name="body">
+    <style type="text/css">
+        .xian{background: url("/Public/newUI/img/xian.png");height: 1px;margin-bottom: 5px;}
+    </style>
+    <div class="subMainBox" goal="t_left">
+        <!--面包屑-->
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text"><a href="/TargetCheck/index">风控目标管理</a></span>&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size: 20px;">-></a>
+                <span><a href="/MainBody/index">控制主体管理</a></span>
+            </div>
+
+            <div class="dataTable_columnCa_b pa">
+                <div class="dataTable_columnCn_b"></div>
+                <div class="dataTableShow_close_b tc">关闭</div>
+            </div>
+        </div>
+        <div class="xian"></div>
+
+        <div><span class="field_customize">查询自定义</span></div>
+
+        <div class="screenBox">
+            <form action="{:U('index')}" id="search_form">
+                <div class="t_left">
+                    <div class="ziduan">
+                        <label>控制主体:&nbsp;</label><input type="text" name="name" value="{$Think.get.name}"/>
+                    </div>
+                    <div class="ziduan">
+                        <label>对接人: &nbsp;</label><input name="butt"  type="text"  value="{$Think.get.butt}"/>
+                    </div>
+                    <div class="ziduan">
+                        <label>状态: </label>
+                        <select id="sel_status" class="selectpicker">
+                            <option value="">全部</option>
+                            <option value="1">正常</option>
+                            <option value="2">暂停</option>
+                        </select>
+                        <input type="hidden"  class="form-control" id="status" name="status" value="{$Think.get.status}">
+                    </div>
+                </div>
+
+                <div class="t_right"><input type="submit" value="查 询" /></div>
+            </form>
+        </div>
+
+
+        <div class="dataCn fl w ha" id="table_con">
+            <!--列表头部功能-->
+            <div class="advancedTit"  goal="dataTable1">
+
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+
+                <div class="advancedLeft tt">
+                    <span class="addAdv advBtn"><a href="{:U('edit')}">新增</a></span>
+
+                <!--<div class="advancedRight">
+                    <div class="advIcon statisticsThumbnail_icon J_statisticsThumbnail fr">可视化报表</div>
+                    <div class="dataTableShow fr" goal="dataTable1">
+                        <div class="advIcon dataTableShow_icon fr del">字段筛选</div>
+                    </div>
+                </div>-->
+
+            </div>
+
+            <table class="dataTable dataTable1">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>控制主体</th>
+                    <th>对接人</th>
+                    <th>创建时间</th>
+                    <th>状态</th>
+                    <th width="150">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                    <volist name="list" id="item">
+                        <tr>
+                            <td>{$item.id}</td>
+                            <td>{$item.name}</td>
+                            <td>{$item.real_name}</td>
+                            <td>{$item.create_time}</td>
+                            <td>{$item.status}</td>
+                            <td>
+                                <a href="{:U('edit?id='.$item['id'])}">编辑</a>&nbsp;&nbsp;
+                                <a href="{:U('detail?id='.$item['id'])}">查看</a>
+                                <php>if($uid == 671){</php>
+                                <a href="#" class="del" mid="{$item['id']}">删除</a>
+                                <php>}</php>
+                            </td>
+                        </tr>
+                    </volist>
+                    <else />
+                    <tr>
+                        <td colspan="6">
+                        <div class="no-datas">暂无数据！！</div>
+                        </td>
+                    </tr>
+                </notempty>
+                </tbody>
+            </table>
+            <!--分页-->
+            {$_page}
+        </div>
+    </div>
+    </div>
+</block>

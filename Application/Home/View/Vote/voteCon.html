@@ -1,0 +1,137 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<div class="subConten fl w">
+    <!--内容-->
+<style type="text/css">
+.wd-tis{
+font-size: 16px;
+}
+.com-btn{
+background: #1a72d6 none repeat scroll 0 0;
+border: medium none;
+border-radius: 3px;
+color: #ffffff;
+cursor: pointer;
+margin-right: 10px;
+padding: 8px 30px
+}
+.voteConList .voteList {
+margin-top: 30px;
+}
+.problems_textarea{
+	width:400px;height: 200px;border:1px solid #e2e2e2;
+}
+</style>
+    <div class="subCon" style="margin-top:0px;">
+        <!--投票问题列表-->
+        <div class="voteConList">
+       		<div class="wd-tis" style="text-align:center;">
+            	【{$vote["vote"]["vname"]}】
+            	<input type="hidden" id="vote_id" name="vote_id" value="{$vote["vote"]["id"]}" />
+            </div>
+            <?php if($vote["vote"]["instruct"]){ ?>
+            	<p class="boteDetail">投票须知：{$vote["vote"]["instruct"]}</p>
+            <?php } ?>
+            
+            <notempty name="vote['problems_list']">
+				<form method="post" action="/Vote/saveVoteCon.html" id="saveVoteCon">
+					<?php $problems_ids=""; ?>
+	            	<volist name="vote['problems_list']" id="vo" key="key">
+	            		 <div class="voteList" id="pro_{$key}">
+			                <p >问题{$key}：{$vo["title"]}</p>
+			                <?php if($vo["type"]==2){
+		                	?>
+		                	<textarea id="problems_textarea_{$vo['id']}" name="problems_textarea_{$vo['id']}" class="problems_textarea"></textarea>
+		                	<input type="hidden" name="problems_textarea_[]" value="{$vo['id']}" />
+		                	<?php
+			                }else{
+		                	?>
+			                	<div  class="problems" data-type="{$vo["type"]}" id="problems_{$key}" data-index="{$key}">
+					                <?php $problems_ids .= $vo["id"].","; ?>
+					                <?php if($vo["type"]==1){
+					                	foreach ($vo["item_list"] as $k => $v) {
+					                	?>
+					                	<p>
+						                	<input class="items" name="problems_item_{$vo["id"]}[]" type="checkbox" id="item_{$vo["id"]}_{$v['id']}" value="{$v['id']}">
+						                	<label for="item_{$vo["id"]}_{$v['id']}">
+						                	<?php if($vo["vtype"]==1){ ?> <img src="{$v["img_url"]}" style="width:80px;height:50px;" /> <?php }else{ ?> {$v["title"]} <?php } ?>
+						                		</label>
+					                	</p>
+					                	<?php
+					                	}
+				                	}else{
+				                		foreach ($vo["item_list"] as $k => $v) {
+				                		?>
+											<p><input  class="items" name="problems_item_{$vo["id"]}[]" type="radio" value="{$v['id']}">
+											<label for="item_{$vo["id"]}_{$v['id']}">
+												<?php if($vo["vtype"]==1){ ?> <img src="{$v["img_url"]}" style="width:80px;height:50px;" /> <?php }else{ ?> {$v["title"]} <?php } ?>
+											</label>
+											</p>
+				                		<?php
+				                		}
+				                		} ?>
+				                </div>
+		                	<?php }  ?>
+			                
+			            </div>
+	            	</volist>
+	            	<?php $problems_ids = substr($problems_ids, 0,strlen($problems_ids)-1); ?>
+	            	<input type="hidden" name="problems_ids" value="{$problems_ids}"/>
+	            	<input type="hidden" name="vote_id" value="{$vote["vote"]["id"]}"/>
+	            	<?php if($vote["vote"]["attention"]){ ?>
+		            	<p  class="boteDetail">注意事项：{$vote["vote"]["attention"]}</p>
+		            <?php } ?>
+	            	<div class="wd-tis" style="margin-top:30px;">
+		            	<input id="choseDepart" value="开始投票" onclick="Vote.vote()" type="button" class="com-btn">
+		            </div>
+		            
+				</form>
+            	<else />
+            	 <div class="voteList">
+	                <p>暂无问题选项！</p>
+	            </div>
+            </notempty>
+<script type="text/javascript">
+
+var Vote={
+	vote:function(){
+		if(Vote.checkVote()){
+			$("#choseDepart").val("投票提交中...").attr("onclick","");
+			$("#saveVoteCon").submit();
+		}
+	},
+	checkVote:function(){
+		var no_pro = 0,is_pass=false;
+		$(".problems").each(function(i){
+			var t=$(this),type=t.attr("data-type"),pindex=t.attr("data-index");
+			var ht = $("#problems_"+pindex);
+			var list = ht.find(".items");
+			var list_len = list.length;
+			var fact_len = 0;
+			$.each(list,function(a,b){
+				if(b.checked){
+	    			fact_len++;
+	    		}
+			});
+			if(fact_len==0){
+				alertnewpage2("问题"+pindex+"还没有作答！");
+				no_pro++;
+				return false;
+			}
+		});
+		if(no_pro==0){
+			is_pass=true
+		}
+		return is_pass;
+	}
+};
+
+
+</script>
+        </div>
+        <!--end 投票问题列表-->
+    </div>
+    <!--end 内容-->
+</div>
+</block>

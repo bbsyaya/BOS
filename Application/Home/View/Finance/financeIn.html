@@ -1,0 +1,545 @@
+<extend name="Public/base"/>
+
+<block name="script">
+	<script type="text/javascript" src="__JS__/bootbox.min.js"></script>
+	<script type="text/javascript">
+	var inputnum=1;
+	var Allsetmoney;
+			$(function() {
+
+				if(getCookie('boss30_on_'+getHref()+'_dataTable1_state')!='activate' || getCookie('boss30_on_'+getHref()+'_dataTable1_state')=='' || getCookie('boss30_on_'+getHref()+'_dataTable1_state')==null || getCookie('boss30_on_'+getHref()+'_dataTable1_state')==undefined){
+					setCookie('boss30_on_'+getHref()+'_dataTable1','1111111011100',30);
+				}
+
+				if(getCookie('boss30_on_'+getHref()+'_t_left_state')!='activate' || getCookie('boss30_on_'+getHref()+'_t_left_state')=='' || getCookie('boss30_on_'+getHref()+'_t_left_state')==null || getCookie('boss30_on_'+getHref()+'_t_left_state')==undefined) {
+					setCookie('boss30_on_'+getHref()+'_t_left','1111000');
+				}
+
+				var configData;
+				$.post('/Ajax/getConfig',{},function(res){
+					configData=res;
+				},'json')
+				var makeFinanceDataId;
+				//对话框开票
+				$(".invoiceDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "1200",
+					height: "600",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							var Allinmoney=0;
+							$('.invoiceDetails').find('tr').each(function(){
+								if(!isNaN($(this).find('td').eq(1).find('input').val())){
+									Allinmoney+= parseFloat($(this).find('td').eq(1).find('input').val());
+								}
+
+							})
+							//alert(Allinmoney);return;
+							if(Allinmoney!=Allsetmoney){
+								if(confirm('应开票金额与实际开票金额不一致！')){
+									$(this).dialog("close");
+									$('#financeform').attr('target','newpage').submit();
+								}
+							}else{
+								$(this).dialog("close");
+								$('#financeform').attr('target','newpage').submit();
+							}
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				//开票对话框
+				$(".dataTable").on({
+					click: function() {
+						makeFinanceDataId=$(this).attr('data');
+						$.post('/Finance/makeInvoiceApi',{'id':makeFinanceDataId},function(res){
+							$('#invoiceid').val(makeFinanceDataId);
+							var Intab=$(".invoiceDialog");
+							Allsetmoney=res.data.settlementmoney;
+							Intab.find('#advname').html(res.adverinfo.name);
+							Intab.find('#type').html(configData.invoice_type[res.adverinfo.invoice_type]);
+							Intab.find('#content').html(res.adverinfo.invoice_remark);
+							Intab.find('#code').html(res.adverinfo.taxpayer_num);
+							Intab.find('#bankname').html(res.adverinfo.opening_bank);
+							Intab.find('#bankcode').html(res.adverinfo.bank_no);
+							Intab.find('#jszt').html(res.jszt.jszt);
+							Intab.find('#allmoney').html(res.data.settlementmoney);
+							Intab.find('#strAndEndDate').html(res.data.strdate+'-'+res.data.enddate);
+							Intab.find('#username').html(res.sjrinfo.name);
+							Intab.find('#tel').html(res.sjrinfo.mobile);
+							Intab.find('#address').html(res.sjrinfo.address);
+							Intab.find('#sealer').html(res.jszt.sealname);
+							Intab.find('#auditer').html(res.data.auditer);
+							Intab.find('#audittime').html(res.data.audittime);
+							Intab.find('#z_address').html(res.adverinfo.reg_address);
+							Intab.find('#telephone').html(res.adverinfo.reg_mobile);
+							var DaydataInfoTableHtml='<tr><th>产品名称</th><th>计费模式</th><th>有效数据</th><th>金额</th><th>业务线</th></tr>';
+							for(o in res.daydatainfo){
+								DaydataInfoTableHtml+='<tr><th>'+res.daydatainfo[o].comname+'</th><th>'+configData.charging_mode[res.daydatainfo[o].charging_mode]+'</th><th>'+res.daydatainfo[o].enddata+'</th><th>'+res.daydatainfo[o].endmoney+'</th><th>'+res.daydatainfo[o].linename+'</th></tr>';
+							}
+							Intab.find('#DaydataInfoTable').html(DaydataInfoTableHtml);
+							$(".invoiceDialog").dialog("open");
+						},'json')
+					}
+				}, ".J_invoice");				
+				/*========================开票详情========================*/
+				//新增
+				$(".invoiceDetails .addTR").click(function() {
+					$(".invoiceDetails").append("<tr>" +
+						"<td><input name='financeCode"+inputnum+"' type=\"text\" /></td>" +
+						"<td><input name='money"+inputnum+"' type=\"text\" /></td>" +
+						"<td>" +
+						"<span class=\"dataDelete\">删除</span>" +
+						"</td>" +
+						"</tr>");
+					inputnum++;
+				});
+				/*2016.12.21
+				 * 用友系统对接 同步发票收入到财务系统
+				 * */
+				/*$(".RBillData").click(function(){
+					$(".uploadingDialog").dialog("open");
+				});*/
+
+				/*$(".uploadingDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "450",
+					height: "200",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							var t_strtime = $("input[name='t_strtime']").val();
+							$(this).dialog("close");
+							$.post("{:U('getFp')}",{
+								rb_date : t_strtime
+							},function(res){
+								var tablehtml='<tr><th style="text-align: left;">单据编号</th><th style="text-align: left;">发票号</th><th style="text-align: left;">客户编码</th><th style="text-align: left;">客户名称</th><th style="text-align: left;">业务线编码</th><th style="text-align: left;">业务线名称</th><th style="text-align: left;">税率</th><th style="text-align: left;">U8帐套号</th><th style="text-align: left;">金额</th></tr>';
+								for(var o in res){
+									var thisdata=res[o];
+									tablehtml+="<tr><td>"+thisdata.BillCode+"</td><td>"+thisdata.BillNo+"</td><td>"+thisdata.CusCode+"</td><td>"+thisdata.CusName+"</td><td>"+thisdata.ItemCode+"</td><td>"+thisdata.ItemName+"</td><td>"+thisdata.taxrate+"</td><td>"+thisdata.AccID+"</td><td>"+thisdata.Money+"</td></tr>";
+								}
+								//$(".uploadingDialog").dialog.close();
+								$(".RdDialog").find('table').html(tablehtml);
+								$(".RdDialog").dialog("open");
+							},'json');
+
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});*/
+
+				$(".RdDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "1000",
+					height: "500",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+
+							bootbox.dialog({message: "请耐心等待，正在同步数据...", });
+							var t_strtime = $("input[name='t_strtime']").val();
+							//alert(t_strtime);return;
+							 $.post("{:U('RBillData')}",{
+							 rb_date : t_strtime
+							 },function(data){
+								 if(data == "TRUE"){
+								 location.reload();
+								 }else{
+								 alert(data);
+								 }
+							 });
+							 $(this).dialog("close");
+						},
+						"取消":function(){
+							$(".RdDialog").find('table').html('');
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				var sid = $("#sid").val();
+				if(sid !=''){
+					makeFinanceDataId = sid;
+					$.post('/Finance/makeInvoiceApi',{'id':makeFinanceDataId},function(res){
+						$('#invoiceid').val(makeFinanceDataId);
+						var Intab=$(".invoiceDialog");
+						Allsetmoney=res.data.settlementmoney;
+						Intab.find('#advname').html(res.adverinfo.name);
+						Intab.find('#type').html(configData.invoice_type[res.adverinfo.invoice_type]);
+						Intab.find('#content').html(res.adverinfo.invoice_remark);
+						Intab.find('#code').html(res.adverinfo.taxpayer_num);
+						Intab.find('#bankname').html(res.adverinfo.opening_bank);
+						Intab.find('#bankcode').html(res.adverinfo.bank_no);
+						Intab.find('#jszt').html(res.jszt.jszt);
+						Intab.find('#allmoney').html(res.data.settlementmoney);
+						Intab.find('#strAndEndDate').html(res.data.strdate+'-'+res.data.enddate);
+						Intab.find('#username').html(res.sjrinfo.name);
+						Intab.find('#tel').html(res.sjrinfo.mobile);
+						Intab.find('#address').html(res.sjrinfo.address);
+						Intab.find('#sealer').html(res.jszt.sealname);
+						Intab.find('#auditer').html(res.data.auditer);
+						Intab.find('#audittime').html(res.data.audittime);
+						Intab.find('#z_address').html(res.adverinfo.reg_address);
+						Intab.find('#telephone').html(res.adverinfo.reg_mobile);
+						var DaydataInfoTableHtml='<tr><th>产品名称</th><th>计费模式</th><th>有效数据</th><th>金额</th><th>业务线</th></tr>';
+						for(o in res.daydatainfo){
+							DaydataInfoTableHtml+='<tr><th>'+res.daydatainfo[o].comname+'</th><th>'+configData.charging_mode[res.daydatainfo[o].charging_mode]+'</th><th>'+res.daydatainfo[o].enddata+'</th><th>'+res.daydatainfo[o].endmoney+'</th><th>'+res.daydatainfo[o].linename+'</th></tr>';
+						}
+						Intab.find('#DaydataInfoTable').html(DaydataInfoTableHtml);
+						$(".invoiceDialog").dialog("open");
+					},'json')
+				}
+				//alert(sid);
+			});
+		</script>
+</block>
+
+<block name="body">
+	<div class="subMainBox" goal="t_left">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">应收管理</span>
+				<span>财务管理</span>
+			</div>
+			<div class="ri_work">Receivable management</div>
+
+			<div class="dataTable_columnCa_b pa">
+				<div class="dataTable_columnCn_b"></div>
+				<div class="dataTableShow_close_b tc">关闭</div>
+			</div>
+		</div>
+
+		<div><span class="field_customize">查询自定义</span></div>
+				<!--筛选-->
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<input type="button" value="导出" class="" onclick="window.open('/Finance/downloadfinanceinlist'+window.location.search)"/>
+						<input type="button" value="筛选" class="J_openScreen" />
+						<a href="/Finance/index" target="_blank">同步发票收入到财务系统</a>
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					    <form action="/Finance/financeIn" method='get'>
+					<div class="screenList fl w">
+						<table>
+							<tr>
+								<th>广告主名称：</th>
+								<td><input type="text" name='ggzname' value="{:I('get.ggzname')}"/></td>
+								<th>产品名称：</th>
+								<td><input type="text" name='comname' value="{:I('get.comname')}"/></td>
+								<th>销售人员：</th>
+								<td><input type="text" name='jfname' value="{:I('get.jfname')}"/></td>
+								<th>时间：</th>
+								<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>
+							</tr>
+							<tr>
+								<th>结算单状态：</th>
+								<td><select name="status">
+						          <option value="0">全部</option>
+						          <option value="2">待开票</option>
+						          <option value="3">已开票</option>
+						          <option value="4">已认款</option>
+						          <option value="5">已回款未开票</option>
+						        </select></td>
+								<th>要不要开发票：</th>
+								<td><select name="iskaipiao">
+						          <option value="0">全部</option>
+						          <option value="1">要</option>
+						          <option value="2">不要</option>
+						        </select></td>	
+						        <th>结算主体：</th>
+								<td><select name="jszt">
+						          <option value="0">全部</option>
+						          <volist name="dic" id='v'>
+						          		<option value="{$v.id}">{$v.name}</option>
+						          </volist>
+						        </select></td>	
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+									<input type="button" value="取消" class="J_closeScreen" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					</form>
+				</div>-->
+
+				<div class="screenBox">
+							<form action="/Finance/financeIn" method='get' id="search_form">
+
+								<div class="t_left">
+									<div class="ziduan">
+											<label>广告主: </label>
+											<input type="text" name='ggzname' value="{:I('get.ggzname')}"/>
+									</div>
+									<div class="ziduan">
+											<th>产品名称: </th>
+											<td><input type="text" name='comname' value="{:I('get.comname')}"/></td>
+									</div>
+									<div class="ziduan">
+											<label>销售人员: </label>
+											<input type="text" name='jfname' value="{:I('get.jfname')}"/>
+									</div>
+									<div class="ziduan">
+											<label>开始日期: </label>
+											<input readonly="true"  class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>
+									</div>
+									<div class="ziduan">
+										<label>结束日期: </label>
+										<input readonly="true"  class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/>
+									</div>
+									<div class="ziduan">
+											<label>状态: </label>
+											<select class="selectpicker" name="status">
+												<option value="0">全部</option>
+												<option value="2">待开票</option>
+												<option value="3">已开票</option>
+												<option value="4">已认款</option>
+												<option value="5">已回款未开票</option>
+											</select>
+									</div>
+									<div class="ziduan">
+											<label>要不开票: </label>
+											<select class="selectpicker" name="iskaipiao">
+												<option value="0">全部</option>
+												<option value="1">要</option>
+												<option value="2">不要</option>
+											</select>
+									</div>
+								</div>
+								<div class="t_right"><input type="submit" value="查询" /></div>
+							</form>
+				</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit" goal="dataTable1">
+
+						<div class="dataTable_columnCa pa">
+							<div class="dataTable_columnCn"></div>
+							<div class="dataTableShow_close tc">关闭</div>
+						</div>
+
+					<div class="advancedLeft">
+						<span class="addAdv advBtn tc">
+							<input type="button" value="导出" class="" onclick="window.open('/Finance/downloadfinanceinlist'+window.location.search)"/>
+						</span>
+						<style type="text/css">
+							.tb{padding: 0 30px;margin: 13px 0 10px 10px!important;}
+							.tc{margin: 13px 0 10px 10px!important;}
+						</style>
+						<span class="export advBtn tb"><a href="/Finance/index" target="_blank">同步发票收入</a></span>
+					</div>
+
+					<div class="advancedRight">
+						<div class="dataTableShow fr" >
+							<div class="advIcon dataTableShow_icon fr del" style="margin-left: -60px;padding: 0 0px;">筛选</div>
+							<!--<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>-->
+						</div>
+					</div>
+					</div>
+					<input type="hidden" id="sid" value="{$sid}">
+					<form action="subaudit" method='post' name='subauditdataform'>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th>结算单编号</th>
+							<th>广告主名称</th>
+							<th>产品名称</th>
+							<th>账单期间</th>
+							<th>结算金额（含税）</th>
+							<th>结算主体</th>
+							<th>收款账户</th>
+							<th>已回款金额</th>
+							<th>待回款金额</th>
+							<th>所属销售</th>
+							<th>结算依据</th>
+							<th>状态</th>
+							<th>要不要开票</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name="getSum" id="sum_val">
+							<tr>
+								<td>汇总</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>{$sum_val.settlementmoney}</td>
+								<td></td>
+								<td></td>
+								<td>{$sum_val.yskmoney}</td>
+								<td><php>echo $sum_val['settlementmoney']-$sum_val['yskmoney'];</php></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</volist>
+						<volist name='data' id='v'>
+							<tr>
+								<td>{$v.id}</td>
+								<td>{$v.advname}</td>
+								<td>{$v.comname}</td>
+								<td>{$v.strdate}-{$v.enddate}</td>
+								<td>{$v.settlementmoney}</td>
+								<td>{$v.jszt}</td>
+								<td>{$v.bankname}</td>
+								<td>{$v.yskmoney}</td>
+								<td><php>echo $v['settlementmoney']-$v['yskmoney'];</php></td>
+								<td>{$v.real_name}</td>
+								<td>
+								<php>if(!empty($v['basispath'])){
+								$imgpath=explode(',',$v['basispath']);
+								</php>
+								<volist name="imgpath" id='val' key='k'>
+								<a target="_blank" href='/{$val}'>预览{$k}</a>
+								</volist>
+								<php>}</php></td>
+								<td>{:C('option.insettlement_status')[$v['status']]}</td>
+								<td><eq name='v.iskaipiao' value='1'>要<else/>不要</eq></td>
+								<td>
+									<if condition="($v.status eq 2) and ($v.iskaipiao eq 1)">
+										<a data="{$v.id}" class="J_invoice">开发票</a>
+									<elseif condition="($v.status eq 5) and ($v.iskaipiao eq 1)" />
+										<a data="{$v.id}" class="J_invoice">开发票</a>&nbsp;
+										<a href="{:U('Finance/financeInDetail')}?id={$v.id}" target="_blank">查看</a>
+									<else/>
+										<a href="{:U('Finance/financeInDetail')}?id={$v.id}" target="_blank">查看</a>&nbsp;
+									</if>
+									<if condition="$v.yskmoney eq 0"><a target="_blank" onClick="return confirm('确认作废？')" href="{:U('Makesettlement/settlementInNo')}?id={$v.id}">作废</a>
+									</if>
+								</td>
+					        </tr>
+						</volist>
+						</tbody>
+					</table>
+					</form>
+					{$_page}
+				</div>
+			</div>
+	</div>
+			<div class="invoiceDialog" style="display:none;" title="开票详情">
+				<table class="dialogTable_form2 w ha">
+					<tr>
+						<th>广告主名称:</th>
+						<td id='advname'>……</td>
+						<th>发票类型:</th>
+						<td id='type'>……</td>
+						<th>发票内容:</th>
+						<td id='content'>……</td>
+					</tr>
+					<tr>
+						<th>纳税人识别号:</th>
+						<td id='code'>……</td>
+						<th>开户行名称:</th>
+						<td id='bankname'>……</td>
+						<th>开户行账号:</th>
+						<td id='bankcode'>……</td>
+					</tr>
+					<tr>
+						<th>注册地址:</th>
+						<td id='z_address' style="white-space: normal;">……</td>
+						<th>注册电话:</th>
+						<td id='telephone'>……</td>
+					</tr>
+					<tr>
+						<th>结算主体:</th>
+						<td id='jszt'>……</td>
+						<th>开票金额:</th>
+						<td id='allmoney'>……</td>
+						<th>起止时间:</th>
+						<td id='strAndEndDate'>……</td>
+					</tr>
+					<tr>
+						<th>收件人姓名:</th>
+						<td id='username'>……</td>
+						<th>收件人电话:</th>
+						<td id='tel'>……</td>
+						<th>收件人地址:</th>
+						<td id='address' style="white-space: normal;">……</td>
+					</tr>
+					<tr>
+						<th>所属销售:</th>
+						<td id='sealer'>……</td>
+						<th>审核人:</th>
+						<td id='auditer'>……</td>
+						<th>审核时间:</th>
+						<td id='audittime'>……</td>
+					</tr>
+				</table><br />
+				<table id="DaydataInfoTable" class="dialogTable_list w ha">
+				</table>
+				<br />
+				<form id="financeform" action="/Finance/makeInvoiceDo" method='post'>
+				<input type='hidden' name='id' id='invoiceid' />
+				<table class="dialogTable_form2 w ha">
+					<tr>
+						<th style="height: 40px; line-height: 40px;">快递单号:</th>
+						<td><input name="expresscode" type="text" /></td>
+					</tr>
+				</table>
+				<br />
+				<table class="dynamicTable invoiceDetails w ha" style="margin-top: -1px;">
+					<caption align="bottom">
+						<input class="addTR" type="button" value="" />
+					</caption>
+					<tr>
+						<th>发票编号:</th>
+						<th>票面金额:</th>
+						<th width="100">操作</th>
+					</tr>
+					<tr>					
+						<td><input name='financeCode' type="text" /></td>
+						<td><input name='money' type="text" /></td>
+						<td>
+							<span class="dataDelete">删除</span>
+						</td>
+					</tr>
+				</table>
+				</form>
+			</div>
+
+	<!--弹出框 -->
+	<!--<div class="uploadingDialog" title="同步发票信息选择日期">
+			<table class="dialogTable_form w ha">
+				<tr>
+					<th>日期月份选择：</th>
+					<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="t_strtime" />
+				</tr>
+			</table>
+	</div>-->
+
+	<!--弹出框 -->
+	<div class="RdDialog" title="同步发票信息">
+		<table class="dialogTable_form w ha">
+
+		</table>
+	</div>
+		
+</block>
+
+

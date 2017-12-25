@@ -1,0 +1,1130 @@
+@import "variables";
+@import "base";
+
+/*内容主体框架*/
+.subConten {
+  padding: @padding-20;
+}
+
+/*面包屑样式*/
+.crumbs {
+  .size(100%; 40px;);
+  line-height: 40px;
+  font-size: @font-size-base;
+  color: @gray-cont;
+  a {
+    color: @gray-cont;
+    &:hover {
+      color: @blue-base;
+      text-decoration: underline;
+    }
+  }
+  span {
+    color: @blue-base;
+  }
+}
+
+/*条件查询&筛选*/
+.subCon {
+  margin-top: 20px;
+}
+
+.queryTable {
+  .size(100%; auto);
+  table-layout: fixed;
+  tr th,
+  tr td {
+    height: 50px;
+    line-height: 50px;
+    font-size: @font-size-base;
+    color: @gray-con;
+  }
+  tr th {
+    width: 100px;
+    text-align: right;
+  }
+  input[type="text"],
+  select {
+    height: 40px;
+    line-height: 40px;
+    font-size: @font-size-base;
+    color: @gray-con;
+    .border(@border-base);
+    .border-radius(@border-radius-small);
+  }
+  input[type="text"] {
+    width: 85%;
+    padding: 0 2%;
+    &:focus{
+      .border(@blue-base);
+    }
+  }
+  select {
+    width: 89%;
+    background: url("../images/select_up.png") 96.8%  center no-repeat #fff;
+    &:focus{
+      .border(@blue-base);
+    }
+  }
+  input[type="button"],
+  input[type="submit"]{
+    height: 30px;
+    color: @title-color;
+    border: none;
+    .border-radius(@border-radius-small);
+    font-size: @font-size-base;
+    margin-right: 20px;
+  }
+  input[type="button"]{
+    min-width: 70px;
+    padding: 0 5px;
+    background: @blue-base;
+    &:hover{
+      background: @blue-base-bg;
+    }
+  }
+  input[type="submit"]{
+    width: 76px;
+    background: @input-back;
+    &:hover{
+      background: @input-back-h;
+    }
+  }
+  .dayTime{
+    width: 88% !important;
+    input[type="text"]{
+      width: 100% !important;
+    }
+    &:extend(.modifyCon .modify .dayTime all);
+    i{
+      top: 18px !important;
+    }
+  }
+  .query_time{
+    display: block;
+    .relative;
+    i{
+      .absolute;
+      top: 5px;
+      right: 11%;
+      .size(30px; 40px);
+      line-height: 40px;
+      text-align: center;
+      background: @title-color;
+
+    }
+  }
+}
+/*考勤列表*/
+.workListBox{
+  margin-top: 20px;
+  .workTitle{
+    height: 42px;
+    line-height: 42px;
+    font-size: @font-size-base;
+    color: @title-color;
+    background: @blue-base;
+    text-indent: 40px;
+    span{
+      margin-right: 40px;
+      i{
+        color: #fff100;
+      }
+    }
+  }
+}
+.listTable{
+  .size(100%;auto);
+  table-layout: fixed;
+  tr{
+    background: @tabel-bg;
+  }
+  tr:nth-child(2n){
+    background: @title-color;
+  }
+  tr:hover{
+    background: @tabel-bg-h;
+  }
+  tr th,
+  tr td{
+    height: 42px;
+    vertical-align: middle;
+    .border(@border-base);
+    text-align: center;
+    font-size: @font-size-base;
+    color: @gray-dark;
+  }
+  tr th{
+    color: @title-color;
+    background: @blue-base;
+    input[type="checkbox"]{
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+  }
+  tr td{
+    .rest{
+      color: @blue-base;
+    }
+    .rest_red{
+      color: #e60012;
+    }
+    .rest_green{
+      color: #228b22;
+    }
+    span em{
+      color: #e60012;
+      margin-left: 10px;
+    }
+    .title_btn{
+      display: block;
+      cursor: pointer;
+      &:hover{
+       color: @blue-base;
+      }
+    }
+    a{
+      display: inline-block;
+      padding: 0 10px;
+      margin: 0 5px;
+      &:hover{
+        text-decoration: underline;
+      }
+      &.rest{
+        &:extend(.rest all);
+      }
+      &.edit{
+        color: #228b22;
+      }
+      &.detail{
+        color: #f33;
+      }
+    }
+    input[type="button"]{
+      .size(50px;30px);
+      .border-radius(@border-radius-small);
+      .border(#dadada);
+      margin-left: 20px;
+      &:hover{
+        color: @blue-base;
+        .border(@blue-base);
+      }
+      &.look_btn{
+        margin-left: 0;
+        &:hover{
+          background: @blue-base;
+          color: @title-color;
+        }
+      }
+    }
+  }
+}
+.tabThBg tr th{
+  background: @title-color;
+  color: @gray-dark;
+}
+/*公用按钮*/
+.btnBox{
+  &:extend(.clearfix all);
+  margin-top: 20px;
+  height: 36px;
+  text-align: center;
+  input[type="button"]{
+    .border-radius(@border-radius-small);
+    height: 36px;
+    color: @title-color;
+    border: none;
+    margin: 0 15px;
+  }
+  input[type="button"].close{
+    width: 76px;
+    background: @input-back;
+    &:hover{
+      background: @input-back-h;
+    }
+  }
+  input[type="button"].submit{
+    width: 110px;
+    background: @blue-base;
+    &:hover{
+      background: @blue-base-bg;
+    }
+  }
+  input[type="button"].question_btn{
+    color: @gray-con;
+    &:extend(.office_btnBox input[type="button"] all);
+  }
+}
+/*公用遮罩层*/
+.mask{
+  .display;
+  .fixed(0; 0);
+  .square(100%);
+  background: rgba(0, 0, 0,.1);
+  z-index: @zindex-navbar;
+}
+/*弹出层公共样式*/
+.popupPublic{
+  .display;
+  .fixed(50%; 50%);
+  background: @tabel-bg;
+  .border-radius(@border-radius-large);
+  padding-bottom: 20px;
+  overflow: hidden;
+  z-index: @zindex-navbar-fixed;
+}
+/*考勤说明详情弹出层*/
+.popup{
+  .size(860px;450px);
+  margin-left: -430px;
+  margin-top: -230px;
+  .tableList{
+    .size(100%; 394px;);
+    overflow-x: hidden;
+    overflow-y: auto;
+    tr th{
+      border-top: none;
+    }
+  }
+  .radiusTab{
+    background: @title-color;
+    .border-top-radius(@border-radius-large);
+  }
+}
+/*考勤说明弹出层*/
+.explain{
+  .size(650px;430px);
+  margin-left: -325px;
+  margin-top: -220px;
+  h2{
+    .size(100%; 50px);
+    line-height: 50px;
+    text-align: center;
+    font-size: @font-size-base;
+    font-weight: normal;
+    color: @title-color;
+    background: @blue-base;
+    margin: 0;
+  }
+  .explainCon{
+    .size(100%; 324px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    .explainList li{
+      .size(92%; 56px);
+      .border-bottom(#ddd);
+      line-height: 56px;
+      padding: 0 4%;
+      color: @gray-con;
+      font-size: @font-size-base;
+      overflow: hidden;
+      input[type="radio"]{
+        vertical-align: middle;
+        margin-right: 10px;
+      }
+      input[type="text"]{
+        margin-left: 30px;
+        .size(110px; 30px);
+        padding: 0 10px;
+        text-align: center;
+        .border(@border-base);
+        .border-radius(@border-radius-small);
+      }
+    }
+  }
+}
+/*制度管理功能按钮区*/
+.shopBtn{
+  margin-top: 20px;
+  span{
+    display: inline-block;
+    min-width: 90px;
+    height: 30px;
+    background: @tabel-bg;
+    line-height: 30px;
+    text-align: center;
+    .border(#dadada);
+    .border-radius(@border-radius-small);
+    margin-right: 20px;
+    padding: 0 10px;
+    cursor: pointer;
+    .relative;
+    font-size: @font-size-base;
+    vertical-align: middle;
+    &:hover{
+      color: @blue-base;
+    }
+    a{
+      display: block;
+      &:hover{
+        color: @blue-base;
+      }
+    }
+  }
+  span:before{
+    display: inline-block;
+    text-indent: -9999px;
+    vertical-align: middle;
+    margin-right: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .add_icon:before{
+    content: "~\"url(../images/add_icon.png)\"";
+    background: url("../images/add_icon.png") 0 center no-repeat;
+    .size(13px;30px);
+  }
+  .up_icon:before{
+    content: "~\"url(../images/up_icon.png)\"";
+    background: url("../images/up_icon.png") 0 center no-repeat;
+    .size(14px;30px);
+  }
+  .down_icon:before{
+    content: "~\"url(../images/down_icon.png)\"";
+    background: url("../images/down_icon.png") 0 center no-repeat;
+    .size(14px;30px);
+  }
+  .delete_icon:before{
+    content: "~\"url(../images/delete_icon.png)\"";
+    background: url("../images/delete_icon.png") 0 center no-repeat;
+    .size(13px;30px);
+  }
+  .import_icon:before{
+    content: "~\"url(../images/import_icon.png)\"";
+    background: url("../images/import_icon.png") 0 center no-repeat;
+    .size(15px;30px);
+  }
+  .export_icon:before{
+    content: "~\"url(../images/export_icon.png)\"";
+    background: url("../images/export_icon.png") 0 center no-repeat;
+    .size(15px;30px);
+  }
+}
+/*管理制度详情弹出层*/
+.conDetails{
+  .relative;
+  .size(600px; 500px);
+  top: 50%;
+  left: 50%;
+  margin-left: -300px;
+  margin-top: -250px;
+  overflow: hidden;
+  .colse{
+    .absolute;
+    top: 5px;
+    right: 5px;
+    .square(21px);
+    background: url("../images/close_icon.png") 0 0 no-repeat;
+  }
+  h2{
+    .size(90%; 40px;);
+    margin: 20px auto 0 auto;
+    font-size: @font-size-base;
+    color: @gray-con;
+    text-align: center;
+    font-weight: normal;
+    .border-bottom(@border-base);
+  }
+  .detailsCon{
+    .size(90%; auto);
+    margin: 0 auto;
+    color: @gray-con;
+    font-size: @font-size-base;
+    p.detailsCrumbs{
+      text-align: right;
+      color: @gray-cont;
+      line-height: 40px;
+    }
+    .detailsTxt{
+      .size(100%; 370px);
+      line-height: 30px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    a{
+      color: @blue-base;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+  }
+}
+/*管理制度 > 新增、修改表单*/
+.modifyCon{
+  .modify{
+    .relative;
+    height:44px;
+    margin-bottom: 26px;
+    lable{
+      display: inline-block;
+      .size(70px; 44px);
+      line-height: 44px;
+      font-size: @font-size-base;
+      color: @gray-dark;
+    }
+    input[type="text"],
+    input[type="password"]{
+      .size(450px; 42px);
+      padding: 0 10px;
+      &:extend(.queryTable input[type="text"] all);
+    }
+    select{
+      .size(450px; 42px);
+      &:extend(.queryTable select all);
+    }
+    .power{
+      font-size: @font-size-base;
+      color: @blue-base;
+      cursor: pointer;
+      &:before{
+        &:extend(.shopBtn span:before all);
+      }
+      &:extend(.shopBtn .add_icon all);
+    }
+    .fileTree{
+      .display;
+      .size(268px;350px);
+      background: @gray-lighter;
+      .absolute;
+      top: 0;
+      left: 200px;
+      z-index: @zindex-tooltip;
+      h2{
+        .size(100%; 38px);
+        line-height: 38px;
+        background: @blue-base;
+        text-align: center;
+        color: @title-color;
+        font-size: @font-size-base;
+        font-weight: normal;
+        margin: 0;
+        padding: 0;
+      }
+      .fileList{
+        .size(100%;270px);
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      input[type="button"]{
+        .size(80%; 30px);
+        .border(@blue-base);
+        color: @blue-base;
+        .border-radius(@border-radius-small);
+        margin: 0 10%;
+        &:hover{
+          .border(@blue-base-bg);
+          color: @blue-base-bg;
+        }
+      }
+    }
+    .dayTime{
+      .relative;
+      display: inline-block;
+      .size(180px; 44px;);
+      input[type="text"]{
+        .size(180px; 44px;);
+      }
+      i{
+        .absolute;
+        top: 15px;
+        right: 10px;
+        color: @blue-base;
+      }
+    }
+    input[type="radio"]{
+      margin: 0 5px 0 16px;
+      vertical-align: middle;
+    }
+    .alloFile{
+      display: inline-block;
+      vertical-align: middle;
+      .size(180px; 42px);
+      .border(@border-base);
+      line-height: 42px;
+      padding: 0 10px;
+      .text-overflow;
+      .border-radius(@border-radius-small);
+      .relative;
+      .fileUrl{
+        display: block;
+        .text-overflow;
+      }
+      .fileBtn{
+        display: block;
+        .absolute;
+        top: 0;
+        left: 0;
+        .size(180px; 42px);
+        .opacity(0);
+        cursor: pointer;
+      }
+    }
+  }
+  .previewBox{
+    height: 130px;
+    &:extend(.clearfix all);
+    .preview{
+      display: inline-block;
+      .square(130px);
+      .border(@border-base);
+    }
+    lable{
+      float:left;
+    }
+  }
+  .editor{
+    .size(1158px;488px);
+    overflow: hidden;
+  }
+  .special{
+    &:extend(.clearfix all);
+    height: auto;
+    lable{
+      float:left;
+    }
+    textarea{
+      .size(455px; 200px);
+      padding: 4px;
+      font-size: @font-size-base;
+      color: @gray-con;
+      line-height: 30px;
+      .border(@border-base);
+      .border-radius(@border-radius-small);
+      &:focus{
+        .border(@blue-base);
+      }
+    }
+  }
+}
+/*办公用品列表*/
+.office_btn tr td{
+   input[type="button"]{
+    .size(110px; 30px);
+     margin: 0;
+  }
+  input[type="button"].chase_plete{
+    &:extend(.queryTable input[type="button"] all);
+    margin: 0;
+    &:hover{
+      color: @title-color;
+    }
+  }
+}
+.office_btnBox{
+  margin-top: 20px;
+  height: 30px;
+  text-align: left;
+  input[type="button"]{
+    .size(110px; 30px);
+    .border-radius(@border-radius-small);
+    .border(@border-base);
+    margin-right: 20px;
+    &:hover{
+      color: @blue-base;
+      .border(@blue-base);
+    }
+  }
+}
+.officeBox{
+  .size(650px; 570px);
+  margin-left: -325px;
+  margin-top: -285px;
+  h2{
+    &:extend(.explain h2 all);
+  }
+  .officeCon{
+    .size(100%; 440px);
+    margin-top: 25px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .officeList{
+      width: 588px;
+      margin: 0 auto;
+      &:extend(.clearfix all);
+      li{
+        min-height: 50px;
+        line-height: 50px;
+        margin-bottom: 14px;
+        label{
+          float:left;
+          .size(100px; 50px);
+          line-height: 50px;
+          font-size: @font-size-base;
+          color: @gray-con;
+          text-align: left;
+        }
+        input[type="text"]{
+          float: left;
+          .size(428px; 48px);
+          .border(@title-color);
+          .border-radius(@border-radius-small);
+          background: @title-color;
+          padding: 0 10px;
+          margin-right: 10px;
+          font-size: @font-size-base;
+          color: @gray-con;
+          &:focus{
+            .border(@blue-base);
+          }
+        }
+        textarea{
+          .size(448px; 110px);
+          padding: 4px;
+          font-size: @font-size-base;
+          color: @gray-con;
+          line-height: 30px;
+          &:focus{
+            .border(@blue-base);
+          }
+        }
+      }
+    }
+  }
+}
+/*人事管理*/
+.companyBox{
+  .size(530px; 350px);
+  margin-left: -265px;
+  margin-top: -175px;
+  h2{
+    &:extend(.explain h2 all);
+  }
+  .companyCon{
+    margin-top: 40px;
+    .companyList{
+      width: 470px;
+      margin: 0 auto;
+      &:extend(.clearfix all);
+      li{
+        height: 50px;
+        line-height: 50px;
+        margin-bottom: 14px;
+        label{
+          &:extend(.officeBox .officeCon .officeList li label all);
+        }
+        select{
+          .size(346px; 50px);
+          &:extend(.queryTable select all);
+        }
+        .dayTime{
+          .size(345px; 50px);
+          &:extend(.modifyCon .modify .dayTime all);
+          input[type="text"]{
+            .size(345px; 50px);
+            .border-radius(@border-radius-small);
+            .border(@border-base);
+            text-indent: 15px;
+            &:focus{
+              .border(@blue-base);
+            }
+          }
+          i{
+            top: 17px;
+          }
+        }
+      }
+    }
+  }
+}
+/*=========流程管理===========*/
+//流程列表
+.flow_btn{
+  .size(140px; 40px);
+  background: @tabel-bg;
+  .border(@border-base);
+  cursor: pointer;
+  .border-radius(@border-radius-small);
+  &:hover{
+    background: @blue-base;
+    .border(@blue-base);
+    color: @title-color;
+  }
+}
+//修改、设计流程
+.designListBox{
+  margin-top: 20px;
+  &:extend(.clearfix all);
+  .design_node{
+    .relative;
+    float: left;
+    .size(390px; 300px);
+    .border-radius(@border-radius-base);
+    background: @tabel-bg;
+    margin: 0 30px 14px 0;
+    .design_close{
+      display: inline-block;
+      .square(22px);
+      .absolute;
+      top: 5px;
+      right: 5px;
+      background: url("../images/design_icon.png") center center no-repeat;
+      cursor: pointer;
+    }
+    h3{
+      height: 50px;
+      line-height: 50px;
+      font-size: @font-size-base;
+      color: @gray-dark;
+      font-weight: normal;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .design_txt{
+      .size(340px; 44px);
+      line-height: 44px;
+      margin: 12px auto 0 auto;
+      label{
+        display: inline-block;
+        .size(70px; 44px);
+        text-align: left;
+        color: @gray-dark;
+        font-size: @font-size-base;
+      }
+      input[type="text"]{
+        &:extend(.queryTable input[type="text"] all);
+        .size(252px; 42px);
+      }
+    }
+    .design_samll{
+      height: 35px;
+      line-height: 35px;
+    }
+    .design_btn{
+      .size(340px, 30px);
+      margin: 10px auto 0 auto;
+      text-align: right;
+      input[type="button"]{
+        &:extend(.office_btnBox input[type="button"] all);
+      }
+    }
+  }
+}
+.design_tit{
+  .size(100%; 30px);
+  line-height: 30px;
+  font-size: @font-size-base;
+  color: @gray-dark;
+}
+.design_editor{
+  .size(930px; 470px);
+  margin-top: 15px;
+  overflow: hidden;
+}
+/*流程管理-条件设置*/
+.setupBox{
+  .size(800px, auto);
+  margin-top: 25px;
+  .setupLeft{
+    .size(400px; auto);
+    .setupTerm{
+      margin-bottom: 30px;
+      h2{
+        .size(100%; 44px);
+        line-height: 44px;
+        font-weight: normal;
+        color: @title-color;
+        font-size: @font-size-base;
+        text-align: center;
+        background: @blue-base;
+        margin-bottom: 14px;
+      }
+      .setupSelect{
+        height: 44px;
+        &:extend(.clearfix all);
+        select{
+          &:extend(.queryTable select all);
+          .size(184px; 44px);
+          &.setupSum{
+            .size(150px; 44px);
+            margin-right: 5px;
+          }
+          &.setTerm{
+            .size(56px; 44px);
+          }
+        }
+      }
+      .office_btnBox{
+        text-align: right;
+        input[type="button"]{
+          margin: 0;
+        }
+      }
+    }
+  }
+  .setupRight{
+    .size(320px; auto);
+    padding: 20px;
+    background: @tabel-bg;
+    font-size: @font-size-base;
+    color: @gray-dark;
+    p{
+      .relative;
+      line-height: 30px;
+      margin-bottom: 20px;
+      padding-right: 40px;
+      .setClose{
+        .absolute;
+        .square(30px);
+        top: 50%;
+        right: 0;
+        margin-top: -15px;
+        background: url("../images/setup_close.png") center center no-repeat;
+      }
+    }
+  }
+}
+/*发起投票 - 投票列表*/
+.voteBox{
+  .square(650px);
+  margin-left: -325px;
+  margin-top: -325px;
+  h2{
+    &:extend(.explain h2 all);
+  }
+  .voteConBox{
+    .size(100%; 530px);
+    padding: 20px 0 10px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    p{
+      width: 550px;
+      &:extend(.clearfix all);
+      margin: 10px auto;
+      label{
+        float:left;
+        .size(90px; 44px);
+        line-height: 44px;
+        font-size: @font-size-base;
+        margin: 0;
+      }
+      textarea{
+        .size(460px; 110px);
+        .border(@border-base);
+        .border-radius(@border-radius-small);
+        padding: 4px;
+        font-size: @font-size-base;
+        color: @gray-con;
+        line-height: 30px;
+        &:focus{
+          .border(@blue-base);
+        }
+      }
+      input[type="text"]{
+        &:extend(.queryTable input[type="text"] all);
+        .size(460px; 44px);
+        padding: 0 10px;
+        &.votetxt{
+          .size(380px; 44px);
+        }
+      }
+      input[type="button"]{
+        &:extend(.queryTable input[type="button"] all);
+        margin: 0 0 0 10px;
+      }
+    }
+    .voteQuestion{
+      .size(550px; 336px);
+      padding: 10px 20px;
+      margin: 0 auto;
+      .border(@border-samll);
+      box-sizing: border-box;
+      .voteQuesCon{
+        input[type="text"],
+        textarea{
+          width: 415px;
+        }
+      }
+      .voteRadio{
+        height: 30px;
+        label{
+          height: 30px;
+          line-height: 30px;
+          &.voteLabel{
+            width: 160px;
+          }
+        }
+        span{
+          display: inline-block;
+          line-height: 30px;
+          margin-right: 20px;
+        }
+      }
+    }
+  }
+}
+/*投票页面*/
+.voteConList{
+  .boteDetail{
+    line-height: 28px;
+    color: #e60012;
+  }
+  .voteList{
+    margin-top: 20px;
+    p{
+      line-height: 40px;
+      span{
+        display: inline-block;
+        margin-right: 30px;
+        input[type="radio"],
+        input[type="checkbox"]{
+          margin-right: 6px;
+        }
+      }
+    }
+  }
+}
+/*投票结果*/
+.resultList{
+  .ResultTit{
+    height: 40px;
+    line-height: 40px;
+  }
+  .reportList{
+    margin-top: 20px;
+    &:extend(.clearfix all);
+    li{
+      float:left;
+      width: 33.3333%;
+      p{
+        width: 90%;
+        height: 40px;
+        line-height: 20px;
+        overflow: hidden;
+      }
+    }
+  }
+}
+/*员工入职表单*/
+.entryList{
+  margin: 0;
+  &:extend(.clearfix all);
+  li{
+    float:left;
+    width: 33.3334%;
+    height: 44px;
+    margin-bottom: 10px;
+    line-height: 44px;
+    font-size: @font-size-base;
+    color: @gray-dark;
+    .entryCon{
+      .size(80%; 44px);
+      label{
+        width: 70px;
+        margin: 0;
+        &.entryOne{
+          width:100px;
+        }
+        &.entryTwo{
+          width: 160px;
+        }
+        &.entryThree{
+          width: 120px;
+        }
+      }
+      select {
+        width: 75%;
+        &:extend(.queryTable select all);
+      }
+      input[type="text"] {
+        width: 75%;
+        &:extend(.queryTable input[type="text"] all);
+        &.txtOne {
+          width: 68%;
+        }
+        &.dayThree {
+          width: 63.5%;
+        }
+      }
+      .dayTime {
+        width: 75%;
+        input[type="text"] {
+          width: 100%;
+        }
+        &:extend(.modifyCon .modify .dayTime all);
+        i {
+          top: 18px !important;
+        }
+      }
+      .dayOne {
+        width: 68%;
+        input[type="text"] {
+          width: 100%;
+        }
+        &:extend(.modifyCon .modify .dayTime all);
+        i {
+          top: 18px !important;
+        }
+      }
+      .dayTwo {
+        width: 54.5%;
+        input[type="text"] {
+          width: 100%;
+        }
+        &:extend(.modifyCon .modify .dayTime all);
+        i {
+          top: 18px !important;
+        }
+      }
+      .dayThree {
+        width: 63.5%;
+        input[type="text"] {
+          width: 100%;
+        }
+        &:extend(.modifyCon .modify .dayTime all);
+        i {
+          top: 18px !important;
+        }
+      }
+      @media screen and (max-width: 1400px) {
+        input[type="text"] {
+          &.txtOne {
+            width: 65%;
+          }
+          &.dayThree {
+            width: 58.5%;
+          }
+        }
+        .dayTime {
+          width: 75%;
+          input[type="text"] {
+            width: 100%;
+          }
+          &:extend(.modifyCon .modify .dayTime all);
+          i {
+            top: 18px !important;
+          }
+        }
+        .dayOne {
+          width: 65%;
+          input[type="text"] {
+            width: 100%;
+          }
+          &:extend(.modifyCon .modify .dayTime all);
+          i {
+            top: 18px !important;
+          }
+        }
+        .dayTwo {
+          width: 45.5%;
+          input[type="text"] {
+            width: 100%;
+          }
+          &:extend(.modifyCon .modify .dayTime all);
+          i {
+            top: 18px !important;
+          }
+        }
+        .dayThree {
+          width: 58.5%;
+          input[type="text"] {
+            width: 100%;
+          }
+          &:extend(.modifyCon .modify .dayTime all);
+          i {
+            top: 18px !important;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<form id="tableForm">
+    <table class="dialogTable_form w ha">
+        <tr>
+            <th>职位名称:</th>
+            <td><input type="text" style="padding:0px 5px !important;" name="name" id="name" value="{$data['name']}"/></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>
+            <input type="button" value="保存" onclick="d.saveData()" />
+            <input type="hidden" name="pid" id="pid" value="{$data.id}" />
+            </td>
+        </tr>
+    </table>
+</form>

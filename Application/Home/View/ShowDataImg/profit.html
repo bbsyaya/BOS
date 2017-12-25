@@ -1,0 +1,582 @@
+<extend name="Public/base"/>
+<block name="style">
+	<link rel="stylesheet" type="text/css" href="__CSS__/reset_2.css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/main.css">
+    <link rel="stylesheet" type="text/css" href="__JS__/daterangepicker/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="__JS__/daterangepicker/daterangepicker.css">
+    <style>
+    	.chart{
+			background:#1a69c5;
+		}
+		.tabTitle span.chart{
+			color:#fff
+		}
+    </style>
+    <!--双日期插件-->
+    <script type="text/javascript" src="__JS__/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="__JS__/daterangepicker/daterangepicker.min.js"></script>
+    <!--图表插件-->
+    <script src="__PUBLIC__/Home/module/ECharts/echarts-all.js" type="text/javascript"></script>
+</block>
+<block name="body">
+	<script type="text/javascript">
+	
+    var old_c=getCookie('profit_co');
+    if(old_c=='' || old_c[0]=='[')old_c='0000';
+    var st_lineid=old_c[0];
+    var s_time="<php>echo date('Y-m-d',time()-3600*24*7);</php>";
+    var e_time="<php>echo date('Y-m-d');</php>";
+    function settime_cl(stime,etime,obj){
+    	if(!!obj){
+    		$('.chartDay').find('span').removeClass('dayHover');
+    		$(obj).addClass('dayHover');
+    	}
+    	$('#DayDemo').val(stime+' ~ '+etime);
+    	settime(stime,etime);
+    }
+    function changetime(){
+    	var s_e_t=$("#DayDemo").val();
+    	var arr=s_e_t.replace(/\s/g,'').split('~');
+    	settime(arr[0],arr[1]);
+    }
+    function settime(stime,etime){
+    	
+    	s_time=stime;
+    	e_time=etime;
+    	type=old_c[1];
+    	if(st_lineid!=0 && type==0)type=1;
+    	c_type(type);
+    }
+
+//去除千分位
+function delcommafy(num){
+    if((num+"")==""){
+        return"";
+    }
+    num=num.replace(/,/gi,'');
+    return num;
+}
+
+    var isshowzc = 500;//默认不显示总裁办数据
+    function c_line(lineid,t){
+    	$('.classifyList').find('a').removeClass('ifyhover');
+    	$('.classifyList').find('a').eq(lineid).addClass('ifyhover');
+    	st_lineid=lineid;
+    	setCookie('profit_co',st_lineid+old_c[1]+old_c[2]+old_c[3],30);
+    	old_c=st_lineid+old_c[1]+old_c[2]+old_c[3];
+    	if(st_lineid==3)st_lineid=46;
+    	else if(st_lineid==4)st_lineid=47;
+    	else if(st_lineid==5)st_lineid=48;
+        else if(st_lineid==6)st_lineid=34;
+        else if(st_lineid==7)st_lineid=42;
+
+        //默认排除总裁办数据，点击按钮才显示总裁办数据
+        var zcb_lineid='34,36,40,42,44,45';
+        if(lineid==100){
+            isshowzc = isshowzc==500?200:500;
+            st_lineid='34,36,40,42,44,45';
+            $("#zcb_100").addClass('ifyhover');
+            if(isshowzc==500){
+                $("#zcb_100").removeClass('ifyhover');
+                 st_lineid='';
+            }
+        }
+
+
+        if(isshowzc==200){
+            $("#zcb_100").addClass('ifyhover');
+        }
+
+        //去掉显示
+        if(st_lineid==1 || st_lineid==2 || st_lineid==46 || st_lineid==47 || st_lineid==48 || st_lineid==34 || st_lineid==42){
+            $("#zcb_100").removeClass('ifyhover');
+        }
+        
+    	$('#alldatatable').find('tr').each(function(){
+    		if($(this).index()!=0){
+    			$(this).find('td').each(function(){
+    				if($(this).index()!=0)$(this).html('');
+    			})
+    		}
+    	})
+    	$('#loading').show();
+    	//选择业务线
+    	$.get("/Ajax/getshowdataimgtable",{"lineid[]":st_lineid,"isshowzc":isshowzc,"zcb_lineid":zcb_lineid},function(res){
+    		$('#loading').hide();
+    		for(var o in res){
+    			if(o=='thismonth'){
+    				$('#alldatatable').find('tr').eq(1).find('td').eq(1).html(res[o]['indata']);
+    				$('#alldatatable').find('tr').eq(1).find('td').eq(2).html(res[o]['outdata']);
+    				$('#alldatatable').find('tr').eq(1).find('td').eq(3).html(res[o]['profit']);
+
+    				if(res[o]['allpmoney']>0)
+                        $('#alldatatable').find('tr').eq(1).find('td').eq(4).html(res[o]['allpmoney']);
+    				else $('#alldatatable').find('tr').eq(1).find('td').eq(4).html('-');
+
+    				if(res[o]['allpmoney']>0){
+                        var p1 = delcommafy(res[o]['profit']);
+                        var p2 = delcommafy(res[o]['allpmoney']);
+
+                        var wcl = ((parseFloat(p1)/parseFloat(p2)*10000)/100).toFixed(2);
+                        $('#alldatatable').find('tr').eq(1).find('td').eq(5).html(wcl+'%');
+                    }
+    				else {
+                        $('#alldatatable').find('tr').eq(1).find('td').eq(5).html('-');
+                    }
+    				$('#alldatatable').find('tr').eq(1).find('td').eq(6).html(res[o]['inqueren']+'%');
+    				$('#alldatatable').find('tr').eq(1).find('td').eq(7).html(res[o]['outqueren']+'%');
+    			}
+    			/*  if(o=='lastmonththis'){
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(1).html(res[o]['indata']);
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(2).html(res[o]['outdata']);
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(3).html(res[o]['profit']);
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(6).html(res[o]['inqueren']+'%');
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(7).html(res[o]['outqueren']+'%');
+    			}*/
+    			if(o=='lastmonthall'){
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(1).html(res[o]['indata']);
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(2).html(res[o]['outdata']);
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(3).html(res[o]['profit']);
+    				if(res[o]['allpmoney']>0)$('#alldatatable').find('tr').eq(2).find('td').eq(4).html(res[o]['allpmoney']);
+    				else $('#alldatatable').find('tr').eq(2).find('td').eq(4).html('-');
+
+    				if(res[o]['allpmoney']>0){
+                        var p1 = delcommafy(res[o]['profit']);
+                        var p2 = delcommafy(res[o]['allpmoney']);
+                        //Math.round(res[o]['profit']/res[o]['allpmoney']*10000)/100+'%'
+                         var wcl = ((parseFloat(p1)/parseFloat(p2)*10000)/100).toFixed(2);
+                        $('#alldatatable').find('tr').eq(2).find('td').eq(5).html(wcl+'%');
+                    }
+    				else {
+                        $('#alldatatable').find('tr').eq(2).find('td').eq(5).html('-');
+                    }
+
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(6).html(res[o]['inqueren']+'%');
+    				$('#alldatatable').find('tr').eq(2).find('td').eq(7).html(res[o]['outqueren']+'%');
+    			}
+    			if(o=='allyear'){
+    				$('#alldatatable').find('tr').eq(3).find('td').eq(1).html(res[o]['indata']);
+    				$('#alldatatable').find('tr').eq(3).find('td').eq(2).html(res[o]['outdata']);
+    				$('#alldatatable').find('tr').eq(3).find('td').eq(3).html(res[o]['profit']);
+    				if(res[o]['allpmoney']>0)$('#alldatatable').find('tr').eq(3).find('td').eq(4).html(res[o]['allpmoney']);
+    				else $('#alldatatable').find('tr').eq(3).find('td').eq(4).html('-');
+
+    				if(res[o]['allpmoney']>0){
+                        var p1 = delcommafy(res[o]['profit']);
+                        var p2 = delcommafy(res[o]['allpmoney']);
+                         var wcl = ((parseFloat(p1)/parseFloat(p2)*10000)/100).toFixed(2);
+                        $('#alldatatable').find('tr').eq(3).find('td').eq(5).html(wcl+"%");
+                    }
+    				else {
+                        $('#alldatatable').find('tr').eq(3).find('td').eq(5).html('-');
+                    }
+
+    				$('#alldatatable').find('tr').eq(3).find('td').eq(6).html(res[o]['inqueren']+'%');
+    				$('#alldatatable').find('tr').eq(3).find('td').eq(7).html(res[o]['outqueren']+'%');
+    			}
+    		}
+        	},'json')
+    	if(t!=1){
+    		type=old_c[1];
+	    	if(lineid!=0 && type==0)type=1;
+            // console.log(1);
+	    	c_type(type);
+    	}
+    	if(lineid!=0){
+    		$('.chartType').find('span').eq(0).hide();
+    	}else{
+    		$('.chartType').find('span').eq(0).show();
+    	}
+    }
+    function c_type(type){
+    	//选择图表类型
+    	$('.chartType').find('span').removeClass('chart');
+    	$('.chartType').find('span').eq(type).addClass('chart');
+    	setCookie('profit_co',old_c[0]+type+old_c[2]+old_c[3],30);
+    	old_c=old_c[0]+type+old_c[2]+old_c[3];
+    	if(type==0){
+    		//占比
+    		$('.myChart3').hide();
+    		$('#container').hide();
+    		$('.chartLeft').show();
+    		$('.chartRight').show();
+    		$('.chartRight').find('p').html('');
+    		$.get("/Ajax/getlinelv",{"strtime":s_time,"endtime":e_time,"lineid[]":st_lineid},function(res){
+    			var myChart1 = echarts.init(document.getElementById('myChart1'));
+				var myChart2 = echarts.init(document.getElementById('myChart2'));
+				var pie = {
+						backgroundColor: 'rgba(255,255,255,0.9)',
+						
+					    title : {
+					        text: '各业务线收入流水占比(单位：万元)',
+					         x: 'center', 
+					         textStyle: {
+					            fontSize: 16,
+					            color: '#1a72d6'
+					        },
+					        padding: 15, 
+					    },
+					    tooltip : {
+					        trigger: 'item',
+					        formatter: "{a} <br/>{b} : {c} ({d}%)"
+					    },
+					    calculable : true,
+					    series : [
+					        {
+					            name:'收入流水',
+					            type:'pie',
+					            radius : '55%',
+					            center: ['50%', '60%'],
+					            data:res.in,
+					            itemStyle: {
+									normal: {
+										label: {
+											show: true,
+											formatter: "{b} :  {c} \n({d}%)"
+										},
+
+									}
+								}
+					        }
+					    ]
+					};
+	            var pie2 = {
+						backgroundColor: 'rgba(255,255,255,0.9)',
+						
+					    title : {
+					        text: '各业务线毛利润占比(单位：万元)',
+					         x: 'center', 
+					         textStyle: {
+					            fontSize: 16,
+					            color: '#1a72d6'
+					        },
+					        padding: 15, 
+					    },
+					    tooltip : {
+					        trigger: 'item',
+					        formatter: "{a} <br/>{b} : {c} ({d}%)"
+					    },
+					    calculable : true,
+					    series : [
+					        {
+					            name:'毛利润',
+					            type:'pie',
+					            radius : '55%',
+					            center: ['50%', '60%'],
+					            data:res.out,
+					            itemStyle: {
+									normal: {
+										label: {
+											show: true,
+											formatter: "{b} :  {c} \n({d}%)"
+										},
+
+									}
+								}
+					        }
+					    ]
+					};
+
+				
+				if(res.re!=''){
+					var re_html='';
+					for(var j in res.re){
+						re_html+=res.re[j];
+					}
+					$('.chartRight').find('p').html(re_html);
+				}
+				myChart1.setOption(pie);
+				myChart2.setOption(pie2);
+        	},'json')
+    	}else if(type==1){
+    		//趋势
+    		$('.myChart3').hide();
+    		$('#container').show();
+    		$('.chartLeft').hide();
+    		$('.chartRight').hide();
+    		$.get("/Ajax/getqushidata",{"strtime":s_time,"endtime":e_time,"lineid[]":st_lineid},function(res){
+    			var myChart3 = echarts.init(document.getElementById('container'));
+    			var option = {
+					backgroundColor: 'rgba(255,255,255,0.9)',
+					color : ['#5ACD14','#FF8080','#8080FF'],
+					legend: {
+							show: true,
+							data: ['收入','成本','利润'],
+						},
+				    title : {
+				         x: 'center', 
+				         textStyle: {
+				            fontSize: 16,
+				            color: '#1a72d6'
+				        },
+				        padding: 15, 
+				    },
+					tooltip: {
+						trigger: 'axis',
+						title: 'sdlf ',
+					},
+					calculable: true,
+					xAxis: [{
+						type: 'category',
+						data: res.date
+					}],
+					yAxis: [{
+						name:'单位：万元',
+						type: 'value',
+						axisLine: {
+							lineStyle: {
+								width: 0
+							}
+						}
+					}],
+					series: [{
+						name: '收入',
+						type: 'line',
+						data: res.in
+					},{
+						name: '成本',
+						type: 'line',
+						data: res.out
+					},{
+						name: '利润',
+						type: 'line',
+						data: res.fit
+					}]
+				};
+				myChart3.setOption(option);
+        	},'json')
+    		
+    	}else{
+    		//TOP
+    		$('.myChart3').show();
+    		$('#container').hide();
+    		$('.chartLeft').hide();
+    		$('.chartRight').hide();
+    		
+    		c_type2(old_c[2])
+    		c_type3(old_c[3])
+    	}
+    }
+    function c_type2(type){
+    	//选择广告主TOP10种类
+    	$('.analyseLeft .tabTitle').find('span').removeClass('chart');
+    	$('.analyseLeft .tabTitle').find('span').eq(type).addClass('chart');
+    	setCookie('profit_co',old_c[0]+old_c[1]+type+old_c[3],30);
+    	old_c=old_c[0]+old_c[1]+type+old_c[3];
+    	if(type==0){
+    		//收入
+    		var html_name='收入(单位：元)';
+    		$.get("/Ajax/getadvintop10",{"strtime":s_time,"endtime":e_time,"lineid[]":st_lineid},function(res){
+    			if(res.html=='null')res.html='<tr><td colspan="3">暂无数据</td></tr>';
+    			this_html='<tr><th width="80">序列号</th><th>广告主</th><th>'+html_name+'</th></tr>'+res.html;
+    			$('.analyseLeft').find('.tableCon').find('tbody').html(this_html);
+        	},'json')
+    	}else if(type==1){
+    		//毛利
+    		var html_name='毛利(单位：元)';
+    		$.get("/Ajax/getadvlrtop10",{"strtime":s_time,"endtime":e_time,"lineid[]":st_lineid},function(res){
+    			if(res.html=='null')res.html='<tr><td colspan="3">暂无数据</td></tr>';
+    			this_html='<tr><th width="80">序列号</th><th>广告主</th><th>'+html_name+'</th></tr>'+res.html;
+    			$('.analyseLeft').find('.tableCon').find('tbody').html(this_html);
+        	},'json')
+    	}else{
+    		//毛利增长率
+    		var html_name='毛利增长率';
+    		$.get("/Ajax/getadvzztop10",{"strtime":s_time,"endtime":e_time,"lineid[]":st_lineid},function(res){
+    			if(res.html=='null')res.html='<tr><td colspan="3">暂无数据</td></tr>';
+    			this_html='<tr><th width="80">序列号</th><th>广告主</th><th>'+html_name+'</th></tr>'+res.html;
+    			$('.analyseLeft').find('.tableCon').find('tbody').html(this_html);
+        	},'json')
+    	}
+    	
+    }
+    function c_type3(type){
+    	//选择供应商TOP10种类
+    	$('.analyseRight .tabTitle').find('span').removeClass('chart');
+    	$('.analyseRight .tabTitle').find('span').eq(type).addClass('chart');
+    	setCookie('profit_co',old_c[0]+old_c[1]+old_c[2]+type,30);
+    	old_c=old_c[0]+old_c[1]+old_c[2]+type;
+    	if(type==0){
+    		//成本
+    		var html_name='成本(单位：元)';
+    		$.get("/Ajax/getsupouttop10",{"strtime":s_time,"endtime":e_time,"lineid[]":st_lineid},function(res){
+    			if(res.html=='null')res.html='<tr><td colspan="3">暂无数据</td></tr>';
+    			this_html='<tr><th width="80">序列号</th><th>供应商</th><th>'+html_name+'</th></tr>'+res.html;
+    			$('.analyseRight').find('.tableCon').find('tbody').html(this_html);
+        	},'json')
+    	}else if(type==1){
+    		//毛利
+    		var html_name='毛利(单位：元)';
+    		$.get("/Ajax/getsuplrtop10",{"strtime":s_time,"endtime":e_time,"lineid[]":st_lineid},function(res){
+    			if(res.html=='null')res.html='<tr><td colspan="3">暂无数据</td></tr>';
+    			this_html='<tr><th width="80">序列号</th><th>供应商</th><th>'+html_name+'</th></tr>'+res.html;
+    			$('.analyseRight').find('.tableCon').find('tbody').html(this_html);
+        	},'json')
+    	}else{
+    		//毛利增长率
+    		var html_name='毛利增长率';
+    		$.get("/Ajax/getsupzztop10",{"strtime":s_time,"endtime":e_time,"lineid[]":st_lineid},function(res){
+    			if(res.html=='null')res.html='<tr><td colspan="3">暂无数据</td></tr>';
+    			this_html='<tr><th width="80">序列号</th><th>供应商</th><th>'+html_name+'</th></tr>'+res.html;
+    			$('.analyseRight').find('.tableCon').find('tbody').html(this_html);
+        	},'json')
+    	}
+    }
+        $(function(){
+        	c_line(old_c[0],1);
+        })
+    </script>
+	<div class="MainContent" style="margin-top:40px">
+	    <div class="classifyBox">
+	        <ul class="classifyList clear">
+                 <li><a href="javascript:c_line(0)" title="">全公司</a></li>
+                 <li><a href="javascript:c_line(1)">优效分发平台</a></li>
+                 <li><a href="javascript:c_line(2)">优效SSP平台</a></li>
+                 <li><a href="javascript:c_line(3)">优效发行平台</a></li>
+                 <li><a href="javascript:c_line(4)">优效营销平台</a></li>
+                 <li><a href="javascript:c_line(5)">优效商家平台</a></li>
+                 <!-- <li><a href="javascript:c_line(6)">分发（一）</a></li>-->
+                 <!-- <li><a href="javascript:c_line(7)">分发（二）</a></li>  -->
+                <?php if($isHas_check==200){ ?>
+                 <li><a href="javascript:c_line(100)" id="zcb_100" title="点击该按钮之后，在点击全公司按钮，全公司数据包含总裁办数据（默认全公司不包含总裁办数据）">显示总裁办数据</a></li> 
+                <?php } ?>
+                 
+	        </ul><!--classifyList-->
+	    </div><!--classifyBox-->
+	    <h2>收益概览</h2>
+	    <div class="tableBox" style="position:relative;">
+	    	<div id='loading' style="position:absolute;top:0;width:100%;height:100%;display:none;text-align:center;opacity:0.5;-moz-opacity:0.5;filter:alpha(opacity=50);background:#fff;"><img style="margin:auto;" src="__PUBLIC__/Home/img/loading.gif"/></div>
+	        <table class="tableCon" id='alldatatable'>
+	            <tbody>
+	                <tr>
+	                    <th style="width:190px;">指标</th>
+	                    <th>收入(单位：万元)</th>
+	                    <th>成本(单位：万元)</th>
+	                    <th>完成毛利(单位：万元)</th>
+	                    <th>毛利目标</th>
+	                    <th>完成率</th>
+	                    <th>收入确认率</th>
+	                    <th>成本确认率</th>
+	                </tr>
+	                <tr>
+	                    <td>本&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;<php>echo (int)date('m').'月';</php></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                </tr>
+	                <!--   <tr>
+	                    <td>上月同期&nbsp;&nbsp;&nbsp;&nbsp;<php>echo $date_arr[2].'~'.$date_arr[3];</php></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                </tr>  -->
+	                <tr>
+	                    <td>上&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;<php>$mo = (int)date('m',strtotime(date('Y').'-'.(date('m')-1))).'月';echo $mo;</php></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                </tr>
+	                <tr>
+	                    <td>全年累计&nbsp;&nbsp;&nbsp;&nbsp;<php>if((int)date('m')!=1)echo '1~'.(int)date('m').'月'; else echo '1月';</php></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                    <td></td>
+	                </tr>
+	            </tbody>
+	        </table>
+	    </div><!--tableBox-->
+	    <div class="chartTypeBox">
+	        <div class="chartType left"><span onclick="c_type(0)">占比分析</span><span onclick="c_type(1)">收入趋势分析</span><span onclick="c_type(2)">TOP10分析</span></div>
+	        <div class="chartDay right">
+            <span class="dayHover" onclick='settime_cl(<php>echo '"'.$date_arr[5].'","'.$date_arr[8].'"';</php>,this)'>近7天</span>
+            <?php if($querytop10==200){ ?> 
+                 <span onclick='settime_cl(<php>echo '"'.$pre_start.'","'.$pre_end.'"';</php>,this)'>上月</span>
+            <?php }else{ ?>
+                 <span onclick='settime_cl(<php>echo '"'.$date_arr[6].'","'.$date_arr[8].'"';</php>,this)'>近30天</span>
+             <?php } ?>
+           
+            <span onclick='settime_cl(<php>echo '"'.$date_arr[7].'","'.$date_arr[8].'"';</php>,this)'>全年</span>
+            <span class="DayTime">
+            <input type="text" id="DayDemo" onchange="changetime()" class="form-control"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+            </span>
+            </div>
+	    </div><!--chartTypeBox-->
+	    <div class="chartBox clear">
+	        <div class="chartLeft left">
+	            <div id="myChart1" style="width:98%;height:480px"></div>
+	        </div>
+	        <div class="chartRight right">
+	            <div id="myChart2" style="width:98%;height:480px"></div>
+	            <p></p>
+	        </div>
+	        <div id="container" style="height: 400px;display:none;"></div>
+	        <div class="analyseLeft left myChart3" style="display:none">
+	            <div class="tabTitle"><span onclick="c_type2(0)">收入</span><span onclick="c_type2(1)">毛利润</span><span onclick="c_type2(2)">毛利增长率</span></div>
+	            <div class="tabConBox">
+	                <div class="tabCon2 tableBox">
+	                    <table class="tableCon">
+	                        <tbody>
+
+	                            
+	                        </tbody>
+	                    </table>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="analyseRight right myChart3" style="display:none">
+	            <div class="tabTitle"><span onclick="c_type3(0)">成本</span><span onclick="c_type3(1)">毛利润</span><span onclick="c_type3(2)">毛利增长率</span></div>
+	            <div class="tabConBox">
+	                <div class="tabCon2 tableBox">
+	                    <table class="tableCon">
+	                        <tbody>
+	                        
+	                        
+	                        </tbody>
+	                    </table>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<script>
+	    $('#DayDemo').daterangepicker({
+	        locale: {
+	            direction: "ltr",
+	            format: "YYYY-MM-DD", //控件中from和to 显示的日期格式
+	            separator: " ~ ",
+	            applyLabel: "确定",
+	            cancelLabel: "取消",
+	            fromLabel: "起始时间",
+	            toLabel: "结束时间",
+	            customRangeLabel: "自定义",
+	            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+	            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+	            firstDay: 1
+	        },
+	        startDate: "<php>echo $date_arr[5];</php>",
+	        endDate: "<php>echo $date_arr[8];</php>",
+	        opens: "left"
+	    });
+	</script>
+</block>
+<block name="script">
+
+	
+</block>
+

@@ -1,0 +1,107 @@
+<extend name="Public/base"/>
+<block name="body">
+    <!--数据表-->
+    <form id="dataform"  action="{:U('create_txt')}" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="sort_id" name="sort_id" value="{$sort_id}">
+        <input type="hidden" id="cid" name="cid" value="{$cid}">
+        <input type="hidden" id="FROM_ID" name="FROM_ID" value="<?php echo UID ?>">
+        <!--<table class="dialogTable_form w ha">
+            <tr>
+                <th>标题：</th>
+                <td><input type="text" name="SUBJECT"></td>
+            </tr>
+            <tr>
+                <th>类型：</th>
+                <td><bselect name="TYPE_ID" options="notify_type" selected="_GET['notify_type']" first="请选择"/></td>
+            </tr>
+            <tr>
+                <th>阅读权限：</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>有效期：</th>
+                <td><input name="BEGIN_DATE" readonly="readonly" style="width: 103px;" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate"/>至<input style="width: 103px;" name="END_DATE" readonly="readonly" type="text" onClick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate"/>(无终止时间将一直生效)</td>
+            </tr>
+            <tr>
+                <th>置顶：</th>
+                <td><input type="radio" name="TOP" value="1" checked>是&nbsp;&nbsp;<input type="radio" name="TOP" value="0">否</td>
+            </tr>
+            <tr>
+                <th>附件：</th>
+                <td><input type="file" class="fileBtn" id="notifyFile"  name="notifyFile" multiple="multiple" /><span class="nr"></span></td>
+            </tr>
+        </table>-->
+        <div class="subCon">
+            <!--新增、修改表单-->
+            <div class="modifyCon">
+                <p class="modify">
+                    <lable>文件名</lable>
+                    <input type="text" name="SUBJECT" value="{$upInfo['SUBJECT']}">
+                </p>
+
+                <p class="modify">
+                    <lable>描述</lable>
+                    <textarea id="nerong" name="nerong" style="width: 550px;">{$upInfo.nerong}</textarea>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="dataFormOperate" style="line-height: 500px;width: 30%;">
+            <input id="" type="submit" value="保存" />
+            <a href="{:U('index')}">返回</a>
+        </div>
+    </form>
+
+</block>
+
+<block name="script">
+    <script src="__MODULE__/jquery.form.js"></script>
+
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+    <!--编辑器 start-->
+    <link rel="stylesheet" href="__PUBLIC__/OA/js/kindeditor-4.1.10/themes/default/default.css" />
+    <script charset="utf-8" src="__PUBLIC__/OA/js/kindeditor-4.1.10/kindeditor-all-min.js"></script>
+    <script charset="utf-8" src="__PUBLIC__/OA/js/kindeditor-4.1.10/lang/zh_CN.js"></script>
+    <script>
+        var editor;
+        KindEditor.ready(function(K) {
+            editor = K.create('textarea[name="nerong"]', {
+                allowFileManager : true
+            });
+
+            K('input[name=getHtml]').click(function(e) {
+                alert(editor.html());
+            });
+            K('input[name=isEmpty]').click(function(e) {
+                alert(editor.isEmpty());
+            });
+            K('input[name=getText]').click(function(e) {
+                alert(editor.text());
+            });
+            K('input[name=selectedHtml]').click(function(e) {
+                alert(editor.selectedHtml());
+            });
+            K('input[name=setHtml]').click(function(e) {
+                editor.html('<h3>Hello KindEditor</h3>');
+            });
+            K('input[name=setText]').click(function(e) {
+                editor.text('<h3>Hello KindEditor</h3>');
+            });
+            K('input[name=insertHtml]').click(function(e) {
+                editor.insertHtml('<strong>插入HTML</strong>');
+            });
+            K('input[name=appendHtml]').click(function(e) {
+                editor.appendHtml('<strong>添加HTML</strong>');
+            });
+            K('input[name=clear]').click(function(e) {
+                editor.html('');
+            });
+        });
+    </script>
+    <script type="text/javascript">
+
+    </script>
+</block>

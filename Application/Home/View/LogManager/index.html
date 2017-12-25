@@ -1,0 +1,118 @@
+<extend name="Public/base"/>
+<block name="body">
+    <!--筛选-->
+    <div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <div class="dataTableShow fr" goal="dataTable1">
+                <div class="dataTableShow_icon fr"></div>
+                <div class="dataTable_columnCa pa">
+                    <div class="dataTable_columnCn"></div>
+                    <div class="dataTableShow_close tc">关闭</div>
+                </div>
+            </div>
+        </div>
+        <div class="screenList fl w">
+            <form>
+            <table action="{:U('index')}">
+                <tr>
+                    <th>关键字：</th>
+                    <td><input type="text" name="kw" value="{$Think.get.kw}" /></td>
+                    <th>模块：</th>
+                    <td><bselect name="module" options="op_module" selected="_GET['module']"/></td>
+                    <th>日志级别：</th>
+                    <td><bselect name="level" options="op_level" selected="getlevel"/></td>
+                    <th>时间：</th>
+                    <td><input readonly="true" class="Wdate" onClick="WdatePicker({ dateFmt:'yyyyMMdd'})" type="text" name="date" value="<empty name='Think.get.date'>{:date('Ymd')}<else/>{$_GET['date']}</empty>"/></td>
+                    <th>数据源：</th>
+                    <td><bselect name="resource" options="op_resource" selected="_GET['resource']"/></td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <input type="hidden" name="p" value="1"/>
+                        <input type="submit" value="查询" />
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+    </div>
+
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>模块</th>
+                <th>级别</th>
+                <th>人员</th>
+                <th>关键字</th>
+                <th>时间</th>
+                <th>内容</th>
+                <th width="150">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                <volist name="list" id="item">
+                    <tr>
+                        <td>{$item.id}</td>
+                        <td>{$item.module}</td>
+                        <td>{$item.level}</td>
+                        <td>{$item.user}</td>
+                        <td>{$item.keyword}</td>
+                        <td>{$item.datetime}</td>
+                        <td>{$item.content}</td>
+                        <td>
+                            <a log-content="{$item.all}" item-id="{$item['id']}" class="btn-detail">详情</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    {$_page}
+
+    <!--————————————————————————————————————————————————————————————————————————————————————————————————————-->
+    <!--弹出框（详情） -->
+    <div class="detailDialog" title="详情" style="display: none;">
+    </div>
+
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        $(function() {
+            //删除
+            $(".dataTable").on({
+                click: function() {
+                    //var id = $(this).attr('item-id');
+                    var thisDialog = $(".detailDialog");
+                    thisDialog.html($(this).attr('log-content'));
+                    thisDialog.dialog("open");
+                }
+            }, ".btn-detail");
+
+            //对话框（新增、修改）
+            $(".detailDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "700",
+                height: "200",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    /*"保存":function() {
+
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }*/
+                },
+            });
+
+
+        });
+    </script>
+
+</block>

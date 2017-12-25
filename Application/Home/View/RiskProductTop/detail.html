@@ -1,0 +1,155 @@
+<extend name="Public/base"/>
+<block name="subnav">
+</block>
+<block name="script">
+    <script type="text/javascript" src="__MODULE__/bootstrapselect/bootstrap-select.js"></script>
+    <script src="__MODULE__/ECharts/echarts-all.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function() {
+            $("#doExport").click(function(){
+                var param = $("#search_form").serialize();
+                var url = "{:U('export_de')}";
+                window.location.href=url+'?'+param;
+            });
+            cS();
+            $("#search_btn").click(function(){
+                cS();
+            });
+            function cS(){
+                var pro_name = $("#pro_name").val();
+                var adv_name = $("#adv_name").val();
+                var sale_name = $("#sale_name").val();
+                var a_pl = $("#a_pl").val();
+                $.get("{:U('AjaxAnalysis')}",{pro_name:pro_name,adv_name:adv_name,sale_name:sale_name},function(ret){
+                    var str = '';
+                    for(var o in ret){
+                        str +='<tr>' +
+                                '<td>'+ret[o].name+'</td>' +
+                                '<td>'+ret[o].adv_name+'</td>' +
+                                '<td>'+ret[o].real_name+'</td>' +
+                                '<td>'+ret[o].newmoney+'</td>' +
+                                '<td>'+ret[o].whk_money+'</td>' +
+                                '<td>'+ret[o].out_newmoney+'</td>' +
+                                '</tr>';
+                    }
+                    $(".analysis").html(str);
+                });
+            }
+        });
+    </script>
+</block>
+
+<block name="body">
+<div class="subMainBox">
+    <div class="tabCa pa">
+        <div class="tab_contentWrapper pa">
+            <!--核检概览-->
+            <div class="tab_content pa " style="display: block;">
+                <!--筛选-->
+                <!--<div class="screenCn fl w ha">
+                    <div class="screenOperate fl w">
+                        <input id="doExport" type="button" value="下载报表" class="" />
+                        <input type="button" value="高级筛选" class="J_openScreen" />
+                        <a href="/RiskProductTop/index" target="_blank">明细</a>
+                    </div>
+
+                    <div class="screenList fl w">
+                        <form action="{:U('index')}" id="search_form">
+                            <table>
+                                <tr>
+                                    <th class="expertScreen">产品名称：</th>
+                                    <td class="expertScreen">
+                                        <input type="text" id="pro_name" name="pro_name" value="{$Think.get.pro_name}">
+                                    </td>
+                                    <th class="expertScreen">客户名称：</th>
+                                    <td class="expertScreen"><input type="text" id="adv_name" name="adv_name" value="{$Think.get.adv_name}">
+                                    </td>
+                                    <th class="expertScreen">合同责任人：</th>
+                                    <td class="expertScreen">
+                                        <input type="text" id="sale_name" name="sale_name" value="{$Think.get.sale_name}">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="8" class="expertScreen">
+                                        <input id="search_btn" type="button" value="查询" />
+                                        <input type="hidden" name="p" value="1"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>-->
+
+                <div class="screenBox swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <form action="{:U('index')}" id="search_form">
+                                <!--基础查询-->
+                                <h2>基础查询</h2>
+
+                                <div class="swiperRight">
+                                    <table class="tableBox">
+                                        <tr>
+                                            <th>产品名称：</th>
+                                            <td>
+                                                <input type="text" id="pro_name" name="pro_name" value="{$Think.get.pro_name}">
+                                            </td>
+                                            <th>客户名称：</th>
+                                            <td><input type="text" id="adv_name" name="adv_name" value="{$Think.get.adv_name}">
+                                            </td>
+                                            <th>合同责任人：</th>
+                                            <td>
+                                                <input type="text" id="sale_name" name="sale_name" value="{$Think.get.sale_name}">
+                                            </td>
+                                            <td>
+                                                <input type="submit" value="查询" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </form>
+                            <!--end 基础查询-->
+                        </div>
+                    </div>
+                </div>
+                <!--数据表-->
+                <div class="dataCn fl w ha">
+                    <div class="advancedTit">
+                        <div class="advancedLeft">
+                            <span class="export advBtn"><input id="doExport" type="button" value="下载报表" class="" /></span>
+                        </div>
+                    </div>
+                    <table class="dataTable dataTable1" id="alldatatable">
+                        <thead>
+                        <tr>
+                            <th>产品名称</th>
+                            <th>客户名称</th>
+                            <th>合同责任人</th>
+                            <th>总金额</th>
+                            <th>未回款金额</th>
+                            <th>已支付成本</th>
+                        </tr>
+                        </thead>
+                        <tbody class="analysis">
+                        <volist name="list" id="item">
+                            <tr>
+                                <td>{$item.name}</td>
+                                <td>{$item.adv_name}</td>
+                                <td>{$item.real_name}</td>
+                                <td>{$item.newmoney}</td>
+                                <td>{$item.whk_money}</td>
+                                <td>{$item.out_newmoney}</td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                    <!--分页-->
+                    <sapn class="fenYe">{$_page}</sapn>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <link rel="stylesheet" type="text/css" href="__MODULE__/bootstrapselect/css/bootstrap-select.css"/>
+</block>

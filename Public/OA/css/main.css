@@ -1,0 +1,35 @@
+.MainBox { bottom: 0; left: 0; /*min-width: 1400px;*/ overflow-x: hidden; overflow-y: auto; position: absolute; right: 0; top: 0; width: 100%;  }
+/*
+*头部 header
+*/
+.headBox{ width: 100%; height:74px; background:#26293a;}
+.logoBox{ position: absolute; left: 0; top: 0; width: 200px; height: 74px; text-align: center;}
+.logoBox img{ display: inline-block; margin-top: 19px;}
+.headRight{ padding: 0 200px; height: 74px;}
+.headNav{ width: 100%;}
+.headNav li{ float:left; width:9%; margin-left: 1%; height: 74px; line-height: 74px;}
+.headNav li a{ display: block; width: 100%; height: 74px; text-align: center; color:#dadada; font-size:16px;}
+.headNav li a.headhover,.headNav li a:hover{ background:#171b2d; color:#1a72d6;}
+.userBox{ position: absolute; right: 60px; top: 0; width: 140px; height: 74px;}
+.userBox .userName { color: #f9f9f9; height: 74px; line-height: 74px; overflow: hidden; padding-right: 20px; position: relative; text-overflow: ellipsis; white-space: nowrap; width: 120px; margin-left: 10px; cursor: pointer;}
+.userBox .userName:after { background: rgba(0, 0, 0, 0) url("../images/user_icon_a.png") no-repeat scroll 0 0; content: "~\"url(../images/arrow-down.png)\""; height: 4px; margin-top: -1px; overflow: hidden; position: absolute; right: 8px; text-indent: -9999px; top: 50%; white-space: nowrap; width: 6px; margin: 0 10px; }
+.userBox .userName:before { content: url("../images/user_icon.png"); float: left; margin: 4px 10px 0;}
+.userBox .userList{ display: none; position: absolute; top: 60px; left: 10px; width: 156px; height:68px; border:1px solid #e0e0e0; background:#fff; z-index: 20;}
+.userBox .userList li{ height: 34px; text-align: left; text-indent: 20px; line-height: 34px;}
+.userBox .userList li a{ display: block; width: 100%; height: 34px; font-size:14px; color:#666;}
+.userBox .userList li a:hover{ background:#f5f5f5;}
+.userBox:hover .userList{ display: block;}
+/*
+*左侧菜单
+*/
+.MainMenu{ position: absolute; left: 0; top: 74px; bottom: 0; width: 200px; background:#eee;}
+.menuList{ margin-top: 10px;}
+.menuList li{ height: 45px; border-bottom: 1px solid #dadada;}
+.menuList li a{ display: block; height: 45px; line-height: 45px; text-align: left; text-indent: 35px; font-size: 14px; color:#666;}
+.menuList li a.menuHover{ color:#1a69c5; background: #f9f9f9;}
+.menuList li a:hover{color:#1a69c5; }
+/*
+*主体内容
+*/
+.MainContentBox{ position: absolute; right: 0; top: 74px; bottom: 0; left: 200px;  background: #fff;overflow-x: hidden; overflow-y: auto;}
+.MainContent{ padding: 20px;}

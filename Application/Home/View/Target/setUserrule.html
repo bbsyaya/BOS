@@ -1,0 +1,315 @@
+<extend name="Public/base"/>
+<block name="script">
+	<script type="text/javascript">
+	var inputnum=1;
+	// var glist={$grouplist2};
+			$(function() {
+				var configData;
+				$.post('/Ajax/getConfig',{},function(res){
+					configData=res;
+				},'json')
+				var makeFinanceDataId;
+				//对话框开票
+				$(".invoiceDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "1200",
+					height: "600",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$(this).dialog("close");
+							$('#financeform').submit();
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				//新增对话框
+				$(".screenOperate").on({
+					click: function() {
+						$('.dynamicTable').html($('.dynamicTableclone').html());
+						// $('select[name="groupid"]').find('option').each(function(){
+						// 	for(var o in glist){
+						// 		if($(this).attr('value')==glist[o].id)$(this).remove();
+						// 	}
+						// })
+						$(".invoiceDialog").dialog("open");
+					}
+				}, ".J_Add");				
+
+
+
+				//新增部门提成规则
+				$(".dynamicTable").on({
+					click:function() {
+		                var tabObj = $(this).parents('table');
+		                $(tabObj).append("<tr>" +
+		                    "<td><input type='text' name='num[]'/></td>"+
+		                    "<td><input type='text' name='money[]'/></td>"+
+		                    "<td><span class=\"doDataDelete\">删除</span></td>" +
+		                    "</tr>");
+		            }
+	      		},'.add_blplanning');
+	            //删除按钮
+	            $(".dynamicTable").on('click', '.doDataDelete', function(){
+	                var id = $(this).attr('item-id');
+	                var type = $(this).attr('item-type');
+	                var thisbtn = this;
+
+	                if (confirm('确认删除此条信息?')) {
+	                    $(thisbtn).parents('tr').remove();
+	                }
+	            });
+	            //修改信息
+	            $(".dataTable").on({
+					click:function(){
+						$.post('/Target/getUserDataApi',{'id':$(this).attr('data')},function(res){
+							// for(var o in glist){
+							// 	$('select[name="groupid"]').append('<option value="'+glist[o].id+'">'+glist[o].name+'</option>');
+							// }
+							//选中select
+							$("#depart_id").find("option").remove("selected");
+							$("#depart_id").find("option[value="+res.groupid+"]").attr("selected","selected");
+							$('.dialogTable_form').find('select[name="groupid"]').val(res.groupid);
+							$('.dialogTable_form').find('select[name="type"]').val(res.type);
+							$('.dialogTable_form').find('input[name="minmoney"]').val(res.minmoney);
+							$('.dialogTable_form').find('input[name="id"]').val(res.id);
+							$('.dynamicTable').html($('.dynamicTableclone').html());
+							for(var i in res.rule){
+								$('.dynamicTable').append("<tr>" +
+			                    "<td><input type='text' name='num[]' value='"+res.rule[i][0]+"'/></td>"+
+			                    "<td><input type='text' name='money[]' value='"+res.rule[i][1]+"'/></td>"+
+			                    "<td><span class=\"doDataDelete\">删除</span></td>" +
+			                    "</tr>");
+							}
+							$(".invoiceDialog").dialog("open");
+						},'json')
+						
+					}
+				},".J_change")
+				//对话框导入流水
+				$(".uploadingDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "450",
+					height: "200",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$(this).dialog("close");
+							$('#uploadexcel').submit();
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//导入流水对话框
+				$(".J_uploading").click(function(){
+					$(".uploadingDialog").dialog("open");
+				});
+			});
+
+		</script>
+</block>
+
+<block name="body">
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">部门提成规则设置</span>
+				<span>商务管理</span>
+			</div>
+			<div class="ri_work">Department of the proposed rules set</div>
+		</div>
+				<!--筛选-->
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<input type="button" value="新增" class="J_Add" />
+						<input type="button" value="导入" class="J_uploading" />
+						<input type="button" value="下载模板" onclick="window.open('/部门提成规则.xlsx')" />
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					<form action="/Target/setUserrule" method='get'>
+					<div class="screenList fl w">
+						<table>
+							<tr>
+								<th>部门：</th>
+								<td>
+									<select name='groupid'>
+										<volist name='grouplist' id='v'>
+											<option value="{$v.groupid}" <eq name='v.groupid' value="$_GET['groupid']">selected="selected"</eq>>{$v.name}</option>
+										</volist>
+									</select>
+								</td>
+								<td></td>
+								<td colspan="5">
+									<input type="submit" value="查询" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					</form>
+				</div>-->
+
+				<div class="screenBox swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<form action="/Target/setUserrule" method='get'>
+
+								<div class="swiperRight">
+									<table class="tableBox">
+										<tr>
+											<th>部门：</th>
+											<td>
+												<select class="selectpicker" name='groupid'>
+													<volist name='grouplist' id='v'>
+														<option value="{$v.groupid}" <eq name='v.groupid' value="$_GET['groupid']">selected="selected"</eq>>{$v.name}</option>
+													</volist>
+												</select>
+											</td>
+											<td colspan="6">
+												<input type="submit" value="查询" />
+											</td>
+										</tr>
+									</table>
+								</div>
+							</form>
+							<!--end 基础查询-->
+						</div>
+					</div>
+				</div>
+				<!--数据表-->
+				<style type="text/css">
+					.te{margin-left: 0!important;}
+				</style>
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<span class="addAdv advBtn"><input type="button" value="新增" class="J_Add" /></span>
+							<span class="export advBtn te"><input type="button" value="导入" class="J_uploading" /></span>&nbsp;&nbsp;
+							<input type="button" value="下载模板" onclick="window.open('/部门提成规则.xlsx')" />
+						</div>
+					</div>
+					<form action="subaudit" method='post' name='subauditdataform'>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+
+							<th>序号</th>
+							<th>所属部门</th>
+							<th>考核类型</th>
+							<th>最低毛利指标</th>
+							<th>提成规则</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+
+						<volist name='data' id='v'>
+							<tr>
+								<td>{$v.id}</td>
+								<td>{$v.name}</td>
+								<td>{:C('option.targettype')[$v['type']]}</td>
+								<td>{$v.minmoney}</td>
+								<td>{$v.rule}</td>
+								<td><a href="javascript:;" class="J_change" data='{$v.id}'>修改</a>&nbsp;<a href="/Target/delOneUserrule?id={$v.id}">删除</a></td>
+					        </tr>
+						</volist>
+						</tbody>
+					</table>
+					</form>
+				</div>
+			</div>
+
+			<div class="invoiceDialog" title="开票详情">
+			<form id="financeform" action="/Target/addUserrule" method='post' target="newpage">
+				<table class="dialogTable_form w ha">
+				<input type='hidden' name='id' value=""/>
+					<tr>
+						<th>所属部门:</th>
+						<td>
+							<select name='groupid' id="depart_id" style="width:275px !important;">
+								<option>加载中...</option>
+							</select>
+						</td>
+						<th>考核类型:</th>
+						<td><select name='type'>
+							<option value="1">毛利润</option>
+							<option value="2">收入流水</option>
+							<option value="3">成本流水</option>
+						</select></td>
+						<th>最低毛利指标:</th>
+						<td id='content'><input name='minmoney' type='text'/></td>
+					</tr>
+					
+				</table>
+				<table class="dynamicTable w ha">
+					<caption align="bottom">
+                        <input class="addTR add_blplanning" type="button" value="" />
+                    </caption>
+					<tr>
+						<th style="text-align:center">提成基数</th>
+						<th style="text-align:center">毛利提成系数（请输入小于1的小数）</th>
+						<th style="text-align:center">操作</th>
+					</tr>
+				</table>
+				</form>
+				<table class="dynamicTableclone" style="display:none">
+					<caption align="bottom">
+                        <input class="addTR add_blplanning" type="button" value="" />
+                    </caption>
+					<tr>
+						<th style="text-align:center">提成基数</th>
+						<th style="text-align:center">毛利提成系数（请输入小于1的小数）</th>
+						<th style="text-align:center">操作</th>
+					</tr>
+				</table>
+		<div class="uploadingDialog" title="导入流水">
+			<form action='/Target/uploadUserruleForExcel' target="newpage" id="uploadexcel" method='post' enctype="multipart/form-data">
+			<table class="dialogTable_form w ha">
+				<tr>
+					<th></th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>导入流水<span class="must">*</span>:</th>
+					<td><input type="file" name='file' multiple="multiple" /></td>
+				</tr>
+			</table>
+			</form>
+		</div>
+<script type="text/javascript">
+	var l={
+		init:function(){
+			this.lazyDepart();
+		},
+		lazyDepart:function(){
+	        setTimeout(function(){
+	            $.get("/OA/OrganizSetting/getAllList.html",function(data){
+	                var ht='',sec="";
+	                $.each(data,function(i,o){
+	                	// sec=_default.depart_id==o.id?"selected":"";
+	                    ht+='<option value="'+o.id+'" '+sec+'>'+o.name+'</option>';
+	                });
+	                $("#depart_id").html(ht);
+	            });
+	        },1000);
+    	}
+	}
+	$(function(){l.init();});
+</script>
+</block>
+
+

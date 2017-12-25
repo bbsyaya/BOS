@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>重庆话语智能办公平台   BOS系统</title>
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge"/>
+    <link rel="stylesheet" href="__PUBLIC__/newUIH/css/reset.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/newUIH/css/index.css?v={:getVersion()}"/>
+</head>
+<body>
+<section>
+    <div class="section_box">
+       
+        <div class="section_willdo">
+            <div class="section_willdo_header">
+                <div class="section_willdo_daiban">
+                    <div><img src="__PUBLIC__/newUIH/images/daiban.png" alt=""></div>
+                    <div>
+                        <div class=" section_willdo_title">RECYCLE</div>
+                        <div>回收站</div>
+                    </div>
+                </div>
+                
+            </div>
+            <!-- udpate 0921  -->
+            
+            <div class="mes-opre-sec">
+                <span class="xx-ch" onclick="x.checkAll(this)" data-status="1">
+                    <i class="aimg xx-ck" id="choseAll"></i>
+                </span>
+                <span class="xx-sel">
+                    <select class="xx-sel-n">
+                        <option value="0" onclick="x.backStatus()">请选择</option>
+                        <option value="1" onclick="x.backStatus()">还原</option>
+                    </select>
+                    <i class="aimg xx-down"></i>
+                </span>
+               <span class="ks-sk">
+                    <span class="ks-ssk">
+                        <input  type="text" class="ks-puk" id="content" name="content" value="{$content}" placeholder="关键字查询，例如合同、逾期、回款、产品"/>
+                         <span class="ks-ssbtn" onclick="x.searchMsg()">&nbsp;&nbsp;&nbsp;</span>
+                    <form action="/Home/Message/rubbishList.html" id="sform">
+                     <input type="hidden" value="{$content}" id="hd_content" name="hd_content"/>
+                     </form>
+                    </span>
+                </span>
+                
+            </div>
+            
+            <!-- udpate 021 -->
+             <style type="text/css">
+                .isExp{color:red !important;}
+                .test{float: right !important;
+                    margin-right: 30px;}
+            </style>
+            <div class="section_willdo_text">
+                <if condition="count($promlist) eq 0">
+                    <div class="no_data_text">
+                        <div class="no_data_img"><img src="/Public/newUIH/images/no_data_img.png" alt=""></div>
+                        <div>您的垃圾桶空空的！！！</div>
+                    </div>
+                <else/>
+                    <div id="table_content">
+                        <volist name="promlist" id='v'>
+                            <div class="section_willdo_list">
+                                <span class="xx-ch" onclick="x.choseItem({$v.id})">
+                                    <i class="aimg xx-ck ckitem" id="ck_{$v.id}" data-msgid="{$v.id}"></i>
+                                </span>
+                                <span class="section_willdo_icon mgleft17 <eq name="v.status" value="1">has_backg</eq>"></span>
+                                <span class="xx-mesgk"><a class="{$v['isExp_css']}" title="{$v.content}">{$v.content}</a></span>
+                                <span class="test">
+                                    {$v['date_time']|strtotime|date='Y-m-d',###} 
+                                </span>
+                                
+                            </div>
+                        </volist>
+                    </div>
+                    {$page}
+                </if>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="__PUBLIC__/newUIH/js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/newUIH/js/msg.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+</body>
+</html>

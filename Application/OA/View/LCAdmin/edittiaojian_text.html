@@ -1,0 +1,37 @@
+<extend name="Public/base"/>
+<block name="style">
+    <meta charset="UTF-8">
+    <title>流程管理</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+</block>
+
+
+<block name="body">
+<div class="subConten">
+    <!--面包屑-->
+    <div class="crumbs"><a href="">系统管理</a>&nbsp;&gt;&nbsp;<a href="">流程管理</a>&nbsp;&gt;&nbsp;<span>审核要点设置:{$data.name}</span></div>
+    <!--end 面包屑-->
+    <!--内容-->
+    <div class="subCon">
+        <!--条件查询-->
+        <div class="query">
+            <form action="/OA/LCAdmin/changetiaojian_text" method='post'>
+            <input type="hidden" name="id" value="{:I('get.id')}"/>
+            <table class="queryTable">
+                <tbody>
+                    <tr>
+                        <th>审核要点：</th>
+                        <td style="width:600px"><textarea style="width:100%" name="yaodian">{$data.yaodian}</textarea></td>
+                        <td colspan="2"><input name="" type="submit" value="提交"></td>
+                    </tr>
+                </tbody>
+            </table>
+            </form>
+        </div>
+        <!-- end 条件查询-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+</block>

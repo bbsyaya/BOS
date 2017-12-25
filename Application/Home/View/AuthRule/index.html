@@ -1,0 +1,157 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="subMainBox">
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text">权限菜单</span>
+                <span>系统管理</span>
+            </div>
+            <div class="ri_work">authority management</div>
+        </div>
+    <!--筛选-->
+    <div class="screenBox swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <form action="{:U('index')}" id="search_form">
+                    <!--基础查询-->
+                    <h2>基础查询</h2>
+                    <div class="swiperRight">
+                        <table class="tableBox">
+                            <tr>
+                                <th>权限名称：</th>
+                                <td><input type="text" name="title" value="{$Think.get.title}"/></td>
+                                <td colspan="6">
+                                    <input type="submit" value="查询" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+                <!--end 基础查询-->
+            </div>
+        </div>
+    </div>
+
+    <!--数据表-->
+    <div class="dataCn fl w ha" id="table_con">
+        <div class="advancedTit">
+            <div class="advancedLeft">
+                <span class="addAdv advBtn"><input type="button" class="J_addData" value="新增"></span>
+            </div>
+        </div>
+        <table class="dataTable dataTable1">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>名称</th>
+                <th>上级</th>
+                <th>数据范围</th>
+                <th>URL</th>
+                <th>隐藏</th>
+                <th>状态</th>
+                <th width="150">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                <volist name="list" id="item">
+                    <tr>
+                        <td>{$item.id}</td>
+                        <td><a href="{:U('index?pid='.$item['id'])}">{$item.title}</a></td>
+                        <td>{$parentName}</td>
+                        <td></td>
+                        <td>{$item.name}</td>
+                        <td>{$op_is_hide[$item['is_hide']]}</td>
+                        <td>{$op_function_status[$item['status']]}</td>
+                        <td>
+                            <a item-id="{$item['id']}" class="J_updateData">编辑</a>
+                            <a item-id="{$item['id']}" class="J_delete">删除</a>
+                        </td>
+                    </tr>
+                </volist>
+            </tbody>
+        </table>
+        <!--分页-->
+        {$_page}
+    </div>
+    </div>
+
+
+    <!--————————————————————————————————————————————————————————————————————————————————————————————————————-->
+    <!--弹出框（新增角色） -->
+    <div class="addDataDialog" title="编辑角色" style="display: none;">
+    </div>
+
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        $(function() {
+            //删除
+            $(".J_delete").click(function(){
+                if (confirm("确认删除[" + $(this).parent().siblings().eq(1).text() + "]?")) {
+                    var itemid = $(this).attr('item-id');
+                    window.location.href = "{:U('delete')}" +"?id="+itemid;
+                }
+            });
+
+            //对话框（新增、修改）
+            $(".addDataDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                width: "500",
+                height: "300",
+                modal: true,
+                show: "scale",
+                buttons: {
+                    "保存":function() {
+                        var thisdialog = this;
+                        var tableform = $("#tableForm");
+                        $.post("{:U('update')}", tableform.serialize(), function(ret){
+                            if (ret == 'ok') {
+                                $(thisdialog).dialog("close");
+                                alertnewpage2('保存成功',window.location.href);
+                            } else {
+                                alertnewpage2(ret);
+                            }
+                        });
+                    },
+                    "取消":function(){
+                        $(this).dialog("close");
+                    }
+                },
+            });
+            //新增对话框
+            var addDialogData = '';
+            $(".J_addData").click(function(){
+                //ajax加载表格数据
+                if (!addDialogData) {
+                    $.get("{:U('add')}",{},function(dom){
+                        addDialogData = dom;
+                        $(".addDataDialog").html(addDialogData);
+                        $(".addDataDialog").dialog("open");
+                    });
+                } else {
+                    $(".addDataDialog").html(addDialogData);
+                    $(".addDataDialog").dialog("open");
+                }
+
+            });
+            //修改对话框
+            $(".dataTable").on({
+                click: function() {
+                    var id = $(this).attr('item-id');
+                    if (!id) {
+                        $("<div>参数错误</div>").dialog();
+                    }
+                    $.get("{:U('edit')}",{id:id},function (dom) {
+                        $(".addDataDialog").html(dom);
+                        $(".addDataDialog").dialog("open");
+                    })
+                }
+            }, ".J_updateData");
+
+
+        });
+    </script>
+
+</block>

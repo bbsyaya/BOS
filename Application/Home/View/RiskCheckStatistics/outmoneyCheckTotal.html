@@ -1,0 +1,48 @@
+<extend name="Public/base"/>
+<block name="body">
+<style type="text/css">
+	.tt{margin-top:8px;float:left;width:100%;}.tit-s{width: 100%;float: left;margin-top: 20px;font-size: 16px;text-align: center;}.clin{color: #1a69c5 !important;}
+</style>
+<div class="subMainBox">
+<div class="tit-s">{$year}年付款总计</div>
+<div class="dataCn fl w ha" id="table_con">
+    <div class="advancedTit">
+        <div class="advancedLeft">
+        </div>
+    </div>
+<table class="tableCon tt dataTable dataTable1" id="alldatatable" >
+    <tbody>
+        <tr>
+            <th style="width:190px;">月份</th>
+            <th>BOS总成本(单位：元)</th>
+            <th>BOS确认成本(单位：元)</th>
+            <th>用友成本(单位：元)</th>
+            <th>银行流水成本(单位：元)</th>
+        </tr>
+        <?php $row=1; ?>
+        <volist name="timeList" id="vo">
+        	<tr class="month" data-start="{$vo['startMonth']}" data-end="{$vo['endMonth']}" data-index="{$row}">
+	            <td>{$row}月</td>
+	            <td id="zsr_{$row}"  data-money="">加载中...</td>
+	            <td id="qzsr_{$row}"  data-money="">加载中...</td>
+	            <td id="yyzsr_{$row}"  data-money="">加载中...</td>
+	            <td id="bankzsr_{$row}"  data-money="">加载中...</td>
+	        </tr>
+	        <?php $row++; ?>
+        </volist>
+        <!--  -->
+        <tr>
+            <td>累计</td>
+            <td id="zsr_total">加载中...</td>
+            <td id="qzsr_total">加载中...</td>
+            <td id="yyzsr_total">加载中...</td>
+            <td id="bankzsr_total">加载中...</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
+<input type="hidden" id="loadedindex" value="0"/>
+<script type="text/javascript">var pType="outmoneyCheckTotal";</script>
+<script type="text/javascript" src="/Public/OA/js/inmoney.js"></script>
+</block>

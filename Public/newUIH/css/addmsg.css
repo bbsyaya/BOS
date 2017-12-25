@@ -1,0 +1,41 @@
+#table_content .content_addmsg{
+	padding-left: 30px;
+	line-height: 40px;
+	
+	font-family: '微软雅黑';
+}
+#table_content .content_addmsg input{
+	width: 720px;
+	line-height: 40px;
+	font-size: 14px;
+}
+#table_content .content_addmsg div{
+	margin-top:10px;
+}
+#table_content .content_addmsg select{
+	line-height: 40px;
+	font-size: 14px;
+	width: 105px;
+	text-align: center;
+}
+#table_content .content_addmsg textarea{
+	width: 720px;
+	line-height: 40px;
+	font-size: 14px;
+	height: 180px;
+}
+#table_content .content_addmsg .t_span{
+	width: 120px;
+	display: inline-block;
+	font-size: 16px;
+	text-align: right;
+	vertical-align: top;
+}
+#table_content .content_addmsg a.sub{
+	border-radius: 10px;
+    border: 1px solid #4776e6;
+    line-height: 30px;
+    display: inline-block;
+    width: 60px;
+    text-align: center;
+}

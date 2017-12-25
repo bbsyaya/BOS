@@ -1,0 +1,351 @@
+<extend name="Public/base"/>
+<block name="script">
+	<script type="text/javascript">
+	var inputnum=1;
+			$(function() {
+				var configData;
+				$.post('/Ajax/getConfig',{},function(res){
+					configData=res;
+				},'json')
+				var makeFinanceDataId;
+				//对话框开票
+				$(".invoiceDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "800",
+					height: "300",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$(this).dialog("close");
+							$('#financeform').submit();
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				//新增对话框
+				$(".screenOperate").on({
+					click: function() {
+						$(".invoiceDialog").dialog("open");
+					}
+				}, ".J_Add");				
+			
+				$('select[name="uid"]').change(function(){
+	            	var thisV=$(this).val();
+	            	$(this).find('option').each(function(){
+	            		if($(this).val()==thisV){
+	            			$('#groupid').html($(this).attr('data'));
+	            			$('#posttype').html($(this).attr('data-typename'));
+	            			$("#leve_depart_id").val($(this).attr('leve_depart_id'));
+	            		}
+	            	})
+	            })
+	            $('select[name="uid"]').change();
+	            //对话框导入流水
+				$(".uploadingDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "450",
+					height: "200",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$(this).dialog("close");
+							$('#uploadexcel').submit();
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//导入流水对话框
+				// $(".J_uploading").click(function(){
+				// 	$(".uploadingDialog").dialog("open");
+				// });
+			});
+		</script>
+</block>
+
+<block name="body">
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">个人提成规则设置</span>
+				<span>商务管理</span>
+			</div>
+			<div class="ri_work">Personal submission rules set</div>
+		</div>
+				<!--筛选-->
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<input type="button" value="新增" class="J_Add" />
+						<input type="button" value="导入" id="importtc" class="J_uploading" />
+						<input type="button" value="下载模板" onclick="r.downloadmb()" />
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					<form action="/Target/setOneUserrule" method='get'>
+					<div class="screenList fl w">
+						<table>
+							<tr>
+								<th>部门：</th>
+								<td>
+									<select name="depart_id" id="depart_id">
+										<option>加载中...</option>
+									</select>
+									<script type="text/javascript">
+										var d_ = {};
+										d_.depart_id="{$map['depart_id']}";
+										d_.name_u="{$map['name_u']}";
+									</script>
+								</td>
+								<th>姓名：</th>
+								<td>
+									<select name="name_u"   class="selectpicker1" id="name_u" data-live-search="true">
+										<option>加载中...</option>
+									</select>
+								</td>
+								<td></td>
+								<td colspan="3">
+									<input type="submit" value="查询" />
+									<input type="button" value="取消" class="J_closeScreen" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					</form>
+				</div>-->
+
+				<div class="screenBox swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<form action="/Target/setOneUserrule" method='get'>
+
+								<div class="swiperRight">
+									<table class="tableBox">
+										<tr>
+											<th>部门：</th>
+											<td>
+												<select class="selectpicker" name="depart_id" id="depart_id">
+													<option>加载中...</option>
+												</select>
+												<script  type="text/javascript">
+													var d_ = {};
+													d_.depart_id="{$map['depart_id']}";
+													d_.name_u="{$map['name_u']}";
+												</script>
+											</td>
+											<th>姓名：</th>
+											<td>
+												<select class="selectpicker" name="name_u"  id="name_u" data-live-search="true">
+													<option>加载中...</option>
+												</select>
+											</td>
+											<th>&nbsp;</th>
+											<td></td>
+											<td>
+												<input type="submit" value="查询" />
+											</td>
+										</tr>
+									</table>
+								</div>
+							</form>
+							<!--end 基础查询-->
+						</div>
+					</div>
+				</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<input type="button" value="新增" class="J_Add" />
+							<input type="button" value="下载模板" onclick="r.downloadmb()" />&nbsp;&nbsp;
+							<input type="button" value="导入" id="importtc" class="J_uploading" />
+						</div>
+					</div>
+					<form action="subaudit" method='post' name='subauditdataform'>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+
+							<th>序号</th>
+							<th>姓名</th>
+							<th>所属一级部门</th>
+							<th>职务</th>
+							<th>毛利润提成系数</th>
+							<th>收入流水提成系数</th>
+							<th>成本流水提成系数</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<notempty name="list">
+								<volist name='list' id='v'>
+									<tr>
+										<td>{$v.id}</td>
+										<td>{$v.user_name}</td>
+										<td>{$v.name}</td>
+										<td>{$v.duty}</td>
+										<td><?php if($v['rule']){ ?> {$v['rule']}% <?php }else{ ?> -- <?php } ?></td>
+										<td><?php if($v['in_num']){ ?> {$v['in_num']}% <?php }else{ ?> -- <?php } ?></td>
+										<td><?php if($v['out_num']){ ?> {$v['out_num']}% <?php }else{ ?> -- <?php } ?></td>
+										<td><a href="javascript:;" class="J_change" onclick="r.edit({$v.id})" id="r_{$v.id}" data='{$v.id}'>修改</a>&nbsp;<a href="/Target/delOneUserrule?id={$v.id}">删除</a></td>
+							        </tr>
+								</volist>
+							<else />
+								<tr><td colspan="8"><div class="no-datas">暂无数据！</div></td></tr>
+						</notempty>
+						</tbody>
+					</table>
+					<notempty name="list">
+						<div class="no-datas">{$page}</div>
+					</notempty>
+					</form>
+				</div>
+			</div>
+	</div>
+			<div class="invoiceDialog" title="个人提成规则" style="display:none;">
+			<form id="financeform" action="/Target/addOneUserrule" method='post' target="newpage">
+			
+				<table class="dialogTable_form w ha">
+					<tr>
+						<th>姓名:</th>
+						<td>
+							<select name='uid' class="selectpicker1" id="uid" data-live-search="true">
+								<option value="0">加载中....</option>
+							</select>
+							<input type='hidden' name='rule_id' value="" id="rule_id"/>
+						</td>
+						
+						<th>毛利润提成系数:</th>
+						<td><input style="width:90%" type='text' name='num' id="num"/>%</td>
+						
+					</tr>
+					<tr>
+					<th>职务:</th>
+						<td id="posttype">--</td>
+						<th>收入流水提成系数:</th>
+						<td><input style="width:90%" type='text' name='in_num' id="in_num"/>%</td>
+					</tr>
+					<tr>
+						
+						<th>所属部门:<input type="hidden" id="leve_depart_id" name="leve_depart_id" value="" /></th>
+						<td id="groupid">--</td>
+						<th>成本流水提成系数:</th>
+						<td><input style="width:90%" type='text' name='out_num'  id="out_num"/>%</td>
+					</tr>
+				</table>
+
+				</form>
+
+<script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+		<script type="text/javascript">
+		var r={
+			init:function(){
+				setTimeout(this.lazyRuleUsers(),1000);
+				setTimeout(this.lazyDepart,1005);
+				this.initFun();this.initimporttcInfo();
+			},
+			initimporttcInfo:function(){
+				var button = $('#importtc');
+				new AjaxUpload(button,{
+				    action: "/Home/Target/importtcInfo",
+				    name: 'files',
+				    onSubmit:function(file, ext){
+				        button.val("导入中...");
+				    },
+				    onComplete: function(file, response){
+				        var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+				        if(list.logdata){
+				            r.createForm(list.logdata);
+				            button.val("导入");
+				        }else{
+				            layer.alert(list.msg);
+				        }
+				    }
+				});
+			},
+			createForm:function(logdata){
+	            var html_="<form id=\"logForm\" method='post' target=\"_blank\" action=\"/Home/Public/showLog.html\"><input type=\"hidden\" name=\"datalog\" value=\""+logdata+"\"/></form>";
+	            $("body").append(html_);
+	            $("#logForm").submit().remove();
+	        },
+			downloadmb:function(){
+				window.open('/Public/excel/个人提成模板.xls');
+			},
+			initFun:function(){
+			},
+			edit:function(id){
+				$("#r_"+id).html("展开中...");
+				 layer.open({
+			          type: 2,
+			          title: '修改个人目标',
+			          shadeClose: true,
+			          shade: 0.8,
+			          area: ['800px', '300px'],
+			          content: '/Home//Target/editsetOneUser?id='+id//iframe的url
+		        }); 
+				$("#r_"+id).html("修改");
+			},
+			editUid:0,
+			loadUser:function(data,type_){
+				var h='<option value="">全部</option>';
+				$.each(data,function(i,o){
+					var se = "";
+					if(d_.name_u && type_=="init"){
+						se = o.id==d_.name_u?"selected='selected'":"";
+					}
+					if(type_=="edit"){
+						se = o.id==r.editUid?"selected='selected'":"";
+					}
+					h+='<option value="'+o.id+'" '+se+' data="'+o.depart_name+'" data-typename="'+o.duty+'" leve_depart_id="'+o.leve_depart_id+'">'+o.real_name+'</option>';
+				});
+				return h;
+			},
+			lazyRuleUsers:function(){
+				$.get("/Home/Target/lazyRuleUsers",function(data){
+					if(data){
+						r.userList=data;
+						var h = r.loadUser(data,"init");
+						$("#uid").html(h);
+						$("#uid").selectpicker();
+						$("#name_u").html(h);
+						$("#name_u").selectpicker();
+					}
+					
+				});
+			},
+			userList:null,
+			lazyDepart:function(){
+				$.get("/OA/OrganizSetting/getAllList.html",function(data){
+	                var ht='<option value="">全部</option>',sec="";
+	                $.each(data,function(i,o){
+	                	sec = o.id==d_.depart_id?"selected='selected'":"";
+	                    ht+='<option value="'+o.id+'" '+sec+'>'+o.name+'</option>';
+	                });
+	                $("#depart_id").html(ht);
+	            });
+			}
+		};
+		$(function(){r.init();});
+		</script>
+<div class="addDataDialog" title=""></div>
+</block>
+
+

@@ -1,0 +1,21 @@
+<form id="tableForm">
+    <table class="dialogTable_form w ha">
+        <tr>
+            <th>编码:</th>
+            <td><input readonly="readonly" type="text" name="bl_code" value="{$data['bl_code']|default=''}" placeholder="自动生成"/></td>
+        </tr>
+        <tr>
+            <th>名称:</th>
+            <td><input type="text" name="name" value="{$data['name']}"/></td>
+        </tr>
+        <tr>
+            <th>类型:</th>
+            <td> <bselect name="type" options="op_type" selected="data['type']"/></td>
+        </tr>
+        <tr>
+            <th>签订主体:</th>
+            <td><bselect name="sb_id" options="op_sb" selected="data['sb_id']"/></td>
+        </tr>
+        <input type="hidden" name="id" value="{$data.id}" />
+    </table>
+</form>

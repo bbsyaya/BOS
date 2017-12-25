@@ -1,0 +1,101 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+	<div class="subConten fl w">
+    <!--内容-->
+    <div class="subCon">
+        <!--条件查询-->
+        <div class="query">
+	        <form action="/OA/Vote/myParticList" method="get">
+	        	<table class="queryTable">
+	                <tbody>
+	                    <tr>
+	                        <th>投票名称：</th>
+	                        <td><input name="vname"  type="text" value="{$map['vname']}"></td>
+	                        <th>发起时间：</th>
+	                        <td>
+	                           <span class="dayTime"><input class="start_rise" type="text" id="start_one" name="time_diff"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+	                        </td>
+	                        <td><input name="" type="submit" value="查询"></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </form>
+            
+        </div>
+        <!-- end 条件查询-->
+        <!--发起投票列表-->
+        <div class="workListBox">
+            <table class="listTable Js_tableCon dataTable dataTable1">
+                <thead>
+                    <tr>
+                        <th>发起时间</th>
+                        <th>投票开始</th>
+                        <th>投票结束</th>
+                        <th>投票名称</th>
+                        <th>发起人</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="list">
+                	<volist name="list" id="vo">
+                		<tr>
+	                        <td>{$vo['dateline']}</td>
+	                         <td>{$vo['start_time']}</td>
+	                         <td>{$vo['end_time']}</td>
+	                        <td>{$vo['vname']}</td>
+	                        <td>{$vo['real_name']}</td>
+	                        <td>
+	                        <?php  if($vo['is_canyu']==1){ ?>  <span class="rest">已投票</span> <?php }else{ ?>  <span class="rest_red">未投票</span> <?php } ?>
+	                        </td>
+	                        <td>
+	                        <?php  if($vo['is_canyu']==1){ ?>  <a class="rest_green" href="voteResult.html?vid={$vo['id']}">查看结果</a> <?php }else{ ?>  <a class="rest" href="voteCon.html?vid={$vo['id']}">去投票</a> <?php } ?>
+	                        	
+	                        </td>
+	                    </tr>
+                	</volist>
+                	<else />
+                	 <tr>
+                        <td colspan="7">
+                        	<div class="no-datas">暂无数据</div>
+                        </td>
+                    </tr>
+                </notempty>
+                </tbody>
+            </table>
+            <div class="no-datas">{$page}</div>
+        </div>
+        <!--end 发起投票列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+<!--双日期插件-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+    	$('#start_one').daterangepicker({
+		        locale: {
+		            direction: "ltr",
+		            format: "YYYY.MM.DD", //控件中from和to 显示的日期格式
+		            separator: " ~ ",
+		             applyLabel: "确定",
+		             cancelLabel: "取消",
+		             fromLabel: "起始时间",
+		             toLabel: "结束时间",
+		            customRangeLabel: "自定义",
+		            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+		            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+		            firstDay: 1
+		        },
+		        startDate: "{$map['start_time']}",
+		        endDate: "{$map['end_time']}",
+		        opens: "left"
+		    });
+    });
+</script>
+</block>

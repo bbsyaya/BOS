@@ -1,0 +1,15 @@
+.mask{width:100%;height:100%;background-color:rgba(0,0,0,.6);position:fixed;top:0;left:0;z-index:100;display:none}.dialog_content{display:block;width:662px;height:70%;border-radius:5px;position:absolute;top:48%;left:50%;overflow:hidden;margin-top:-280px;margin-left:-331px;background-color:#fff}.mask .close{position:absolute;top:50%;right:50%;margin-top:-280px;margin-right:-360px;color:#fff;font-size:30px;font-weight:bold;cursor:pointer}.dialog_header{width:100%;height:65px;background:url("../img/dia_back.png") center;background-size: 100% 100%;border-radius: 5px 5px 0 0;}.dialog_content_edit{display:block;position:absolute;top:10px;right:30px;font-weight:bold;font-size:14px;color:rgba(255,255,255,.8);padding-left:25px;text-decoration:none;out-line:none;background:url("../img/dia_th_b.png") no-repeat left;cursor:pointer}.dia_header_title{width:150px;height:100%;margin:0 auto;text-align:center;overflow:hidden}.dia_header_title>div:nth-of-type(1){font-size:18px;color:white;margin-top:10px}.dia_header_title>div:nth-of-type(2){font-size:12px;color:rgba(255,255,255,.5)}.dialog_content_title{line-height:34px;font-size:22px;color:#999;padding-left:20px;border-bottom:1px solid #ddd;margin-bottom:30px}.dia_list{width:103%;overflow:auto;height:70%;margin-top:20px}.each_item_c{color:white;background:url(../img/dia_back.png) center center}.dialog_content .selected_box{padding:5px 0;min-height:42px;margin:10px auto;display:none}.sel_text{text-align:center}.sel_box{width:auto;height:30px;line-height:30px;text-align:center;padding:0 8px;border:1px solid #5b74f5;color:#5b74f5;font-size:14px;border-radius:5px;display:inline-block;margin:5px 20px 0 0;position:relative;background-color:white}.sel_text_d{display:block}
+.dataFormTables{table-layout: fixed; width: 100%;}
+.dataFormTables tr th,
+.dataFormTables tr td{height: 40px;line-height: 40px; text-align: center; white-space: nowrap; text-overflow: ellipsis; vertical-align: middle;  border: solid 1px #ebebeb;}
+.dataFormTables tr th{width: 150px; text-align: right;padding-left: 0px;}
+/*表单*/
+.dataFormTables input[type="text"],
+.dataFormTables input[type="password"],
+.dataFormTables select{width: 100%;height: 100%; padding: 0px; margin: 0px; border: none;}
+.dataFormTables textarea{width: 98%;height: 98%;line-height: 20px;padding: 1%; margin: 0px; border: none;}
+.dataFormTables input[type="radio"]{vertical-align: middle;}
+.dataFormTables label{vertical-align: middle;display: inline;max-width: 10%;margin-bottom:0px;font-weight:100; padding-left: 4px;}
+
+/*特殊标记*/
+.dataFormTables .autoWrap{white-space: normal; line-height: 14px;}

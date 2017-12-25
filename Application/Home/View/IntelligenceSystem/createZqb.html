@@ -1,0 +1,86 @@
+<extend name="Public/base"/>
+<block name="body">
+<link rel="stylesheet" type="text/css" href="/Public/Home/css/intsys.css?v={:getVersion()}">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<style type="text/css">
+	
+	.mis-rb-1 {
+    color: #666;
+    float: left;
+    width: 150px;
+}
+.zxfwz{
+    width:98% !important;
+}
+</style>
+ <div class="add-qb-sec d-f " style="display:block;">
+        <div class="d-f adw-items">
+            <span class="qb-tisl">主情报名称：</span>
+            <input type="text" class="qb-isurk" id="zqb_name" {$issure} placeholder="请输入主情报名称" style="margin-left:0px;width:391px !important;" value="{$one["title"]}" />
+        </div>
+        <div class="d-f mis-sks" style="border-top: 1px dashed #e2e2e2;height:auto !important;">
+            <span class="mis-lea" style="width:80px;text-align:right;">负责人：</span>
+            <span class="mis-rb-1"  >
+                <select class="selectpicker1 zxfwz"  {$issure_}  id="zqb_fzr"  data-actions-box="true" data-done-button="true" data-live-search="true" style="height:30px !important;" >
+                    <option>加载中....</option>
+                </select>
+                <script type="text/javascript">
+                var ed={};
+                ed.zqb_id = '{$one['id']}';
+                ed.zqb_fzr = '{$one['pri_uid']}';
+                </script>
+            </span>
+            <span class="mis-lea " style="margin-left:10px;width:80px;text-align:right;">计划完成：</span>
+            <span class="mis-rb t-tile qb-right">
+                <input class="tks-ps js-time" id="zqb_jhwcsj"  {$issure_}  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" type="text" value="{$one['exp_end_time']}">
+            </span>
+        </div>
+        <div class="d-f mis-sks" style="margin-top:0px;">
+            <span class="mis-lea" style="width:80px;text-align:right;">描述：</span>
+            <span class="mis-rb-1 t-tile" style="height:auto;width:391px !important;">
+                <textarea class="txt-ms-s"   {$issure_}  id="zqb_ms" placeholder="请输入任务描述" style="width:376px;"> {$one['remark']}</textarea>
+            </span>
+        </div>
+        <div class="d-f mis-sks" style="margin-top:0px;height:auto !important;">
+            <span class="mis-lea" style="width:80px;text-align:right;">参与人：</span>
+            <span  class="mis-rb-1"  style="width:370px !important;" >
+                <select class="selectpicker1"  {$issure_}  id="zqb_cyr_ids" name="cyr_ids" style="width:250px !important;height:30px !important;" data-actions-box="true" multiple="true" data-done-button="true" data-live-search="true" >
+                    <option>加载中....</option>
+                </select>
+                <script type="text/javascript">
+                ed.zqb_cyr_ids = '{$one['part_uids']}';
+                </script>
+            </span>
+        </div>
+         <if condition="$issure eq 200">
+             <div class="d-f mis-sks" style="margin-top:0px;height:auto !important;">
+                <span class="mis-lea" style="width:80px;text-align:right;">是否分解：</span>
+                <span  class="mis-rb-1"  style="width:370px !important;" >
+                    <span class="fles"><input type="radio" class="fimis" name="is_fenjie" value="1" checked="true" /></span>
+                    <span class="fles mgls-s" style=""> 是</span>
+                    <span class="fles"><input type="radio" class="fimis" name="is_fenjie" value="2" /></span>
+                    <span class="fles mgls-s">否</span>
+                    <span class="fles" style="color:red;">*分解主情报</span>
+                        
+                </span>
+                </span>
+            </div>
+        </if>
+
+        <div class="d-f mis-sks" style="margin-top:0px;text-align:center;border-bottom:0px;">
+            <if condition="$issure neq 200">
+                    <input type="button" <?php if($one){ ?> value="确认编辑" <?php }else{ ?>  value="确认创建" <?php } ?>  id="cjbtn" onclick="In.createQb()" />
+                <else />
+                <input type="button" value="确认主情报"  id="cjbtn" onclick="In.sureZuQingBao()"  />
+            </if>
+        </div>
+
+       
+    </div>
+<script type="text/javascript" src="/Public/static/layer/layer.js"></script>
+<script type="text/javascript" src="/Public/Home/js/qb.create.js?v={:getVersion()}"></script>
+</block>

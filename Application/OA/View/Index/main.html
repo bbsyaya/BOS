@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <!-- IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 兼容国产浏览器的高速模式 -->
+    <meta name="renderer" content="webkit">
+    <title>智能办公平台</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/css/models.css">
+    <script>
+    function opennewwindow(url,title){
+        $('#newwindow_con .newwindow_title').text(title);
+        $('#newwindow_if').attr('src',url);
+        $('#newwindow_bg').show();
+        $('#newwindow_con').show();
+    }
+    </script>
+</head>
+<body>
+<!--首页-->
+<div style="background-color:rgba(0,0,0,.6);width:100%;height:100%;position:fixed;display:none;z-index:10000;" id="newwindow_bg">
+    <div style="margin:120px auto;height:560px;width:660px;background:url(__PUBLIC__/newUI/img/window_newhtml.png);display:none;z-index:10001;" id="newwindow_con">
+        <p class="newwindow_title" style="line-height:66px;text-align:center;font-size:22px;color:#fff;"></p>
+        <iframe style="border:none;width:661px;height:494px;" id="newwindow_if" src=""></iframe>
+    </div>
+</div>
+
+<div class="MainBox">
+    <!--头部-->
+    <div class="mainTop" style="cursor:pointer;background:url(/Public/OA/images/oabg2.png) repeat-x !important;">
+        <div class="logo left" onclick="javascript:window.location.href='/';" style="cursor:pointer;background:url(/Public/OA/images/oabg1.png)!important;margin:14px 20px;width:403px !important;height:32px !important;"  >
+        </div>
+        <div class="userBox right">
+            <a href="#" class="top_list userIcon"><img src="__PUBLIC__/newUI/img/<eq name="data_user.gender" value="1">user_icon<else/>p1</eq>.png" alt="">
+            <!-- <span class="userTagg"></span> -->
+            </a>
+            
+            
+        </a>
+            <a href="/Home/Public/logout.html" class="top_list outIcon" style="background:url(/Public/OA/images/oalogout1.png) no-repeat !important;margin-top:6px !important;"></a>
+        </div>
+    </div>
+    <!--end 头部-->
+    <!--左边导航-->
+    <div class="leftNav" id="accordion">
+        <div class="user_infoBox">
+            <p class="userImg"><img src="__PUBLIC__/newUI/img/p1.jpg" alt=""></p>
+            <h2>{$_SESSION['userinfo']['realname']}</h2>
+            <p class="userHome">{$_SESSION['userinfo']['duty_name']}</p>
+           <!--  <p class="userHome">Business Manager</p> -->
+        </div>
+        <ul class="navBox">
+            <li onclick="ld.gotoparent('/OA/Index/index')">
+            <div class="link"><i class="navIcon nav_ware"></i>OA主页</div>
+            </li>
+
+            <php> if($mainurl == '/OA/Index/loading'){ </php>
+            <li class="open" onclick="ld.goto('/OA/Index/loading.html')">
+                <div class="link"><i class="navIcon nav_type"></i>我的流程</div>
+            </li>
+            <php> }else{ </php>
+            <li onclick="ld.goto('/OA/Index/loading.html')">
+                <div class="link"><i class="navIcon nav_type"></i>我的流程</div>
+            </li>
+            <php> } </php>
+
+            <volist name="authTree" id="vo">
+                <php>if($pid == $vo['id']){ </php>
+                    <li class="open">
+                        <div class="link"><i class="navIcon {$vo['class_img']}"></i>{$vo["title"]}</div>
+                        <dl class="submenu" style="display: block;">
+                            <volist name="vo['childMenu']" id="voo">
+                                <php>if($mainurl == $voo["name"]){ </php>
+                                <dd><a class="link_a"  href="{$voo["name"]}" onclick="ld.gourl('{$voo["name"]}')" target="main_frame">{$voo["title"]}</a></dd>
+                                <php> }else{ </php>
+                                <dd><a href="{$voo["name"]}" onclick="ld.gourl('{$voo["name"]}')" target="main_frame">{$voo["title"]}</a></dd>
+                                <php> } </php>
+                            </volist>
+                        </dl>
+                    </li>
+
+                <php> }else{ </php>
+                    <li>
+                        <div class="link"><i class="navIcon {$vo['class_img']}"></i>{$vo["title"]}</div>
+                        <dl class="submenu">
+                            <volist name="vo['childMenu']" id="voo">
+                                <php>if($mainurl == $voo["name"]){ </php>
+                                <dd><a class="link_a"  href="{$voo["name"]}" onclick="ld.gourl('{$voo["name"]}')" target="main_frame">{$voo["title"]}</a></dd>
+                                <php> }else{ </php>
+                                <dd><a href="{$voo["name"]}" onclick="ld.gourl('{$voo["name"]}')" target="main_frame">{$voo["title"]}</a></dd>
+                                <php> } </php>
+                            </volist>
+                        </dl>
+                    </li>
+
+                <php> } </php>
+            </volist>
+        </ul>
+    </div>
+    <!--end 左边导航-->
+    <!--主体内容-->
+    <script type="text/javascript" src="__PUBLIC__/newUI/js/jquery-1.11.1.min.js"></script>
+    <div class="MainContentBox" style="padding:5px;">
+
+        <div  class="office_main" style="width: 100%;display: none;box-sizing: border-box;padding: 20px 40px;">
+            <div style="margin: 0 auto;overflow: hidden;width: 950px;">
+
+                <volist name="officeTree" id="of">
+                    <a href="{$of["name"]}" class="ac"  target="main_frame"><div class="xingZheng mar_r">{$of["title"]}</div></a>
+                </volist>
+                <!--<div class="xingZheng mar_r"><a href="/OA/notify/index" target="main_frame">公告制度新闻管理</a></div>
+                <div class="xingZheng mar_r"><a href="/OA/OrganizSetting/crateImg" target="main_frame">组织架构设置</a></div>
+                <div class="xingZheng mar_r"><a href="/OA/FileCabinets/index" target="main_frame">文件柜</a></div>
+                <div class="xingZheng"><a href="/OA/Vote/myParticList" target="main_frame">投票管理</a></div>-->
+            </div>
+        </div>
+        <iframe id="main_frame" width="100%" height="100%" frameborder="0"  name="main_frame" src="{$mainurl}" onload="ld.loadFrame(this)" style="overflow:hidden; position:absolute;"></iframe>
+        <script type="text/javascript">
+            var ld={
+                init:function(){
+                    ld.showImg();
+
+                },
+                loadFrame:function(_frame){
+                    ld.loadShow();
+                    var url = _frame.contentWindow.location.href;
+                    if(url.indexOf("login.html")!=-1){
+                        window.location.href = "/Home/Public/login.html";
+                    }
+                    ld.loadOver();   
+                },
+                showImg:function(){
+                    var wd=$(window),ht=wd.height();
+                    var lht=ht-60;
+                    $("#load").show().css({"line-height":lht+"px","height":lht+"px"});
+                },
+                hideImg:function(){
+                    $("#load").hide();
+                },
+                gourl:function(data){
+
+                    if(data == '/OA/OfficeManagement/index'){
+                        //console.log(data);
+                        $(".office_main").show();
+                    }else{
+                        $(".office_main").hide();
+                    }
+
+                    var st = $(".ac");
+                    //console.log(st);
+                    $(st[0]).addClass("a_b");
+                    $(st[0]).find(".xingZheng").addClass("a_y");
+                },
+                loadOver:function(){
+                    $("#main_frame").show();
+                    ld.hideImg(); 
+                },
+                loadShow:function(){
+                    $("#main_frame").hide();
+                    ld.showImg();
+                },
+                goto:function(url){
+                    $("#main_frame").attr("src",url);
+                },
+                gotoparent:function(url){
+                    window.location.href=url;
+                }
+            };
+            $(function(){ld.init();})
+            $(function(){
+                $(".ac").click(function(){
+
+                    $(this).addClass("a_b");
+                    $(this).find(".xingZheng").addClass("a_y");
+                    $(this).siblings().removeClass("a_b");
+                    $(this).siblings().find(".xingZheng").removeClass("a_y");
+
+
+                });
+            })
+        </script>
+        <div class="imgload" id="load" style="text-align:center;">
+            <img src="__PUBLIC__/Home/img/loading1.gif" >
+        </div>
+       
+    </div><!--MainContentBox-->
+    <!--end 主体内容-->
+</div>
+<!--end 首页-->
+<script type="text/javascript" src="__PUBLIC__/newUI/js/index.js"></script>
+</body>
+</html>

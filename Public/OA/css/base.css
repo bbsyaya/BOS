@@ -1,0 +1,39 @@
+select::-ms-expand {
+  display: none;
+}
+select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+}
+i,
+em {
+  font-style: normal;
+}
+input[type="submit"],
+input[type="button"] {
+  cursor: pointer;
+}
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+  visibility: hidden;
+  height: 0;
+}
+.relative {
+  position: relative;
+}
+.absolute {
+  position: absolute;
+}
+.display {
+  display: none;
+}

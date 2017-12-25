@@ -1,0 +1,132 @@
+//*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand { display: none; }
+//*将默认的select选择框样式清除*/
+select{
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+  -ms-appearance:none;
+}
+i,
+em{
+  font-style: normal;
+}
+input[type="submit"],
+input[type="button"]{
+  cursor: pointer;
+}
+// 清除浮动
+// ==========================================================================
+.clearfix() {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+    visibility:hidden;
+    height:0;
+  }
+}
+.clearfix{
+  .clearfix();
+  *zoom:1;
+}
+//边框
+.border(@border-base) {
+  border: 1px solid @border-base;
+}
+.border-bottom(@border-base) {
+  border-bottom: 1px solid @border-base;
+}
+// 设置容器宽高
+
+.size(@width; @height) {
+  width: @width;
+  height: @height;
+}
+.size-large(@width; @height) {
+  width: @width;
+  max-height: @height;
+}
+.size-samll(@width; @height) {
+  width: @width;
+  min-height: @height;
+}
+
+.square(@size) {
+  .size(@size; @size);
+}
+//超出隐藏
+.text-overflow() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+//CSS圆角
+.border-radius(@radius) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
+.border-top-radius(@radius) {
+  border-top-right-radius: @radius;
+  border-top-left-radius: @radius;
+}
+.border-right-radius(@radius) {
+  border-bottom-right-radius: @radius;
+  border-top-right-radius: @radius;
+}
+.border-bottom-radius(@radius) {
+  border-bottom-right-radius: @radius;
+  border-bottom-left-radius: @radius;
+}
+.border-left-radius(@radius) {
+  border-bottom-left-radius: @radius;
+  border-top-left-radius: @radius;
+}
+
+//字体大小
+@font-size-base:          14px;
+@font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
+@font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
+
+@font-size-h1:            floor((@font-size-base * 2.6)); // ~36px
+@font-size-h2:            floor((@font-size-base * 2.15)); // ~30px
+@font-size-h3:            ceil((@font-size-base * 1.7)); // ~24px
+@font-size-h4:            ceil((@font-size-base * 1.25)); // ~18px
+@font-size-h5:            @font-size-base;
+@font-size-h6:            ceil((@font-size-base * 0.85)); // ~12px
+
+//定位
+.relative{
+  position: relative;
+}
+.absolute {
+  position: absolute;
+}
+.fixed(@top; @left) {
+  position: fixed;
+  top: @top;
+  left: @left;
+
+}
+
+// Opacity
+
+.opacity(@opacity) {
+  opacity: @opacity;
+  // IE8 filter
+  @opacity-ie: (@opacity * 100);
+  filter: ~"alpha(opacity=@{opacity-ie})";
+}
+
+//隐藏元素
+.display{
+  display: none;
+}
+//文本对齐
+.align(@align){
+  text-align: @align;
+}

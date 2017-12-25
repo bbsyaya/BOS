@@ -1,0 +1,164 @@
+<extend name="Public/base"/>
+<block name="body">
+<include file="Public/commonoa" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+<script type="text/javascript" src="__PUBLIC__/Home/module/bootstrapselect/bootstrap-select.js"></script>
+<style type="text/css">
+    .mod-sec{
+        width:550px !important;
+    }
+    .bootstrap-select{width: 70% !important;}
+    .bootstrap-select > .dropdown-toggle{ height: 40px !important;line-height: 40px !important;}
+    .a-com{
+         border: medium none;
+        border-radius: 3px;
+        color: #fff;
+        height: 36px;
+        margin: 0 15px;  background: #1269cc none repeat scroll 0 0;
+    width: 110px;
+    line-height: 36px;
+    display: inline-block;
+    color: #fff !important;
+    font-size: 14px;
+    text-align: center;
+    }body{font-size: 12px !important;}
+</style>
+<div class="subConten fl w">
+    <!--内容-->
+    <div class="subCon">
+        <!--新增、修改表单-->
+        <div class="modifyCon">
+            <p class="modify">
+                <lable>所属公司</lable>
+                <select name="companyid" id="companyid">
+                    <option>加载中...</option>
+                </select>
+            </p>
+            <div class="modify">
+                <lable>部门名称</lable>
+                <input name="name" id="name" type="text" value="{$one['name']}">
+            </div>
+            <p class="modify">
+                <lable>上级部门</lable>
+                <select name="pid" id="pid" >
+                    <option>加载中...</option>
+                </select>
+            </p>
+            <div class="modify">
+                <div class="mod-sec">
+                    <lable>部门主管</lable>
+                    <select  name="heads" id="heads" class="selectpicker1"  data-live-search="true" style="width: 70% !important;">
+                       <option>加载中...</option>
+                    </select>
+                    ( 非必填 )
+                </div>
+            </div>
+            <p class="modify">
+                <lable>排序号</lable>
+                <input name="sort" id="sort" type="text" <?php if($one['sort']){ ?> value="{$one['sort']}" <?php }else{ ?> value="0" <?php } ?> >
+            </p>
+            <div class="modify special">
+                <lable>部门职能</lable>
+                <?php if($one['functions']){ ?> 
+                <textarea  name="functions" id="functions" >{$one['functions']}</textarea>
+                <?php }else{
+                    ?>
+                    <textarea  name="functions" id="functions" ></textarea>
+                    <?php 
+                    } ?>
+                    <input type="hidden" id="depart_id" name="depart_id" value="{$one['id']}"/>
+            </div>
+        </div>
+        <!--end 新增、修改表单-->
+        <!--按钮-->
+        <div class="btnBox" style="text-align: left;">
+            <input class="submit" name="" onclick="S.addSetting(this)" type="button" value="保存信息" style="margin-left:70px;">
+            <a href="/OA/OrganizSetting/settingList"  class="a-com">返回列表</a>
+        </div>
+        <!--end 按钮-->
+    </div>
+    <!--end 内容-->
+</div>
+<script type="text/javascript">
+    var S = {
+        init:function(){
+            this.lazyCompany();this.lazyDepart();this.lazygetUserList();
+        },
+        lazyCompany:function(){
+            setTimeout(function(){
+                var default_id="{$one['companyid']}";
+                $.get("/OA/OrganizSetting/getCompnanys.html",function(data){
+                    var ht='';
+                    $.each(data,function(i,o){
+                        var sec=o.id==default_id?"selected":"";
+                        ht+='<option value="'+o.id+'" '+sec+'>'+o.name+'</option>';
+                    });
+                    $("#companyid").html(ht);
+                });
+            },1000);
+        },
+        lazyDepart:function(){
+            setTimeout(function(){
+                $.get("/OA/OrganizSetting/getAllList.html",function(data){
+                    var ht='<option value="0">顶级</option>',_pid="{$pid}",default_id="{$one['pid']}";
+                    $.each(data,function(i,o){
+                        var sec="";
+                        if(default_id){
+                            sec=default_id==o.id?"selected":"";
+                        }else{
+                            sec=_pid==o.id?"selected":"";
+                        }
+                        
+                        ht+='<option value="'+o.id+'" '+sec+'>'+o.name+'</option>';
+                    });
+                    $("#pid").html(ht);
+                });
+            },1000);
+        },
+        lazygetUserList:function(){
+            setTimeout(function(){
+                $.get("/OA/OrganizSetting/getUserList.html",function(data){
+                    var ht="<option value=\"0\">请选择</option>",default_heads_id="{$one['heads_id']}";
+                    $.each(data,function(i,o){
+                        var sec=o.id==default_heads_id?"selected":"";
+                        ht+='<option value="'+o.id+'" '+sec+'>'+o.real_name+'</option>';
+                    });
+                    $("#heads").html(ht);
+                    $('.selectpicker1').selectpicker();
+                });
+            },1000);
+        },
+        addSetting:function(obj){
+            var params = {};
+            params.name      = $("#name").val();
+            params.pid       = $("#pid").val();
+            params.sort      = $("#sort").val();
+            params.heads     = $("#heads").val();
+            params.functions = $("#functions").val();
+            params.companyid = $("#companyid").val();
+            params.depart_id = $("#depart_id").val();
+            if(S._beforeCheck(params)){
+                $(obj).val("保存中...");
+                $(obj).attr("onclick","");
+                $.post("/OA/OrganizSetting/saveDepart",params,function(data){
+                    layer.alert(data.msg);
+                    $(".ui-widget-overlay").hide();
+                    $(obj).val("保存信息");
+                    $(obj).attr("onclick","S.addSetting(this)");
+                    window.location.href="/OA/OrganizSetting/settingList.html";
+                });
+            }
+            $(".ui-widget-overlay").hide();
+        },
+        _beforeCheck:function(params){
+            if(!params.name){
+                layer.alert("请输入部门名称");
+                $("#name").focus();
+                return false;
+            }
+            return true;
+        }
+    };
+    $(function(){S.init();});
+</script>
+</block>

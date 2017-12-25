@@ -1,0 +1,172 @@
+<extend name="Public/base"/>
+<block name="body">
+	<div class="screenCn fl w ha">
+        <div class="screenOperate fl w">
+            <div class="line fr h"></div>
+           
+        </div>
+        <style type="text/css">
+	.wd100{
+		width: 100px !important;
+	}
+	.disnone{
+		display: none;
+	}body{font-size: 12px !important;}
+        </style>
+        <div class="screenList fl w">
+			<form action="/OA/Vote/saveVotes.html" method="post">
+			vname:<input type="text" class="wd100" name="vname" id="vname"/><br/>
+			start_time:<input type="text" class="wd100"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate"  name="start_time" id="start_time"/><br/>
+			end_time:<input type="text" class="wd100"  onclick="WdatePicker({ dateFmt:'yyyy-MM-dd'})" class="Wdate"  name="end_time" id="end_time"/><br/>
+			instruct:<input type="text" class="wd100" name="instruct" id="instruct"/><br/>
+			attention:<input type="text" class="wd100" name="attention" id="attention"/><br/>
+			允许投票的部门id集合:<input type="text" class="wd100" name="departs" id="departs"/><input type="text" class="wd100" name="departs_ids" id="departs_ids"/><input type="button" id="choseDepart" value="选择部门" /><br/>
+			
+			<div class="problems_list">
+				<div style="border:1px solid #ddd;width:100%;margin:10px;padding:5px;" data-index="1" class="problems_item">
+					投票问题：<input type="text" id="problems_title_1" name="problems_title[]" class="wd100"/><br/>
+					投票type：<input type="radio" id="problems_type_1" name="problems_type_1[]" value="0" checked="checked" />0单选---<input type="radio" id="0problems_type_1" name="problems_type_1[]" value="1" />1多选<br/>
+					<br/>
+					<br/>
+					选项类型：
+					<input type="radio" id="item_type_1" name="item_type_1" data-pid="1" value="0" class="item_type" checked="checked" />0文字---
+					<input data-pid="1" type="radio" id="0item_type_1" name="item_type_1" class="item_type" value="1" />1图片<br/>
+					<div class="probles_items" id="wz_items_1">
+						<div class="" style="width:200px;float:left;">选项标题：<input type="text" id="item_title_1_1" name="item_title_1[]" class="wd100 items" data-pid="1"/></div>
+					</div>
+					<div id="img_items_1" class="disnone probles_items">
+						<div class="" style="width:200px;float:left;">
+						选项选择图片：<input type="button" data-pid="1" id="item_img_url_1_1" name="item_img_url_1[]"  class="wd100 items" value="选择图片" />
+						<input type="hidden" id="hidden_item_img_url_1_1" name="hidden_item_img_url_1[]" class="wd100 items" data-pid="1"/>
+						</div>
+						
+					</div>
+					<br/><br/>
+					<input type="button" class="addItems" data-pid="1" value="增加选项" />
+					
+					<br/><br/><br/>
+					是否自定义<input type="radio" id="problems_is_custom_1" name="problems_is_custom_1[]" value="0" checked="checked" />0可以---<input type="radio" id="0problems_is_custom_1" name="problems_is_custom_1[]" value="1" />1不可以<br/>
+				</div>
+			</div>
+			
+			<br/>
+			<input type="button" id="addProblems" value="增加问题" /><br/><br/>
+			<input type="submit" />
+		</form>
+	<script type="text/javascript" src="/Public/Home/js/ajaxupload.js"></script>
+		<script type="text/javascript">
+		var Box ={
+			init:function(){
+				this.vtypeClick();this.addItems();this.addProblems();
+			},
+			addProblems:function(){
+				$("#addProblems").on("click",function(){
+				var html_,p_count = $(".problems_item").length,pid=p_count;
+				p_count++;
+				html_ = '<div style="border:1px solid #ddd;width:100%;margin:10px;padding:5px;" data-index="'+p_count+'" class="problems_item">'
+						+'投票问题：<input type="text" id="problems_title_'+p_count+'" name="problems_title[]" class="wd100"/><br/>'
+						+'投票type：<input type="radio" id="problems_type_'+p_count+'" name="problems_type_'+p_count+'[]" value="0" checked="checked" />'
+						+'0单选---<input type="radio" id="0problems_type_'+p_count+'" name="problems_type_'+p_count+'[]" value="1" />1多选<br/>'
+						+'<br/>'
+						+'<br/>'
+						+'选项类型：'
+						+'<input type="radio" id="item_type_'+p_count+'" name="item_type_'+p_count+'" data-pid="'+p_count+'" value="0" class="item_type" checked="checked" />'
+						+'0文字---<input data-pid="'+p_count+'" type="radio" id="0item_type_'+p_count+'" name="item_type_'+p_count+'" class="item_type" value="1" />1图片<br/>'
+						+'<div class="probles_items" id="wz_items_'+p_count+'">'
+						+'<div class="" style="width:200px;float:left;">选项标题：<input type="text" id="item_title_'+p_count+'_1" name="item_title_'+p_count+'[]" class="wd100 items" data-pid="1"/></div>'
+						+'</div>'
+						+'<div id="img_items_'+p_count+'" class="disnone probles_items">'
+						+'<div class="" style="width:200px;float:left;">'
+						+'选项选择图片：<input type="button" data-pid="'+p_count+'" id="item_img_url_'+p_count+'_1" name="item_img_url_'+p_count+'[]"  class="wd100 items" value="选择图片" /><input type="hidden" id="hidden_item_img_url_'+p_count+'_1" name="hidden_item_img_url_'+p_count+'[]" class="wd100 items" data-pid="'+p_count+'"/>'
+						+'</div>'
+						+'</div>'
+						+'<br/><br/>'
+						+'<input type="button" class="addItems" data-pid="'+p_count+'" value="增加选项" />'
+						+'<br/><br/><br/>'
+						+'是否自定义<input type="radio" id="problems_is_custom_'+p_count+'" name="problems_is_custom_'+p_count+'[]" value="0" checked="checked" />0可以---<input type="radio" id="0problems_is_custom_1" name="problems_is_custom_'+p_count+'[]" value="1" />1不可以<br/>'
+						+'</div>';
+
+				$(".problems_list").append(html_);Box.vtypeClick();Box.addItems();
+				});
+			},
+			addItems:function(){
+				$(".addItems").on("click",function(){
+					var t = 0,pid = 0,th=$(this);
+					pid=th.attr("data-pid");
+					t = $("input[name='item_type_"+pid+"']:checked").val();
+					var html_="",lth=0;
+					if(t=="0") 
+						lth = $("#wz_items_"+pid).find(".items").length;
+					else 
+						lth = $("#img_items_"+pid).find(".items").length;
+					lth++;
+					switch(t){
+						case "1"://图片
+							html_ = '<div class="" style="width:200px;float:left;">选项选择图片：<input type="button" data-pid="'+pid+'" id="item_img_url_'+pid+'_'+lth+'" name="item_img_url_'+pid+'[]"  class="wd100 items" value="选择图片" /><input type="hidden" id="hidden_item_img_url_'+pid+'_'+lth+'" name="hidden_item_img_url_'+pid+'[]" class="wd100 items" data-pid="'+pid+'"/></div>';
+						break;
+						case "0"://文字
+
+							html_ = '<div class="" style="width:200px;float:left;">选项标题：<input type="text" id="item_title_'+pid+'_'+lth+'" name="item_title_'+pid+'[]" class="wd100 items" data-pid="'+pid+'"/></div>';
+						break;
+					}
+					if(t=="0") {
+						$("#wz_items_"+pid).append(html_);
+					}
+					else {
+						$("#img_items_"+pid).append(html_);
+						Box.initUp("item_img_url_"+pid+"_"+lth);
+					}
+				});
+				
+			},
+			vtypeClick:function(){
+				$(".item_type").on("click",function(){
+					var t = $(this),pid;
+					var v=t.val(),pid=t.attr("data-pid");
+					if(v=="0") {
+						$("#img_items_"+pid).hide();$("#wz_items_"+pid).show();
+					}else {
+						$("#img_items_"+pid).show();$("#wz_items_"+pid).hide();
+					}
+					
+					Box.initUp("item_img_url_"+pid+"_1");
+				});
+			},
+			initUp:function(id){
+				var button = $('#'+id);
+				new AjaxUpload(button,{
+					action: "/Home/Public/uploadss.html",
+					name: 'files',
+					onComplete: function(file, response){
+						var list=eval("("+response.replace(/<\/?[^>]*>/g,'')+")");
+						if(list.data){
+							$('#hidden_'+id).val(list.data);
+						}
+						alertnewpage3(list.msg);
+					}
+				});
+			}
+		};
+		$(function(){Box.init();});
+		</script>
+
+		<!--弹出框（部门） -->
+	    <div class="authorizationDialog" title="选择部门">
+	        <!--结构树-->
+	        <ul id="treeDepart" class="ztree"></ul>
+	    </div>
+
+
+        </div>
+        <link rel="stylesheet" href="__MODULE__/jqueryztree3.5/css/zTreeStyle/zTreeStyle.css" type="text/css">
+		<block name="script">
+		<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.core.js"></script>
+		<script type="text/javascript" src="__MODULE__/jqueryztree3.5/js/jquery.ztree.excheck.js"></script>
+		<script type="text/javascript">
+		</script>
+		<script type="text/javascript">var pType="createVotes";</script>
+		<script type="text/javascript" src="/Public/Home/js/fun.js"></script>
+		</block>
+    </div>
+</block>
+

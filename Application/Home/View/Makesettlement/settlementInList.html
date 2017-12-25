@@ -1,0 +1,343 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+	<script type="text/javascript">
+	var nowid;
+			$(function() {
+				if(getCookie('boss30_on_'+getHref()+'_t_left_state')!='activate' || getCookie('boss30_on_'+getHref()+'_t_left_state')=='' || getCookie('boss30_on_'+getHref()+'_t_left_state')==null || getCookie('boss30_on_'+getHref()+'_t_left_state')==undefined) {
+					setCookie('boss30_on_'+getHref()+'_t_left','111100000');
+				}
+				//对话框（通过）
+				$(".passDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "400",
+					height: "200",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确认":function(){
+							$('#newpageiframe').attr('src',"/Makesettlement/settlementInOk?id="+nowid);
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//通过对话框
+				$(".J_pass").click(function(){
+					nowid=$(this).attr('data');
+					$(".passDialog").dialog("open");
+				});
+				//对话框（不通过）
+				$(".flunkDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "400",
+					height: "250",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确认":function(){
+							$('#newpageiframe').attr('src',"/Makesettlement/settlementInNo?id="+nowid+"&yy="+$('#selectyy').val());
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				$(".J_flunk").click(function(){
+					nowid=$(this).attr('data');
+					$(".flunkDialog").dialog("open");
+				});
+
+				$(".dataTable1").on({click:function(){
+					var sid = $(this).attr('data');
+					if(confirm("确定要开票吗？"))
+					{
+						$.post("{:U('change_one')}",{
+							sid : sid
+						},function(data){
+							if(data == "TRUE"){
+								//location.reload();
+								window.location.href=window.location.href;
+							}else{
+								alert(data);
+							}
+						});
+					}
+
+				}},".J_KaiPiao");
+
+				$('#js_status').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+					var tmpSelected = $('#js_status').val();
+					if (tmpSelected != null) {
+						$('#status').val(tmpSelected);
+					} else {
+						$('#status').val("");
+					}
+				});
+
+				$('#js_kaiPiao').on('hidden.bs.select', function (e) { //该方法注册到$(function(){})函数中
+					var tmpSelected = $('#js_kaiPiao').val();
+					if (tmpSelected != null) {
+						$('#kaiPiao').val(tmpSelected);
+					} else {
+						$('#kaiPiao').val("");
+					}
+				});
+
+
+			});
+		</script>
+</block>
+<block name="body">
+	<div class="subMainBox" goal="t_left">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">结算单管理</span>
+				<span>财务管理</span>
+			</div>
+			<div class="ri_work">Settlement of accounts</div>
+
+			<div class="dataTable_columnCa_b pa">
+				<div class="dataTable_columnCn_b"></div>
+				<div class="dataTableShow_close_b tc">关闭</div>
+			</div>
+		</div>
+		<div><span class="field_customize">查询自定义</span></div>
+				<!--筛选-->
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<input type="button" value="导出" class="" onclick="window.open('/Makesettlement/downloadsetinlist'+window.location.search)"/>
+						<input type="button" value="筛选" class="J_openScreen" />
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					    <form action="/Makesettlement/settlementInList" method='get'>
+					<div class="screenList fl w">
+						<table>
+							<tr>
+								<th>广告主名称：</th>
+								<td><input type="text" name='advname' value="{:I('get.advname')}"/></td>
+								<th>产品名称：</th>
+								<td><input type="text" name='comname' value="{:I('get.comname')}"/></td>
+								<th>销售人员：</th>
+								<td><input type="text" name='salerid' value="{:I('get.salerid')}"/></td>
+								<th>时间：</th>
+								<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/></td>
+							</tr>
+							<tr>
+								<th>结算单状态：</th>
+								<td><select name="status">
+						          <option value="0">全部</option>
+						          <option value="1">待审核</option>
+						          <option value="2">待开票</option>
+						          <option value="3">已开票</option>
+						          <option value="4">已结清</option>
+						          <option value="5">已回款未开票</option>
+						          <option value="6">已作废</option>
+						        </select></td>
+								<th>要不要开发票：</th>
+								<td><select name="kaiPiao">
+									<option value="">全部</option>
+									<option value="1">要</option>
+									<option value="0">不要</option>
+									</select>
+								</td>
+								<th>结算单编号：</th>
+								<td><input type="text" name="id"></td>
+								<th>生成时间：</th>
+								<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="addstrtime" value="{:I('get.addstrtime')}"/>至<input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="addendtime" value="{:I('get.addendtime')}"/></td>
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+									<input type="button" value="取消" class="J_closeScreen" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					</form>
+				</div>-->
+<style type="text/css">
+	.tableBox tr th{font-size: 12px !important;}
+</style>
+			<div class="screenBox">
+					<form action="/Makesettlement/settlementInList" method='get' id="search_form">
+
+						<div class="t_left">
+							<div class="ziduan">
+								<label>编号: </label>
+								<input type="text" name='id' value="{:I('get.id')}"/>
+							</div>
+							<div class="ziduan">
+								<label>广告主: </label>
+								<input type="text" name='advname' value="{:I('get.advname')}"/>
+							</div>
+							<div class="ziduan">
+								<label>产品: </label>
+								<input type="text" name='comname' value="{:I('get.comname')}"/>
+							</div>
+							<div class="ziduan">
+								<label>状态: </label>
+								<select id="js_status" class="selectpicker">
+									<option value="0">全部</option>
+									<option value="1">待审核</option>
+									<option value="2">待开票</option>
+									<option value="3">已开票</option>
+									<option value="4">已结清</option>
+									<option value="5">已回款未开票</option>
+									<option value="6">已作废</option>
+								</select>
+								<input type="hidden"  class="form-control" id="status" name="status">
+							</div>
+							<div class="ziduan">
+								<label>要不开票: </label>
+								<input type="hidden"  class="form-control" id="kaiPiao" name="kaiPiao">
+								<select class="selectpicker" id="js_kaiPiao">
+									<option value="">全部</option>
+									<option value="1">要</option>
+									<option value="0">不要</option>
+								</select>
+							</div>
+							<div class="ziduan">
+								<label>生成时间: </label>
+								<input readonly="true" style="width:70px;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="addstrtime" value="{:I('get.addstrtime')}"/>至<input readonly="true" style="width:70px;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="addendtime" value="{:I('get.addendtime')}"/>
+							</div>
+							<div class="ziduan">
+								<label>销售人员: </label>
+								<input type="text" name='salerid' value="{:I('get.salerid')}"/>
+							</div>
+							<div class="ziduan">
+								<label>账单开始: </label>
+								<input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{:I('get.strtime')}"/>
+							</div>
+							<div class="ziduan">
+								<label>账单结束: </label>
+								<input readonly="true"  class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="endtime" value="{:I('get.endtime')}"/>
+							</div>
+						</div>
+						<div class="t_right"><input type="submit" value="查询" /></div>
+					</form>
+			</div>
+				<!--数据表-->
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<span class="addAdv advBtn">
+								<input type="button" value="导出" class="" onclick="window.open('/Makesettlement/downloadsetinlist'+window.location.search)"/>
+							</span>
+						</div>
+					</div>
+					<form action="subaudit" method='post' name='subauditdataform'>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th>结算单编号</th>
+							<th>广告主名称</th>
+							<th>产品名称</th>
+							<th>账单期间</th>
+							<th>结算金额（含税）</th>
+							<th>结算主体</th>
+							<th>所属销售</th>
+							<th>要不要开发票</th>
+							<th>结算依据</th>
+							<th>状态</th>
+							<th width="150">操作</th>
+							<th>查看日报</th>
+						</tr>
+						</thead>
+						<tbody>
+						<volist name="getSumIn" id="sum">
+							<tr>
+								<td>汇总</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>{$sum.settlementmoney}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</volist>
+						<volist name='data' id='v'>
+							<tr>
+								<td>{$v.id}</td>
+								<td>{$v.advname}</td>
+								<td>{$v.comname}</td>
+								<td>{$v.strdate}-{$v.enddate}</td>
+								<td>{$v.settlementmoney|twonum}</td>
+								<td>{$v.jszt}</td>
+								<td>{$v.real_name}</td>
+								<td>{$v.iskaipiao}</td>
+								<td>
+								<php>if(!empty($v['basispath'])){
+								$imgpath=explode(',',$v['basispath']);
+								</php>
+								<volist name="imgpath" id='val' key='k'>
+								<a target="_blank" href='/{$val}'>预览{$k}</a>
+								</volist>
+								<php>}</php></td>
+								<td>{:C('option.insettlement_status')[$v['status']]}</td>
+								<td>
+									<a href="/Makesettlement/settlementIn?id={$v.id}">查看</a>&nbsp;
+									<eq name='v.status' value='1'>
+									<a class="J_pass" data='{$v.id}'>通过</a>&nbsp;
+									<a class="J_flunk" data='{$v.id}'>不通过</a>&nbsp;
+									</eq>
+									<eq name='v.iskaipiao' value='不要'>
+										<a class="J_KaiPiao" data='{$v.id}'>去开票</a>
+									</eq>
+								</td>
+								<td><a target="_blank" href="/Report/dayReport?strtime={$v.strdate}&endtime={$v.enddate}&inzt[]={$v.jsztid}&adverid[]={$v.advid}&salerid[]={$v.salerid}{$v.comstr}{$v.jfstr}">查看</a></td>
+					        </tr>
+						</volist>
+						</tbody>
+					</table>
+					{$_page}
+					</form>
+				</div>
+
+			</div>
+	</div>
+			<!--弹出框（通过） -->
+		<div class="passDialog" title="通过">
+			<br /><br />
+			<p class="tc">请确定审核通过！</p>
+		</div>
+	<!--弹出框（不通过） -->
+		<div class="flunkDialog" title="不通过">
+			<table class="dialogTable_form w ha">
+				<tr>
+					<th></th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>选择原因<span class="must">*</span>:</th>
+					<td><select id='selectyy'>
+					<volist name='dic' id='v'>
+						<option value="{$v.name}">{$v.name}</option>
+					</volist>
+					</select></td>
+				</tr>
+				
+			</table>
+		</div>
+
+</block>
+
+
+

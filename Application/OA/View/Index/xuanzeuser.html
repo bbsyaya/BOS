@@ -1,0 +1,42 @@
+<extend name="Public/base"/>
+<block name="style">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+
+    <link rel="stylesheet" href="__PUBLIC__/OA/js/kindeditor-4.1.10/themes/default/default.css" />
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap-select.css"/>
+</block>
+<block name="script">
+
+</block>
+<block name="body">
+<link rel="stylesheet" href="__PUBLIC__/OA/css/oaliuc.css">
+<div style="margin:auto;width:420px;font-size:18px;">
+<p class="xz_p">下一节点：{$data.name}</p>
+<p class="xz_p">主办人：</p>
+<form action="/OA/Index/xuanzeuserDo" method='get'>
+<input type='hidden' name='lcid' value="{:I('get.lcid')}"/>
+<input type='hidden' name='txid' value="{:I('get.txid')}"/>
+<input type='hidden' name='sortid' value="{:I('get.sortid')}"/>
+<div style="width:220px">
+<p class="xz_p"><select name='userid' style="width:220px" class="selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+<volist name='alluid' id='v'>
+	<option value="{$v.id}" <eq name="autouser" value="$v.id">selected="selected"</eq>>{$v.real_name}</option>
+</volist>
+</select></p>
+</div>
+<p class="xz_p">经办人：</p>
+<div style="width:220px">
+<p class="xz_p"><select name='juserlist[]' style="width:220px" multiple class="selectpicker" data-actions-box="true" data-done-button="true" data-live-search="true">
+<volist name='alluid' id='v'>
+	<option <php>if(in_array($v['id'],$autojb) || $v['id']==$autojb)echo "selected='selected'";</php> value="{$v.id}">{$v.real_name}</option>
+</volist>
+</select></p>
+</div>
+<br/>
+<input type='submit' value="确认转交"/>
+</div>
+</form>
+</block>

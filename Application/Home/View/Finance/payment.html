@@ -1,0 +1,478 @@
+<extend name="Public/base"/>
+
+
+<block name="script">
+	<script type="text/javascript" src="__JS__/bootbox.min.js"></script>
+	<script type="text/javascript">
+			$(function() {
+				var aHtml = '<tr class="bu1">'+
+							     	'<th class="autoWrap">部门负责人</th>'+
+									'<td colspan="2"><select class="selectList2" name="DATA_22" title="部门负责人">'+
+									'<option value="同意">同意</option>'+
+									'<option value="不同意">不同意</option>'+
+									'</select>'+
+									'<img alt="" style="cursor: pointer;" sign_type="1,0," sign_color="0x0000FF" src="/module/html_editor/editor/images/sign.gif" classname="SIGN" class="SIGN" value="部门负责人" title="签章控件:部门负责人" name="DATA_23" border="0" align="absMiddle" /></td>'+
+				'<td colspan="4" class="checkGist">'+
+						'<ol>'+
+						'<li>费用真实性审核</li>'+
+						'<li>报销是否符合公司制度</li>'+
+						'</ol>'+
+						'</td>'+
+						'<td class="checkTime" id="bumen">1时3分5秒</td>'+
+				'</tr>'+
+				'<tr class="bu2">'+
+						'<td class="step" colspan="8">&#160;</td>'+
+				'</tr>';
+				//对话框批量备注
+				$(".batchRemarkDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "400",
+					height: "250",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+				//批量备注对话框
+				$(".J_batchRemark").click(function(){
+					$(".batchRemarkDialog").dialog("open");
+				});
+				/*
+				//修改实付金额
+				$("input[name='pay_money']").blur(function(){
+					var pay_money = $(this).val();
+					var id = $(this).attr('rid');
+
+					$.post("{:U('actually_pay')}",{
+						pay_money : pay_money,
+						rid : id
+					},function(data){
+						if(data == "TRUE"){
+							location.reload();
+						}else{
+							alert(data);
+						}
+					});
+				});
+
+				//修改支付银行账户
+				$("select[name='pay_num']").change(function(){
+					var pay_num = $(this).val();
+					var id = $(this).attr('rid');
+
+					$.post("{:U('actually_num')}",{
+						pay_num : pay_num,
+						rid : id
+					},function(data){
+						if(data == "TRUE"){
+							location.reload();
+						}else{
+							alert(data);
+						}
+					});
+				});
+
+				//修改支付时间
+				$("input[name='pay_date']").on("change",function(){
+					alert(1);
+					var pay_date = $(this).val();
+					var id = $(this).attr('rid');
+					alert(pay_date+'  '+id);
+				});*/
+
+
+				$(".dataTable1").on({click:function(){
+					var rid = $(this).attr('id');
+					var pay_money = $(this).parents('tr').find('input[name="pay_money"]').val();
+					var pay_num = $(this).parents('tr').find('select[name="pay_num"]').val();
+					var pay_date = $(this).parents('tr').find('input[name="pay_date"]').val();
+
+					$.post("{:U('actually_pay')}",{
+						rid : rid,
+						pay_money : pay_money,
+						pay_num : pay_num,
+						pay_date : pay_date
+					},function(data){
+						if(data == "TRUE"){
+							//location.reload();
+							window.location.href=window.location.href;
+						}else{
+							alert(data);
+						}
+					});
+				}},".b_c");
+
+				$(".uploadingDialog").dialog({
+					autoOpen: false,
+					resizable: false,
+					width: "450",
+					height: "200",
+					modal: true,
+					show: "scale",
+					buttons: {
+						"确定":function() {
+							//获取合同id
+							var t_strtime = $("input[name='t_strtime']").val();
+
+							$.post("{:U('PaymentData')}",{
+								t_strtime : t_strtime
+							},function(data){
+								if(data == "TRUE"){
+									location.reload();
+								}else{
+									alert(data);
+								}
+							});
+
+							$(this).dialog("close");
+						},
+						"取消":function(){
+							$(this).dialog("close");
+						}
+					},
+				});
+
+				/*2016.12.21
+				* 用友系统对接 同步付款数据到U8
+				* */
+				$(".J_TongBu").click(function(){
+					$(".uploadingDialog").dialog("open");
+				});
+
+				$('.check-all').click(function(){
+					$('.ids').prop('checked',this.checked);
+				});
+				$('.ids').click(function(){
+					var option = $('.ids');
+					option.each(function(i) {
+						if(!this.checked){
+							$('.check-all').prop('checked',false);
+							return false;
+						}else{
+							$('.check-all').prop('checked',true);
+						}
+					});
+				});
+
+				$(".J_PbillData").click(function(){
+					var chk_value =[];
+					var outData = [];
+					$('input[name="nid"]:checked').each(function(){
+						chk_value.push($(this).val());
+						//alert($(this).parents('tr').find('td').eq(5).html());return;
+						var onedata = [];
+						onedata[0] = $(this).val();
+						onedata[1] = $(this).parents('tr').find('td').find('input[name="pay_money"]').val();
+						onedata[2] = $(this).parents('tr').find('td').find('select[name="pay_num"]').val();
+						onedata[3] = $(this).parents('tr').find('td').find('input[name="pay_date"]').val();
+						outData.push(onedata);
+					});
+					if(chk_value ==''){
+						alert("请选择数据");return;
+					}
+					bootbox.dialog({message: "请耐心等待，正在同步数据...", });
+					$.post("{:U('actually_pay')}",{sid:chk_value,outdata:outData},function(data){
+						if(data == "TRUE"){
+							location.reload();
+						}else{
+							alert(data);
+						}
+					});
+				});
+			});
+		</script>
+	<style type="text/css">
+		.b_c{color: #1a72d6;}
+	</style>
+</block>
+<block name="body">
+	<div class="subMainBox">
+		<div class="ri_header">
+			<div class="ri_title_box">
+				<span class="clip-text">应付管理</span>
+				<span>财务管理</span>
+			</div>
+			<div class="ri_work">Cope with management</div>
+		</div>
+				<!--筛选-->
+				<!--<div class="screenCn fl w ha">
+					<div class="screenOperate fl w">
+						<a href="http://bos3.yandui.com/OA/Index/begin?id=66" target="_blank">申请结算</a>
+						<input type="button" value="导出" class="" onclick="window.open('/Finance/downloadpaymentlist'+window.location.search)" />
+						<input type="button" value="确定同步" class="J_PbillData" />
+						<div class="dataTableShow fr" goal="dataTable1">
+							<div class="dataTableShow_icon fr"></div>
+							<div class="dataTable_columnCa pa">
+								<div class="dataTable_columnCn"></div>
+								<div class="dataTableShow_close tc">关闭</div>
+							</div>
+						</div>
+					</div>
+					    <form action="/Finance/payment" method='get'>
+					<div class="screenList fl w">
+						<table>
+							<tr>
+								<th>供应商名称：</th>
+								<td><input type="text" name='ggzname' value="{:I('get.ggzname')}"/></td>
+								<th>产品名称：</th>
+								<td><input type="text" name='comname' value="{:I('get.comname')}"/></td>
+								<th>结算单编号：</th>
+								<td><input type="text" name="fid" id="fid"></td>
+								<th>支付日期：</th>
+								<td><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{$strtime}"/></td>
+							</tr>
+							<tr>
+								<th>单位：</th>
+								<td>
+									<select name="sb_name">
+									<volist name='sbData' id='sb'>
+											<option value="" selected="selected">请选择</option>
+											<option value="{$sb.name}">{$sb.name}</option>
+									</volist>
+									</select>
+								</td>
+								<th>流程状态：</th>
+								<td><select id="lc_status" name="lc_status">
+									<option value="" selected="selected">全部</option>
+									<option value="1">审批中</option>
+									<option value="2">已审批</option>
+								</select></td>
+							</tr>
+							<tr>
+								<td colspan="8">
+									<input type="submit" value="查询" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					<input type="hidden" name="p" value="1">
+					</form>
+				</div>-->
+
+				<div class="screenBox swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<form action="{:U('payment')}" id="search_form">
+
+								<div class="swiperRight">
+									<table class="tableBox">
+										<tr>
+											<th>供应商名称：</th>
+											<td><input type="text" name='ggzname' value="{:I('get.ggzname')}"/></td>
+											<th>产品名称：</th>
+											<td><input type="text" name='comname' value="{:I('get.comname')}"/></td>
+											<th>结算单编号：</th>
+											<td><input type="text" name="fid" id="fid"></td>
+											<td>
+												<input type="submit" value="查询" />
+											</td>
+										</tr>
+										<tr>
+											<th>支付日期：</th>
+											<td><input readonly="true" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" name="strtime" value="{$strtime}"/></td>
+											<th>单位：</th>
+											<td>
+												<select class="selectpicker" name="sb_name">
+													<volist name='sbData' id='sb'>
+														<option value="" selected="selected">请选择</option>
+														<option value="{$sb.name}">{$sb.name}</option>
+													</volist>
+												</select>
+											</td>
+											<th>流程状态：</th>
+											<td><select class="selectpicker" id="lc_status" name="lc_status">
+												<option value="" selected="selected">全部</option>
+												<option value="1">审批中</option>
+												<option value="2">已审批</option>
+											</select></td>
+										</tr>
+									</table>
+								</div>
+							</form>
+							<!--end 基础查询-->
+						</div>
+					</div>
+				</div>
+				<!--数据表-->
+				<style type="text/css">
+					.te{margin-left: 0!important;padding: 0 30px;}
+					.J_PbillData{margin: 10px 0 10px 20px;}
+					.abc{margin-left: 0!important;}
+				</style>
+				<div class="dataCn fl w ha" id="table_con">
+					<div class="advancedTit">
+						<div class="advancedLeft">
+							<span class="addAdv advBtn te">
+								<a href="/OA/Index/begin?id=66" target="_blank">申请结算</a>
+							</span>
+							<span class="addAdv advBtn te">
+							<a onclick="window.open('/Finance/downloadpaymentlist'+window.location.search)">导出</a></span>
+							<span class="addAdv advBtn te">
+							<!--<a  class="J_PbillData">确定同步</span>-->
+							<a class="J_PbillData">确定同步</a>
+							</span>
+						</div>
+					</div>
+					<form action="subaudit" method='post' name='subauditdataform'>
+					<table class="dataTable dataTable1">
+						<thead>
+						<tr>
+							<th><input class="check-all" name="" type="checkbox">全选</th>
+							<th>OA编号</th>
+							<th>结算单编号</th>
+							<th>供应商名称</th>
+							<th>产品名称</th>
+							<th>账单期间</th>
+							<th>结算金额（含税）</th>
+							<th>同步金额</th>
+							<th>结算主体</th>
+							<th>支付时间</th>
+							<th>已付款金额</th>
+							<th>待结算金额</th>
+							<th>申请人</th>
+							<th>申请时间</th>
+							<th>流程状态</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>汇总</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>{$getSum.data_22}</td>
+								<td>{$getSum.pay_money}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>{$getSum['data_22'] - $getSum['pay_money']}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						<volist name='data' id='v'>
+							<tr>
+								<td><input class="ids" type="checkbox" name="nid" value="{$v['id']}"></td>
+								<td>{$v.x739c8a_1}</td>
+								<td>{$v.x739c8a_13}</td>
+								<td>{$v.x739c8a_3}</td>
+								<td>{$v.x739c8a_14}</td>
+								<td>{$v.x739c8a_16}</td>
+								<td>{$v.x739c8a_17}</td>
+								<!--判断流程状态 不可以编辑-->
+								<if condition="($v['x739c8a_9'] - $v['pay_money'] eq 0) or ($v['status'] NEQ '2') ">
+									<td><input type="text" placeholder="{$v.pay_money}" disabled="disabled"  name="pay_money" value="{$v.pay_money}" /></td>
+									<td>
+										<select disabled="disabled" name="pay_num" class="selectpicker">
+										<volist name='sbData' id='sb'>
+											<php> if($sb['name'] == $v['x739c8a_0']){ </php>
+
+											<option value="{$sb.name}" selected="selected">{$sb.name}</option>
+											<php> }else{ </php>
+												<option value="{$sb.name}">{$sb.name}</option>
+
+											<option value="{$sb.name}" selected="selected">{$sb.name}</option>
+
+
+											<php> } </php>
+										</volist>
+									</select>
+									</td>
+									<if condition="$v['pay_date'] NEQ '' ">
+										<td><input type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="pay_date" value="{$v.pay_date}" rid="{$v.id}" disabled="disabled"/></td>
+										<else />
+										<td><input type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="pay_date" value="<?php echo date('Y-m-d')?>" rid="{$v.id}" disabled="disabled"/></td>
+									</if>
+								<else />
+									<!--判断流程状态 可以编辑-->
+									<td><input type="text" placeholder="{$v.pay_money}" name="pay_money" rid="{$v.id}" value="{$v['x739c8a_9'] - $v['pay_money']}"/></td><!--value="{$v.pay_money}"-->
+									<td>
+										<select name="pay_num" rid="{$v.id}">
+											<volist name='sbData' id='sb'>
+												<php> if($sb['name'] == $v['x739c8a_0']){ </php>
+												<option value="{$sb.name}" selected="selected">{$sb.name}</option>
+												<php> }else{ </php>
+												<option value="{$sb.name}">{$sb.name}</option>
+												<php> } </php>
+											</volist>
+										</select>
+									</td>
+									<if condition="$v['pay_date'] NEQ '' ">
+										<td><input type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="pay_date" value="{$v.pay_date}" rid="{$v.id}"/></td>
+									<else />
+										<td><input type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="pay_date" value="<?php echo date('Y-m-d')?>" rid="{$v.id}"/></td>
+									</if>
+								</if>
+								<td>{$v['pay_money']}</td>
+								<td>{$v['x739c8a_9'] - $v['pay_money']}</td>
+								<td>{$v.adduser}</td>
+								<td>{$v.addtime}</td>
+								<if condition="($v['status'] NEQ '') ">
+								<td>已审批</td>
+								<else />
+								<td>审批中</td>
+								</if>
+								<td>
+									<!--<input type="button" value="提交" class="b_c" id="{$v.id}">&nbsp;&nbsp;-->
+									<a href="/Finance/paymentDetail?id={$v.id}&sp_uid={$v.data_40}" target="_blank">查看</a>
+								</td>
+					        </tr>
+							<!--<tr>
+								<td>……</td>
+								<td>……</td>
+								<td>……</td>
+								<td>……</td>
+								<td>……</td>
+								<td>……</td>
+								<td><input type="text" placeholder="500" /></td>
+								<td><select><option>下拉</option></select></td>
+								<td><input type="text" /></td>
+								<td>……</td>
+								<td>……</td>
+								<td>……</td>
+								<td>……</td>
+								<td>……</td>
+								<td>
+									<a href="accountPayableManage_look.html">查看</a>
+								</td>
+							</tr>-->
+						</volist>
+						</tbody>
+					</table>
+					</form>
+					{$_page}
+				</div>
+			</div>
+		</div>
+
+			<!--弹出框 -->
+			<div class="uploadingDialog" title="同步付款数据信息">
+				<form id="ciForm" enctype="multipart/form-data" action="{:U('uploadImg')}" method="post">
+					<table class="dialogTable_form w ha">
+						<tr>
+							<th>日期月份选择：</th>
+							<td><input readonly="true" style="width:45%!important;" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM'})" type="text" name="t_strtime" />
+						</tr>
+						<!--<tr>
+							<th>选择合同<span class="must">*</span>:</th>
+							<td><input type="file" id="contractImg"  name="contractImg" multiple="multiple" />
+								<input type="hidden" id="cid" name="cid">
+							</td>
+						</tr>-->
+					</table>
+				</form>
+			</div>
+</block>
+
+

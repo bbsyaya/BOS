@@ -1,0 +1,156 @@
+<extend name="Public/base"/>
+
+<block name="body">
+
+    <div class="subMainBox">
+        <style type="text/css">
+            #sub{
+                line-height: 30px;
+                color: #4776e6;
+                font-size: 14px;
+                font-family: 'Microsoft YaHei';
+                min-width: 75px;
+                padding: 0 5px;
+                cursor: pointer;
+                border-radius: 15px;
+                border: 1px solid #4776e6;
+                display: inline-block;
+                box-sizing: border-box;
+                margin-right: 20px;;
+            }
+            #fan{
+                line-height: 30px;
+                color: #4776e6;
+                font-size: 14px;
+                font-family: 'Microsoft YaHei';
+                min-width: 75px;
+                padding: 0 5px;
+                cursor: pointer;
+                border-radius: 15px;
+                border: 1px solid #4776e6;
+                display: inline-block;
+                box-sizing: border-box;
+            }
+            .xian{background: url("/Public/newUI/img/xian.png");height: 1px;margin-bottom: 15px;}
+
+            .sel-djs{
+                width:150px !important;
+            }
+            .dataFormTable tr th, .dataFormTable tr td{
+                height: auto !important;
+                *height: auto;
+                line-height: auto !important;
+                padding:5px 5px !important;
+                overflow: auto !important; *overflow: auto !important;
+            }
+        </style>
+
+        <div class="ri_header">
+            <div class="ri_title_box">
+                <span class="clip-text"><a href="/TargetCheck/index">风控目标管理</a></span>&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size: 20px;">-></a>
+                <span><a href="/MainBody/index">控制主体管理</a></span>
+            </div>
+            <div class="dataTable_columnCa_b pa">
+                <div class="dataTable_columnCn_b"></div>
+                <div class="dataTableShow_close_b tc">关闭</div>
+            </div>
+        </div>
+        <div class="xian"></div>
+
+        <div class="dataFormTitle" style="background-color: #E6F1FF;color: #4776e6;">控制主体管理</div>
+        <form id="dataform"  action="{:U('update')}" method="post" enctype="multipart/form-data">
+        <div class="dataFormContent">
+
+            <table class="dataFormTables">
+                <tr>
+                    <th>控制主体名称：<span class="required">*</span></th>
+                    <td><input type="text" class="ritem" name="name" value="{$adInfo.name}" /></td>
+                    <th>对接人：<span class="required">*</span></th>
+                    <td>
+                        <select id="djr_name" name='butt' class="sel-djs"  data-actions-box="true" data-done-button="true" data-live-search="true">
+                            <volist name="user" id='v'>
+                                <option value="{$v.id}" <php>if($v['id'] == $adInfo['butt'])echo "selected='selected'";</php>>{$v.real_name}</option>
+                            </volist>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>状态：<span class="required">*</span></th>
+                    <td colspan="3">
+                        <select id="status" name="status">
+
+                            <php>if(empty($adInfo['status'])){</php>
+
+                            <option value="">请选择</option>
+                            <option value="1" selected>正常</option>
+                            <option value="0">暂停</option>
+
+                            <php>}else{</php>
+
+                                <php>if($adInfo['status'] == 1){</php>
+                                <option value="">请选择</option>
+                                <option value="1" selected>正常</option>
+                                <option value="0">暂停</option>
+                                <php>}elseif($adInfo['status'] == 2){</php>
+                                <option value="">请选择</option>
+                                <option value="1">正常</option>
+                                <option value="0" selected>暂停</option>
+                                <php>}</php>
+                            <php>}</php>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>主体说明:</th>
+                    <td colspan="3"><textarea id="remark" name="remark" style="text-align: center;">{$adInfo.remark}</textarea></td>
+                </tr>
+            </table>
+        </div>
+        <div class="dataFormOperate">
+            <input type="hidden" name="id" value="{$adInfo.id}" />
+            <input id="sub" type="button" value="保存" />
+            <a href="{:U('index')}" id="fan">返回</a>
+        </div>
+        </form>
+    </div>
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/module/bootstrapselect/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/css/targetcheck.css">
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+    <script>
+        $(function(){
+            $('#djr_name').selectpicker({
+                selectAllText: '全选',
+                deselectAllText: '全不选'
+            });
+            /*var st = "{$adInfo['butt']}";
+            if(st){
+                $('#djr_name').find("option[value="+st+"]").attr("selected", "true");
+                $("#djr_name").selectpicker('refresh');
+            }*/
+            $("#sub").click(function(){
+                var form   = $("#dataform");
+                var url    = form.attr('action');
+                $("#dataform").ajaxSubmit({
+                    type: 'post',
+                    url: url,
+                    timeout: 5000,
+                    success:function(ret){
+                        if(ret.status == 1){
+                            layer.alert(ret.msg);
+                            //location.reload();
+                            var goUrl = '/MainBody/index';
+                            window.location.href = goUrl;
+                        }else{
+                            layer.alert(ret.msg);
+                        }
+
+                    }
+
+                });
+            });
+
+        });
+    </script>
+
+</block>

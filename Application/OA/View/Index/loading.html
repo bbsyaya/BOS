@@ -1,0 +1,149 @@
+<extend name="Public/base"/>
+<block name="style">
+    <meta charset="UTF-8">
+    <title>流程管理</title>
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/OA/css/models.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/OA/js/daterangepicker/daterangepicker.css">
+</block>
+<block name="script">
+<script type="text/javascript" src="__PUBLIC__/OA/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/globle.js"></script>
+<!--双日期插件-->
+<script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/jquery.timepicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/jquery.datepair.js"></script>
+<script type="text/javascript" src="__PUBLIC__/OA/js/datepicker/datepicker.js"></script>
+
+</block>
+<block name="body">
+<style type="text/css">
+    .queryTable tr th, .queryTable tr td {
+    height: 32px !important;
+    line-height: 32px !important;
+    font-size: 12px;
+    color: #666666;
+    padding:5px 0px;
+}
+.surk{
+    height: 30px !important;
+    line-height: 30px !important;
+}
+.listTable tr th, .listTable tr td {
+    padding:5px 0px  !important;
+}
+</style>
+<div class="subConten">
+    <!--面包屑-->
+    <div class="crumbs"><span>我的流程</span></div>
+    <!--end 面包屑-->
+    <!--内容-->
+    <div class="subCon" style="width:100%;display:inline-block;margin-top:0px; padding: 2px !important;">
+   <!--  <div class="screenOperate fl w">
+
+            <a class="Js_addOffice screenCn_a" href="/OA/Index/add">发起流程</a>
+           .queryTable tr th, .queryTable tr td {
+    height: 50px;
+    line-height: 50px;
+    font-size: 12px;
+    color: #666666;
+}
+    </div> -->
+        <!--条件查询-->
+        <div class="query" style="width:100%;margin-top:10px;">
+            <form action="" method='get'>
+            
+            <table class="queryTable">
+                <tbody>
+                    <tr>
+                        <th>流程名称：</th>
+                        <td colspan="3"><input name="name" value="{:I('get.name')}" type="text" style="width:97%" class="surk"></td>
+                        <th>发起人：</th>
+                        <td><input name="user" value="{:I('get.user')}" type="text" class="surk"></td>
+                        <th>流程号：</th>
+                        <td>
+                        <input name="oaid" value="{:I('get.oaid')}" type="text" class="surk">
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <th>流程类别：</th>
+                        <td><select name="type2" class="surk"><option value='0'>全部</option><option <php>if(I('get.type2')==1)echo "selected='selected'";</php> value="1">财务类</option><option <php>if(I('get.type2')==2)echo "selected='selected'";</php> value="2">行政类</option><option <php>if(I('get.type2')==3)echo "selected='selected'";</php> value="3">人力资源类</option></select></td>
+                        <th width="100px">办理状态：</th>
+                        <td><select name="type" class="surk">
+                        <option <php>if(I('get.type')==1)echo "selected='selected'";</php> value="1">待办理</option><option <php>if(I('get.type')==2)echo "selected='selected'";</php> value="2">已办理</option><option <php>if(I('get.type')==3)echo "selected='selected'";</php> value="3">由我发起</option><eq name="_SESSION['userinfo']['uid']" value="669"><option <php>if(I('get.type')==4)echo "selected='selected'";</php> value="4">业务合同流程</option></eq></select></td>
+                        <th>流程状态：</th>
+                        <td><select name="status" class="surk"><option value='0'>全部</option><option <php>if(I('get.status')==1)echo "selected='selected'";</php> value="1">进行中</option><option <php>if(I('get.status')==2)echo "selected='selected'";</php> value="2">已结束</option><option <php>if(I('get.status')==3)echo "selected='selected'";</php> value="3">已作废</option></select></td>
+                        <th></th>
+                        <td><input name="" type="submit" value="查询"></td>
+
+                    </tr>
+                </tbody>
+            </table>
+           <!--  <input name="" onclick="window.location=''" type="button" value="" class="creatoa"> -->
+            </form>
+        </div>
+        <!-- end 条件查询-->
+        <!--发起流程列表-->
+        <div class="workListBox">
+            <table class="listTable Js_tableCon">
+                <thead>
+                    <tr>
+                        <th>流程ID</th>
+                        <th>流程类型</th>
+                        <th>流程名称</th>
+                        <th>开始时间</th>
+                        <th>流程步骤</th>
+                        <th>当前办理人</th>
+                        <th>发起人</th>
+                        <th>流程状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <notempty name="data">
+                    <volist name='data' id='v'>
+                        <tr>
+                            <td>{$v.liuchenid}</td>
+                            <td>{$v.mname}</td>
+                            <td><a class="rest" href="/OA/Index/lc_detail?id={$v.liuchenid}" >{$v.name}</a></td>
+                            <td>{$v.addtime}</td>
+                            <td>{$v.thissortname}</td>
+                            <td>{$v.thisuser}</td>
+                            <td>{$v.adduser}</td>
+                            <td>{:C('option.liuchen_status')[$v['status']]}</td>
+                            <td><eq name="v.is_check" value="0"><if condition="($_GET['type'] neq 4) and ($_GET['type'] neq 3) and ($_GET['type'] neq 2)"><a class="rest" href="/OA/Index/useing?lcid={$v.liuchenid}&jdid={$v.jiedianid}&txid={$v.id}">办理</a></if></eq>
+                            <eq name="v.isunset" value="1"><a onclick="return confirm('确定取消？');" class="rest" href="/OA/Index/unsetoa?lcid={$v.liuchenid}&jdid={$v.jiedianid}&txid={$v.id}" style="color:red">撤销</a></eq>
+                            <if condition="($v['isdel'] eq 1) and ($_GET['type'] neq 2) and ($_GET['type'] neq 3) and ($_GET['type'] neq 4)"><a onclick="return confirm('确定作废？');" class="rest" href="/OA/Index/deloa?lcid={$v.liuchenid}&jdid={$v.jiedianid}&txid={$v.id}">作废</a></if>
+                            <!--<a class="detail Js_details" href="javascript:void(0);">删除</a>-->
+                            </td>
+                        </tr>
+                    </volist>
+                <else />
+                     <tr>
+                         <td colspan="9">
+                             <div class="no-datas">暂无数据！<a href="/OA/Index/loading.html?name=&user=&oaid=&type2=0&type=3&status=0" style="color:#1269cc;">点击查看自己发起的流程</a></div>
+                         </td>
+                     </tr>
+                </notempty>
+                    
+
+                </tbody>
+            </table>
+            <style type="text/css">
+            .dataPageList{margin-top: 0px !important;}
+            </style>
+             <notempty name="data">
+            {$_page}
+            </notempty>
+        </div>
+        <!--end 发起流程列表-->
+    </div>
+    <!--end 内容-->
+</div>
+<!--end 主体-->
+
+
+</block>
+

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 设置 viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 兼容国产浏览器的高速模式 -->
+    <meta name="renderer" content="webkit">
+    <title>智能办公平台</title>
+    <link rel="stylesheet" href="__PUBLIC__/newUI/css/swiper-3.4.2.min.css">
+    <script src="__PUBLIC__/newUI/js/jquery-1.9.1.min.js"></script>
+    <script src="__PUBLIC__/newUI/js/swiper-3.4.2.jquery.min.js"></script>
+    <link href="__PUBLIC__/newUI/css/myCss.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/newUI/css/index.css?v={:getVersion()}">
+    <link rel="stylesheet" href="__PUBLIC__/newUIH/css/reset.css"/>
+    <style type="text/css">
+        .te{color: red;}
+    </style>
+</head>
+<body>
+<!--头部head-->
+<div class="top_content" style="cursor:pointer;background:url(/Public/OA/images/oabg2.png) repeat-x !important;">
+
+    <div class="top_contentBox clearfix">
+    <div class="logo left" onclick="javascript:window.location.href='/';" style="cursor:pointer;background:url(/Public/OA/images/oabg1.png)!important;margin:14px 20px 0 0 ;width:403px !important;height:32px !important;"  >
+        </div>
+        <div class="top_content_right clearfix">
+            <a href="/Home/Public/logout.html" class="top_list outIcon" style="background:url(/Public/OA/images/oalogout1.png) no-repeat !important;margin-top:6px !important;float:right;width:18px;height:20px;"></a>
+            <div  class="top_list userIcon" style="float:right;">
+                <a href="/Home/User/mycenter"><img <eq name="_SESSION['userinfo']['duty_name']" value="财务总监">id="aaabbbccc"</eq> src="__PUBLIC__/newUI/img/<eq name="data_user.gender" value="1">g<else/>p1</eq>.png"></a>
+                <span class=""></span>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--end 头部head-->
+
+<!--主体内容-->
+<div class="main_content">
+    <!--头部个人信息-->
+    <div class="mainInfo clearfix">
+        <div class="top_left" style="position: relative;">
+            <!--头像-->
+            <div class="top_left_user_icon"><img src="__PUBLIC__/newUI/img/<eq name="data_user.gender" value="1">g<else/>p1</eq>.png"></div><!--<img src="__PUBLIC__/newUI/img/p1.jpg" alt="">-->
+            <!--个人信息-->
+            <div class="top_left_user_info">
+                <div class="userInofBox clearfix">
+
+                    <p class="user_info_name"><span>Hi,<em><eq name="data_user.gender" value="1">美女<else/>帅哥</eq></em></span><i>{$_SESSION['userinfo']['realname']}</i></p>
+<!--<a href="/OA/Index/main.html?mainurl=/OA/attend/index" class="AttendanceBtn" target="_blank">本月考勤</a>-->
+<!--<a href="/OA/Index/main.html?mainurl=/OA/OrganizSetting/crateImg" class="AttendanceBtn" target="_blank">部门架构</a>-->
+                    <span class="duty">{$_SESSION['userinfo']['duty_name']}</span>
+                    <span class="dep">{$_SESSION['userinfo']['depart_name']}</span>
+                </div>
+
+                <ul class="userInfoList clearfix">
+                    <li class="user_post">{$data_user.auth_name}</li>
+                    <!--<li class="user_department">{$_SESSION['userinfo']['depart_name']}</li>
+                    <li class="user_power"> {$_SESSION['userinfo']['duty_name']}</li>-->
+                    <li class="user_WorkYears gl">工龄{$_SESSION['userinfo']['company_age']}年</li>
+                </ul>
+                <div class="xian"></div>
+                <div style="padding-top: 15px;">
+                    <a href="/OA/Index/main.html?mainurl=/OA/attend/index" target="_blank"><span class="kaoqin"></span></a>
+                    <a href="javascript:void(0);" onclick="or.showImg()"><span class="jiagou"></span></a>
+                </div>
+            </div>
+
+        </div>
+        <!--右边企业理念-->
+        <div class="top_right">
+            <div class="swiper-container qywh_swiper">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            活下来就有机会
+                        </p>
+                        <p class="company_culture_con">
+                            公司全员降低舒适欲望预期，踏踏实实积累粮草与练兵，只要能够生存下来做好积累就会有巨大发展机会。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            开放资源，分享利益
+                        </p>
+                        <p class="company_culture_con">
+                            充分争取现阶段最重要合作方支持，建立信任基础与利益共同体，让重要合作方利益保障与我们生存绑定在一起。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            成为平台型公司的雇佣军
+                        </p>
+                        <p class="company_culture_con">
+                            借助对方成熟体系获取生存发展机会，通过对方体系快速成长，做好生存阶段的积累。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            心态要慢，成长要快
+                        </p>
+                        <p class="company_culture_con">
+                            任何事情欲速则不达，降低财富与舒适度预期，提升能力成长预期，方法正确、心态正确一定会有更大的回报。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            自产自足，量产到户
+                        </p>
+                        <p class="company_culture_con">
+                            每个人都必须全力为组织发展进行创收、节省资源，让组织早日到达发展战略阶段，积累组织发展阶段所需粮草。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            态度比方向重要
+                        </p>
+                        <p class="company_culture_con">
+                            只要做事情的态度对了，方向错误可以及时调整，如果做事情的态度都没有，方向再正确也没有结果。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            努力者才能驾驭梦想
+                        </p>
+                        <p class="company_culture_con">
+                            不愿意主动去学习成长的人，在公司无法看到以及得到发展机会。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            化繁为简
+                        </p>
+                        <p class="company_culture_con">
+                            把复杂的事情变简单,让目标够简单的完成
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            重要的事情今天干
+                        </p>
+                        <p class="company_culture_con">
+                            要保证高效协作的执行力，必须养成重要的事情今天干的习惯
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            未雨绸缪
+                        </p>
+                        <p class="company_culture_con">
+                            风险未来临时能够提升利润，风险来临时能够抵御风险。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            围绕价值做积累
+                        </p>
+                        <p class="company_culture_con">
+                            做对用户、客户、伙伴有价值的事情。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            敢于挑战
+                        </p>
+                        <p class="company_culture_con">
+                            敢于为未来的失败承担风险与责任去换取挑战、创新的机会。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            适应变化
+                        </p>
+                        <p class="company_culture_con">
+                            保持年轻的心态适应市场变化，把每次变化当作是新的机会。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            实践是最好的证明
+                        </p>
+                        <p class="company_culture_con">
+                            证明自己的想法最好的方式是通过实践出结果。
+                        </p>
+                    </div>
+                    <div class="swiper-slide">
+                        <p class="company_culture">企业文化之</p>
+                        <p class=" company_culture company_culture_des">
+                            追求极致服务体验
+                        </p>
+                        <p class="company_culture_con">
+                            建立高标准化，高满意度的服务体系去服务合作伙伴。
+                        </p>
+                    </div>
+                </div>
+                <div class="swiper_slide_prev"></div>
+                <div class="swiper_slide_next"></div>
+            </div>
+        </div>
+    </div>
+    <!--end 头部个人信息-->
+
+    <!--公告-->
+    <div class="ggao_content">
+        <div class="swiper-container gg_swiper">
+            <div class="swiper-wrapper">
+                <!--<volist name="notify" id='v'>
+                    <div class="swiper-slide gg_swiper_boc" data-id="{$v['notify_id']}">
+                        <img src="__PUBLIC__/newUI/img/gg_icon.png" alt="">
+                        <span class="gg_title_lable">{$v.TYPE_ID}:</span>
+                        <span class="gg_title_text">{$v.subject}</span>
+                        <span class="gg_title_time_lable">生成时间:</span>
+                        <span class="gg_title_time">{$v.begin_date}</span>
+
+                    </div>
+                </volist>-->
+            </div>
+        </div>
+    </div>
+
+    <!--菜单列表-->
+    <div class="middle_content">
+        <ul class="flex_itemBox clearfix" id="menuList" style="display:none;">
+            <li class="flex_item">
+                <a href="/OA/Index/main.html?mainurl=/OA/Index/loading&pid=175" target="_blank">
+                    <span class="div_item div_item_mine"></span>
+                    <p>我的流程</p>
+                </a>
+            </li>
+
+            <li class="flex_item  po_flex">
+                <a href="#" id="more_entry">
+                    <span class="div_item div_item_more"></span>
+                    <p>更多流程</p>
+                </a>
+            </li>
+        </ul>
+        <div style="height:190px;line-height:190px;text-align:center;color:#999;font-size:16px;" id="menuLoading">努力加载中...</div>
+    </div>
+    <!--end 菜单列表-->
+    <!--待办事项列表-->
+    <div class="bottom_content">
+        <div class="bottom_title">
+            <img src="__PUBLIC__/newUIH/images/tz.png" alt="" style="padding-right: 10px;">待办事项
+            <div class="section_willdo_xiaoxi">
+                <img src="__PUBLIC__/newUI/images/weidu.png" alt="">
+                <span style="color: white;padding-left: 10px;">您有</span>
+                <span style="color: white;">{$num}</span>
+                <span style="color: white;">条未读消息</span>
+                <span></span>
+            </div>
+        </div>
+        <if condition="count($promlist) eq 0">
+        <div class="needCon">
+            <span class="needIcn"></span>
+            <p>您暂无待办事项!</p>
+        </div>
+        <else/>
+            <ul class="slider_list" id="table_content">
+                <volist name="promlist" id='v'>
+                    <li>
+
+                        <div class="slider_list_title" style="padding-left: 30px;">
+                            <if condition="$v['status'] eq 3">
+                            <a target="_blank" href="/Home/Ajax/readtixing?id={$v.id}&type=oa"><span class="te">{$v.content}</span></a>
+                            <else />
+                                <a target="_blank" href="/Home/Ajax/readtixing?id={$v.id}&type=oa">{$v.content}</a>
+                            </if>
+                        </div>
+                        <div class="slider_list_name">{$v.real_name}</div>
+                        <div class="slider_list_time">{$v.date_time}</div>
+                    </li>
+                </volist>
+            </ul>
+            {$page_html}
+        </if>
+    </div>
+    <!--end 待办事项列表-->
+</div>
+<!--end 主体内容-->
+<!--版权信息-->
+<div class="copyright">
+    版权所有 : 重庆话语科技有限公司 &nbsp;&nbsp; 公司地址 : 重庆市渝中区华盛路10号企业天地2号楼19楼1-6
+</div>
+<!--end 版权信息-->
+<div class="mask">
+    <div class="dia_tishi">请选择替换项</div>
+    <div class="dialog_content">
+        <div class="dialog_header">
+            <div class="dia_header_title">
+                <div>快捷办公入口</div>
+                <div>Quick entry</div>
+            </div>
+        </div>
+        <span class="dialog_content_edit"></span>
+        <div class="clearfix selected_box">
+
+        </div>
+        <div class="dia_list">
+
+        </div>
+        <div class="bott_box">
+            <button class="go_tihuan">确定</button>
+            <button id="btn_close">取消</button>
+        </div>
+    </div>
+</div>
+
+<!--公告弹出层-->
+<div class="notice">
+    <div class="dialog_content">
+        <img class="notice_img" src="__PUBLIC__/newUI/img/close_img.png" alt="">
+        <img class="msk_left" src="__PUBLIC__/newUI/img/msk_left.png" alt="">
+        <img class="msk_right" src="__PUBLIC__/newUI/img/msk_right.png" alt="">
+        <div class="dialog_header">
+            <div class="dia_header_title">
+                <div>公告</div>
+                <div>ANNOUNCEMENT</div>
+            </div>
+        </div>
+        <div class="lunbo_box swiper-container">
+
+            <div class="swiper-wrapper ">
+
+                <!--<div class="swiper-slide swiper_box">
+                    <div>
+                        <div class="swiper_title">
+                            <div class="st_left">关于公关组织架构的调整及通知</div>
+                            <div class="st_right">
+                                <span>发布人:</span>
+                                <span>执念</span>
+                                <span class="fbtime">发布时间:</span>
+                                <span>2017年10月12日 12:00</span>
+                            </div>
+                        </div>
+                        <div class="swiper_text">
+                            内容
+                        </div>
+                        <div class="sb_img_box">
+                            <button>下载附件</button>
+                            <img class="st_login_icon" src="__PUBLIC__/newUI/img/login_icon_1.png">
+                        </div>
+                    </div>
+                </div>-->
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/newUI/js/menu.js?v={:GetVersion()}"></script>
+<script type="text/javascript"  src="__PUBLIC__/newUI/js/text.js?v={:GetVersion()}"></script>
+<script type="text/javascript" src="__PUBLIC__/newUIH/js/reset.js?v={:GetVersion()}"></script>
+<script>
+    $(function(){
+        var res_data ='';
+        $.post('/OA/Index/find_notify', {}, function (data) {
+            res_data = data;
+            var adTr = '';
+
+            $.each(res_data, function (idx, ele) {
+
+                adTr +=  '<div class="swiper-slide gg_swiper_boc" data-id='+ele.notify_id+'>' +
+                        '<img src="__PUBLIC__/newUI/img/gg_icon.png" alt="">' +
+                        '<span class="gg_title_lable">'+ele.TYPE_ID+':</span>' +
+                        '<span class="gg_title_text">'+ele.subject+'</span>' +
+                        '<span class="gg_title_time_lable">生成时间:</span>' +
+                        '<span class="gg_title_time">'+ele.begin_date+'</span>' +
+                        '</div>'
+            });
+
+            //console.log(adTr)
+            $(".gg_swiper .swiper-wrapper").html(adTr);
+
+            var ggaoSwiper = new Swiper('.gg_swiper', {
+                autoplay: 5000,//可选选项，自动滑动
+                autoplayDisableOnInteraction: false,
+                paginationClickable: true,
+                loop: true
+            });
+
+            $('.gg_swiper .gg_swiper_boc').on({
+                mouseover: function () {
+                    // console.log(11)
+                    ggaoSwiper.stopAutoplay()
+                },
+                mouseout: function () {
+                    // console.log(22)
+                    ggaoSwiper.startAutoplay()
+                }
+            });
+
+        });
+
+        $(".gg_swiper").on({click:function () {
+            var aa = [];
+            var id = $(this).attr('data-id');
+            var str = '';
+
+            $.each(res_data, function (idx,abc) {
+                if(abc.notify_id== id){
+
+                    var sTer = abc;
+                    res_data.splice(idx,1);
+                    res_data.unshift(sTer);
+                    //console.log(res_data,'5555');
+                    $.each(res_data, function (i, e){
+
+                        var strs = e.content.split("&nbsp;");
+                        for(var i=0;i<strs.length;i++){
+                            strs[i].replace('&nbsp;',' ');
+                        }
+                        strs = strs.join("");
+                        //console.log(strs,'5555');return;
+
+                        var str_nb = strs.split("nbsp;");
+                        for(var i=0;i<str_nb.length;i++){
+                            str_nb[i].replace('nbsp;',' ');
+                        }
+                        str_nb = str_nb.join("");
+                        //console.log(str_nb,'5555');return;
+
+                        var str_amp = str_nb.split("&amp;");
+                        for(var i=0;i<str_amp.length;i++){
+                            str_amp[i].replace('&amp;',' ');
+                        }
+                        str_amp = str_amp.join("");
+                        //console.log(str_amp,'5555');return;
+
+                        str += '<div class="swiper-slide swiper_box">' +
+                                '<div>' +
+                                '<div class="swiper_title">' +
+                                '<div class="st_left">'+e.subject+'</div>' +
+                                '<div class="st_right">' +
+                                '<span>发布人:</span>' +
+                                '<span>'+e.real_name+'</span>' +
+                                '<span class="fbtime">发布时间:</span>' +
+                                '<span>'+e.begin_date+'</span>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="swiper_text"><p>'+str_amp+'</p></div>' +
+                                '<div class="sb_img_box">' +
+                                '<span class="fujian">查看附件</span><a class="xiazai" target="_blank" href='+'http://it.yandui.com/'+e.attachment_name+' style="color:white;">'+ e.subject+'</a>' +
+                                '<img class="st_login_icon" src="__PUBLIC__/newUI/img/login_icon_1.png">' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>';
+
+
+                    });
+                    $(".lunbo_box .swiper-wrapper").html(str);
+                    // 公告栏模态框
+                    /*var noticeSwiper = new Swiper('.lunbo_box', {
+                        autoplay: 3500,//可选选项，自动滑动
+                        autoplayDisableOnInteraction: false,
+                        paginationClickable: true,
+                        loop: true
+                    });*/
+
+                    $(".notice").fadeIn();
+
+                    $(".notice").on({click:function () {
+                        //console.log(11111)
+                        noticeSwiper.slidePrev();
+                    }},".msk_left");
+
+                    $(".notice").on({click:function () {
+                        //console.log(2222)
+                        noticeSwiper.slideNext();
+                    }},".msk_right");
+
+                    //console.log(res_data,'5555');
+                }
+
+            });
+
+            var noticeSwiper = new Swiper('.lunbo_box', {
+                //autoplay: 3500,//可选选项，自动滑动
+                autoplayDisableOnInteraction: false,
+                paginationClickable: true,
+                loop: true
+            });
+
+            $('.lunbo_box .swiper_box>div').on({
+                mouseover: function () {
+                    // console.log(11)
+                    noticeSwiper.stopAutoplay();
+                },
+                mouseout: function () {
+                    // console.log(22)
+                    noticeSwiper.startAutoplay();
+                }
+            });
+
+            $(".notice").on({click:function () {
+
+                $(".notice").fadeOut();
+
+            }},".notice_img");
+
+
+        }},".gg_swiper_boc");
+    })
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/layer/layer.js"></script>
+<script type="text/javascript" src="/Public/OA/js/organiz.img.js?v={:GetVersion()}"></script>
+</body>
+</html>
